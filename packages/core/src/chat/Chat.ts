@@ -1,15 +1,24 @@
 import { Message } from "./Message.js";
 import { ChatOptions } from "./ChatOptions.js";
 import { Provider } from "../providers/Provider.js";
+import { Executor } from "../executor/Executor.js";
+import { LLM } from "../llm.js";
 
 export class Chat {
   private messages: Message[] = [];
+  private executor: Executor;
 
   constructor(
     private readonly provider: Provider,
     private readonly model: string,
     options: ChatOptions = {}
   ) {
+
+    this.executor = new Executor(
+      provider,
+      LLM.getRetryConfig()
+    );
+
     if (options.systemPrompt) {
       this.messages.push({
         role: "system",
@@ -38,7 +47,7 @@ export class Chat {
       content,
     });
 
-    const response = await this.provider.chat({
+    const response = await this.executor.executeChat({
       model: this.model,
       messages: this.messages,
     });

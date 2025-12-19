@@ -4,14 +4,31 @@ import { Provider } from "./providers/Provider.js";
 import { providerRegistry } from "./providers/registry.js";
 import { ensureOpenAIRegistered } from "./providers/openai/register.js";
 
+export interface RetryOptions {
+  attempts?: number;
+  delayMs?: number;
+}
+
 type LLMConfig =
-  | { provider: Provider }
-  | { provider: string };
+  | { provider: Provider; retry?: RetryOptions }
+  | { provider: string; retry?: RetryOptions };
 
 class LLMCore {
   private provider?: Provider;
+   
+  private retry: Required<RetryOptions> = {
+    attempts: 1,
+    delayMs: 0,
+  };
 
   configure(config: LLMConfig) {
+    if (config.retry) {
+      this.retry = {
+        attempts: config.retry.attempts ?? 1,
+        delayMs: config.retry.delayMs ?? 0,
+      };
+    }
+
     if (typeof config.provider === "string") {
       if (config.provider === "openai") {
         ensureOpenAIRegistered();
@@ -30,6 +47,11 @@ class LLMCore {
 
     return new Chat(this.provider, model, options);
   }
+
+  getRetryConfig() {
+    return this.retry;
+  }
+  
 }
 
 export const LLM = new LLMCore();

@@ -1,23 +1,29 @@
 import "dotenv/config";
 import { LLM } from "./packages/core/dist/index.js";
 
-LLM.configure({ provider: "openai" });
+LLM.configure({ 
+  provider: "openai",
+  retry: {
+    attempts: 3,
+    delayMs: 500,
+  },
+});
 
 const chat = LLM.chat("gpt-4o-mini", {
   systemPrompt: "You are a concise assistant",
 });
 
-// const reply = await chat.ask("Explain HTTP in one sentence");
-// console.log("LLM reply:", reply);
+const reply = await chat.ask("Explain HTTP in one sentence");
+console.log("LLM reply:", reply);
 
 
 // 🔥 STREAMING TEST
-let full = "";
+// let full = "";
 
-for await (const token of chat.stream("Explain HTTP in one sentence")) {
-  process.stdout.write(token);
-  full += token;
-}
+// for await (const token of chat.stream("Explain HTTP in one sentence")) {
+//   process.stdout.write(token);
+//   full += token;
+// }
 
 console.log("\n\n---");
 console.log("Final message stored in chat history:");
