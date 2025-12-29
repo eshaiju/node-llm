@@ -40,6 +40,17 @@ export class Chat {
   }
 
   /**
+   * Add a tool to the chat session (fluent API)
+   */
+  withTool(tool: any): this {
+    if (!this.options.tools) {
+      this.options.tools = [];
+    }
+    this.options.tools.push(tool);
+    return this;
+  }
+
+  /**
    * Ask the model a question
    */
   async ask(content: string, options?: { images?: string[]; files?: string[] }): Promise<string> {

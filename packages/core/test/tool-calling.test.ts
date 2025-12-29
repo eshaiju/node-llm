@@ -62,11 +62,9 @@ describe("Chat Tool Calling", () => {
 
     const provider = new MockToolProvider([toolCallResponse, finalResponse]);
     
-    const chat = new Chat(provider, "test-model", {
-      tools: [weatherTool],
-    });
+    const chat = new Chat(provider, "test-model");
 
-    const response = await chat.ask("What is the weather?");
+    const response = await chat.withTool(weatherTool).ask("What is the weather?");
 
     // Assertions
     expect(response).toBe("The weather is Sunny with 25 degrees.");
@@ -122,14 +120,40 @@ describe("Chat Tool Calling", () => {
     };
 
     const provider = new MockToolProvider([toolCallResponse, finalResponse]);
-    const chat = new Chat(provider, "test-model", {
-      tools: [errorTool],
-    });
+    const chat = new Chat(provider, "test-model");
 
-    await chat.ask("Trigger error");
+    await chat.withTool(errorTool).ask("Trigger error");
 
     const history = provider.requests[1].messages;
     const toolMessage = history.find(m => m.role === "tool");
     expect(toolMessage?.content).toContain("Error executing tool: Something went wrong");
+  });
+
+  it("should support both constructor tools and withTool fluent API", async () => {
+    const tool1: Tool = {
+      type: "function",
+      function: { name: "tool1", parameters: {} },
+      handler: async () => "result1",
+    };
+    const tool2: Tool = {
+      type: "function",
+      function: { name: "tool2", parameters: {} },
+      handler: async () => "result2",
+    };
+
+    const toolCallResponse: ChatResponse = {
+      content: null,
+      tool_calls: [{ id: "c1", type: "function", function: { name: "tool2", arguments: "{}" } }],
+    };
+    const finalResponse: ChatResponse = { content: "Done" };
+
+    const provider = new MockToolProvider([toolCallResponse, finalResponse]);
+    
+    // tool1 via constructor, tool2 via withTool
+    const chat = new Chat(provider, "test-model", { tools: [tool1] });
+    await chat.withTool(tool2).ask("Call tool2");
+
+    expect(provider.requests[0].tools).toContain(tool1);
+    expect(provider.requests[0].tools).toContain(tool2);
   });
 });

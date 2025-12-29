@@ -14,13 +14,15 @@ This is a core library, not a framework.
 
 ## Features (current)
 
-- Provider-agnostic chat API
-- Ruby-LLM-style configuration
-- Streaming responses using AsyncIterator
-- Tool calling (function calling) support
-- Retry support (pre-chat execution layer)
-- Strict ESM and TypeScript
-- Testable core with fake providers
+- **Provider-agnostic chat API**: Switch between OpenAI, Anthropic, etc. with one line of config.
+- **Ruby-LLM-style configuration**: Simple, global configuration.
+- **Streaming responses**: Native AsyncIterator support for progressive token delivery.
+- **Tool calling (Function calling)**: Automatic execution loop for model-requested tools.
+- **Multi-modal Support**: Built-in support for Vision (images) and Audio.
+- **Smart File Handling**: Pass local file paths or URLs; the library handles reading and encoding.
+- **Fluent API**: Chainable methods like `.withTool()` for dynamic tool registration.
+- **Retry support**: Configurable retry logic at the execution layer.
+- **Strict ESM and TypeScript**: Modern, type-safe development.
 
 ---
 
@@ -88,11 +90,6 @@ for await (const token of chat.stream("Explain HTTP in one sentence")) {
 console.log("\nFinal response:", full);
 ```
 
-Streaming behavior:
-- Tokens arrive progressively
-- Final assistant message is stored in chat history
-- No SDKs or frameworks required
-
 ---
 
 ## Tool Calling
@@ -124,10 +121,14 @@ const weatherTool: Tool = {
   }
 };
 
-// 3. Initialize chat with tools
+// 3. Initialize chat (Option A: via constructor)
 const chat = LLM.chat("gpt-4o-mini", {
   tools: [weatherTool]
 });
+
+// OR Option B: via fluent API (Ruby-LLM style)
+const chat2 = LLM.chat("gpt-4o-mini")
+  .withTool(weatherTool);
 
 // 4. Ask a question
 const reply = await chat.ask("What is the weather in London?");
@@ -137,9 +138,9 @@ console.log(reply);
 
 ---
 
-## File & Vision Support
+## File & Multi-modal Support
 
-You can send files (images, text, etc.) to models that support them. The library automatically handles local file reading and formatting.
+You can send files (images, audio, text, etc.) to models that support them. The library automatically handles local file reading, MIME detection, and base64 encoding.
 
 ```ts
 // Local files (automatically read & converted)
@@ -147,14 +148,19 @@ await chat.ask("Analyze this image", {
   files: ["./image.jpg"]
 });
 
+// Text files (content is automatically appended to prompt)
+await chat.ask("Summarize this code", {
+  files: ["./app.ts"]
+});
+
 // Remote URLs (passed through)
 await chat.ask("Describe this", {
   files: ["https://example.com/photo.png"]
 });
 
-// Multiple files (mixed types)
-await chat.ask("Compare these", {
-  files: ["./chart.png", "./data.csv"]
+// Audio files (OpenAI input_audio support)
+await chat.ask("Transcribe this meeting", {
+  files: ["./meeting.mp3"]
 });
 ```
 
@@ -193,21 +199,10 @@ node test-openai.mjs
 
 ## Design Philosophy
 
-- Explicit over implicit
-- Provider-agnostic core
-- No hidden side effects
-- Ruby-LLM mental model with Node-native execution
-- Suitable for libraries, services, and frameworks
-
----
-
-## Roadmap
-
-- Tool and function calling
-- Streaming with tools
-- Azure OpenAI provider
-- Observability hooks
-- CLI utilities
+- **Explicit over implicit**: No hidden side effects or complex state management.
+- **Provider-agnostic core**: The same code works across different LLM providers.
+- **Ruby-LLM mental model**: Developer experience inspired by the best of Ruby, executed with Node-native patterns.
+- **Production Ready**: Built with TypeScript, ESM, and comprehensive testing.
 
 ---
 
