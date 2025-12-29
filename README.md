@@ -65,6 +65,10 @@ const chat = LLM.chat("gpt-4o-mini", {
 
 const reply = await chat.ask("Explain HTTP in one sentence");
 console.log(reply);
+
+// List available models with metadata (pricing, context window, etc.)
+const models = await LLM.listModels();
+console.log(models[0]);
 ```
 
 ---

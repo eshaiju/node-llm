@@ -5,4 +5,6 @@ export interface ChatOptions {
   systemPrompt?: string;
   messages?: Message[];
   tools?: Tool[];
+  temperature?: number;
+  maxTokens?: number;
 }

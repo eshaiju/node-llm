@@ -16,6 +16,11 @@ const chat = LLM.chat("gpt-4o-mini", {
 const reply = await chat.ask("Explain HTTP in one sentence");
 console.log("LLM reply:", reply);
 
+console.log("\n\n--- LIST MODELS TEST ---");
+const models = await LLM.listModels();
+console.log(`Found ${models.length} models.`);
+console.log("First model example:", JSON.stringify(models[0], null, 2));
+
 
 // 🔥 STREAMING TEST
 // let full = "";

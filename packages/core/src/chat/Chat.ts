@@ -53,12 +53,17 @@ export class Chat {
   /**
    * Ask the model a question
    */
-  async ask(content: string, options?: { images?: string[]; files?: string[] }): Promise<string> {
+  async ask(content: string, options?: { images?: string[]; files?: string[]; temperature?: number; maxTokens?: number }): Promise<string> {
     let messageContent: any = content;
     const files = [...(options?.images ?? []), ...(options?.files ?? [])];
 
     if (files.length > 0) {
       const processedFiles = await Promise.all(files.map(f => FileLoader.load(f)));
+      
+      const hasBinary = processedFiles.some(p => p.type === "image_url" || p.type === "input_audio" || p.type === "video_url");
+      if (hasBinary && this.provider.capabilities && !this.provider.capabilities.supportsVision(this.model)) {
+        throw new Error(`Model ${this.model} does not support vision/binary files.`);
+      }
 
       messageContent = [
         { type: "text", text: content },
@@ -66,16 +71,26 @@ export class Chat {
       ];
     }
 
+    if (this.options.tools && this.options.tools.length > 0) {
+      if (this.provider.capabilities && !this.provider.capabilities.supportsTools(this.model)) {
+        throw new Error(`Model ${this.model} does not support tool calling.`);
+      }
+    }
+
     this.messages.push({
       role: "user",
       content: messageContent,
     });
 
-    let response = await this.executor.executeChat({
+    const executeOptions = {
       model: this.model,
       messages: this.messages,
       tools: this.options.tools,
-    });
+      temperature: options?.temperature ?? this.options.temperature,
+      max_tokens: options?.maxTokens ?? this.options.maxTokens,
+    };
+
+    let response = await this.executor.executeChat(executeOptions);
 
     this.messages.push({
       role: "assistant",

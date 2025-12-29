@@ -1,5 +1,8 @@
-import { Provider, ChatRequest, ChatResponse } from "../Provider.js";
-import { OpenAIChatResponse } from "./types.js";
+import { Provider, ChatRequest, ChatResponse, ModelInfo, ChatChunk } from "../Provider.js";
+import { Capabilities } from "./Capabilities.js";
+import { OpenAIChat } from "./Chat.js";
+import { OpenAIStreaming } from "./Streaming.js";
+import { OpenAIModels } from "./Models.js";
 
 export interface OpenAIProviderOptions {
   apiKey: string;
@@ -8,94 +11,33 @@ export interface OpenAIProviderOptions {
 
 export class OpenAIProvider implements Provider {
   private readonly baseUrl: string;
+  private readonly chatHandler: OpenAIChat;
+  private readonly streamingHandler: OpenAIStreaming;
+  private readonly modelsHandler: OpenAIModels;
+
+  public capabilities = {
+    supportsVision: (model: string) => Capabilities.supportsVision(model),
+    supportsTools: (model: string) => Capabilities.supportsTools(model),
+    supportsStructuredOutput: (model: string) => Capabilities.supportsStructuredOutput(model),
+    getContextWindow: (model: string) => Capabilities.getContextWindow(model),
+  };
 
   constructor(private readonly options: OpenAIProviderOptions) {
     this.baseUrl = options.baseUrl ?? "https://api.openai.com/v1";
+    this.chatHandler = new OpenAIChat(this.baseUrl, options.apiKey);
+    this.streamingHandler = new OpenAIStreaming(this.baseUrl, options.apiKey);
+    this.modelsHandler = new OpenAIModels(this.baseUrl, options.apiKey);
   }
 
   async chat(request: ChatRequest): Promise<ChatResponse> {
-    const body: any = {
-      model: request.model,
-      messages: request.messages,
-    };
-
-    if (request.tools) {
-      body.tools = request.tools;
-    }
-
-    const response = await fetch(`${this.baseUrl}/chat/completions`, {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${this.options.apiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(body),
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(
-        `OpenAI error (${response.status}): ${errorText}`
-      );
-    }
-
-    const json = (await response.json()) as OpenAIChatResponse;
-
-    const message = json.choices[0]?.message;
-    const content = message?.content ?? null;
-    const tool_calls = message?.tool_calls;
-
-    if (!content && !tool_calls) {
-      throw new Error("OpenAI returned empty response");
-    }
-
-    return { content, tool_calls };
+    return this.chatHandler.execute(request);
   }
 
-  async *stream(request: ChatRequest) {
-    const response = await fetch(
-      `${this.baseUrl}/chat/completions`,
-      {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${this.options.apiKey}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          model: request.model,
-          messages: request.messages,
-          stream: true,
-        }),
-      }
-    );
+  async *stream(request: ChatRequest): AsyncGenerator<ChatChunk> {
+    yield* this.streamingHandler.execute(request);
+  }
 
-    if (!response.body) {
-      throw new Error("No response body for streaming");
-    }
-
-    const reader = response.body.getReader();
-    const decoder = new TextDecoder();
-
-    while (true) {
-      const { value, done } = await reader.read();
-      if (done) break;
-
-      const chunk = decoder.decode(value);
-      const lines = chunk.split("\n");
-
-      for (const line of lines) {
-        if (!line.startsWith("data: ")) continue;
-
-        const data = line.replace("data: ", "").trim();
-        if (data === "[DONE]") return;
-
-        const json = JSON.parse(data);
-        const delta = json.choices?.[0]?.delta?.content;
-
-        if (delta) {
-          yield { content: delta };
-        }
-      }
-    }
+  async listModels(): Promise<ModelInfo[]> {
+    return this.modelsHandler.execute();
   }
 }

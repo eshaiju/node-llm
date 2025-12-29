@@ -48,6 +48,16 @@ class LLMCore {
     return new Chat(this.provider, model, options);
   }
 
+  async listModels() {
+    if (!this.provider) {
+      throw new Error("LLM provider not configured");
+    }
+    if (!this.provider.listModels) {
+      throw new Error(`Provider ${typeof this.provider} does not support listModels`);
+    }
+    return this.provider.listModels();
+  }
+
   getRetryConfig() {
     return this.retry;
   }

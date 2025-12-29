@@ -6,6 +6,8 @@ export interface ChatRequest {
   model: string;
   messages: Message[];
   tools?: Tool[];
+  temperature?: number;
+  max_tokens?: number;
 }
 
 export interface ChatChunk {
@@ -18,7 +20,29 @@ export interface ChatResponse {
   tool_calls?: ToolCall[];
 }
 
+export interface ProviderCapabilities {
+  supportsVision: (model: string) => boolean;
+  supportsTools: (model: string) => boolean;
+  supportsStructuredOutput: (model: string) => boolean;
+  getContextWindow: (model: string) => number | null;
+}
+
+export interface ModelInfo {
+  id: string;
+  name: string;
+  provider: string;
+  family: string;
+  context_window: number | null;
+  max_output_tokens: number | null;
+  modalities: { input: string[]; output: string[] };
+  capabilities: string[];
+  pricing: any;
+  metadata?: Record<string, any>;
+}
+
 export interface Provider {
   chat(request: ChatRequest): Promise<ChatResponse>;
   stream?(request: ChatRequest): AsyncIterable<ChatChunk>;
+  listModels?(): Promise<ModelInfo[]>;
+  capabilities?: ProviderCapabilities;
 }
