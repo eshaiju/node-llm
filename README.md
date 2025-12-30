@@ -80,6 +80,27 @@ console.log(`Generated Image URL: ${image.url}`);
 
 ---
 
+## 📚 Examples
+
+Check the [examples](./examples) directory for focused scripts organized by provider:
+
+### OpenAI Examples
+| Example | Description |
+| :--- | :--- |
+| [Basic Chat](./examples/openai/01-basic-chat.mjs) | Simple completion request |
+| [Streaming](./examples/openai/02-streaming.mjs) | Real-time token streaming |
+| [Tool Calling](./examples/openai/03-tool-calling.mjs) | Automatic tool execution loop |
+| [Vision](./examples/openai/04-vision.mjs) | Image analysis |
+| [List Models](./examples/openai/05-list-models.mjs) | Enumerate available models |
+| [Paint](./examples/openai/06-paint.mjs) | Image generation with DALL-E |
+
+To run an example:
+```bash
+node examples/openai/01-basic-chat.mjs
+```
+
+---
+
 ## 🔌 Advanced Usage
 
 ### Tool Calling (Function Calling)
