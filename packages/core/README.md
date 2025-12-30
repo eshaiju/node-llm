@@ -112,14 +112,14 @@ Check the [examples](./examples) directory for focused scripts organized by prov
 ### OpenAI Examples
 | Example | Description |
 | :--- | :--- |
-| [Basic Chat](../../examples/openai/01-basic-chat.mjs) | Simple completion request |
-| [Streaming](../../examples/openai/02-streaming.mjs) | Real-time token streaming |
-| [Tool Calling](../../examples/openai/03-tool-calling.mjs) | Automatic tool execution loop |
-| [Vision](../../examples/openai/04-vision.mjs) | Image analysis |
-| [List Models](../../examples/openai/05-list-models.mjs) | Enumerate available models |
-| [Paint](../../examples/openai/06-paint.mjs) | Image generation with DALL-E |
-| [Image Features](../../examples/openai/07-image-features.mjs) | Saving and processing generated images |
-| [Token Usage](../../examples/openai/08-token-usage.mjs) | Detailed stats for turns and conversations |
+| [Basic Chat](https://github.com/eshaiju/node-llm/blob/main/examples/openai/01-basic-chat.mjs) | Simple completion request |
+| [Streaming](https://github.com/eshaiju/node-llm/blob/main/examples/openai/02-streaming.mjs) | Real-time token streaming |
+| [Tool Calling](https://github.com/eshaiju/node-llm/blob/main/examples/openai/03-tool-calling.mjs) | Automatic tool execution loop |
+| [Vision](https://github.com/eshaiju/node-llm/blob/main/examples/openai/04-vision.mjs) | Image analysis |
+| [List Models](https://github.com/eshaiju/node-llm/blob/main/examples/openai/05-list-models.mjs) | Enumerate available models |
+| [Paint](https://github.com/eshaiju/node-llm/blob/main/examples/openai/06-paint.mjs) | Image generation with DALL-E |
+| [Image Features](https://github.com/eshaiju/node-llm/blob/main/examples/openai/07-image-features.mjs) | Saving and processing generated images |
+| [Token Usage](https://github.com/eshaiju/node-llm/blob/main/examples/openai/08-token-usage.mjs) | Detailed stats for turns and conversations |
 
 To run an example (from the project root):
 ```bash
