@@ -1,6 +1,7 @@
 import { ChatRequest, ChatResponse } from "../Provider.js";
 import { OpenAIChatResponse } from "./types.js";
 import { Capabilities } from "./Capabilities.js";
+import { handleOpenAIError } from "./Errors.js";
 
 export class OpenAIChat {
   constructor(private readonly baseUrl: string, private readonly apiKey: string) {}
@@ -37,8 +38,7 @@ export class OpenAIChat {
     });
 
     if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`OpenAI error (${response.status}): ${errorText}`);
+      await handleOpenAIError(response, request.model);
     }
 
     const json = (await response.json()) as OpenAIChatResponse;

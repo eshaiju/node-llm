@@ -1,4 +1,5 @@
 import { ImageRequest, ImageResponse } from "../Provider.js";
+import { handleOpenAIError } from "./Errors.js";
 
 export class OpenAIImage {
   constructor(private readonly baseUrl: string, private readonly apiKey: string) {}
@@ -22,8 +23,7 @@ export class OpenAIImage {
     });
 
     if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`OpenAI Image error (${response.status}): ${errorText}`);
+      await handleOpenAIError(response, request.model);
     }
 
     const json = await response.json();

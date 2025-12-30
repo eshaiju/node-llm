@@ -1,6 +1,6 @@
 import { expect, it } from "vitest";
-import { Chat } from "../src/chat/Chat.js";
 import { LLM } from "../src/llm.js";
+import { ServerError } from "../src/errors/index.js";
 
 it("retries provider failures", async () => {
   let calls = 0;
@@ -9,7 +9,7 @@ it("retries provider failures", async () => {
     async chat() {
       calls++;
       if (calls < 3) {
-        throw new Error("Temporary failure");
+        throw new ServerError("Temporary failure", 500, {});
       }
       return { content: "ok" };
     },

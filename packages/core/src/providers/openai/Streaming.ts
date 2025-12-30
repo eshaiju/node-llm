@@ -1,5 +1,6 @@
 import { ChatRequest, ChatChunk } from "../Provider.js";
 import { Capabilities } from "./Capabilities.js";
+import { handleOpenAIError } from "./Errors.js";
 
 export class OpenAIStreaming {
   constructor(private readonly baseUrl: string, private readonly apiKey: string) {}
@@ -28,6 +29,10 @@ export class OpenAIStreaming {
       },
       body: JSON.stringify(body),
     });
+
+    if (!response.ok) {
+      await handleOpenAIError(response, request.model);
+    }
 
     if (!response.body) {
       throw new Error("No response body for streaming");
