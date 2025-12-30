@@ -197,6 +197,26 @@ await chat.ask("Explain this code", {
 
 ---
 
+## 🧪 Testing
+
+`node-llm` uses VCR-style testing (via Polly.js) for robust, deterministic integration tests. This allows us to record real LLM provider interactions once and replay them during tests without making actual API calls.
+
+### Running Tests
+
+- **Replay Mode (Default)**: Runs tests using recorded cassettes. Fast, deterministic, and requires no API keys.
+  ```bash
+  npm test
+  ```
+
+- **Record Mode**: Hits real APIs and updates cassettes. Requires a valid API key.
+  ```bash
+  VCR_MODE=record OPENAI_API_KEY=your_key npm test
+  ```
+
+*All recordings are automatically scrubbed of sensitive data (API keys, org IDs) before being saved to disk.*
+
+---
+
 ## 📄 License
 
 MIT © [node-llm contributors]
