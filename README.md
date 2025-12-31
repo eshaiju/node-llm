@@ -229,6 +229,25 @@ Check the [examples](./examples) directory for focused scripts organized by prov
 | [Multi-File](./examples/openai/17-multi-file.mjs) | Analyze multiple files at once |
 | [Embeddings](./examples/openai/18-embeddings.mjs) | Generate vector embeddings for semantic search |
 
+### Gemini Examples
+| Example | Description |
+| :--- | :--- |
+| [Basic Chat](./examples/gemini/01-basic-chat.mjs) | Simple completion request |
+| [Streaming](./examples/gemini/02-streaming.mjs) | Real-time token streaming |
+| [Tool Calling](./examples/gemini/03-tool-calling.mjs) | Automatic tool execution loop |
+| [Vision](./examples/gemini/04-vision.mjs) | Image analysis |
+| [List Models](./examples/gemini/05-list-models.mjs) | Enumerate available models |
+| [Paint](./examples/gemini/06-paint.mjs) | Image generation with Imagen |
+| [Image Features](./examples/gemini/07-image-features.mjs) | Saving and processing generated images |
+| [Token Usage](./examples/gemini/08-token-usage.mjs) | Detailed stats for turns and conversations |
+| [Transcribe](./examples/gemini/09-transcribe.mjs) | Audio to text transcription |
+| [Capabilities](./examples/gemini/10-capabilities.mjs) | Dynamic model specs and pricing |
+| [Chat Events](./examples/gemini/13-chat-events.mjs) | Lifecycle hooks (onNewMessage, onToolCall etc) |
+| [System Prompts](./examples/gemini/15-system-prompts.mjs) | Dynamic system instructions |
+| [Temperature](./examples/gemini/16-temperature.mjs) | Control creativity vs determinism |
+| [Multi-File](./examples/gemini/17-multi-file.mjs) | Analyze multiple files at once |
+| [Embeddings](./examples/gemini/18-embeddings.mjs) | Generate vector embeddings |
+
 
 To run an example:
 ```bash
@@ -333,6 +352,7 @@ console.log(model.pricing.text_tokens.standard.input_per_million); // => 0.15
 | Provider | Status | Notes |
 | :--- | :--- | :--- |
 | **OpenAI** | ✅ Supported | Chat, Streaming, Tools, Vision, Audio, Images, Transcription, Moderation |
+| **Gemini** | ✅ Supported | Chat, Streaming, Tools, Vision, Audio, Video, Embeddings, Transcription |
 | **Anthropic** | 🏗️ Roadmap | Coming soon |
 | **Azure OpenAI** | 🏗️ Roadmap | Coming soon |
 

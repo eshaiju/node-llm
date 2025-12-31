@@ -1,7 +1,8 @@
 import { ChatRequest, ChatChunk } from "../Provider.js";
 import { Capabilities } from "./Capabilities.js";
 import { handleGeminiError } from "./Errors.js";
-import { GeminiGenerateContentResponse, GeminiPart } from "./types.js";
+import { GeminiGenerateContentResponse } from "./types.js";
+import { GeminiChatUtils } from "./ChatUtils.js";
 
 export class GeminiStreaming {
   constructor(private readonly baseUrl: string, private readonly apiKey: string) {}
@@ -10,33 +11,7 @@ export class GeminiStreaming {
     const temperature = Capabilities.normalizeTemperature(request.temperature, request.model);
     const url = `${this.baseUrl}/models/${request.model}:streamGenerateContent?alt=sse&key=${this.apiKey}`;
 
-    const contents: any[] = [];
-    let systemInstructionParts: GeminiPart[] = [];
-
-    for (const msg of request.messages) {
-      if (msg.role === "system") {
-        if (typeof msg.content === "string") {
-          systemInstructionParts.push({ text: msg.content });
-        }
-      } else if (msg.role === "user" || msg.role === "assistant") {
-        const parts: any[] = [];
-        const role = msg.role === "assistant" ? "model" : "user";
-        
-        if (typeof msg.content === "string" && msg.content) {
-          parts.push({ text: msg.content });
-        } else if (Array.isArray(msg.content)) {
-          for (const part of msg.content) {
-            if (part.type === "text") {
-              parts.push({ text: part.text });
-            }
-          }
-        }
-
-        if (parts.length > 0) {
-          contents.push({ role, parts });
-        }
-      }
-    }
+    const { contents, systemInstructionParts } = await GeminiChatUtils.convertMessages(request.messages);
 
     const payload: any = {
       contents,
@@ -87,9 +62,11 @@ export class GeminiStreaming {
 
           try {
             const json = JSON.parse(data) as GeminiGenerateContentResponse;
-            const part = json.candidates?.[0]?.content?.parts?.[0];
-            if (part?.text) {
-              yield { content: part.text };
+            const parts = json.candidates?.[0]?.content?.parts || [];
+            for (const part of parts) {
+              if (part.text) {
+                yield { content: part.text };
+              }
             }
           } catch (e) {
             // Ignore parse errors

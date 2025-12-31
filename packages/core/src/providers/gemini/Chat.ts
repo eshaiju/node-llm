@@ -1,8 +1,8 @@
 import { ChatRequest, ChatResponse } from "../Provider.js";
-import { GeminiContent, GeminiGenerateContentRequest, GeminiGenerateContentResponse, GeminiPart } from "./types.js";
+import { GeminiGenerateContentRequest, GeminiGenerateContentResponse } from "./types.js";
 import { Capabilities } from "./Capabilities.js";
 import { handleGeminiError } from "./Errors.js";
-import { BinaryUtils } from "../../utils/Binary.js";
+import { GeminiChatUtils } from "./ChatUtils.js";
 
 export class GeminiChat {
   constructor(private readonly baseUrl: string, private readonly apiKey: string) {}
@@ -11,65 +11,7 @@ export class GeminiChat {
     const temperature = Capabilities.normalizeTemperature(request.temperature, request.model);
     const url = `${this.baseUrl}/models/${request.model}:generateContent?key=${this.apiKey}`;
 
-    const contents: GeminiContent[] = [];
-    let systemInstructionParts: GeminiPart[] = [];
-
-    for (const msg of request.messages) {
-      if (msg.role === "system") {
-        if (typeof msg.content === "string") {
-          systemInstructionParts.push({ text: msg.content });
-        }
-      } else if (msg.role === "user" || msg.role === "assistant" || msg.role === "tool") {
-        const parts: GeminiPart[] = [];
-
-        if (msg.role === "tool") {
-          parts.push({
-            functionResponse: {
-              name: msg.tool_call_id || "unknown",
-              response: { result: msg.content },
-            },
-          });
-          contents.push({ role: "user", parts });
-        } else {
-          const role = msg.role === "assistant" ? "model" : "user";
-          
-          if (typeof msg.content === "string" && msg.content) {
-            parts.push({ text: msg.content });
-          } else if (Array.isArray(msg.content)) {
-            for (const part of msg.content) {
-              if (part.type === "text") {
-                parts.push({ text: part.text });
-              } else if (part.type === "image_url") {
-                const binary = await BinaryUtils.toBase64(part.image_url.url);
-                if (binary) {
-                  parts.push({
-                    inlineData: {
-                      mimeType: binary.mimeType,
-                      data: binary.data,
-                    },
-                  });
-                }
-              }
-            }
-          }
-
-          if (msg.role === "assistant" && msg.tool_calls) {
-            for (const call of msg.tool_calls) {
-              parts.push({
-                functionCall: {
-                  name: call.function.name,
-                  args: JSON.parse(call.function.arguments),
-                },
-              });
-            }
-          }
-
-          if (parts.length > 0) {
-            contents.push({ role, parts });
-          }
-        }
-      }
-    }
+    const { contents, systemInstructionParts } = await GeminiChatUtils.convertMessages(request.messages);
 
     const payload: GeminiGenerateContentRequest = {
       contents,
