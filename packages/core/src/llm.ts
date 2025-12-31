@@ -16,6 +16,7 @@ import { Transcription } from "./transcription/Transcription.js";
 import { Moderation } from "./moderation/Moderation.js";
 import { Embedding } from "./embedding/Embedding.js";
 import { EmbeddingRequest } from "./providers/Embedding.js";
+import { DEFAULT_MODELS } from "./constants.js";
 
 export interface RetryOptions {
   attempts?: number;
@@ -175,7 +176,7 @@ class LLMCore {
 
     const request: EmbeddingRequest = {
       input,
-      model: options?.model || this.defaultEmbeddingModelId || "text-embedding-3-small",
+      model: options?.model || this.defaultEmbeddingModelId || DEFAULT_MODELS.EMBEDDING,
       dimensions: options?.dimensions,
     };
 
