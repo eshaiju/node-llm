@@ -101,6 +101,28 @@ describe("OpenAI Integration (VCR)", { timeout: 30000 }, () => {
     expect(response.content.split(" ").length).toBeLessThan(10);
   });
 
+  it("should support JSON mode", async ({ task }) => {
+    polly = setupVCR(task.name, "openai");
+
+    LLM.configure({ provider: "openai" });
+    const chat = LLM.chat("gpt-4o-mini");
+
+    chat.withRequestOptions({
+       headers: { "Content-Type": "application/json" }
+    });
+
+    // Manually setting response_format via chat options interface we just added
+    chat["options"].responseFormat = { type: "json_object" };
+
+    const response = await chat.ask("Generate a JSON object with a key 'greeting' and value 'hello'.");
+    
+    // Should be parseable JSON
+    // We can now use the .parsed property directly
+    const json = response.parsed;
+    expect(json).toBeDefined();
+    expect(json.greeting).toBe("hello");
+  });
+
   it("should analyze images (Vision)", async ({ task }) => {
     polly = setupVCR(task.name, "openai");
 
