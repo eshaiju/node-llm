@@ -1,0 +1,77 @@
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { LLM } from "../src/llm.js";
+import { Provider } from "../src/providers/Provider.js";
+
+describe("Transcription Unit Tests", () => {
+  let mockProvider: Provider;
+
+  beforeEach(() => {
+    mockProvider = {
+      chat: vi.fn(),
+      transcribe: vi.fn().mockResolvedValue({
+        text: "Mock transcription",
+        model: "whisper-1",
+        duration: 10,
+        segments: [{ id: 0, start: 0, end: 10, text: "Mock transcription" }]
+      })
+    };
+    LLM.configure({ provider: mockProvider });
+  });
+
+  it("should call provider.transcribe with correct arguments", async () => {
+    await LLM.transcribe("test.mp3", { language: "en", prompt: "Test prompt" });
+
+    expect(mockProvider.transcribe).toHaveBeenCalledWith({
+      file: "test.mp3",
+      language: "en",
+      prompt: "Test prompt",
+      model: undefined
+    });
+  });
+
+  it("should use global default model if provided", async () => {
+    LLM.configure({ 
+      provider: mockProvider,
+      defaultTranscriptionModel: "gpt-4o-transcribe"
+    });
+
+    await LLM.transcribe("test.mp3");
+
+    expect(mockProvider.transcribe).toHaveBeenCalledWith(expect.objectContaining({
+      model: "gpt-4o-transcribe"
+    }));
+  });
+
+  it("should override global default model with local option", async () => {
+    LLM.configure({ 
+      provider: mockProvider,
+      defaultTranscriptionModel: "gpt-4o-transcribe"
+    });
+
+    await LLM.transcribe("test.mp3", { model: "whisper-1" });
+
+    expect(mockProvider.transcribe).toHaveBeenCalledWith(expect.objectContaining({
+      model: "whisper-1"
+    }));
+  });
+
+  it("should return a Transcription object with correct properties", async () => {
+    const result = await LLM.transcribe("test.mp3");
+
+    expect(result.text).toBe("Mock transcription");
+    expect(result.model).toBe("whisper-1");
+    expect(result.duration).toBe(10);
+    expect(result.segments).toHaveLength(1);
+    expect(result.segments[0].text).toBe("Mock transcription");
+    expect(result.toString()).toBe("Mock transcription");
+  });
+
+  it("should throw error if provider does not support transcribe", async () => {
+    const limitedProvider: Provider = {
+      chat: vi.fn()
+    };
+    LLM.configure({ provider: limitedProvider });
+
+    await expect(LLM.transcribe("test.mp3")).rejects.toThrow("Provider does not support transcribe");
+  });
+});

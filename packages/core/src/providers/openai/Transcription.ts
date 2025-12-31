@@ -75,6 +75,10 @@ export class OpenAITranscription {
       defaultPrompt = "Transcribe the audio and identify different speakers (e.g., Speaker A, Speaker B). Return only the transcript.";
     }
 
+    if (request.language) {
+      defaultPrompt += ` The audio is in ${request.language}.`;
+    }
+
     const body = {
       model: actualModel,
       messages: [
