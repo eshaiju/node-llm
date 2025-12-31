@@ -168,6 +168,7 @@ Hook into the chat lifecycle for logging, UI updates, or auditing.
 
 ```ts
 chat
+  .withTool(weatherTool)
   .onNewMessage(() => console.log("AI started typing..."))
   .onToolCall((tool) => console.log(`Calling ${tool.function.name}...`))
   .onToolResult((result) => console.log(`Tool returned: ${result}`))
