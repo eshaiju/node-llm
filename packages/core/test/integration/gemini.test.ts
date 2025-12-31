@@ -93,15 +93,35 @@ describe("Gemini Integration (VCR)", { timeout: 30000 }, () => {
     expect(response.usage.input_tokens).toBeGreaterThan(0);
   });
 
-  it("should generate an image (Paint)", async ({ task }) => {
+  it("should generate an image and support image features (Paint)", async ({ task }) => {
     polly = setupVCR(task.name, "gemini");
 
     LLM.configure({ provider: "gemini" });
-    const response = await LLM.paint("A sunset over the mountains", { 
+    const image = await LLM.paint("A sunset over the mountains", { 
       model: "imagen-4.0-generate-001" 
     });
 
-    expect(response.data).toBeDefined();
-    expect(response.mimeType).toBe("image/png");
+    expect(image.data).toBeDefined();
+    expect(image.mimeType).toBe("image/png");
+    expect(image.isBase64).toBe(true);
+
+    const buffer = await image.toBuffer();
+    expect(buffer).toBeInstanceOf(Buffer);
+    expect(buffer.length).toBeGreaterThan(0);
+  });
+
+  it("should track total token usage", async ({ task }) => {
+    polly = setupVCR(task.name, "gemini");
+
+    LLM.configure({ provider: "gemini" });
+    const chat = LLM.chat("gemini-2.0-flash");
+
+    await chat.ask("Hello");
+    await chat.ask("How are you?");
+
+    const total = chat.totalUsage;
+    expect(total.input_tokens).toBeGreaterThan(0);
+    expect(total.output_tokens).toBeGreaterThan(0);
+    expect(total.total_tokens).toBe(total.input_tokens + total.output_tokens);
   });
 });
