@@ -13,36 +13,7 @@ export interface AskOptions {
   maxTokens?: number;
 }
 
-/**
- * Enhanced string that includes token usage metadata.
- * Behaves like a regular string but has .usage and .input_tokens etc.
- */
-export class ChatResponseString extends String {
-  constructor(
-    content: string,
-    public readonly usage: Usage,
-    public readonly model: string
-  ) {
-    super(content);
-  }
-
-  get input_tokens() { return this.usage.input_tokens; }
-  get output_tokens() { return this.usage.output_tokens; }
-  get total_tokens() { return this.usage.total_tokens; }
-  get cached_tokens() { return this.usage.cached_tokens; }
-
-  get content(): string {
-    return this.valueOf();
-  }
-
-  get model_id(): string {
-    return this.model;
-  }
-
-  toString() {
-    return this.valueOf();
-  }
-}
+import { ChatResponseString } from "./ChatResponse.js";
 
 export class Chat {
   private messages: Message[] = [];
@@ -106,6 +77,28 @@ export class Chat {
     return this;
   }
 
+  // --- Event Handlers ---
+
+  onNewMessage(handler: () => void): this {
+    this.options.onNewMessage = handler;
+    return this;
+  }
+
+  onEndMessage(handler: (message: ChatResponseString) => void): this {
+    this.options.onEndMessage = handler;
+    return this;
+  }
+
+  onToolCall(handler: (toolCall: any) => void): this {
+    this.options.onToolCall = handler;
+    return this;
+  }
+
+  onToolResult(handler: (result: any) => void): this {
+    this.options.onToolResult = handler;
+    return this;
+  }
+
   /**
    * Ask the model a question
    */
@@ -158,18 +151,32 @@ export class Chat {
       }
     };
 
+    // First round
+    if (this.options.onNewMessage) this.options.onNewMessage();
     let response = await this.executor.executeChat(executeOptions);
     trackUsage(response.usage);
 
+    const firstAssistantMessage = new ChatResponseString(
+      response.content ?? "", 
+      response.usage ?? { input_tokens: 0, output_tokens: 0, total_tokens: 0 }, 
+      this.model
+    );
+
     this.messages.push({
       role: "assistant",
-      content: new ChatResponseString(response.content ?? "", response.usage ?? { input_tokens: 0, output_tokens: 0, total_tokens: 0 }, this.model),
+      content: firstAssistantMessage,
       tool_calls: response.tool_calls,
       usage: response.usage,
     });
 
+    if (this.options.onEndMessage && (!response.tool_calls || response.tool_calls.length === 0)) {
+      this.options.onEndMessage(firstAssistantMessage);
+    }
+
     while (response.tool_calls && response.tool_calls.length > 0) {
       for (const toolCall of response.tool_calls) {
+        if (this.options.onToolCall) this.options.onToolCall(toolCall);
+
         const tool = this.options.tools?.find(
           (t) => t.function.name === toolCall.function.name
         );
@@ -178,6 +185,7 @@ export class Chat {
           try {
             const args = JSON.parse(toolCall.function.arguments);
             const result = await tool.handler(args);
+            if (this.options.onToolResult) this.options.onToolResult(result);
 
             this.messages.push({
               role: "tool",
@@ -207,12 +215,22 @@ export class Chat {
       });
       trackUsage(response.usage);
 
+      const assistantMessage = new ChatResponseString(
+        response.content ?? "", 
+        response.usage ?? { input_tokens: 0, output_tokens: 0, total_tokens: 0 }, 
+        this.model
+      );
+
       this.messages.push({
         role: "assistant",
-        content: new ChatResponseString(response.content ?? "", response.usage ?? { input_tokens: 0, output_tokens: 0, total_tokens: 0 }, this.model),
+        content: assistantMessage,
         tool_calls: response.tool_calls,
         usage: response.usage,
       });
+
+      if (this.options.onEndMessage && (!response.tool_calls || response.tool_calls.length === 0)) {
+        this.options.onEndMessage(assistantMessage);
+      }
     }
 
     return new ChatResponseString(response.content ?? "", totalUsage, this.model);

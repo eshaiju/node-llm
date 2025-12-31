@@ -40,25 +40,35 @@ export class OpenAIStreaming {
 
     const reader = response.body.getReader();
     const decoder = new TextDecoder();
+    let buffer = "";
 
     while (true) {
       const { value, done } = await reader.read();
       if (done) break;
 
-      const chunk = decoder.decode(value);
-      const lines = chunk.split("\n");
+      const chunk = decoder.decode(value, { stream: true });
+      buffer += chunk;
+
+      const lines = buffer.split("\n\n");
+      buffer = lines.pop() || ""; // Keep the last incomplete part in the buffer
 
       for (const line of lines) {
-        if (!line.startsWith("data: ")) continue;
+        const trimmed = line.trim();
+        if (!trimmed.startsWith("data: ")) continue;
 
-        const data = line.replace("data: ", "").trim();
+        const data = trimmed.replace("data: ", "").trim();
         if (data === "[DONE]") return;
 
-        const json = JSON.parse(data);
-        const delta = json.choices?.[0]?.delta?.content;
+        try {
+          const json = JSON.parse(data);
+          const delta = json.choices?.[0]?.delta?.content;
 
-        if (delta) {
-          yield { content: delta };
+          if (delta) {
+            yield { content: delta };
+          }
+        } catch (e) {
+          // Ignore parse errors for now, or log them
+          // console.warn("JSON parse error in stream:", e);
         }
       }
     }

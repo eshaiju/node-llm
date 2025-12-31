@@ -7,4 +7,8 @@ export interface ChatOptions {
   tools?: Tool[];
   temperature?: number;
   maxTokens?: number;
+  onNewMessage?: () => void;
+  onEndMessage?: (message: any) => void;
+  onToolCall?: (toolCall: any) => void;
+  onToolResult?: (result: any) => void;
 }

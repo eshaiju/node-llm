@@ -1,6 +1,7 @@
 import { Message } from "./Message.js";
 import { ChatOptions } from "./ChatOptions.js";
 import { Provider } from "../providers/Provider.js";
+import { ChatResponseString } from "./ChatResponse.js";
 
 export class Stream {
   private messages: Message[];
@@ -48,6 +49,7 @@ export class Stream {
     }
 
     let full = "";
+    let isFirst = true;
 
     for await (const chunk of this.provider.stream({
       model: this.model,
@@ -55,6 +57,11 @@ export class Stream {
       temperature: this.options.temperature,
       max_tokens: this.options.maxTokens,
     })) {
+      if (isFirst) {
+        if (this.options.onNewMessage) this.options.onNewMessage();
+        isFirst = false;
+      }
+
       if (chunk.content) {
         full += chunk.content;
       }
@@ -65,5 +72,13 @@ export class Stream {
       role: "assistant",
       content: full,
     });
+
+    if (this.options.onEndMessage) {
+      this.options.onEndMessage(new ChatResponseString(
+        full,
+        { input_tokens: 0, output_tokens: 0, total_tokens: 0 },
+        this.model
+      ));
+    }
   }
 }

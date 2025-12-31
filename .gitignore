@@ -41,3 +41,4 @@ yarn-error.log*
 # Misc
 # =========================
 coverage/
+run_all_examples.sh

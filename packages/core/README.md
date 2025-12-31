@@ -129,6 +129,20 @@ if (result.flagged) {
 
 Learn how to implement [custom risk thresholds](https://github.com/eshaiju/node-llm/blob/main/examples/openai/12-risk-assessment.mjs) for more granular control.
 
+### 8. Chat Event Handlers
+
+Hook into the chat lifecycle for logging, UI updates, or auditing.
+
+```ts
+chat
+  .onNewMessage(() => console.log("AI started typing..."))
+  .onToolCall((tool) => console.log(`Calling ${tool.function.name}...`))
+  .onToolResult((result) => console.log(`Tool returned: ${result}`))
+  .onEndMessage((response) => console.log(`Done. Usage: ${response.total_tokens}`));
+
+await chat.ask("What's the weather?");
+```
+
 ---
 
 ## 📚 Examples
@@ -150,6 +164,7 @@ Check the [examples](./examples) directory for focused scripts organized by prov
 | [Capabilities](https://github.com/eshaiju/node-llm/blob/main/examples/openai/10-capabilities.mjs) | Dynamic model specs and pricing |
 | [Moderate](https://github.com/eshaiju/node-llm/blob/main/examples/openai/11-moderate.mjs) | Content safety moderation |
 | [Risk Assessment](https://github.com/eshaiju/node-llm/blob/main/examples/openai/12-risk-assessment.mjs) | Custom thresholds and risk levels |
+| [Chat Events](https://github.com/eshaiju/node-llm/blob/main/examples/openai/13-chat-events.mjs) | Lifecycle hooks (onNewMessage, onToolCall etc) |
 
 To run an example (from the project root):
 ```bash
