@@ -11,13 +11,16 @@ Polly.register(NodeHttpAdapter);
 Polly.register(FetchAdapter);
 Polly.register(FSPersister);
 
-export function setupVCR(recordingName: string) {
-  const recordingsDir = path.resolve(__dirname, "../__cassettes__");
+export function setupVCR(recordingName: string, subDir?: string) {
+  let recordingsDir = path.resolve(__dirname, "../__cassettes__");
+  if (subDir) {
+    recordingsDir = path.join(recordingsDir, subDir);
+  }
   const mode = (process.env.VCR_MODE as any) || "replay";
 
-  // If in replay mode and no key is set, set a dummy key to avoid validation errors
-  if (mode === "replay" && !process.env.OPENAI_API_KEY) {
-    process.env.OPENAI_API_KEY = "sk-dummy-key-for-vcr-replay";
+  if (mode === "replay") {
+    if (!process.env.OPENAI_API_KEY) process.env.OPENAI_API_KEY = "sk-dummy-key-for-vcr-replay";
+    if (!process.env.GEMINI_API_KEY) process.env.GEMINI_API_KEY = "dummy-key-for-vcr-replay";
   }
 
   const polly = new Polly(recordingName, {
@@ -31,6 +34,12 @@ export function setupVCR(recordingName: string) {
     matchRequestsBy: {
       headers: {
         exclude: ["authorization", "openai-organization", "openai-project", "user-agent"],
+      },
+      url: {
+        query: (query: any) => {
+          const { key, ...rest } = query;
+          return rest;
+        },
       },
       body: false,
     },
@@ -51,6 +60,11 @@ export function setupVCR(recordingName: string) {
           header.value = "[REDACTED]";
         }
       });
+    }
+
+    // Scrub key from URL
+    if (recording.request.url) {
+      recording.request.url = recording.request.url.replace(/key=[^&]+/, 'key=[REDACTED]');
     }
 
     // Scrub sensitive headers from responses

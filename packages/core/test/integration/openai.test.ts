@@ -18,7 +18,7 @@ describe("OpenAI Integration (VCR)", { timeout: 30000 }, () => {
   });
 
   it("should perform a basic chat completion", async ({ task }) => {
-    polly = setupVCR(task.name);
+    polly = setupVCR(task.name, "openai");
 
     LLM.configure({ provider: "openai" });
     const chat = LLM.chat("gpt-4o-mini");
@@ -30,7 +30,7 @@ describe("OpenAI Integration (VCR)", { timeout: 30000 }, () => {
   });
 
   it("should handle tool calling", async ({ task }) => {
-    polly = setupVCR(task.name);
+    polly = setupVCR(task.name, "openai");
 
     LLM.configure({ provider: "openai" });
 
@@ -55,7 +55,7 @@ describe("OpenAI Integration (VCR)", { timeout: 30000 }, () => {
   });
 
   it("should analyze images (Vision)", async ({ task }) => {
-    polly = setupVCR(task.name);
+    polly = setupVCR(task.name, "openai");
 
     LLM.configure({ provider: "openai" });
     const chat = LLM.chat("gpt-4o-mini");
@@ -69,7 +69,7 @@ describe("OpenAI Integration (VCR)", { timeout: 30000 }, () => {
   });
 
   it("should generate images (Paint)", async ({ task }) => {
-    polly = setupVCR(task.name);
+    polly = setupVCR(task.name, "openai");
 
     LLM.configure({ provider: "openai" });
     const image = await LLM.paint("a cute robot", { model: "dall-e-3" });
@@ -79,7 +79,7 @@ describe("OpenAI Integration (VCR)", { timeout: 30000 }, () => {
   });
 
   it("should track total token usage", async ({ task }) => {
-    polly = setupVCR(task.name);
+    polly = setupVCR(task.name, "openai");
 
     LLM.configure({ provider: "openai" });
     const chat = LLM.chat("gpt-4o-mini");
@@ -94,7 +94,7 @@ describe("OpenAI Integration (VCR)", { timeout: 30000 }, () => {
   });
 
   it("should support streaming", async ({ task }) => {
-    polly = setupVCR(task.name);
+    polly = setupVCR(task.name, "openai");
 
     LLM.configure({ provider: "openai" });
     const chat = LLM.chat("gpt-4o-mini");
@@ -108,7 +108,7 @@ describe("OpenAI Integration (VCR)", { timeout: 30000 }, () => {
   });
 
   it("should transcribe audio", async ({ task }) => {
-    polly = setupVCR(task.name);
+    polly = setupVCR(task.name, "openai");
 
     LLM.configure({ 
       provider: "openai",
@@ -124,7 +124,7 @@ describe("OpenAI Integration (VCR)", { timeout: 30000 }, () => {
   });
 
   it("should transcribe audio using gpt-4o-transcribe", async ({ task }) => {
-    polly = setupVCR(task.name);
+    polly = setupVCR(task.name, "openai");
 
     LLM.configure({ provider: "openai" });
     const transcription = await LLM.transcribe(audioPath, {
@@ -136,7 +136,7 @@ describe("OpenAI Integration (VCR)", { timeout: 30000 }, () => {
   });
 
   it("should moderate content", async ({ task }) => {
-    polly = setupVCR(task.name);
+    polly = setupVCR(task.name, "openai");
 
     LLM.configure({ provider: "openai" });
     const result = await LLM.moderate("This is a safe message about coding.");

@@ -12,7 +12,7 @@ describe("OpenAI Embeddings (VCR)", { timeout: 30000 }, () => {
   });
 
   it("should generate embeddings for single text", async ({ task }) => {
-    polly = setupVCR(task.name);
+    polly = setupVCR(task.name, "openai");
     LLM.configure({ provider: "openai" });
 
     const embedding = await LLM.embed("Hello world");
@@ -24,7 +24,7 @@ describe("OpenAI Embeddings (VCR)", { timeout: 30000 }, () => {
   });
 
   it("should generate embeddings for multiple texts", async ({ task }) => {
-    polly = setupVCR(task.name);
+    polly = setupVCR(task.name, "openai");
     LLM.configure({ provider: "openai" });
 
     const input = ["Hello", "World"];
@@ -36,7 +36,7 @@ describe("OpenAI Embeddings (VCR)", { timeout: 30000 }, () => {
   });
 
   it("should support custom dimensions", async ({ task }) => {
-    polly = setupVCR(task.name);
+    polly = setupVCR(task.name, "openai");
     LLM.configure({ provider: "openai" });
 
     const embedding = await LLM.embed("Hello world", { dimensions: 256 });
@@ -45,7 +45,7 @@ describe("OpenAI Embeddings (VCR)", { timeout: 30000 }, () => {
   });
 
   it("should use configured default model", async ({ task }) => {
-    polly = setupVCR(task.name);
+    polly = setupVCR(task.name, "openai");
     LLM.configure({ 
       provider: "openai",
       defaultEmbeddingModel: "text-embedding-3-large"
@@ -58,7 +58,7 @@ describe("OpenAI Embeddings (VCR)", { timeout: 30000 }, () => {
   });
 
   it("should throw error for non-embedding model", async ({ task }) => {
-    polly = setupVCR(task.name);
+    polly = setupVCR(task.name, "openai");
     LLM.configure({ provider: "openai" });
 
     await expect(LLM.embed("Hello", { model: "gpt-4" }))

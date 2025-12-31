@@ -10,6 +10,7 @@ import {
 } from "./providers/Provider.js";
 import { providerRegistry } from "./providers/registry.js";
 import { ensureOpenAIRegistered } from "./providers/openai/index.js";
+import { registerGeminiProvider } from "./providers/gemini/index.js";
 import { GeneratedImage } from "./image/GeneratedImage.js";
 import { models, ModelRegistry } from "./models/ModelRegistry.js";
 import { Transcription } from "./transcription/Transcription.js";
@@ -62,6 +63,10 @@ class LLMCore {
     if (typeof config.provider === "string") {
       if (config.provider === "openai") {
         ensureOpenAIRegistered();
+      }
+
+      if (config.provider === "gemini") {
+        registerGeminiProvider();
       }
 
       this.provider = providerRegistry.resolve(config.provider);
