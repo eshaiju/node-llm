@@ -1,3 +1,6 @@
+import fs from "fs";
+import path from "path";
+
 export interface Base64Data {
   data: string;
   mimeType: string;
@@ -5,7 +8,7 @@ export interface Base64Data {
 
 export class BinaryUtils {
   /**
-   * Converts a URL (data: or http:) to a base64 string and mime type.
+   * Converts a URL (data:, http:, or local path) to a base64 string and mime type.
    */
   static async toBase64(url: string): Promise<Base64Data | null> {
     if (url.startsWith("data:")) {
@@ -22,7 +25,7 @@ export class BinaryUtils {
         if (!response.ok) return null;
         const buffer = await response.arrayBuffer();
         const base64 = Buffer.from(buffer).toString("base64");
-        const mimeType = response.headers.get("content-type") || "image/jpeg";
+        const mimeType = response.headers.get("content-type") || this.guessMimeType(url);
         return {
           mimeType,
           data: base64,
@@ -31,7 +34,40 @@ export class BinaryUtils {
         console.error("Error converting URL to base64:", e);
         return null;
       }
+    } else {
+      // Assume local file path
+      try {
+        if (fs.existsSync(url)) {
+          const buffer = fs.readFileSync(url);
+          const base64 = buffer.toString("base64");
+          const mimeType = this.guessMimeType(url);
+          return {
+            mimeType,
+            data: base64,
+          };
+        }
+      } catch (e) {
+        console.error("Error reading local file for base64:", e);
+        return null;
+      }
     }
     return null;
+  }
+
+  private static guessMimeType(filePath: string): string {
+    const ext = path.extname(filePath).toLowerCase();
+    switch (ext) {
+      case ".png": return "image/png";
+      case ".jpg":
+      case ".jpeg": return "image/jpeg";
+      case ".webp": return "image/webp";
+      case ".gif": return "image/gif";
+      case ".mp3": return "audio/mpeg";
+      case ".wav": return "audio/wav";
+      case ".ogg": return "audio/ogg";
+      case ".m4a": return "audio/mp4";
+      case ".pdf": return "application/pdf";
+      default: return "application/octet-stream";
+    }
   }
 }

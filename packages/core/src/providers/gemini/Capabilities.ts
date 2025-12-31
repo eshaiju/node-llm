@@ -75,7 +75,8 @@ export class Capabilities {
   }
 
   static supportsTranscription(modelId: string): boolean {
-    return false;
+    const id = this.normalizeModelId(modelId);
+    return !!id.match(/gemini|flash|pro/);
   }
 
   static supportsModeration(modelId: string): boolean {

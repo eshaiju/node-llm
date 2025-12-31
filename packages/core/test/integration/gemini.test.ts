@@ -1,4 +1,5 @@
 import { describe, it, expect, afterEach } from "vitest";
+import path from "path";
 import { LLM } from "../../src/index.js";
 import { setupVCR } from "../helpers/vcr.js";
 import "dotenv/config";
@@ -145,5 +146,18 @@ describe("Gemini Integration (VCR)", { timeout: 30000 }, () => {
     expect(response.vectors.length).toBe(2);
     expect(response.vectors[0].length).toBeGreaterThan(0);
     expect(response.vectors[1].length).toBeGreaterThan(0);
+  });
+
+  it("should transcribe audio", async ({ task }) => {
+    polly = setupVCR(task.name, "gemini");
+
+    LLM.configure({ provider: "gemini" });
+    
+    const audioPath = path.resolve(__dirname, "../../../../examples/audio/sample-0.mp3");
+    const response = await LLM.transcribe(audioPath, { model: "gemini-2.0-flash" });
+
+    expect(response.text).toBeDefined();
+    expect(response.text.length).toBeGreaterThan(0);
+    expect(response.model).toBe("gemini-2.0-flash");
   });
 });

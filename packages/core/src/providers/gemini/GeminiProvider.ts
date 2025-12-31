@@ -1,10 +1,11 @@
-import { Provider, ChatRequest, ChatResponse, ModelInfo, ChatChunk, ImageRequest, ImageResponse } from "../Provider.js";
+import { Provider, ChatRequest, ChatResponse, ModelInfo, ChatChunk, ImageRequest, ImageResponse, TranscriptionRequest, TranscriptionResponse } from "../Provider.js";
 import { Capabilities } from "./Capabilities.js";
 import { GeminiChat } from "./Chat.js";
 import { GeminiStreaming } from "./Streaming.js";
 import { GeminiModels } from "./Models.js";
 import { GeminiImage } from "./Image.js";
 import { GeminiEmbeddings } from "./Embeddings.js";
+import { GeminiTranscription } from "./Transcription.js";
 import { EmbeddingRequest, EmbeddingResponse } from "../Embedding.js";
 
 export interface GeminiProviderOptions {
@@ -19,6 +20,7 @@ export class GeminiProvider implements Provider {
   private readonly modelsHandler: GeminiModels;
   private readonly imageHandler: GeminiImage;
   private readonly embeddingHandler: GeminiEmbeddings;
+  private readonly transcriptionHandler: GeminiTranscription;
 
   public capabilities = {
     supportsVision: (model: string) => Capabilities.supportsVision(model),
@@ -38,6 +40,7 @@ export class GeminiProvider implements Provider {
     this.modelsHandler = new GeminiModels(this.baseUrl, options.apiKey);
     this.imageHandler = new GeminiImage(this.baseUrl, options.apiKey);
     this.embeddingHandler = new GeminiEmbeddings(this.baseUrl, options.apiKey);
+    this.transcriptionHandler = new GeminiTranscription(this.baseUrl, options.apiKey);
   }
 
   async chat(request: ChatRequest): Promise<ChatResponse> {
@@ -58,5 +61,9 @@ export class GeminiProvider implements Provider {
 
   async embed(request: EmbeddingRequest): Promise<EmbeddingResponse> {
     return this.embeddingHandler.execute(request);
+  }
+
+  async transcribe(request: TranscriptionRequest): Promise<TranscriptionResponse> {
+    return this.transcriptionHandler.execute(request);
   }
 }
