@@ -42,7 +42,7 @@ import { LLM } from "@node-llm/core";
 import "dotenv/config";
 
 LLM.configure({
-  provider: "openai", // Uses OPENAI_API_KEY from env
+  provider: "openai", // or "gemini" (Uses GEMINI_API_KEY)
   retry: { attempts: 3, delayMs: 500 },
   defaultModerationModel: "text-moderation-latest",
   defaultTranscriptionModel: "whisper-1",
