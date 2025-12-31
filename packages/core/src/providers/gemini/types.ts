@@ -99,3 +99,27 @@ export interface GeminiImageResponse {
     };
   }>;
 }
+
+export interface GeminiEmbedRequest {
+  model: string;
+  content: {
+    parts: Array<{ text: string }>;
+  };
+  outputDimensionality?: number;
+}
+
+export interface GeminiEmbedResponse {
+  embedding: {
+    values: number[];
+  };
+}
+
+export interface GeminiBatchEmbedRequest {
+  requests: GeminiEmbedRequest[];
+}
+
+export interface GeminiBatchEmbedResponse {
+  embeddings: Array<{
+    values: number[];
+  }>;
+}

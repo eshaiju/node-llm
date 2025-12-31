@@ -4,6 +4,8 @@ import { GeminiChat } from "./Chat.js";
 import { GeminiStreaming } from "./Streaming.js";
 import { GeminiModels } from "./Models.js";
 import { GeminiImage } from "./Image.js";
+import { GeminiEmbeddings } from "./Embeddings.js";
+import { EmbeddingRequest, EmbeddingResponse } from "../Embedding.js";
 
 export interface GeminiProviderOptions {
   apiKey: string;
@@ -16,6 +18,7 @@ export class GeminiProvider implements Provider {
   private readonly streamingHandler: GeminiStreaming;
   private readonly modelsHandler: GeminiModels;
   private readonly imageHandler: GeminiImage;
+  private readonly embeddingHandler: GeminiEmbeddings;
 
   public capabilities = {
     supportsVision: (model: string) => Capabilities.supportsVision(model),
@@ -34,6 +37,7 @@ export class GeminiProvider implements Provider {
     this.streamingHandler = new GeminiStreaming(this.baseUrl, options.apiKey);
     this.modelsHandler = new GeminiModels(this.baseUrl, options.apiKey);
     this.imageHandler = new GeminiImage(this.baseUrl, options.apiKey);
+    this.embeddingHandler = new GeminiEmbeddings(this.baseUrl, options.apiKey);
   }
 
   async chat(request: ChatRequest): Promise<ChatResponse> {
@@ -50,5 +54,9 @@ export class GeminiProvider implements Provider {
 
   async paint(request: ImageRequest): Promise<ImageResponse> {
     return this.imageHandler.execute(request);
+  }
+
+  async embed(request: EmbeddingRequest): Promise<EmbeddingResponse> {
+    return this.embeddingHandler.execute(request);
   }
 }
