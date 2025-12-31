@@ -15,6 +15,7 @@ A provider-agnostic LLM core for Node.js, heavily inspired by the elegant design
 - **Provider-Agnostic**: Switch between OpenAI, Anthropic, and others with a single line of config.
 - **Streaming-First**: Native `AsyncIterator` support for real-time token delivery.
 - **Tool Calling**: Automatic execution loop for model-requested functions.
+- **Content Moderation**: Built-in safety checks for user input and model output.
 - **Multi-modal & Smart Files**: Built-in support for Vision (images), Audio, and Text files.
 - **Fluent API**: Chainable methods like `.withTool()` for dynamic registration.
 - **Resilient**: Configurable retry logic at the execution layer.
@@ -112,6 +113,19 @@ const text = await LLM.transcribe("meeting.mp3");
 console.log(text);
 ```
 
+### 7. Content Moderation (Moderate)
+
+Check if text content violates safety policies.
+
+```ts
+const result = await LLM.moderate("I want to help everyone!");
+if (result.flagged) {
+  console.log(`❌ Flagged for: ${result.flaggedCategories.join(", ")}`);
+} else {
+  console.log("✅ Content appears safe");
+}
+```
+
 ---
 
 ## 📚 Examples
@@ -130,6 +144,8 @@ Check the [examples](./examples) directory for focused scripts organized by prov
 | [Image Features](./examples/openai/07-image-features.mjs) | Saving and processing generated images |
 | [Token Usage](./examples/openai/08-token-usage.mjs) | Detailed stats for turns and conversations |
 | [Transcribe](./examples/openai/09-transcribe.mjs) | Audio to text transcription |
+| [Capabilities](./examples/openai/10-capabilities.mjs) | Dynamic model specs and pricing |
+| [Moderate](./examples/openai/11-moderate.mjs) | Content safety moderation |
 
 To run an example:
 ```bash
@@ -207,7 +223,7 @@ console.log(model.pricing.text_tokens.standard.input_per_million); // => 0.15
 
 | Provider | Status | Notes |
 | :--- | :--- | :--- |
-| **OpenAI** | ✅ Supported | Chat, Streaming, Tools, Vision, Audio, Images, Transcription |
+| **OpenAI** | ✅ Supported | Chat, Streaming, Tools, Vision, Audio, Images, Transcription, Moderation |
 | **Anthropic** | 🏗️ Roadmap | Coming soon |
 | **Azure OpenAI** | 🏗️ Roadmap | Coming soon |
 

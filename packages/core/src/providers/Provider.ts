@@ -88,11 +88,29 @@ export interface TranscriptionResponse {
   segments?: TranscriptionSegment[];
 }
 
+export interface ModerationRequest {
+  input: string | string[];
+  model?: string;
+}
+
+export interface ModerationResult {
+  flagged: boolean;
+  categories: Record<string, boolean>;
+  category_scores: Record<string, number>;
+}
+
+export interface ModerationResponse {
+  id: string;
+  model: string;
+  results: ModerationResult[];
+}
+
 export interface Provider {
   chat(request: ChatRequest): Promise<ChatResponse>;
   stream?(request: ChatRequest): AsyncIterable<ChatChunk>;
   listModels?(): Promise<ModelInfo[]>;
   paint?(request: ImageRequest): Promise<ImageResponse>;
   transcribe?(request: TranscriptionRequest): Promise<TranscriptionResponse>;
+  moderate?(request: ModerationRequest): Promise<ModerationResponse>;
   capabilities?: ProviderCapabilities;
 }

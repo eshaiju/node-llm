@@ -5,11 +5,15 @@ import {
   ModelInfo,
   TranscriptionResponse,
   TranscriptionSegment,
+  ModerationResponse,
+  ModerationResult,
 } from "./providers/Provider.js";
 import { providerRegistry } from "./providers/registry.js";
 import { ensureOpenAIRegistered } from "./providers/openai/index.js";
 import { GeneratedImage } from "./image/GeneratedImage.js";
 import { models, ModelRegistry } from "./models/ModelRegistry.js";
+import { Transcription } from "./transcription/Transcription.js";
+import { Moderation } from "./moderation/Moderation.js";
 
 export interface RetryOptions {
   attempts?: number;
@@ -19,30 +23,6 @@ export interface RetryOptions {
 type LLMConfig =
   | { provider: Provider; retry?: RetryOptions; defaultTranscriptionModel?: string }
   | { provider: string; retry?: RetryOptions; defaultTranscriptionModel?: string };
-
-export class Transcription {
-  constructor(private readonly response: TranscriptionResponse) {}
-
-  get text(): string {
-    return this.response.text;
-  }
-
-  get model(): string {
-    return this.response.model;
-  }
-
-  get segments(): TranscriptionSegment[] {
-    return this.response.segments || [];
-  }
-
-  get duration(): number | undefined {
-    return this.response.duration;
-  }
-
-  toString(): string {
-    return this.text;
-  }
-}
 
 class LLMCore {
   public readonly models: ModelRegistry = models;
@@ -144,6 +124,24 @@ class LLMCore {
   getRetryConfig() {
     return this.retry;
   }
+
+  async moderate(input: string | string[], options?: { model?: string }): Promise<Moderation> {
+    if (!this.provider) {
+      throw new Error("LLM provider not configured");
+    }
+    if (!this.provider.moderate) {
+      throw new Error(`Provider does not support moderate`);
+    }
+
+    const response = await this.provider.moderate({
+      input,
+      ...options,
+    });
+
+    return new Moderation(response);
+  }
 }
+
+export { Transcription, Moderation };
 
 export const LLM = new LLMCore();

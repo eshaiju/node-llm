@@ -1,10 +1,11 @@
-import { Provider, ChatRequest, ChatResponse, ModelInfo, ChatChunk, ImageRequest, ImageResponse } from "../Provider.js";
+import { Provider, ChatRequest, ChatResponse, ModelInfo, ChatChunk, ImageRequest, ImageResponse, ModerationRequest, ModerationResponse } from "../Provider.js";
 import { Capabilities } from "./Capabilities.js";
 import { OpenAIChat } from "./Chat.js";
 import { OpenAIStreaming } from "./Streaming.js";
 import { OpenAIModels } from "./Models.js";
 import { OpenAIImage } from "./Image.js";
 import { OpenAITranscription } from "./Transcription.js";
+import { OpenAIModeration } from "./Moderation.js";
 import { TranscriptionRequest, TranscriptionResponse } from "../Provider.js";
 
 export interface OpenAIProviderOptions {
@@ -19,6 +20,7 @@ export class OpenAIProvider implements Provider {
   private readonly modelsHandler: OpenAIModels;
   private readonly imageHandler: OpenAIImage;
   private readonly transcriptionHandler: OpenAITranscription;
+  private readonly moderationHandler: OpenAIModeration;
 
   public capabilities = {
     supportsVision: (model: string) => Capabilities.supportsVision(model),
@@ -34,6 +36,7 @@ export class OpenAIProvider implements Provider {
     this.modelsHandler = new OpenAIModels(this.baseUrl, options.apiKey);
     this.imageHandler = new OpenAIImage(this.baseUrl, options.apiKey);
     this.transcriptionHandler = new OpenAITranscription(this.baseUrl, options.apiKey);
+    this.moderationHandler = new OpenAIModeration(this.baseUrl, options.apiKey);
   }
 
   async chat(request: ChatRequest): Promise<ChatResponse> {
@@ -54,5 +57,9 @@ export class OpenAIProvider implements Provider {
 
   async transcribe(request: TranscriptionRequest): Promise<TranscriptionResponse> {
     return this.transcriptionHandler.execute(request);
+  }
+
+  async moderate(request: ModerationRequest): Promise<ModerationResponse> {
+    return this.moderationHandler.execute(request);
   }
 }

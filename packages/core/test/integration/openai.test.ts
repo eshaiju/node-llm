@@ -134,4 +134,15 @@ describe("OpenAI Integration (VCR)", { timeout: 30000 }, () => {
     expect(transcription.text).toBeDefined();
     expect(transcription.model).toBe("gpt-4o-transcribe");
   });
+
+  it("should moderate content", async ({ task }) => {
+    polly = setupVCR(task.name);
+
+    LLM.configure({ provider: "openai" });
+    const result = await LLM.moderate("This is a safe message about coding.");
+
+    expect(result.flagged).toBe(false);
+    expect(result.model).toBeDefined();
+    expect(result.id).toBeDefined();
+  });
 });
