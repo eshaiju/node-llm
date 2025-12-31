@@ -70,6 +70,16 @@ class LLMCore {
     }
   }
 
+  private ensureProviderSupport<K extends keyof Provider>(method: K): Provider & Record<K, NonNullable<Provider[K]>> {
+    if (!this.provider) {
+      throw new Error("LLM provider not configured");
+    }
+    if (!this.provider[method]) {
+      throw new Error(`Provider does not support ${method}`);
+    }
+    return this.provider as Provider & Record<K, NonNullable<Provider[K]>>;
+  }
+
   chat(model: string, options?: ChatOptions): Chat {
     if (!this.provider) {
       throw new Error("LLM provider not configured");
@@ -79,24 +89,14 @@ class LLMCore {
   }
 
   async listModels(): Promise<ModelInfo[]> {
-    if (!this.provider) {
-      throw new Error("LLM provider not configured");
-    }
-    if (!this.provider.listModels) {
-      throw new Error(`Provider does not support listModels`);
-    }
-    return this.provider.listModels();
+    const provider = this.ensureProviderSupport("listModels");
+    return provider.listModels();
   }
 
   async paint(prompt: string, options?: { model?: string; size?: string; quality?: string }): Promise<GeneratedImage> {
-    if (!this.provider) {
-      throw new Error("LLM provider not configured");
-    }
-    if (!this.provider.paint) {
-      throw new Error(`Provider does not support paint`);
-    }
+    const provider = this.ensureProviderSupport("paint");
 
-    const response = await this.provider.paint({
+    const response = await provider.paint({
       prompt,
       ...options,
     });
@@ -114,14 +114,9 @@ class LLMCore {
       speakerReferences?: string[];
     }
   ): Promise<Transcription> {
-    if (!this.provider) {
-      throw new Error("LLM provider not configured");
-    }
-    if (!this.provider.transcribe) {
-      throw new Error(`Provider does not support transcribe`);
-    }
+    const provider = this.ensureProviderSupport("transcribe");
 
-    const response = await this.provider.transcribe({
+    const response = await provider.transcribe({
       file,
       model: options?.model || this.defaultTranscriptionModelId,
       ...options,
@@ -147,14 +142,9 @@ class LLMCore {
   }
 
   async moderate(input: string | string[], options?: { model?: string }): Promise<Moderation> {
-    if (!this.provider) {
-      throw new Error("LLM provider not configured");
-    }
-    if (!this.provider.moderate) {
-      throw new Error(`Provider does not support moderate`);
-    }
+    const provider = this.ensureProviderSupport("moderate");
 
-    const response = await this.provider.moderate({
+    const response = await provider.moderate({
       input,
       model: options?.model || this.defaultModerationModelId,
       ...options,
@@ -167,12 +157,7 @@ class LLMCore {
     input: string | string[],
     options?: { model?: string; dimensions?: number }
   ): Promise<Embedding> {
-    if (!this.provider) {
-      throw new Error("LLM provider not configured");
-    }
-    if (!(this.provider as any).embed) {
-      throw new Error(`Provider does not support embeddings`);
-    }
+    const provider = this.ensureProviderSupport("embed");
 
     const request: EmbeddingRequest = {
       input,
@@ -180,11 +165,11 @@ class LLMCore {
       dimensions: options?.dimensions,
     };
 
-    if (this.provider.capabilities && !this.provider.capabilities.supportsEmbeddings(request.model!)) {
+    if (provider.capabilities && !provider.capabilities.supportsEmbeddings(request.model!)) {
       throw new Error(`Model ${request.model} does not support embeddings.`);
     }
 
-    const response = await (this.provider as any).embed(request);
+    const response = await provider.embed(request);
     return new Embedding(response);
   }
 }
