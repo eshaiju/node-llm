@@ -75,4 +75,21 @@ describe("Gemini Integration (VCR)", { timeout: 30000 }, () => {
     expect(flash?.provider).toBe("gemini");
     expect(flash?.capabilities).toContain("streaming");
   });
+
+  it("should analyze images (Vision)", async ({ task }) => {
+    polly = setupVCR(task.name, "gemini");
+
+    LLM.configure({ provider: "gemini" });
+    const chat = LLM.chat("gemini-2.0-flash");
+
+    // A small 1x1 red PNG dot
+    const base64Image = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==";
+
+    const response = await chat.ask("What color is this image?", {
+      images: [base64Image]
+    });
+
+    expect(String(response).toLowerCase()).toContain("red");
+    expect(response.usage.input_tokens).toBeGreaterThan(0);
+  });
 });

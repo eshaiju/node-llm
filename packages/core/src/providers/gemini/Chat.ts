@@ -2,6 +2,7 @@ import { ChatRequest, ChatResponse } from "../Provider.js";
 import { GeminiContent, GeminiGenerateContentRequest, GeminiGenerateContentResponse, GeminiPart } from "./types.js";
 import { Capabilities } from "./Capabilities.js";
 import { handleGeminiError } from "./Errors.js";
+import { BinaryUtils } from "../../utils/Binary.js";
 
 export class GeminiChat {
   constructor(private readonly baseUrl: string, private readonly apiKey: string) {}
@@ -22,14 +23,13 @@ export class GeminiChat {
         const parts: GeminiPart[] = [];
 
         if (msg.role === "tool") {
-          // Map tool results to functionResponse
           parts.push({
             functionResponse: {
-              name: msg.tool_call_id || "unknown", // Library expects tool_call_id to be name
+              name: msg.tool_call_id || "unknown",
               response: { result: msg.content },
             },
           });
-          contents.push({ role: "user", parts }); // Results come from "user" role
+          contents.push({ role: "user", parts });
         } else {
           const role = msg.role === "assistant" ? "model" : "user";
           
@@ -39,11 +39,20 @@ export class GeminiChat {
             for (const part of msg.content) {
               if (part.type === "text") {
                 parts.push({ text: part.text });
+              } else if (part.type === "image_url") {
+                const binary = await BinaryUtils.toBase64(part.image_url.url);
+                if (binary) {
+                  parts.push({
+                    inlineData: {
+                      mimeType: binary.mimeType,
+                      data: binary.data,
+                    },
+                  });
+                }
               }
             }
           }
 
-          // Handle tool calls in assistant messages
           if (msg.role === "assistant" && msg.tool_calls) {
             for (const call of msg.tool_calls) {
               parts.push({
@@ -101,17 +110,15 @@ export class GeminiChat {
     const json = (await response.json()) as GeminiGenerateContentResponse;
     const candidate = json.candidates?.[0];
     
-    // Extract text
     const content = candidate?.content?.parts
         ?.filter(p => p.text)
         .map(p => p.text)
         .join("\n") || null;
     
-    // Extract tool calls
     const tool_calls = candidate?.content?.parts
       ?.filter((p) => p.functionCall)
       .map((p) => ({
-        id: p.functionCall!.name, // Using name as ID for Gemini
+        id: p.functionCall!.name,
         type: "function" as const,
         function: {
           name: p.functionCall!.name,
@@ -128,4 +135,3 @@ export class GeminiChat {
     return { content, tool_calls, usage };
   }
 }
-
