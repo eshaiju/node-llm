@@ -108,6 +108,15 @@ export class Chat {
     return this.withInstructions(instruction, options);
   }
 
+  /**
+   * Set the temperature for the chat session.
+   * Controls randomness: 0.0 (deterministic) to 1.0 (creative).
+   */
+  withTemperature(temp: number): this {
+    this.options.temperature = temp;
+    return this;
+  }
+
   // --- Event Handlers ---
 
   onNewMessage(handler: () => void): this {

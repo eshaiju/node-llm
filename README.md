@@ -158,6 +158,18 @@ await chat.ask("Hello");
 // => "Ahoy matey!"
 ```
 
+### 10. Temperature Control (Creativity)
+
+Adjust the randomness of the model's responses.
+
+```ts
+// Factual (0.0 - 0.3)
+const factual = LLM.chat("gpt-4o").withTemperature(0.2);
+
+// Creative (0.7 - 1.0)
+const creative = LLM.chat("gpt-4o").withTemperature(0.9);
+```
+
 ---
 
 ## 📚 Examples
@@ -181,6 +193,7 @@ Check the [examples](./examples) directory for focused scripts organized by prov
 | [Risk Assessment](./examples/openai/12-risk-assessment.mjs) | Custom thresholds and risk levels |
 | [Chat Events](./examples/openai/13-chat-events.mjs) | Lifecycle hooks (onNewMessage, onToolCall etc) |
 | [System Prompts](./examples/openai/15-system-prompts.mjs) | Dynamic system instructions |
+| [Temperature](./examples/openai/16-temperature.mjs) | Control creativity vs determinism |
 
 To run an example:
 ```bash
