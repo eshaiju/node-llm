@@ -68,6 +68,8 @@ export interface TranscriptionRequest {
   file: string;
   prompt?: string;
   language?: string;
+  speakerNames?: string[];
+  speakerReferences?: string[];
 }
 
 export interface TranscriptionSegment {

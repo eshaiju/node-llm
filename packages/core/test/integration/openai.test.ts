@@ -2,6 +2,11 @@ import { describe, it, expect, afterEach } from "vitest";
 import { LLM } from "../../src/index.js";
 import { setupVCR } from "../helpers/vcr.js";
 import "dotenv/config";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const audioPath = path.resolve(__dirname, "../../../../examples/audio/sample-0.mp3");
 
 describe("OpenAI Integration (VCR)", { timeout: 30000 }, () => {
   let polly: any;
@@ -110,9 +115,9 @@ describe("OpenAI Integration (VCR)", { timeout: 30000 }, () => {
       defaultTranscriptionModel: "whisper-1"
     });
     
-    // Relative to packages/core where tests run
-    const transcription = await LLM.transcribe("../../examples/audio/sample-0.mp3");
-
+    // Using absolute path resolved from test file location
+    const transcription = await LLM.transcribe(audioPath);
+    
     expect(transcription.text).toBeDefined();
     expect(transcription.segments.length).toBeGreaterThan(0);
     expect(transcription.duration).toBeGreaterThan(0);
@@ -122,7 +127,7 @@ describe("OpenAI Integration (VCR)", { timeout: 30000 }, () => {
     polly = setupVCR(task.name);
 
     LLM.configure({ provider: "openai" });
-    const transcription = await LLM.transcribe("../../examples/audio/sample-0.mp3", {
+    const transcription = await LLM.transcribe(audioPath, {
       model: "gpt-4o-transcribe"
     });
 

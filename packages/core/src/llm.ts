@@ -109,7 +109,16 @@ class LLMCore {
     return new GeneratedImage(response);
   }
 
-  async transcribe(file: string, options?: { model?: string; prompt?: string; language?: string }): Promise<Transcription> {
+  async transcribe(
+    file: string, 
+    options?: { 
+      model?: string; 
+      prompt?: string; 
+      language?: string;
+      speakerNames?: string[];
+      speakerReferences?: string[];
+    }
+  ): Promise<Transcription> {
     if (!this.provider) {
       throw new Error("LLM provider not configured");
     }

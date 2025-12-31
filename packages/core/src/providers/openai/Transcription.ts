@@ -75,35 +75,68 @@ export class OpenAITranscription {
 
     if (model.includes("diarize")) {
       isDiarization = true;
-      defaultPrompt = `Transcribe the audio and identify different speakers (e.g., Speaker A, Speaker B). 
+      const names = request.speakerNames?.join(", ") || "Speaker A, Speaker B";
+      defaultPrompt = `Transcribe the audio and identify different speakers. 
+      Use the following names if possible: ${names}.
       Return the output as a JSON array of objects, each with 'speaker', 'text', 'start', and 'end' (in seconds).
-      Example: [{"speaker": "A", "text": "Hello", "start": 0.5, "end": 1.2}]`;
+      Example: [{"speaker": "Alice", "text": "Hello", "start": 0.5, "end": 1.2}]`;
     }
 
     if (request.language) {
       defaultPrompt += ` The audio is in ${request.language}.`;
     }
 
+    const messagesContent: any[] = [
+      { 
+        type: "text", 
+        text: request.prompt 
+          ? `${defaultPrompt}\n\nContext for transcription: ${request.prompt}`
+          : defaultPrompt 
+      }
+    ];
+
+    // Add speaker reference clips if provided
+    if (request.speakerReferences && request.speakerNames) {
+      for (let i = 0; i < request.speakerReferences.length; i++) {
+        const refFile = request.speakerReferences[i];
+        if (!refFile) continue;
+        
+        const name = request.speakerNames[i] || `Speaker ${i + 1}`;
+        const { data: refData } = await this.loadFileData(refFile);
+        const refBase64 = Buffer.from(refData).toString("base64");
+        
+        messagesContent.push({
+          type: "text",
+          text: `The following audio clip is the voice of ${name}:`
+        });
+        messagesContent.push({
+          type: "input_audio",
+          input_audio: {
+            data: refBase64,
+            format: refFile.endsWith(".wav") ? "wav" : "mp3"
+          }
+        });
+      }
+      messagesContent.push({
+        type: "text",
+        text: "Now, transcribe this main audio file using identified names:"
+      });
+    }
+
+    messagesContent.push({
+      type: "input_audio",
+      input_audio: {
+        data: base64Audio,
+        format: request.file.endsWith(".wav") ? "wav" : "mp3"
+      }
+    });
+
     const body = {
       model: actualModel,
       messages: [
         {
           role: "user",
-          content: [
-            { 
-              type: "text", 
-              text: request.prompt 
-                ? `${defaultPrompt}\n\nContext for transcription: ${request.prompt}`
-                : defaultPrompt 
-            },
-            {
-              type: "input_audio",
-              input_audio: {
-                data: base64Audio,
-                format: request.file.endsWith(".wav") ? "wav" : "mp3"
-              }
-            }
-          ]
+          content: messagesContent
         }
       ],
       response_format: isDiarization ? { type: "json_object" } : undefined

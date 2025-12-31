@@ -100,4 +100,17 @@ describe("Transcription Unit Tests", () => {
     expect(result.segments[1].speaker).toBe("B");
     expect(result.segments[0].start).toBe(0.5);
   });
+
+  it("should support known speaker identification", async () => {
+    await LLM.transcribe("meeting.wav", {
+      model: "gpt-4o-transcribe-diarize",
+      speakerNames: ["Alice", "Bob"],
+      speakerReferences: ["alice.wav", "bob.wav"]
+    });
+
+    expect(mockProvider.transcribe).toHaveBeenCalledWith(expect.objectContaining({
+      speakerNames: ["Alice", "Bob"],
+      speakerReferences: ["alice.wav", "bob.wav"]
+    }));
+  });
 });

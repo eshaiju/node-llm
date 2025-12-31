@@ -1,6 +1,11 @@
 import { describe, it, expect } from "vitest";
 import { Chat } from "../src/chat/Chat.js";
 import { Provider, ChatRequest, ChatResponse } from "../src/providers/Provider.js";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const readmePath = path.resolve(__dirname, "../README.md");
 
 class MockLimitedProvider implements Provider {
   public capabilities = {
@@ -45,7 +50,7 @@ describe("Chat Capabilities Validation", () => {
     // Mock FileLoader to return text
     // (In real life, FileLoader handles .txt correctly)
     const response = await chat.ask("Read this", {
-      files: ["../../README.md"] 
+      files: [readmePath]
     });
 
     expect(String(response)).toBe("ok");
