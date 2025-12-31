@@ -9,6 +9,7 @@ import {
 import { providerRegistry } from "./providers/registry.js";
 import { ensureOpenAIRegistered } from "./providers/openai/index.js";
 import { GeneratedImage } from "./image/GeneratedImage.js";
+import { models, ModelRegistry } from "./models/ModelRegistry.js";
 
 export interface RetryOptions {
   attempts?: number;
@@ -44,6 +45,7 @@ export class Transcription {
 }
 
 class LLMCore {
+  public readonly models: ModelRegistry = models;
   private provider?: Provider;
   private defaultModel?: string;
    

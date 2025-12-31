@@ -186,6 +186,21 @@ await chat.ask("Explain this code", {
 });
 ```
 
+### Model Capabilities & Pricing
+
+Get up-to-date information about context windows, pricing, and capabilities directly from the Parsera API.
+
+```javascript
+// Refresh model information from the API
+await LLM.models.refresh();
+
+// Use the data programmatically
+const model = LLM.models.find("gpt-4o-mini");
+console.log(model.context_window);    // => 128000
+console.log(model.capabilities);      // => ["function_calling", "structured_output", "streaming", "batch"]
+console.log(model.pricing.text_tokens.standard.input_per_million); // => 0.15
+```
+
 ---
 
 ## 📋 Supported Providers
