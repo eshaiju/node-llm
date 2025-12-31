@@ -29,6 +29,15 @@ describe("Transcription Unit Tests", () => {
     });
   });
 
+  it("should support technical domain prompts", async () => {
+    const prompt = "Discussion about Ruby, Rails, PostgreSQL, and Redis.";
+    await LLM.transcribe("test.mp3", { prompt });
+
+    expect(mockProvider.transcribe).toHaveBeenCalledWith(expect.objectContaining({
+      prompt: prompt
+    }));
+  });
+
   it("should use global default model if provided", async () => {
     LLM.configure({ 
       provider: mockProvider,

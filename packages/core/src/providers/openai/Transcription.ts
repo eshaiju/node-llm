@@ -85,7 +85,12 @@ export class OpenAITranscription {
         {
           role: "user",
           content: [
-            { type: "text", text: request.prompt || defaultPrompt },
+            { 
+              type: "text", 
+              text: request.prompt 
+                ? `${defaultPrompt}\n\nContext for transcription: ${request.prompt}`
+                : defaultPrompt 
+            },
             {
               type: "input_audio",
               input_audio: {
