@@ -143,6 +143,21 @@ chat
 await chat.ask("What's the weather?");
 ```
 
+### 9. System Prompts (Instructions)
+
+Guide the AI's behavior, personality, or constraints.
+
+```ts
+// Set initial instructions
+chat.withInstructions("You are a helpful assistant that explains simply.");
+
+// Update instructions mid-conversation (replace: true removes previous ones)
+chat.withInstructions("Now assume the persona of a pirate.", { replace: true });
+
+await chat.ask("Hello");
+// => "Ahoy matey!"
+```
+
 ---
 
 ## 📚 Examples
@@ -165,6 +180,7 @@ Check the [examples](./examples) directory for focused scripts organized by prov
 | [Moderate](https://github.com/eshaiju/node-llm/blob/main/examples/openai/11-moderate.mjs) | Content safety moderation |
 | [Risk Assessment](https://github.com/eshaiju/node-llm/blob/main/examples/openai/12-risk-assessment.mjs) | Custom thresholds and risk levels |
 | [Chat Events](https://github.com/eshaiju/node-llm/blob/main/examples/openai/13-chat-events.mjs) | Lifecycle hooks (onNewMessage, onToolCall etc) |
+| [System Prompts](https://github.com/eshaiju/node-llm/blob/main/examples/openai/15-system-prompts.mjs) | Dynamic system instructions |
 
 To run an example (from the project root):
 ```bash

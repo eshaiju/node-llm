@@ -77,6 +77,37 @@ export class Chat {
     return this;
   }
 
+  /**
+   * Add instructions (system prompt) to the chat.
+   * By default, it appends a new system message.
+   * If { replace: true } is passed, it removes all previous system messages first.
+   */
+  withInstructions(instruction: string, options?: { replace?: boolean }): this {
+    if (options?.replace) {
+      this.messages = this.messages.filter((m) => m.role !== "system");
+    }
+    
+    // System messages usually go first, but for "appending" behavior 
+    // mid-conversation, most providers handle them fine in history.
+    // Ideally, if it's "replace", we might want to unshift it to index 0,
+    // but simply pushing a new system message works for "updating" context too.
+    // For consistency with "replace" meaning "this is THE system prompt":
+    if (options?.replace) {
+      this.messages.unshift({ role: "system", content: instruction });
+    } else {
+      this.messages.push({ role: "system", content: instruction });
+    }
+    
+    return this;
+  }
+
+  /**
+   * Alias for withInstructions
+   */
+  withSystemPrompt(instruction: string, options?: { replace?: boolean }): this {
+    return this.withInstructions(instruction, options);
+  }
+
   // --- Event Handlers ---
 
   onNewMessage(handler: () => void): this {
