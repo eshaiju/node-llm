@@ -209,25 +209,70 @@ const creative = LLM.chat("gpt-4o").withTemperature(0.9);
 Check the [examples](./examples) directory for focused scripts organized by provider:
 
 ### OpenAI Examples
+
+#### 💬 Chat
 | Example | Description |
 | :--- | :--- |
-| [Basic Chat](./examples/openai/01-basic-chat.mjs) | Simple completion request |
-| [Streaming](./examples/openai/02-streaming.mjs) | Real-time token streaming |
-| [Tool Calling](./examples/openai/03-tool-calling.mjs) | Automatic tool execution loop |
-| [Vision](./examples/openai/04-vision.mjs) | Image analysis |
-| [List Models](./examples/openai/05-list-models.mjs) | Enumerate available models |
-| [Paint](./examples/openai/06-paint.mjs) | Image generation with DALL-E |
-| [Image Features](./examples/openai/07-image-features.mjs) | Saving and processing generated images |
-| [Token Usage](./examples/openai/08-token-usage.mjs) | Detailed stats for turns and conversations |
-| [Transcribe](./examples/openai/09-transcribe.mjs) | Audio to text transcription |
-| [Capabilities](./examples/openai/10-capabilities.mjs) | Dynamic model specs and pricing |
-| [Moderate](./examples/openai/11-moderate.mjs) | Content safety moderation |
-| [Risk Assessment](./examples/openai/12-risk-assessment.mjs) | Custom thresholds and risk levels |
-| [Chat Events](./examples/openai/13-chat-events.mjs) | Lifecycle hooks (onNewMessage, onToolCall etc) |
-| [System Prompts](./examples/openai/15-system-prompts.mjs) | Dynamic system instructions |
-| [Temperature](./examples/openai/16-temperature.mjs) | Control creativity vs determinism |
-| [Multi-File](./examples/openai/17-multi-file.mjs) | Analyze multiple files at once |
-| [Embeddings](./examples/openai/18-embeddings.mjs) | Generate vector embeddings for semantic search |
+| [Basic & Streaming](./examples/openai/chat/basic.mjs) | Standard completions and real-time streaming |
+| [System Instructions](./examples/openai/chat/instructions.mjs) | Tuning behavior with system prompts and temperature |
+| [Tool Calling](./examples/openai/chat/tools.mjs) | Automatic execution of model-requested functions |
+| [Parallel Tool Calling](./examples/openai/chat/parallel-tools.mjs) | Executing multiple tools in a single turn |
+| [Lifecycle Events](./examples/openai/chat/events.mjs) | Hooks for specific chat events (onNewMessage, onToolCall) |
+| [Token Usage](./examples/openai/chat/usage.mjs) | Tracking costs and token counts |
+| [Max Tokens](./examples/openai/chat/max-tokens.mjs) | Limiting response length with `maxTokens` |
+
+#### 🖼️ Multimodal
+| Example | Description |
+| :--- | :--- |
+| [Vision Analysis](./examples/openai/multimodal/vision.mjs) | Analyzing images via URLs |
+| [Multi-Image Analysis](./examples/openai/multimodal/multi-image.mjs) | Comparing multiple images in one request |
+| [File Context](./examples/openai/multimodal/files.mjs) | Reading and analyzing local project files |
+| [Audio Transcription](./examples/openai/multimodal/transcribe.mjs) | Converting audio files to text (Whisper) |
+
+#### 🎨 Images
+| Example | Description |
+| :--- | :--- |
+| [Generate & Save](./examples/openai/images/generate.mjs) | Creating images with DALL-E 3 and saving to disk |
+
+#### 🛡️ Safety
+| Example | Description |
+| :--- | :--- |
+| [Moderation](./examples/openai/safety/moderation.mjs) | Content safety checks and risk assessment |
+
+#### 🧠 Discovery
+| Example | Description |
+| :--- | :--- |
+| [Models & Capabilities](./examples/openai/discovery/models.mjs) | Listing models and inspecting their specs |
+| [Embeddings](./examples/openai/embeddings/create.mjs) | Generating semantic vector embeddings |
+
+### Gemini Examples
+
+#### 💬 Chat
+| Example | Description |
+| :--- | :--- |
+| [Basic & Streaming](./examples/gemini/chat/basic.mjs) | Standard completions and real-time streaming |
+| [System Instructions](./examples/gemini/chat/instructions.mjs) | Behavior tuning and creativity control |
+| [Tool Calling](./examples/gemini/chat/tools.mjs) | Function calling with automatic execution |
+| [Lifecycle Events](./examples/gemini/chat/events.mjs) | Event hooks for chat interactions |
+| [Token Usage](./examples/gemini/chat/usage.mjs) | Tracking conversation costs |
+
+#### 🖼️ Multimodal
+| Example | Description |
+| :--- | :--- |
+| [Vision Analysis](./examples/gemini/multimodal/vision.mjs) | Understanding images |
+| [File Context](./examples/gemini/multimodal/files.mjs) | Reading multiple local files |
+| [Audio Transcription](./examples/gemini/multimodal/transcribe.mjs) | Native audio understanding |
+
+#### 🎨 Images
+| Example | Description |
+| :--- | :--- |
+| [Generate & Save](./examples/gemini/images/generate.mjs) | Creating images with Imagen |
+
+#### 🧠 Discovery
+| Example | Description |
+| :--- | :--- |
+| [Models & Capabilities](./examples/gemini/discovery/models.mjs) | Listing models and capabilities |
+| [Embeddings](./examples/gemini/embeddings/create.mjs) | Creating vector embeddings |
 
 
 To run an example:
@@ -333,6 +378,7 @@ console.log(model.pricing.text_tokens.standard.input_per_million); // => 0.15
 | Provider | Status | Notes |
 | :--- | :--- | :--- |
 | **OpenAI** | ✅ Supported | Chat, Streaming, Tools, Vision, Audio, Images, Transcription, Moderation |
+| **Gemini** | ✅ Supported | Chat, Streaming, Tools, Vision, Audio, Video, Embeddings, Transcription |
 | **Anthropic** | 🏗️ Roadmap | Coming soon |
 | **Azure OpenAI** | 🏗️ Roadmap | Coming soon |
 

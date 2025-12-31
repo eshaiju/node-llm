@@ -18,7 +18,7 @@ describe("OpenAI Integration (VCR)", { timeout: 30000 }, () => {
   });
 
   it("should perform a basic chat completion", async ({ task }) => {
-    polly = setupVCR(task.name);
+    polly = setupVCR(task.name, "openai");
 
     LLM.configure({ provider: "openai" });
     const chat = LLM.chat("gpt-4o-mini");
@@ -30,7 +30,7 @@ describe("OpenAI Integration (VCR)", { timeout: 30000 }, () => {
   });
 
   it("should handle tool calling", async ({ task }) => {
-    polly = setupVCR(task.name);
+    polly = setupVCR(task.name, "openai");
 
     LLM.configure({ provider: "openai" });
 
@@ -52,10 +52,57 @@ describe("OpenAI Integration (VCR)", { timeout: 30000 }, () => {
     expect(String(response)).toContain("22");
     expect(String(response)).toContain("London");
     expect(response.usage.input_tokens).toBeGreaterThan(0);
+    expect(response.usage.input_tokens).toBeGreaterThan(0);
+  });
+
+  it("should handle parallel tool calling", async ({ task }) => {
+    polly = setupVCR(task.name, "openai");
+
+    LLM.configure({ provider: "openai" });
+
+    const weatherTool = {
+      type: 'function',
+      function: {
+        name: 'get_weather',
+        description: 'Get weather',
+        parameters: { type: 'object', properties: { location: { type: 'string' } } }
+      },
+      handler: async ({ location }: { location: string }) => {
+        return JSON.stringify({ location, temperature: 22 });
+      }
+    };
+
+    const chat = LLM.chat("gpt-4o-mini").withTool(weatherTool);
+    // Requesting weather for multiple locations triggers parallel calls
+    const response = await chat.ask("What is the weather in Paris and London?");
+
+    const Paris = String(response).includes("Paris");
+    const London = String(response).includes("London");
+    // Expect both locations to be mentioned in the final response
+    expect(Paris && London).toBe(true);
+    // Verify that tool calls happened (we can inspect history for more granular checks if needed)
+    const toolCalls = chat.history.filter(m => m.role === "tool");
+    expect(toolCalls.length).toBeGreaterThanOrEqual(2);
+  });
+
+  it("should respect max_tokens parameter", async ({ task }) => {
+    polly = setupVCR(task.name, "openai");
+
+    LLM.configure({ provider: "openai" });
+    const chat = LLM.chat("gpt-4o-mini");
+
+    const response = await chat.ask("Write a long poem about the sea.", {
+      maxTokens: 5
+    });
+
+    // The output tokens should be <= 5 (or slightly more if provider is fuzzy, but usually exact)
+    expect(response.usage.output_tokens).toBeLessThanOrEqual(5);
+    // The content should be short
+    expect(response.content.split(" ").length).toBeLessThan(10);
   });
 
   it("should analyze images (Vision)", async ({ task }) => {
-    polly = setupVCR(task.name);
+    polly = setupVCR(task.name, "openai");
 
     LLM.configure({ provider: "openai" });
     const chat = LLM.chat("gpt-4o-mini");
@@ -66,10 +113,33 @@ describe("OpenAI Integration (VCR)", { timeout: 30000 }, () => {
 
     expect(response.content.toLowerCase()).toMatch(/nature|boardwalk|grass|sky/);
     expect(response.usage.input_tokens).toBeGreaterThan(0);
+    expect(response.usage.input_tokens).toBeGreaterThan(0);
+  });
+
+  it("should analyze multiple images (Multi-Image Vision)", async ({ task }) => {
+    polly = setupVCR(task.name, "openai");
+
+    LLM.configure({ provider: "openai" });
+    const chat = LLM.chat("gpt-4o-mini");
+
+    // Two differing images (Base64 1x1 pixels to avoid download errors)
+    // Red dot
+    const img1 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==";
+    // Blue dot
+    const img2 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==";
+
+    const response = await chat.ask("Compare these two images. One is red, one is blue.", {
+      files: [img1, img2] // using 'files' as alias for images
+    });
+
+    const content = response.content.toLowerCase();
+    // Expect mention of comparison or description of both
+    expect(content.length).toBeGreaterThan(20);
+    expect(response.usage.input_tokens).toBeGreaterThan(0);
   });
 
   it("should generate images (Paint)", async ({ task }) => {
-    polly = setupVCR(task.name);
+    polly = setupVCR(task.name, "openai");
 
     LLM.configure({ provider: "openai" });
     const image = await LLM.paint("a cute robot", { model: "dall-e-3" });
@@ -79,7 +149,7 @@ describe("OpenAI Integration (VCR)", { timeout: 30000 }, () => {
   });
 
   it("should track total token usage", async ({ task }) => {
-    polly = setupVCR(task.name);
+    polly = setupVCR(task.name, "openai");
 
     LLM.configure({ provider: "openai" });
     const chat = LLM.chat("gpt-4o-mini");
@@ -94,7 +164,7 @@ describe("OpenAI Integration (VCR)", { timeout: 30000 }, () => {
   });
 
   it("should support streaming", async ({ task }) => {
-    polly = setupVCR(task.name);
+    polly = setupVCR(task.name, "openai");
 
     LLM.configure({ provider: "openai" });
     const chat = LLM.chat("gpt-4o-mini");
@@ -108,7 +178,7 @@ describe("OpenAI Integration (VCR)", { timeout: 30000 }, () => {
   });
 
   it("should transcribe audio", async ({ task }) => {
-    polly = setupVCR(task.name);
+    polly = setupVCR(task.name, "openai");
 
     LLM.configure({ 
       provider: "openai",
@@ -124,7 +194,7 @@ describe("OpenAI Integration (VCR)", { timeout: 30000 }, () => {
   });
 
   it("should transcribe audio using gpt-4o-transcribe", async ({ task }) => {
-    polly = setupVCR(task.name);
+    polly = setupVCR(task.name, "openai");
 
     LLM.configure({ provider: "openai" });
     const transcription = await LLM.transcribe(audioPath, {
@@ -136,7 +206,7 @@ describe("OpenAI Integration (VCR)", { timeout: 30000 }, () => {
   });
 
   it("should moderate content", async ({ task }) => {
-    polly = setupVCR(task.name);
+    polly = setupVCR(task.name, "openai");
 
     LLM.configure({ provider: "openai" });
     const result = await LLM.moderate("This is a safe message about coding.");

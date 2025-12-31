@@ -10,6 +10,7 @@ import {
 } from "./providers/Provider.js";
 import { providerRegistry } from "./providers/registry.js";
 import { ensureOpenAIRegistered } from "./providers/openai/index.js";
+import { registerGeminiProvider } from "./providers/gemini/index.js";
 import { GeneratedImage } from "./image/GeneratedImage.js";
 import { models, ModelRegistry } from "./models/ModelRegistry.js";
 import { Transcription } from "./transcription/Transcription.js";
@@ -64,6 +65,10 @@ class LLMCore {
         ensureOpenAIRegistered();
       }
 
+      if (config.provider === "gemini") {
+        registerGeminiProvider();
+      }
+
       this.provider = providerRegistry.resolve(config.provider);
     } else {
       this.provider = config.provider;
@@ -96,8 +101,8 @@ class LLMCore {
   async paint(prompt: string, options?: { model?: string; size?: string; quality?: string }): Promise<GeneratedImage> {
     const provider = this.ensureProviderSupport("paint");
 
-    const model = options?.model || DEFAULT_MODELS.IMAGE;
-    if (provider.capabilities && !provider.capabilities.supportsImageGeneration(model)) {
+    const model = options?.model;
+    if (model && provider.capabilities && !provider.capabilities.supportsImageGeneration(model)) {
       throw new Error(`Model ${model} does not support image generation.`);
     }
 
@@ -121,14 +126,14 @@ class LLMCore {
   ): Promise<Transcription> {
     const provider = this.ensureProviderSupport("transcribe");
 
-    const model = options?.model || this.defaultTranscriptionModelId || DEFAULT_MODELS.TRANSCRIPTION;
-    if (provider.capabilities && !provider.capabilities.supportsTranscription(model)) {
+    const model = options?.model || this.defaultTranscriptionModelId;
+    if (model && provider.capabilities && !provider.capabilities.supportsTranscription(model)) {
       throw new Error(`Model ${model} does not support transcription.`);
     }
 
     const response = await provider.transcribe({
       file,
-      model: options?.model || this.defaultTranscriptionModelId,
+      model,
       ...options,
     });
 
@@ -154,14 +159,14 @@ class LLMCore {
   async moderate(input: string | string[], options?: { model?: string }): Promise<Moderation> {
     const provider = this.ensureProviderSupport("moderate");
 
-    const model = options?.model || this.defaultModerationModelId || DEFAULT_MODELS.MODERATION;
-    if (provider.capabilities && !provider.capabilities.supportsModeration(model)) {
+    const model = options?.model || this.defaultModerationModelId;
+    if (model && provider.capabilities && !provider.capabilities.supportsModeration(model)) {
       throw new Error(`Model ${model} does not support moderation.`);
     }
 
     const response = await provider.moderate({
       input,
-      model: options?.model || this.defaultModerationModelId,
+      model,
       ...options,
     });
 
@@ -174,13 +179,15 @@ class LLMCore {
   ): Promise<Embedding> {
     const provider = this.ensureProviderSupport("embed");
 
+    const model = options?.model || this.defaultEmbeddingModelId;
+
     const request: EmbeddingRequest = {
       input,
-      model: options?.model || this.defaultEmbeddingModelId || DEFAULT_MODELS.EMBEDDING,
+      model,
       dimensions: options?.dimensions,
     };
 
-    if (provider.capabilities && !provider.capabilities.supportsEmbeddings(request.model!)) {
+    if (request.model && provider.capabilities && !provider.capabilities.supportsEmbeddings(request.model)) {
       throw new Error(`Model ${request.model} does not support embeddings.`);
     }
 
