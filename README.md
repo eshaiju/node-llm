@@ -8,6 +8,11 @@ A provider-agnostic LLM core for Node.js, heavily inspired by the elegant design
 
 `node-llm` focuses on clean abstractions, minimal magic, and a streaming-first design. It provides a unified interface to interact with various LLM providers without being locked into their specific SDKs.
 
+  <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/openai-text.svg" alt="OpenAI" height="24" style="margin: 0 10px;" />
+  <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/anthropic-text.svg" alt="Anthropic" height="24" style="margin: 0 10px;" />
+  <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/gemini-text.svg" alt="Gemini" height="24" style="margin: 0 10px;" />
+</p>
+
 ---
 
 ## 🚀 Features

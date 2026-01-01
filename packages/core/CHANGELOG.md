@@ -16,7 +16,7 @@
 
 *   **Documentation & Examples:**
     *   Added `custom-endpoints-example.mjs` demonstrating Chat, Streaming, Embeddings, and more with custom endpoints.
-    *   Updated README with detailed guides for Azure configuration, custom model usage, and V1 features.
+    *   Updated README with detailed guides for Azure configuration and custom model usage.
 ## 0.5.0 (2025-01-01)
  
 ### Features
