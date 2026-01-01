@@ -1,5 +1,22 @@
 # Changelog
  
+## 0.6.0 (2025-01-01)
+
+### Features
+
+*   **Custom Endpoint Support (Azure & Custom Proxies):**
+    *   Unified `OpenAIProvider` to seamlessly support Azure OpenAI, LiteLLM, Ollama, and other compatible endpoints via `OPENAI_API_BASE`.
+    *   Implemented intelligent URL handling that correctly manages Azure-style endpoints with query parameters.
+    *   Added support for manual header injection (e.g., `api-key`) required for Azure authentication.
+
+*   **"Assume Model Exists" Mode:**
+    *   Introduced `assumeModelExists: true` flag in `ChatOptions` and `LLMCore` methods.
+    *   Allows usage of custom model IDs or private deployments (common in Azure) by bypassing internal registry validation checks.
+    *   Enables full flexibility while retaining type safety and interface consistency.
+
+*   **Documentation & Examples:**
+    *   Added `custom-endpoints-example.mjs` demonstrating Chat, Streaming, Embeddings, and more with custom endpoints.
+    *   Updated README with detailed guides for Azure configuration, custom model usage, and V1 features.
 ## 0.5.0 (2025-01-01)
  
 ### Features
