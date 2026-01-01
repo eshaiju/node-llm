@@ -7,6 +7,7 @@ export type { ChatOptions } from "./chat/ChatOptions.js";
 export type { Tool, ToolCall } from "./chat/Tool.js";
 export type { MessageContent, ContentPart } from "./chat/Content.js";
 
+export { z } from "zod";
 export { LLM, Transcription, Moderation, Embedding } from "./llm.js";
 export { providerRegistry } from "./providers/registry.js";
 
