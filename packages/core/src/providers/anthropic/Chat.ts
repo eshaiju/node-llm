@@ -17,11 +17,17 @@ export class AnthropicChat {
     const systemPrompt = formatSystemPrompt(request.messages);
     const messages = formatMessages(request.messages);
 
+    let system = systemPrompt;
+    if (request.response_format) {
+      const instruction = "CRITICAL: Respond ONLY with a valid JSON object matching the requested schema.";
+      system = system ? `${system}\n\n${instruction}` : instruction;
+    }
+
     const body: AnthropicMessageRequest = {
       model: model,
       messages: messages,
       max_tokens: maxTokens,
-      system: systemPrompt,
+      system: system,
       stream: false, // For now, no streaming
     };
 

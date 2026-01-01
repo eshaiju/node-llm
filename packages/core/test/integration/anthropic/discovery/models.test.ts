@@ -1,6 +1,6 @@
 import { describe, it, expect, afterEach } from "vitest";
-import { LLM } from "../../../src/index.js";
-import { setupVCR } from "../../helpers/vcr.js";
+import { LLM } from "../../../../src/index.js";
+import { setupVCR } from "../../../helpers/vcr.js";
 import "dotenv/config";
 
 describe("Anthropic Models Integration (VCR)", { timeout: 30000 }, () => {
