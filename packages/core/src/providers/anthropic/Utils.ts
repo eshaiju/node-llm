@@ -68,8 +68,9 @@ function formatSingleMessage(msg: Message): AnthropicMessage {
       const blocks: AnthropicContentBlock[] = [];
       
       // Assistant text content
-      if (msg.content) {
-          blocks.push({ type: "text", text: String(msg.content) });
+      const text = String(msg.content || "");
+      if (text.length > 0) {
+          blocks.push({ type: "text", text });
       }
 
       // Assistant tool uses
@@ -84,16 +85,14 @@ function formatSingleMessage(msg: Message): AnthropicMessage {
       return { role: "assistant", content: blocks };
   }
 
-  if (!msg.content) {
-      return { role, content: "" };
-  }
+  const contentText = String(msg.content || "");
 
-  if (typeof msg.content === "string") {
-    return { role, content: msg.content };
+  if (contentText && typeof msg.content === "string") {
+    return { role, content: contentText };
   }
   
-  if (msg.content instanceof String) {
-      return { role, content: String(msg.content) };
+  if (contentText && msg.content instanceof String) {
+      return { role, content: contentText };
   }
   
   // Handle multimodal content (images)
@@ -114,14 +113,25 @@ function formatSingleMessage(msg: Message): AnthropicMessage {
                     const mimeMatch = meta.match(/:(.*?);/);
                     const mediaType = mimeMatch ? mimeMatch[1] : "image/jpeg";
                     
-                    blocks.push({
-                        type: "image",
+                    if (mediaType === "application/pdf") {
+                      blocks.push({
+                        type: "document",
                         source: {
-                            type: "base64",
-                            media_type: mediaType || "image/jpeg",
-                            data: data
+                          type: "base64",
+                          media_type: "application/pdf",
+                          data: data
                         }
-                    });
+                      });
+                    } else {
+                      blocks.push({
+                          type: "image",
+                          source: {
+                              type: "base64",
+                              media_type: mediaType || "image/jpeg",
+                              data: data
+                          }
+                      });
+                    }
                   }
               }
           }

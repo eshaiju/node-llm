@@ -4,7 +4,7 @@ export interface AnthropicMessage {
 }
 
 export interface AnthropicContentBlock {
-  type: "text" | "image" | "tool_use" | "tool_result";
+  type: "text" | "image" | "tool_use" | "tool_result" | "document";
   text?: string;
   source?: {
     type: "base64";

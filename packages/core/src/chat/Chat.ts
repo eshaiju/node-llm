@@ -68,7 +68,7 @@ export class Chat {
         }
         return acc;
       },
-      { input_tokens: 0, output_tokens: 0, total_tokens: 0, cached_tokens: 0 }
+      { input_tokens: 0, output_tokens: 0, total_tokens: 0, cached_tokens: 0, cache_creation_tokens: 0 }
     );
   }
 
@@ -222,7 +222,7 @@ export class Chat {
   /**
    * Ask the model a question
    */
-  async ask(content: string, options?: AskOptions): Promise<ChatResponseString> {
+  async ask(content: string | any[], options?: AskOptions): Promise<ChatResponseString> {
     let messageContent: any = content;
     const files = [...(options?.images ?? []), ...(options?.files ?? [])];
 

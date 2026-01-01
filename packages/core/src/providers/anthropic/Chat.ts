@@ -38,14 +38,25 @@ export class AnthropicChat {
       }));
     }
 
+    // Check if any message contains PDF content to add beta header
+    const hasPdf = messages.some(msg => 
+      Array.isArray(msg.content) && msg.content.some(block => block.type === "document")
+    );
+
+    const headers: Record<string, string> = {
+      "x-api-key": this.apiKey,
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      ...request.headers,
+    };
+
+    if (hasPdf) {
+      headers["anthropic-beta"] = "pdfs-2024-09-25";
+    }
+
     const response = await fetch(`${this.baseUrl}/messages`, {
       method: "POST",
-      headers: {
-        "x-api-key": this.apiKey,
-        "anthropic-version": "2023-06-01",
-        "content-type": "application/json",
-        ...request.headers,
-      },
+      headers: headers,
       body: JSON.stringify(body),
     });
 
