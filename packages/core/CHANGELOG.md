@@ -1,4 +1,32 @@
 # Changelog
+
+## 0.7.0 (2025-01-02)
+
+### Features
+
+*   **DeepSeek Provider Support:**
+    *   Full integration of DeepSeek models (Chat V3).
+    *   **Reasoning Support:** Added dedicated support for DeepSeek R1 reasoning models (access via `.reasoning` property).
+    *   Implemented Chat, Streaming, Tools, and Context Caching.
+    *   Added comprehensive examples and integration tests.
+
+*   **Official Documentation Site:**
+    *   Launched full documentation website at [node-llm.eshaiju.com](https://node-llm.eshaiju.com).
+    *   Added custom domain (CNAME) support and GitHub Pages deployment workflow.
+
+### Improvements & Refactoring
+
+*   **Standardized Configuration:**
+    *   Renamed configuration properties to `camelCase` (e.g., `openaiApiKey`) for better TypeScript/JavaScript alignment.
+    *   Refactored `LLM.configure` to enforce this single, idiomatic standard.
+    *   Updated all documentation, examples, and tests to reflect this cleaner API.
+
+*   **DeepSeek Integration Logic:**
+    *   Fixed API key handling consistency and resolved test coverage issues for reasoning models.
+
+*   **Documentation Branding:**
+    *   Added official project logo and visual assets.
+    *   Updated READMEs with comprehensive DeepSeek support guides.
  
 ## 0.6.0 (2025-01-01)
 
