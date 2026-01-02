@@ -7397,6 +7397,34 @@ export const modelsData =
     "metadata": {}
   },
   {
+    "id": "llama3.2-vision",
+    "name": "Llama 3.2 Vision",
+    "provider": "ollama",
+    "family": "llama3",
+    "created_at": null,
+    "context_window": 128000,
+    "max_output_tokens": 8192,
+    "knowledge_cutoff": null,
+    "modalities": { "input": ["text", "image"], "output": ["text", "embeddings"] },
+    "capabilities": ["chat", "streaming", "tools", "vision"],
+    "pricing": {},
+    "metadata": {}
+  },
+  {
+    "id": "llava",
+    "name": "LLaVA",
+    "provider": "ollama",
+    "family": "llava",
+    "created_at": null,
+    "context_window": 4096,
+    "max_output_tokens": 4096,
+    "knowledge_cutoff": null,
+    "modalities": { "input": ["text", "image"], "output": ["text", "embeddings"] },
+    "capabilities": ["chat", "streaming", "vision"],
+    "pricing": {},
+    "metadata": {}
+  },
+  {
     "id": "mxbai-embed-large",
     "name": "mxbai-embed-large",
     "provider": "ollama",
