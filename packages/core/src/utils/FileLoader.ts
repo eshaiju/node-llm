@@ -45,9 +45,44 @@ const TEXT_EXTENSIONS = new Set([
 
 export class FileLoader {
   static async load(filePath: string): Promise<ContentPart> {
-    if (filePath.startsWith("http") || filePath.startsWith("data:")) {
-      // Assume image URL for now if it looks like a URL
-      // TODO: Better detection for remote file types
+    if (filePath.startsWith("http")) {
+      try {
+        const response = await fetch(filePath);
+        if (!response.ok) throw new Error(`Failed to fetch file: ${response.statusText}`);
+        
+        const buffer = await response.arrayBuffer();
+        const contentType = response.headers.get("content-type") || "image/jpeg";
+        const base64 = Buffer.from(buffer).toString("base64");
+        const dataUri = `data:${contentType};base64,${base64}`;
+        
+        if (contentType.startsWith("image/")) {
+          return { type: "image_url", image_url: { url: dataUri } };
+        }
+
+        if (contentType.startsWith("audio/")) {
+          const format = contentType.split("/")[1];
+          return { 
+            type: "input_audio", 
+            input_audio: { 
+              data: base64, 
+              format: (format === "mpeg" ? "mp3" : format) ?? "wav"
+            } 
+          };
+        }
+
+        if (contentType.startsWith("video/")) {
+          return { type: "video_url", video_url: { url: dataUri } };
+        }
+
+        // Default to image_url for unknown binary or use as-is
+        return { type: "image_url", image_url: { url: dataUri } };
+      } catch (error) {
+        // Fallback to URL if fetch fails
+        return { type: "image_url", image_url: { url: filePath } };
+      }
+    }
+
+    if (filePath.startsWith("data:")) {
       return { type: "image_url", image_url: { url: filePath } };
     }
 
