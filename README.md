@@ -20,6 +20,9 @@
   &nbsp;&nbsp;&nbsp;&nbsp;
   <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/deepseek-color.svg" height="28" />
   <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/deepseek-text.svg" height="20" />
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/ollama.svg" height="28" />
+  <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/ollama-text.svg" height="18" />
 </p>
 
 <br/>
@@ -41,8 +44,12 @@ LLM.configure((config) => {
 
 LLM.configure({ provider: "openai" });
 
-// Chat with streaming
+// Basic Chat
 const chat = LLM.chat("gpt-4o");
+const response = await chat.ask("Explain Node.js");
+console.log(response.content);
+
+// Streaming
 for await (const chunk of chat.stream("Explain Node.js")) {
   process.stdout.write(chunk.content);
 }
@@ -61,6 +68,7 @@ LLM.configure((config) => {
   config.anthropicApiKey = process.env.ANTHROPIC_API_KEY;
   config.geminiApiKey = process.env.GEMINI_API_KEY;
   config.deepseekApiKey = process.env.DEEPSEEK_API_KEY;
+  config.ollamaApiBase = process.env.OLLAMA_API_BASE;
 });
 
 // Object style (quick provider switching)
@@ -77,7 +85,7 @@ LLM.configure({
 });
 ```
 
-**[View Full Configuration Guide →](docs/CONFIGURATION.md)**
+**[View Full Configuration Guide →](docs/getting_started/configuration.md)**
 
 ---
 
@@ -156,6 +164,7 @@ console.log(res.content);   // Output the final answer
 | <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/gemini-color.svg" height="18"> <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/gemini-text.svg" height="14"> | Chat, Streaming, Tools, Vision, Audio, Video, Embeddings |
 | <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/anthropic-text.svg" height="12"> | Chat, Streaming, Tools, Vision, PDF Support, Structured Output |
 | <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/deepseek-color.svg" height="18"> <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/deepseek-text.svg" height="14"> | Chat (V3), **Reasoning (R1)**, Tools, Streaming, Structured Output |
+| <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/ollama.svg" height="18"> <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/ollama-text.svg" height="12"> | **Local Inference**, Chat, Streaming, Tools, Vision, Embeddings |
 
 ---
 
@@ -168,6 +177,14 @@ console.log(res.content);   // Output the final answer
 | **Tools** | Automatic Execution Loop | Manual parsing & recursion |
 | **Files** | Path string or URL | Base64 buffers / distinct types |
 | **Retries** | Built-in & Configurable | Varies by SDK |
+
+## 🚀 Explore Examples
+
+Check out the `examples/` directory for ready-to-use code:
+
+- **Ollama**: [Basic Chat](examples/ollama/chat/basic.mjs), [Streaming](examples/ollama/chat/streaming.mjs), [Vision](examples/ollama/multimodal/vision.mjs), [Tools](examples/ollama/chat/tools.mjs), [List Models](examples/ollama/discovery/list.mjs)
+- **OpenAI**: [Reasoning](examples/openai/chat/reasoning.mjs), [Structured Output](examples/openai/chat/structured.mjs)
+- **Configurations**: [Custom Endpoints, Callbacks, Env Vars](examples/configuration-example.mjs)
 
 ---
 
