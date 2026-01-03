@@ -8,7 +8,7 @@ permalink: /
 # @node-llm/core
 **An opinionated architectural layer for using Large Language Models in Node.js.**
 
-Build chatbots, autonomous agents, and RAG pipelines without the SDK fatigue. node-llm provides a unified, production-oriented API for interacting with multiple LLM providers (OpenAI, Gemini, Anthropic, DeepSeek, Ollama, etc.) without coupling your application to any single SDK.
+Build chatbots, autonomous agents, and RAG pipelines without the SDK fatigue. node-llm provides a unified, production-oriented API for interacting with multiple LLM providers (OpenAI, Gemini, Anthropic, DeepSeek, OpenRouter, Ollama, etc.) without coupling your application to any single SDK.
 
 <br/>
 
@@ -27,6 +27,10 @@ Build chatbots, autonomous agents, and RAG pipelines without the SDK fatigue. no
   <div class="provider-logo">
     <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/deepseek-color.svg" alt="DeepSeek" class="logo-medium">
     <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/deepseek-text.svg" alt="DeepSeek" class="logo-small">
+  </div>
+  <div class="provider-logo">
+    <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/openrouter.svg" alt="OpenRouter" class="logo-medium">
+    <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/openrouter-text.svg" alt="OpenRouter" class="logo-medium">
   </div>
   <div class="provider-logo">
     <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/ollama.svg" alt="Ollama" class="logo-medium">

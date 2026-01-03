@@ -49,6 +49,7 @@ LLM.configure({
   anthropicApiKey: process.env.ANTHROPIC_API_KEY,
   geminiApiKey: process.env.GEMINI_API_KEY,
   deepseekApiKey: process.env.DEEPSEEK_API_KEY,
+  openrouterApiKey: process.env.OPENROUTER_API_KEY,
 });
 ```
 
@@ -76,6 +77,8 @@ LLM.configure({
 | `geminiApiBase` | Gemini API base URL | `process.env.GEMINI_API_BASE` |
 | `deepseekApiKey` | DeepSeek API key | `process.env.DEEPSEEK_API_KEY` |
 | `deepseekApiBase` | DeepSeek API base URL | `process.env.DEEPSEEK_API_BASE` |
+| `openrouterApiKey` | OpenRouter API key | `process.env.OPENROUTER_API_KEY` |
+| `openrouterApiBase` | OpenRouter API base URL | `process.env.OPENROUTER_API_BASE` |
 
 ## Inspecting Configuration
 

@@ -62,6 +62,17 @@ permalink: /available-models
 | **DeepSeek R1** | | | |
 | `deepseek-reasoner` | 64k | $0.55 / $2.19 | Advanced reasoning (R1) |
 
+## OpenRouter
+
+OpenRouter provides access to 300+ additional models through a single gateway. 
+
+| Model ID | Context | Cost | Notes |
+| :--- | :--- | :--- | :--- |
+| `google/gemini-2.0-flash-exp:free` | 1M | Free | Fast experimental model |
+| `meta-llama/llama-3.1-405b-instruct` | 128k | $2 / $10 | Top-tier open source model |
+| `liquid/lfm-40b` | 32k | $0.10 / $0.10 | High performance specialist |
+| `qwen/qwen-2.5-72b-instruct` | 128k | $0.35 / $0.40 | Strong general reasoning |
+
 ## Ollama (Local)
 
 Ollama models are run locally on your machine. Costs are typically free (local compute).
@@ -81,18 +92,20 @@ Ollama models are run locally on your machine. Costs are typically free (local c
 | `mxbai-embed-large` | 512 | Free | Popular for RAG |
 
 
-## Programmatic Access
-
 You can access this data programmatically using the registry:
 
 ```ts
 import { LLM } from "@node-llm/core";
 
-const model = LLM.models.find("gpt-4o");
+// Get metadata for a specific model
+const model = await LLM.model("gpt-4o");
 
 console.log(model.context_window); // 128000
-console.log(model.pricing.text_tokens.standard.input_per_million); // 5
+console.log(model.pricing.text_tokens.standard.input_per_million); // 2.5
 console.log(model.capabilities); // ["vision", "function_calling", ...]
+
+// Get all models in the registry
+const allModels = await LLM.listModels();
 ```
 
 ## Finding Models
@@ -100,8 +113,10 @@ console.log(model.capabilities); // ["vision", "function_calling", ...]
 Use the registry to find models dynamically based on capabilities:
 
 ```ts
+const allModels = await LLM.listModels();
+
 // Find a model that supports vision and tools
-const visionModel = LLM.models.list().find(m => 
+const visionModel = allModels.find(m => 
   m.capabilities.includes("vision") && m.capabilities.includes("function_calling")
 );
 ```
