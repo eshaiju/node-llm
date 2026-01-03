@@ -29,6 +29,7 @@ import {
   UnsupportedFeatureError,
   ModelCapabilityError 
 } from "./errors/index.js";
+import { resolveModelAlias } from "./model_aliases.js";
 
 import { config, NodeLLMConfig } from "./config.js";
 
@@ -141,7 +142,9 @@ class LLMCore {
       throw new ProviderNotConfiguredError();
     }
 
-    return new Chat(this.provider, model, options);
+    // Resolve model alias based on the current provider
+    const resolvedModel = resolveModelAlias(model, this.provider.id);
+    return new Chat(this.provider, resolvedModel, options);
   }
 
   async listModels(): Promise<ModelInfo[]> {
@@ -156,8 +159,11 @@ class LLMCore {
 
   async paint(prompt: string, options?: { model?: string; size?: string; quality?: string; assumeModelExists?: boolean }): Promise<GeneratedImage> {
     const provider = this.ensureProviderSupport("paint");
+    
+    // Default to resolving aliases
+    const rawModel = options?.model;
+    const model = resolveModelAlias(rawModel || "", provider.id);
 
-    const model = options?.model;
     if (options?.assumeModelExists) {
       console.warn(`[NodeLLM] Skipping validation for model ${model}`);
     } else if (model && provider.capabilities && !provider.capabilities.supportsImageGeneration(model)) {
@@ -167,6 +173,7 @@ class LLMCore {
     const response = await provider.paint({
       prompt,
       ...options,
+      model,
     });
 
     return new GeneratedImage(response);
@@ -185,7 +192,8 @@ class LLMCore {
   ): Promise<Transcription> {
     const provider = this.ensureProviderSupport("transcribe");
 
-    const model = options?.model || this.defaultTranscriptionModelId;
+    const rawModel = options?.model || this.defaultTranscriptionModelId || "";
+    const model = resolveModelAlias(rawModel, provider.id);
     if (options?.assumeModelExists) {
        console.warn(`[NodeLLM] Skipping validation for model ${model}`);
     } else if (model && provider.capabilities && !provider.capabilities.supportsTranscription(model)) {
@@ -194,8 +202,8 @@ class LLMCore {
 
     const response = await provider.transcribe({
       file,
-      model,
       ...options,
+      model,
     });
 
     return new Transcription(response);
@@ -220,7 +228,8 @@ class LLMCore {
   async moderate(input: string | string[], options?: { model?: string; assumeModelExists?: boolean }): Promise<Moderation> {
     const provider = this.ensureProviderSupport("moderate");
 
-    const model = options?.model || this.defaultModerationModelId;
+    const rawModel = options?.model || this.defaultModerationModelId || "";
+    const model = resolveModelAlias(rawModel, provider.id);
     if (options?.assumeModelExists) {
       console.warn(`[NodeLLM] Skipping validation for model ${model}`);
     } else if (model && provider.capabilities && !provider.capabilities.supportsModeration(model)) {
@@ -229,8 +238,8 @@ class LLMCore {
 
     const response = await provider.moderate({
       input,
-      model,
       ...options,
+      model,
     });
 
     return new Moderation(response);
@@ -242,7 +251,8 @@ class LLMCore {
   ): Promise<Embedding> {
     const provider = this.ensureProviderSupport("embed");
 
-    const model = options?.model || this.defaultEmbeddingModelId;
+    const rawModel = options?.model || this.defaultEmbeddingModelId || "";
+    const model = resolveModelAlias(rawModel, provider.id);
 
     const request: EmbeddingRequest = {
       input,

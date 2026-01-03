@@ -10,7 +10,7 @@ async function main() {
   // Alternative: LLM.configure({ geminiApiKey: "...", provider: "gemini" });
   LLM.configure({ provider: "gemini" });
 
-  const chat = LLM.chat("gemini-2.0-flash");
+  const chat = LLM.chat("gemini-flash");
 
   // 1. Standard Request
   console.log("--- Standard Request ---");

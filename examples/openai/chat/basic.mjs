@@ -12,7 +12,7 @@ async function main() {
 
   // LLM.configure({ provider: "openai" });
 
-  const chat = LLM.chat("gpt-4o-mini");
+  const chat = LLM.chat("gpt-4o");
 
   // 1. Standard Request
   console.log("--- Standard Request ---");

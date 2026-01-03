@@ -120,3 +120,51 @@ const visionModel = allModels.find(m =>
   m.capabilities.includes("vision") && m.capabilities.includes("function_calling")
 );
 ```
+
+## Model Aliases
+
+`node-llm` uses aliases (defined strictly in `packages/core/src/aliases.json`) for convenience, mapping common names to specific provider-specific versions. This allows you to use a generic name like `"gpt-4o"` or `"claude-3-5-sonnet"` and have it resolve to the correct ID for your configured provider.
+
+### How It Works
+
+Aliases abstract away the specific model ID strings required by different providers. For example, `claude-3-5-sonnet` might map to:
+
+- **Anthropic**: `claude-3-5-sonnet-20241022`
+- **Vertex AI**: `claude-3-5-sonnet-v2@20241022`
+- **OpenRouter**: `anthropic/claude-3.5-sonnet`
+- **Bedrock**: `anthropic.claude-3-5-sonnet-20241022-v2:0`
+
+When you call a method like `LLM.chat("claude-3-5-sonnet")`, `node-llm` checks the configured provider and automatically resolves the alias.
+
+```ts
+// If configured with Anthropic
+LLM.configure({ provider: "anthropic" });
+const chat = LLM.chat("claude-3-5-sonnet"); 
+// Resolves internally to "claude-3-5-sonnet-20241022" (or latest stable version)
+
+// If configured with Bedrock
+LLM.configure({ provider: "bedrock" });
+const chat = LLM.chat("claude-3-5-sonnet");
+// Resolves internally to "anthropic.claude-3-5-sonnet-20241022-v2:0"
+```
+
+### Provider-Specific Resolution
+
+If an alias exists for multiple providers, the resolution depends entirely on the `provider` you have currently configured/passed.
+
+```json
+// Example aliases.json structure
+{
+  "gemini-flash": {
+    "gemini": "gemini-1.5-flash-001",
+    "vertexai": "gemini-1.5-flash-001",
+    "openrouter": "google/gemini-1.5-flash-001"
+  }
+}
+```
+
+This ensures your code remains portable across providers without changing the model string manually.
+
+### Prioritization
+
+`node-llm` prioritizes exact ID matches first (if you pass a specific ID like `"gpt-4-0613"`, it uses it). If no exact match or known ID is found, it attempts to resolve it as an alias.
