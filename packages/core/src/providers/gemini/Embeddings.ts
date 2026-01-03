@@ -1,4 +1,4 @@
-import { EmbeddingRequest, EmbeddingResponse } from "../Embedding.js";
+import { EmbeddingRequest, EmbeddingResponse } from "../Provider.js";
 import { GeminiBatchEmbedRequest, GeminiBatchEmbedResponse } from "./types.js";
 import { handleGeminiError } from "./Errors.js";
 

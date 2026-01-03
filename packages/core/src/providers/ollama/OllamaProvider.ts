@@ -32,4 +32,8 @@ export class OllamaProvider extends OpenAIProvider {
       getContextWindow: (modelId: string) => OllamaCapabilities.getContextWindow(modelId),
     };
   }
+
+  protected providerName(): string {
+    return "Ollama";
+  }
 }

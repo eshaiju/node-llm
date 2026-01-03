@@ -12,6 +12,7 @@ export { LLM, Transcription, Moderation, Embedding } from "./llm.js";
 export { config } from "./config.js";
 export type { NodeLLMConfig } from "./config.js";
 export { providerRegistry } from "./providers/registry.js";
+export { BaseProvider } from "./providers/BaseProvider.js";
 
 export { OpenAIProvider } from "./providers/openai/OpenAIProvider.js";
 export { registerOpenAIProvider } from "./providers/openai/index.js";

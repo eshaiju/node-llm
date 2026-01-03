@@ -1,5 +1,5 @@
-import { Provider, ChatRequest, ChatResponse, ModelInfo, ChatChunk, ImageRequest, ImageResponse, ModerationRequest, ModerationResponse, TranscriptionRequest, TranscriptionResponse } from "../Provider.js";
-import { EmbeddingRequest, EmbeddingResponse } from "../Embedding.js";
+import { Provider, ChatRequest, ChatResponse, ModelInfo, ChatChunk, ImageRequest, ImageResponse, ModerationRequest, ModerationResponse, TranscriptionRequest, TranscriptionResponse, EmbeddingRequest, EmbeddingResponse } from "../Provider.js";
+import { BaseProvider } from "../BaseProvider.js";
 import { Capabilities } from "./Capabilities.js";
 import { AnthropicChat } from "./Chat.js";
 import { AnthropicStreaming } from "./Streaming.js";
@@ -10,7 +10,7 @@ export interface AnthropicProviderOptions {
   baseUrl?: string;
 }
 
-export class AnthropicProvider implements Provider {
+export class AnthropicProvider extends BaseProvider implements Provider {
   private readonly baseUrl: string;
   private readonly chatHandler: AnthropicChat;
   private readonly streamHandler: AnthropicStreaming;
@@ -29,10 +29,27 @@ export class AnthropicProvider implements Provider {
   };
 
   constructor(private readonly options: AnthropicProviderOptions) {
+    super();
     this.baseUrl = options.baseUrl ?? "https://api.anthropic.com/v1";
     this.chatHandler = new AnthropicChat(this.baseUrl, options.apiKey);
     this.streamHandler = new AnthropicStreaming(this.baseUrl, options.apiKey);
     this.modelsHandler = new AnthropicModels(this.baseUrl, options.apiKey);
+  }
+
+  public apiBase(): string {
+    return this.baseUrl;
+  }
+
+  public headers(): Record<string, string> {
+    return {
+      "x-api-key": this.options.apiKey,
+      "anthropic-version": "2023-06-01",
+      "Content-Type": "application/json",
+    };
+  }
+
+  protected providerName(): string {
+    return "Anthropic";
   }
 
   async chat(request: ChatRequest): Promise<ChatResponse> {
@@ -47,20 +64,6 @@ export class AnthropicProvider implements Provider {
     return this.modelsHandler.execute();
   }
 
-  async paint(_request: ImageRequest): Promise<ImageResponse> {
-    throw new Error("Anthropic doesn't support image generation");
-  }
-
-  async transcribe(_request: TranscriptionRequest): Promise<TranscriptionResponse> {
-    throw new Error("Anthropic doesn't support transcription");
-  }
-
-  async moderate(_request: ModerationRequest): Promise<ModerationResponse> {
-    throw new Error("Anthropic doesn't support moderation");
-  }
-
-  async embed(_request: EmbeddingRequest): Promise<EmbeddingResponse> {
-    throw new Error("Anthropic doesn't support embeddings");
-  }
+  // Unsupported features will use BaseProvider's default implementations
 }
 

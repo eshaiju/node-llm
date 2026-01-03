@@ -1,4 +1,5 @@
 import { Provider, ChatRequest, ChatResponse, ModelInfo, ChatChunk } from "../Provider.js";
+import { BaseProvider } from "../BaseProvider.js";
 import { DeepSeekChat } from "./Chat.js";
 import { DeepSeekModels } from "./Models.js";
 import { DeepSeekStreaming } from "./Streaming.js";
@@ -9,7 +10,7 @@ export interface DeepSeekProviderOptions {
   baseUrl?: string;
 }
 
-export class DeepSeekProvider implements Provider {
+export class DeepSeekProvider extends BaseProvider implements Provider {
   private readonly baseUrl: string;
   private readonly chatHandler: DeepSeekChat;
   private readonly streamingHandler: DeepSeekStreaming;
@@ -28,10 +29,26 @@ export class DeepSeekProvider implements Provider {
   };
 
   constructor(private readonly options: DeepSeekProviderOptions) {
+    super();
     this.baseUrl = options.baseUrl ?? "https://api.deepseek.com";
     this.chatHandler = new DeepSeekChat(this.baseUrl, options.apiKey);
     this.streamingHandler = new DeepSeekStreaming(this.baseUrl, options.apiKey);
     this.modelsHandler = new DeepSeekModels(this.baseUrl, options.apiKey);
+  }
+
+  public apiBase(): string {
+    return this.baseUrl;
+  }
+
+  public headers(): Record<string, string> {
+    return {
+      "Authorization": `Bearer ${this.options.apiKey}`,
+      "Content-Type": "application/json",
+    };
+  }
+
+  protected providerName(): string {
+    return "DeepSeek";
   }
 
   async chat(request: ChatRequest): Promise<ChatResponse> {
@@ -45,4 +62,6 @@ export class DeepSeekProvider implements Provider {
   async listModels(): Promise<ModelInfo[]> {
     return this.modelsHandler.execute();
   }
+
+  // Other features (paint, transcribe, moderate, embed) will use BaseProvider's default implementations
 }
