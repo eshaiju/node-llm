@@ -67,6 +67,9 @@ export class AnthropicStreaming {
 
 
     let done = false;
+    // Track tool calls being built across chunks
+    const toolCallsMap = new Map<number, any>();
+    let currentBlockIndex = -1;
 
     try {
       const url = `${this.baseUrl}/messages`;
@@ -130,16 +133,56 @@ export class AnthropicStreaming {
             const data = JSON.parse(dataStr);
             
             // Handle different event types from Anthropic
-            if (eventType === "content_block_delta") {
+            if (eventType === "content_block_start") {
+              // Track the block index for tool use
+              if (data.content_block?.type === "tool_use") {
+                currentBlockIndex = data.index;
+                toolCallsMap.set(currentBlockIndex, {
+                  id: data.content_block.id,
+                  type: "function",
+                  function: {
+                    name: data.content_block.name,
+                    arguments: ""
+                  }
+                });
+              }
+            }
+            else if (eventType === "content_block_delta") {
               if (data.delta && data.delta.type === "text_delta") {
                 yield { content: data.delta.text };
               }
+              else if (data.delta && data.delta.type === "input_json_delta") {
+                // Accumulate tool arguments
+                const index = data.index;
+                if (toolCallsMap.has(index)) {
+                  const toolCall = toolCallsMap.get(index)!;
+                  toolCall.function.arguments += data.delta.partial_json;
+                }
+              }
+            }
+            else if (eventType === "content_block_stop") {
+              // Block finished
             }
             else if (eventType === "message_start") {
               // Could extract initial usage here
             }
             else if (eventType === "message_delta") {
               // Update usage or stop reason
+              if (data.delta?.stop_reason === "end_turn" && toolCallsMap.size > 0) {
+                // Yield accumulated tool calls
+                const toolCalls = Array.from(toolCallsMap.values()).map(tc => ({
+                  id: tc.id,
+                  type: "function" as const,
+                  function: {
+                    name: tc.function.name,
+                    arguments: tc.function.arguments
+                  }
+                }));
+                yield { content: "", tool_calls: toolCalls, done: true };
+              }
+            }
+            else if (eventType === "message_stop") {
+              done = true;
             }
             else if (eventType === "error") {
               throw new Error(`Stream error: ${data.error?.message}`);
