@@ -1,5 +1,5 @@
 /**
- * Global configuration for Node-LLM providers.
+ * Global configuration for Node-NodeLLM providers.
  * Values are initialized from environment variables but can be overridden programmatically.
  */
 export interface NodeLLMConfig {

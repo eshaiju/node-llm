@@ -102,11 +102,11 @@ export class CapabilityError extends LLMError {
 }
 
 /**
- * Thrown when LLM provider is not configured
+ * Thrown when NodeLLM provider is not configured
  */
 export class ProviderNotConfiguredError extends LLMError {
   constructor() {
-    super("LLM provider not configured", "PROVIDER_NOT_CONFIGURED");
+    super("NodeLLM provider not configured", "PROVIDER_NOT_CONFIGURED");
   }
 }
 

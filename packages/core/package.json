@@ -10,7 +10,7 @@
       "default": "./dist/index.js"
     }
   },
-  "description": "A provider-agnostic LLM core for Node.js, inspired by ruby-llm.",
+  "description": "A provider-agnostic NodeLLM core for Node.js, inspired by ruby-llm.",
   "author": "node-llm contributors",
   "license": "MIT",
   "engines": {

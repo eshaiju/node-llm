@@ -29,7 +29,7 @@ class ProviderRegistry {
     const factory = this.providers.get(name);
 
     if (!factory) {
-      throw new Error(`Unknown LLM provider '${name}'`);
+      throw new Error(`Unknown NodeLLM provider '${name}'`);
     }
 
     return factory();

@@ -15,7 +15,7 @@ import {
 } from "./Provider.js";
 
 /**
- * Abstract base class for all LLM providers.
+ * Abstract base class for all NodeLLM providers.
  * Provides common functionality and default implementations for unsupported features.
  * Each provider must implement the abstract methods and can override default implementations.
  */
