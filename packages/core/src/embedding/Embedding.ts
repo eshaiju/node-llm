@@ -1,4 +1,4 @@
-import { EmbeddingResponse } from "../providers/Embedding.js";
+import { EmbeddingResponse } from "../providers/Provider.js";
 
 export class Embedding {
   public readonly vectors: number[][];

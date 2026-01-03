@@ -1,0 +1,42 @@
+---
+layout: default
+title: OpenRouter
+nav_order: 5
+parent: Providers
+---
+
+# OpenRouter Provider
+
+The OpenRouter provider acts as a unified gateway to hundreds of AI models. `node-llm` leverages OpenRouter's standardized API while providing additional capabilities like integrated tool calling and vision.
+
+## Configuration
+
+```ts
+import { LLM } from "@node-llm/core";
+
+LLM.configure({
+  provider: "openrouter",
+  openrouterApiKey: process.env.OPENROUTER_API_KEY,
+});
+```
+
+## Features
+
+- **Model Discovery**: Full support for `LLM.listModels()` to explore hundreds of available models.
+- **Unified API**: Switch between models from OpenAI, Anthropic, Google, and Meta using a single configuration.
+- **Vision**: Supported for multimodal models.
+- **Tools**: Supported for models with function calling capabilities.
+- **Reasoning**: Access chain-of-thought for reasoning-capable models (e.g., DeepSeek R1).
+- **Streaming**: Native streaming support with the advanced `Stream` utility.
+
+## Specific Parameters
+
+OpenRouter supports various unique parameters that can be passed via `.withParams()`:
+
+```ts
+const chat = LLM.chat("google/gemini-2.0-flash-exp:free")
+  .withParams({
+    transforms: ["middle-out"], // OpenRouter specific compression
+    route: "fallback"
+  });
+```

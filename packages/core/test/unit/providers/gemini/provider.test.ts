@@ -65,6 +65,6 @@ describe("GeminiProvider", () => {
   });
 
   it("should throw error for moderation", async () => {
-    await expect(provider.moderate({} as any)).rejects.toThrow("Gemini doesn't support moderation");
+    await expect(provider.moderate({} as any)).rejects.toThrow("Gemini does not support moderate");
   });
 });

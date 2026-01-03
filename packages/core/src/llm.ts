@@ -8,19 +8,27 @@ import {
   ModerationResponse,
   ModerationResult,
 } from "./providers/Provider.js";
-import { providerRegistry } from "./providers/registry.js";
-import { ensureOpenAIRegistered } from "./providers/openai/index.js";
-import { registerGeminiProvider } from "./providers/gemini/index.js";
-import { registerAnthropicProvider } from "./providers/anthropic/index.js";
-import { registerDeepSeekProvider } from "./providers/deepseek/index.js";
-import { registerOllamaProvider } from "./providers/ollama/index.js";
+import {
+  providerRegistry,
+  ensureOpenAIRegistered,
+  registerAnthropicProvider,
+  registerGeminiProvider,
+  registerDeepSeekProvider,
+  registerOllamaProvider,
+  registerOpenRouterProvider,
+} from "./providers/registry.js";
 import { GeneratedImage } from "./image/GeneratedImage.js";
 import { ModelRegistry } from "./models/ModelRegistry.js";
 import { Transcription } from "./transcription/Transcription.js";
 import { Moderation } from "./moderation/Moderation.js";
 import { Embedding } from "./embedding/Embedding.js";
-import { EmbeddingRequest } from "./providers/Embedding.js";
+import { EmbeddingRequest } from "./providers/Provider.js";
 import { DEFAULT_MODELS } from "./constants.js";
+import { 
+  ProviderNotConfiguredError, 
+  UnsupportedFeatureError,
+  ModelCapabilityError 
+} from "./errors/index.js";
 
 import { config, NodeLLMConfig } from "./config.js";
 
@@ -36,6 +44,16 @@ type LLMConfig = {
   defaultModerationModel?: string;
   defaultEmbeddingModel?: string;
 } & Partial<NodeLLMConfig>;
+
+// Provider registration map
+const PROVIDER_REGISTRARS: Record<string, () => void> = {
+  openai: ensureOpenAIRegistered,
+  gemini: registerGeminiProvider,
+  anthropic: registerAnthropicProvider,
+  deepseek: registerDeepSeekProvider,
+  ollama: registerOllamaProvider,
+  openrouter: registerOpenRouterProvider,
+};
 
 class LLMCore {
   public readonly models = ModelRegistry;
@@ -93,26 +111,12 @@ class LLMCore {
     }
 
     if (typeof provider === "string") {
-      if (provider === "openai") {
-        ensureOpenAIRegistered();
+      // Use the provider registrars map
+      const registrar = PROVIDER_REGISTRARS[provider];
+      if (registrar) {
+        registrar();
       }
-
-      if (provider === "gemini") {
-        registerGeminiProvider();
-      }
-
-      if (provider === "anthropic") {
-        registerAnthropicProvider();
-      }
-
-      if (provider === "deepseek") {
-        registerDeepSeekProvider();
-      }
-
-      if (provider === "ollama") {
-        registerOllamaProvider();
-      }
-
+      
       this.provider = providerRegistry.resolve(provider);
     } else if (provider) {
       this.provider = provider;
@@ -121,17 +125,20 @@ class LLMCore {
 
   private ensureProviderSupport<K extends keyof Provider>(method: K): Provider & Record<K, NonNullable<Provider[K]>> {
     if (!this.provider) {
-      throw new Error("LLM provider not configured");
+      throw new ProviderNotConfiguredError();
     }
     if (!this.provider[method]) {
-      throw new Error(`Provider does not support ${method}`);
+      throw new UnsupportedFeatureError(
+        "Provider",
+        String(method)
+      );
     }
     return this.provider as Provider & Record<K, NonNullable<Provider[K]>>;
   }
 
   chat(model: string, options?: ChatOptions): Chat {
     if (!this.provider) {
-      throw new Error("LLM provider not configured");
+      throw new ProviderNotConfiguredError();
     }
 
     return new Chat(this.provider, model, options);
@@ -139,7 +146,12 @@ class LLMCore {
 
   async listModels(): Promise<ModelInfo[]> {
     const provider = this.ensureProviderSupport("listModels");
-    return provider.listModels();
+    const models = await provider.listModels();
+    
+    // Dynamically update the model registry with the fetched info
+    ModelRegistry.save(models as any);
+    
+    return models;
   }
 
   async paint(prompt: string, options?: { model?: string; size?: string; quality?: string; assumeModelExists?: boolean }): Promise<GeneratedImage> {
@@ -149,7 +161,7 @@ class LLMCore {
     if (options?.assumeModelExists) {
       console.warn(`[NodeLLM] Skipping validation for model ${model}`);
     } else if (model && provider.capabilities && !provider.capabilities.supportsImageGeneration(model)) {
-      throw new Error(`Model ${model} does not support image generation.`);
+      throw new ModelCapabilityError(model, "image generation");
     }
 
     const response = await provider.paint({
@@ -177,7 +189,7 @@ class LLMCore {
     if (options?.assumeModelExists) {
        console.warn(`[NodeLLM] Skipping validation for model ${model}`);
     } else if (model && provider.capabilities && !provider.capabilities.supportsTranscription(model)) {
-      throw new Error(`Model ${model} does not support transcription.`);
+      throw new ModelCapabilityError(model, "transcription");
     }
 
     const response = await provider.transcribe({
@@ -212,7 +224,7 @@ class LLMCore {
     if (options?.assumeModelExists) {
       console.warn(`[NodeLLM] Skipping validation for model ${model}`);
     } else if (model && provider.capabilities && !provider.capabilities.supportsModeration(model)) {
-      throw new Error(`Model ${model} does not support moderation.`);
+      throw new ModelCapabilityError(model, "moderation");
     }
 
     const response = await provider.moderate({
@@ -241,7 +253,7 @@ class LLMCore {
     if (options?.assumeModelExists) {
       console.warn(`[NodeLLM] Skipping validation for model ${request.model}`);
     } else if (request.model && provider.capabilities && !provider.capabilities.supportsEmbeddings(request.model)) {
-      throw new Error(`Model ${request.model} does not support embeddings.`);
+      throw new ModelCapabilityError(request.model, "embeddings");
     }
 
     const response = await provider.embed(request);

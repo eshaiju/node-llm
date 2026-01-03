@@ -100,3 +100,36 @@ export class CapabilityError extends LLMError {
     super(message, "CAPABILITY_ERROR");
   }
 }
+
+/**
+ * Thrown when LLM provider is not configured
+ */
+export class ProviderNotConfiguredError extends LLMError {
+  constructor() {
+    super("LLM provider not configured", "PROVIDER_NOT_CONFIGURED");
+  }
+}
+
+/**
+ * Thrown when a provider doesn't support a requested feature
+ */
+export class UnsupportedFeatureError extends LLMError {
+  constructor(
+    public readonly provider: string,
+    public readonly feature: string
+  ) {
+    super(`${provider} does not support ${feature}`, "UNSUPPORTED_FEATURE");
+  }
+}
+
+/**
+ * Thrown when a model doesn't support a requested capability
+ */
+export class ModelCapabilityError extends LLMError {
+  constructor(
+    public readonly model: string,
+    public readonly capability: string
+  ) {
+    super(`Model ${model} does not support ${capability}`, "MODEL_CAPABILITY_ERROR");
+  }
+}

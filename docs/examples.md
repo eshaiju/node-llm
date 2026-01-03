@@ -61,3 +61,15 @@ A comprehensive list of runnable examples available in the [examples/](https://g
 | `examples/deepseek/chat/tools.mjs` | Function calling with DeepSeek |
 | `examples/deepseek/chat/structured.mjs` | Structured JSON output |
 | `examples/deepseek/embeddings/basic.mjs` | Generating embeddings |
+
+## OpenRouter Examples
+
+| Example | Description |
+| :--- | :--- |
+| `examples/openrouter/chat/basic.mjs` | Multi-model chat gateway |
+| `examples/openrouter/chat/streaming.mjs` | Unified streaming across 300+ models |
+| `examples/openrouter/chat/tools.mjs` | Cross-provider function calling |
+| `examples/openrouter/chat/reasoning.mjs` | Accessing DeepSeek & o1 reasoning |
+| `examples/openrouter/discovery/models.mjs` | Exploring the global model library |
+| `examples/openrouter/multimodal/vision.mjs` | Unified vision API for all models |
+| `examples/openrouter/embeddings/create.mjs` | Aggregated embedding services |

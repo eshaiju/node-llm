@@ -12,7 +12,8 @@ export interface NodeLLMConfig {
   deepseekApiKey?: string;
   deepseekApiBase?: string;
   ollamaApiBase?: string;
-  [key: string]: any;
+  openrouterApiKey?: string;
+  openrouterApiBase?: string;
 }
 
 class Configuration implements NodeLLMConfig {
@@ -25,8 +26,8 @@ class Configuration implements NodeLLMConfig {
   public deepseekApiKey?: string = process.env.DEEPSEEK_API_KEY?.trim();
   public deepseekApiBase?: string = process.env.DEEPSEEK_API_BASE?.trim();
   public ollamaApiBase?: string = process.env.OLLAMA_API_BASE?.trim() || "http://localhost:11434/v1";
-
-  [key: string]: any;
+  public openrouterApiKey?: string = process.env.OPENROUTER_API_KEY?.trim();
+  public openrouterApiBase?: string = process.env.OPENROUTER_API_BASE?.trim();
 }
 
 export const config = new Configuration();

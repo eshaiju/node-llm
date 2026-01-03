@@ -1,4 +1,5 @@
-import { Provider, ChatRequest, ChatResponse, ModelInfo, ChatChunk, ImageRequest, ImageResponse, ModerationRequest, ModerationResponse } from "../Provider.js";
+import { Provider, ChatRequest, ChatResponse, ModelInfo, ChatChunk, ImageRequest, ImageResponse, ModerationRequest, ModerationResponse, EmbeddingRequest, EmbeddingResponse } from "../Provider.js";
+import { BaseProvider } from "../BaseProvider.js";
 import { Capabilities } from "./Capabilities.js";
 import { OpenAIChat } from "./Chat.js";
 import { OpenAIStreaming } from "./Streaming.js";
@@ -8,14 +9,13 @@ import { OpenAITranscription } from "./Transcription.js";
 import { OpenAIModeration } from "./Moderation.js";
 import { OpenAIEmbedding } from "./Embedding.js";
 import { TranscriptionRequest, TranscriptionResponse } from "../Provider.js";
-import { EmbeddingRequest, EmbeddingResponse } from "../Embedding.js";
 
 export interface OpenAIProviderOptions {
   apiKey: string;
   baseUrl?: string;
 }
 
-export class OpenAIProvider implements Provider {
+export class OpenAIProvider extends BaseProvider implements Provider {
   protected baseUrl: string;
   protected chatHandler: OpenAIChat;
   protected streamingHandler: OpenAIStreaming;
@@ -38,6 +38,7 @@ export class OpenAIProvider implements Provider {
   };
 
   constructor(protected readonly options: OpenAIProviderOptions) {
+    super();
     this.baseUrl = options.baseUrl ?? "https://api.openai.com/v1";
     this.chatHandler = new OpenAIChat(this.baseUrl, options.apiKey);
     this.streamingHandler = new OpenAIStreaming(this.baseUrl, options.apiKey);
@@ -46,6 +47,21 @@ export class OpenAIProvider implements Provider {
     this.transcriptionHandler = new OpenAITranscription(this.baseUrl, options.apiKey);
     this.moderationHandler = new OpenAIModeration(this.baseUrl, options.apiKey);
     this.embeddingHandler = new OpenAIEmbedding(this.baseUrl, options.apiKey);
+  }
+
+  public apiBase(): string {
+    return this.baseUrl;
+  }
+
+  public headers(): Record<string, string> {
+    return {
+      "Authorization": `Bearer ${this.options.apiKey}`,
+      "Content-Type": "application/json",
+    };
+  }
+
+  protected providerName(): string {
+    return "OpenAI";
   }
 
   async chat(request: ChatRequest): Promise<ChatResponse> {

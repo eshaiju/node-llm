@@ -9,8 +9,11 @@ import {
   TranscriptionRequest, 
   TranscriptionResponse,
   ModerationRequest,
-  ModerationResponse 
+  ModerationResponse,
+  EmbeddingRequest,
+  EmbeddingResponse 
 } from "../Provider.js";
+import { BaseProvider } from "../BaseProvider.js";
 import { Capabilities } from "./Capabilities.js";
 import { GeminiChat } from "./Chat.js";
 import { GeminiStreaming } from "./Streaming.js";
@@ -18,14 +21,13 @@ import { GeminiModels } from "./Models.js";
 import { GeminiImage } from "./Image.js";
 import { GeminiEmbeddings } from "./Embeddings.js";
 import { GeminiTranscription } from "./Transcription.js";
-import { EmbeddingRequest, EmbeddingResponse } from "../Embedding.js";
 
 export interface GeminiProviderOptions {
   apiKey: string;
   baseUrl?: string;
 }
 
-export class GeminiProvider implements Provider {
+export class GeminiProvider extends BaseProvider implements Provider {
   private readonly baseUrl: string;
   private readonly chatHandler: GeminiChat;
   private readonly streamingHandler: GeminiStreaming;
@@ -47,6 +49,7 @@ export class GeminiProvider implements Provider {
   };
 
   constructor(private readonly options: GeminiProviderOptions) {
+    super();
     this.baseUrl = options.baseUrl ?? "https://generativelanguage.googleapis.com/v1beta";
     this.chatHandler = new GeminiChat(this.baseUrl, options.apiKey);
     this.streamingHandler = new GeminiStreaming(this.baseUrl, options.apiKey);
@@ -54,6 +57,20 @@ export class GeminiProvider implements Provider {
     this.imageHandler = new GeminiImage(this.baseUrl, options.apiKey);
     this.embeddingHandler = new GeminiEmbeddings(this.baseUrl, options.apiKey);
     this.transcriptionHandler = new GeminiTranscription(this.baseUrl, options.apiKey);
+  }
+
+  public apiBase(): string {
+    return this.baseUrl;
+  }
+
+  public headers(): Record<string, string> {
+    return {
+      "Content-Type": "application/json",
+    };
+  }
+
+  protected providerName(): string {
+    return "Gemini";
   }
 
   async chat(request: ChatRequest): Promise<ChatResponse> {
@@ -80,7 +97,5 @@ export class GeminiProvider implements Provider {
     return this.transcriptionHandler.execute(request);
   }
 
-  async moderate(_request: ModerationRequest): Promise<ModerationResponse> {
-    throw new Error("Gemini doesn't support moderation");
-  }
+  // Moderation is not supported - will use BaseProvider's default implementation
 }

@@ -42,10 +42,10 @@ describe("AnthropicProvider", () => {
   });
 
   it("should throw errors for unsupported methods", async () => {
-    await expect(provider.paint({} as any)).rejects.toThrow("Anthropic doesn't support image generation");
-    await expect(provider.transcribe({} as any)).rejects.toThrow("Anthropic doesn't support transcription");
-    await expect(provider.moderate({} as any)).rejects.toThrow("Anthropic doesn't support moderation");
-    await expect(provider.embed({} as any)).rejects.toThrow("Anthropic doesn't support embeddings");
+    await expect(provider.paint({} as any)).rejects.toThrow("Anthropic does not support paint");
+    await expect(provider.transcribe({} as any)).rejects.toThrow("Anthropic does not support transcribe");
+    await expect(provider.moderate({} as any)).rejects.toThrow("Anthropic does not support moderate");
+    await expect(provider.embed({} as any)).rejects.toThrow("Anthropic does not support embed");
   });
 
   describe("capabilities", () => {
