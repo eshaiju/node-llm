@@ -22,7 +22,12 @@ import {
 export abstract class BaseProvider implements Provider {
   public abstract apiBase(): string;
   public abstract headers(): Record<string, string>;
+  public abstract headers(): Record<string, string>;
   protected abstract providerName(): string;
+
+  get id(): string {
+    return this.providerName();
+  }
 
   protected throwUnsupportedError(feature: string): never {
     throw new Error(`${this.providerName()} does not support ${feature}`);

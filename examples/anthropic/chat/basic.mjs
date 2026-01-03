@@ -13,7 +13,7 @@ LLM.configure({
 
 async function main() {
   console.log("Creating chat with Claude 3.5 Sonnet...");
-  const chat = LLM.chat("claude-3-haiku-20240307");
+  const chat = LLM.chat("claude-3-haiku");
 
   console.log("Sending message...");
   const response = await chat.ask("Hello, who are you?");

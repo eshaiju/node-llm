@@ -8,7 +8,7 @@ async function main() {
     provider: "openrouter" 
   });
 
-  const chat = LLM.chat("openai/gpt-4o-mini");
+  const chat = LLM.chat("gpt-4o-mini");
 
   // 1. Standard Request
   console.log("--- Standard Request ---");

@@ -143,6 +143,7 @@ export interface EmbeddingProvider {
 }
 
 export interface Provider {
+  id: string;
   chat(request: ChatRequest): Promise<ChatResponse>;
   stream?(request: ChatRequest): AsyncIterable<ChatChunk>;
   listModels?(): Promise<ModelInfo[]>;

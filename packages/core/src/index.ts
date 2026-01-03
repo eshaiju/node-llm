@@ -8,6 +8,7 @@ export type { Tool, ToolCall } from "./chat/Tool.js";
 export type { MessageContent, ContentPart } from "./chat/Content.js";
 
 export { z } from "zod";
+import { resolveModelAlias } from "./model_aliases.js";
 export { LLM, Transcription, Moderation, Embedding } from "./llm.js";
 export { config } from "./config.js";
 export type { NodeLLMConfig } from "./config.js";
@@ -17,6 +18,7 @@ export { BaseProvider } from "./providers/BaseProvider.js";
 export { OpenAIProvider } from "./providers/openai/OpenAIProvider.js";
 export { registerOpenAIProvider } from "./providers/openai/index.js";
 export { registerAnthropicProvider } from "./providers/anthropic/index.js";
+export { registerGeminiProvider, GeminiProvider } from "./providers/gemini/index.js";
 export { registerOllamaProvider, OllamaProvider } from "./providers/ollama/index.js";
 export { OpenRouterProvider } from "./providers/openrouter/OpenRouterProvider.js";
 export { registerOpenRouterProvider } from "./providers/registry.js";

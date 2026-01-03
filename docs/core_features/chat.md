@@ -88,19 +88,19 @@ const chat = LLM.chat("claude-3-5-sonnet", {
 ```
 
 ## Working with Different Models
-
-Switching providers is as simple as changing the model ID strings. `node-llm` automatically detects which provider to use based on the model name.
+To switch providers, you must re-configure the `LLM` instance.
 
 ```ts
 // OpenAI
+LLM.configure({ provider: "openai" });
 const gpt = LLM.chat("gpt-4o");
 
 // Anthropic
+LLM.configure({ provider: "anthropic" });
 const claude = LLM.chat("claude-3-5-sonnet-20241022");
-
-// Gemini
-const gemini = LLM.chat("gemini-1.5-pro");
 ```
+
+For advanced multi-provider applications, it is recommended to manage separate `LLMCore` instances or re-configure as needed before requests.
 
 ## Temperature & Creativity
 

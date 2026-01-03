@@ -7,6 +7,7 @@ describe("Transcription Unit Tests", () => {
 
   beforeEach(() => {
     mockProvider = {
+      id: "mock-provider",
       chat: vi.fn(),
       transcribe: vi.fn().mockResolvedValue({
         text: "Mock transcription",
@@ -28,7 +29,7 @@ describe("Transcription Unit Tests", () => {
       file: "test.mp3",
       language: "en",
       prompt: "Test prompt",
-      model: undefined
+      model: "",
     });
   });
 
@@ -80,6 +81,7 @@ describe("Transcription Unit Tests", () => {
 
   it("should throw error if provider does not support transcribe", async () => {
     const limitedProvider: Provider = {
+      id: "limited-provider",
       chat: vi.fn()
     };
     LLM.configure({ provider: limitedProvider });
