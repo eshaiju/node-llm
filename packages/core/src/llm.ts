@@ -39,6 +39,7 @@ export interface RetryOptions {
 type LLMConfig = {
   provider?: Provider | string;
   retry?: RetryOptions;
+  defaultChatModel?: string;
   defaultTranscriptionModel?: string;
   defaultModerationModel?: string;
   defaultEmbeddingModel?: string;
@@ -58,6 +59,7 @@ class NodeLLMCore {
   public readonly models = ModelRegistry;
   public readonly config: NodeLLMConfig;
   private provider?: Provider;
+  private defaultChatModelId?: string;
   private defaultTranscriptionModelId?: string;
   private defaultModerationModelId?: string;
   private defaultEmbeddingModelId?: string;
@@ -111,6 +113,7 @@ class NodeLLMCore {
     const { 
       provider, 
       retry, 
+      defaultChatModel,
       defaultTranscriptionModel, 
       defaultModerationModel, 
       defaultEmbeddingModel, 
@@ -120,6 +123,10 @@ class NodeLLMCore {
     // Merge API keys into global config
     Object.assign(this.config, apiConfig);
     
+    if (defaultChatModel) {
+      this.defaultChatModelId = defaultChatModel;
+    }
+
     if (defaultTranscriptionModel) {
       this.defaultTranscriptionModelId = defaultTranscriptionModel;
     }
@@ -165,13 +172,13 @@ class NodeLLMCore {
     return this.provider as Provider & Record<K, NonNullable<Provider[K]>>;
   }
 
-  chat(model: string, options?: ChatOptions): Chat {
+  chat(model?: string, options?: ChatOptions): Chat {
     if (!this.provider) {
       throw new ProviderNotConfiguredError();
     }
 
-    // Resolve model alias based on the current provider
-    const resolvedModel = resolveModelAlias(model, this.provider.id);
+    const rawModel = model || this.defaultChatModelId || this.provider.defaultModel("chat");
+    const resolvedModel = resolveModelAlias(rawModel, this.provider.id);
     return new Chat(this.provider, resolvedModel, options, this.retry);
   }
 

@@ -1,9 +1,7 @@
 import { describe, it, expect, afterEach } from "vitest";
 import { NodeLLM } from "../../../../src/index.js";
 import { setupVCR } from "../../../helpers/vcr.js";
-import path from "path";
-import dotenv from "dotenv";
-dotenv.config({ path: path.resolve(process.cwd(), "../../.env") });
+import "dotenv/config";
 
 describe("OpenRouter Multi-modal Integration (VCR)", { timeout: 30000 }, () => {
   let polly: any;
@@ -22,7 +20,7 @@ describe("OpenRouter Multi-modal Integration (VCR)", { timeout: 30000 }, () => {
       provider: "openrouter",
     });
     // Use a vision-capable model
-    const chat = NodeLLM.chat("google/gemini-2.0-flash-exp:free");
+    const chat = NodeLLM.chat("meta-llama/llama-3.2-11b-vision-instruct:free");
 
     const response = await chat.ask("What's in this image?", {
       files: ["https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Gfp-wisconsin-madison-the-nature-boardwalk.jpg/2560px-Gfp-wisconsin-madison-the-nature-boardwalk.jpg"]

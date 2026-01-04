@@ -12,8 +12,9 @@ NodeLLM.configure({
 });
 
 async function main() {
-  console.log("Creating chat with Claude 3.5 Sonnet...");
-  const chat = NodeLLM.chat("claude-3-5-sonnet-20241022");
+  // No model specified - defaults to Claude 3.5 Sonnet for Anthropic
+  const chat = NodeLLM.chat();
+  console.log(`Using model: ${chat.modelId}`);
 
   console.log("Sending message...");
   const response = await chat.ask("Hello, who are you?");

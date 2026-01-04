@@ -22,7 +22,7 @@ describe("DeepSeek Multimodal Integration (VCR)", { timeout: 30000 }, () => {
     const chat = NodeLLM.chat("deepseek-chat");
 
     await expect(chat.ask("What is in this image?", { 
-      images: ["https://example.com/image.jpg"] 
+      images: ["data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg=="] 
     })).rejects.toThrow(/does not support vision/i);
   });
 });

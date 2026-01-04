@@ -12,7 +12,9 @@ async function main() {
 
   // NodeLLM.configure({ provider: "openai" });
 
-  const chat = NodeLLM.chat("gpt-4o");
+  // No model specified - defaults to gpt-4o for OpenAI
+  const chat = NodeLLM.chat();
+  console.log(`Using model: ${chat.modelId}`);
 
   // 1. Standard Request
   console.log("--- Standard Request ---");

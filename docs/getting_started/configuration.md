@@ -80,6 +80,11 @@ NodeLLM.configure({
 | `deepseekApiBase` | DeepSeek API base URL | `process.env.DEEPSEEK_API_BASE` |
 | `openrouterApiKey` | OpenRouter API key | `process.env.OPENROUTER_API_KEY` |
 | `openrouterApiBase` | OpenRouter API base URL | `process.env.OPENROUTER_API_BASE` |
+| `defaultChatModel` | Default model for `.chat()` | Provider default |
+| `defaultTranscriptionModel` | Default model for `.transcribe()` | Provider default |
+| `defaultModerationModel` | Default model for `.moderate()` | Provider default |
+| `defaultEmbeddingModel` | Default model for `.embed()` | Provider default |
+| `retry` | Retry configuration | `{ attempts: 1, delayMs: 0 }` |
 
 ## Inspecting Configuration
 

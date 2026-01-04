@@ -72,8 +72,7 @@ This flag tells `NodeLLM` to bypass the registry check.
 **Important**: You MUST specify the `provider` when using this flag, as the system cannot infer it from the ID.
 
 ```ts
-const chat = NodeLLM.chat("my-custom-deployment", {
-  provider: "openai", // Mandatory
+const chat = NodeLLM.withProvider("openai").chat("my-custom-deployment", {
   assumeModelExists: true
 });
 

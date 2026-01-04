@@ -32,7 +32,7 @@ import "dotenv/config";
 // 2. Configure defaults
 NodeLLM.configure({
   provider: "openai",
-  defaultModel: "gpt-4o",
+  defaultChatModel: "gpt-4o",
 });
 ```
 

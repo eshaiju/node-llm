@@ -1,9 +1,7 @@
 import { describe, it, expect, afterEach } from "vitest";
 import { NodeLLM } from "../../../../src/llm.js";
 import { setupVCR } from "../../../helpers/vcr.js";
-import path from "path";
-import dotenv from "dotenv";
-dotenv.config({ path: path.resolve(process.cwd(), "../../.env") });
+import "dotenv/config";
 
 describe("OpenRouter Tool Calling Integration (VCR)", { timeout: 30000 }, () => {
   let polly: any;
