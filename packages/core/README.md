@@ -178,14 +178,16 @@ await NodeLLM.transcribe("meeting-recording.wav");
 ```
 
 ### ⚡ Scoped Parallelism
-Run multiple providers in parallel safely without global configuration side effects using isolated contexts.
+Run multiple providers in parallel safely without global configuration side effects using isolated contexts. You can also override credentials (API keys) for specific instances.
+
 ```ts
 const [gpt, claude] = await Promise.all([
   // Each call branch off into its own isolated context
   NodeLLM.withProvider("openai").chat("gpt-4o").ask(prompt),
-  NodeLLM.withProvider("anthropic").chat("claude-3-5-sonnet").ask(prompt),
+  NodeLLM.withProvider("anthropic", { anthropicApiKey: "..." }).chat("claude-3.5-sonnet").ask(prompt),
 ]);
 ```
+
 
 ### 🧠 Deep Reasoning
 Direct access to the thought process of models like **DeepSeek R1** or **OpenAI o1/o3** using the `.reasoning` field.

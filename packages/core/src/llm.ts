@@ -81,6 +81,9 @@ export class NodeLLMCore {
    * This respects the current global configuration but avoids side effects 
    * on the main NodeLLM singleton.
    * 
+   * @param providerName - The provider to use (e.g., "openai", "anthropic")
+   * @param scopedConfig - Optional configuration overrides for this scoped instance
+   * 
    * @example
    * ```ts
    * const openai = NodeLLM.withProvider("openai");
@@ -92,9 +95,16 @@ export class NodeLLMCore {
    *   anthropic.chat("claude-3-5-sonnet").ask(prompt),
    * ]);
    * ```
+   * 
+   * @example With scoped credentials
+   * ```ts
+   * const customAnthropic = NodeLLM.withProvider("anthropic", {
+   *   anthropicApiKey: "sk-ant-custom-key"
+   * });
+   * ```
    */
-  withProvider(providerName: string): NodeLLMCore {
-    const scoped = new NodeLLMCore({ ...this.config });
+  withProvider(providerName: string, scopedConfig?: Partial<NodeLLMConfig>): NodeLLMCore {
+    const scoped = new NodeLLMCore({ ...this.config, ...scopedConfig });
     scoped.configure({ provider: providerName });
     return scoped;
   }
