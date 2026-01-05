@@ -52,6 +52,10 @@ export class AnthropicProvider extends BaseProvider implements Provider {
     return "Anthropic";
   }
 
+  public override defaultModel(feature?: string): string {
+    return "claude-3-5-sonnet-20241022";
+  }
+
   async chat(request: ChatRequest): Promise<ChatResponse> {
     return this.chatHandler.execute(request);
   }

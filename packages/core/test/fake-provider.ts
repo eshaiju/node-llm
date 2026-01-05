@@ -15,4 +15,8 @@ export class FakeProvider implements Provider {
     }
     return reply;
   }
+
+  defaultModel(_feature?: string): string {
+    return "fake-default-model";
+  }
 }

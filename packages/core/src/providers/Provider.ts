@@ -147,5 +147,6 @@ export interface Provider {
   transcribe?(request: TranscriptionRequest): Promise<TranscriptionResponse>;
   moderate?(request: ModerationRequest): Promise<ModerationResponse>;
   embed?(request: EmbeddingRequest): Promise<EmbeddingResponse>;
+  defaultModel(feature?: string): string;
   capabilities?: ProviderCapabilities;
 }

@@ -39,6 +39,7 @@ export interface RetryOptions {
 type LLMConfig = {
   provider?: Provider | string;
   retry?: RetryOptions;
+  defaultChatModel?: string;
   defaultTranscriptionModel?: string;
   defaultModerationModel?: string;
   defaultEmbeddingModel?: string;
@@ -56,8 +57,9 @@ const PROVIDER_REGISTRARS: Record<string, () => void> = {
 
 class NodeLLMCore {
   public readonly models = ModelRegistry;
-  public readonly config = config;
+  public readonly config: NodeLLMConfig;
   private provider?: Provider;
+  private defaultChatModelId?: string;
   private defaultTranscriptionModelId?: string;
   private defaultModerationModelId?: string;
   private defaultEmbeddingModelId?: string;
@@ -66,6 +68,36 @@ class NodeLLMCore {
     attempts: 1,
     delayMs: 0,
   };
+
+  /**
+   * Create a new LLM instance. Defaults to the global config.
+   */
+  constructor(customConfig?: NodeLLMConfig) {
+    this.config = customConfig || config;
+  }
+
+  /**
+   * Returns a scoped LLM instance configured for a specific provider.
+   * This respects the current global configuration but avoids side effects 
+   * on the main NodeLLM singleton.
+   * 
+   * @example
+   * ```ts
+   * const openai = NodeLLM.withProvider("openai");
+   * const anthropic = NodeLLM.withProvider("anthropic");
+   * 
+   * // These can now run in parallel without race conditions
+   * await Promise.all([
+   *   openai.chat("gpt-4o").ask(prompt),
+   *   anthropic.chat("claude-3-5-sonnet").ask(prompt),
+   * ]);
+   * ```
+   */
+  withProvider(providerName: string): NodeLLMCore {
+    const scoped = new NodeLLMCore({ ...this.config });
+    scoped.configure({ provider: providerName });
+    return scoped;
+  }
 
   configure(configOrCallback: LLMConfig | ((config: NodeLLMConfig) => void)) {
     // Callback style: for setting API keys
@@ -81,6 +113,7 @@ class NodeLLMCore {
     const { 
       provider, 
       retry, 
+      defaultChatModel,
       defaultTranscriptionModel, 
       defaultModerationModel, 
       defaultEmbeddingModel, 
@@ -90,6 +123,10 @@ class NodeLLMCore {
     // Merge API keys into global config
     Object.assign(this.config, apiConfig);
     
+    if (defaultChatModel) {
+      this.defaultChatModelId = defaultChatModel;
+    }
+
     if (defaultTranscriptionModel) {
       this.defaultTranscriptionModelId = defaultTranscriptionModel;
     }
@@ -135,13 +172,13 @@ class NodeLLMCore {
     return this.provider as Provider & Record<K, NonNullable<Provider[K]>>;
   }
 
-  chat(model: string, options?: ChatOptions): Chat {
+  chat(model?: string, options?: ChatOptions): Chat {
     if (!this.provider) {
       throw new ProviderNotConfiguredError();
     }
 
-    // Resolve model alias based on the current provider
-    const resolvedModel = resolveModelAlias(model, this.provider.id);
+    const rawModel = model || this.defaultChatModelId || this.provider.defaultModel("chat");
+    const resolvedModel = resolveModelAlias(rawModel, this.provider.id);
     return new Chat(this.provider, resolvedModel, options, this.retry);
   }
 

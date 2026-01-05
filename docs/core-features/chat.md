@@ -132,7 +132,7 @@ await chat.ask("What's the weather?");
 
 ## Next Steps
 
-- [Multi-modal Capabilities](./multimodal) (Images, Audio, Files)
-- [Structured Output](./structured-output) (JSON Schemas, Zod)
-- [Tool Calling](./tools)
-- [Reasoning](./reasoning) (DeepSeek R1, OpenAI o1/o3)
+- [Multi-modal Capabilities](/core-features/multimodal.html) (Images, Audio, Files)
+- [Structured Output](/core-features/structured_output.html) (JSON Schemas, Zod)
+- [Tool Calling](/core-features/tools.html)
+- [Reasoning](/core-features/reasoning.html) (DeepSeek R1, OpenAI o1/o3)

@@ -54,6 +54,10 @@ export class Chat {
     return this.messages;
   }
 
+  get modelId(): string {
+    return this.model;
+  }
+
   /**
    * Aggregate usage across the entire conversation
    */

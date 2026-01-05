@@ -73,6 +73,10 @@ export class GeminiProvider extends BaseProvider implements Provider {
     return "Gemini";
   }
 
+  public override defaultModel(feature?: string): string {
+    return "gemini-2.0-flash-exp";
+  }
+
   async chat(request: ChatRequest): Promise<ChatResponse> {
     return this.chatHandler.execute(request);
   }

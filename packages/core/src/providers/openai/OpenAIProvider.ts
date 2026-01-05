@@ -64,6 +64,10 @@ export class OpenAIProvider extends BaseProvider implements Provider {
     return "OpenAI";
   }
 
+  public override defaultModel(feature?: string): string {
+    return "gpt-4o";
+  }
+
   async chat(request: ChatRequest): Promise<ChatResponse> {
     return this.chatHandler.execute(request);
   }

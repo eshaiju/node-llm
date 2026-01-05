@@ -51,6 +51,6 @@ Start simple with `NodeLLM.chat().ask("Hello")`. As your needs grow, you can acc
 ## How it Works
 
 1.  **Normalization**: Your inputs (text, images, files) are converted into a standardized format.
-2.  **Routing**: The library detects which provider to use based on the model ID (e.g., `claude-*` -> Anthropic).
+2.  **Configuration**: The library uses the provider and model you specify (e.g., GPT-4o with OpenAI).
 3.  **Execution**: The request is sent. If tools are called, the library executes them and feeds the result back to the model.
 4.  **Response**: The final response is normalized into a consistent object.

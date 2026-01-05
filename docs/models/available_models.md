@@ -153,7 +153,7 @@ const chat = NodeLLM.chat("claude-3-5-sonnet");
 If an alias exists for multiple providers, the resolution depends entirely on the `provider` you have currently configured/passed.
 
 ```json
-// Example aliases.json structure
+// Example [aliases.json](https://github.com/eshaiju/node-llm/blob/main/packages/core/src/aliases.json) structure
 {
   "gemini-flash": {
     "gemini": "gemini-1.5-flash-001",

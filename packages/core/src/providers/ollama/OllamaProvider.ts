@@ -36,4 +36,8 @@ export class OllamaProvider extends OpenAIProvider {
   protected providerName(): string {
     return "Ollama";
   }
+
+  public override defaultModel(feature?: string): string {
+    return "llama3";
+  }
 }

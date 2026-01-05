@@ -26,6 +26,38 @@ describe("NodeLLM.configure", () => {
   });
 });
 
+describe("NodeLLM Default Model Resolution", () => {
+  it("uses provider default when no model is specified", () => {
+    const provider = new FakeProvider();
+    NodeLLM.configure({ provider });
+
+    const chat = NodeLLM.chat();
+    expect(chat.modelId).toBe("fake-default-model");
+  });
+
+  it("prioritizes global configuration default over provider default", () => {
+    const provider = new FakeProvider();
+    NodeLLM.configure({ 
+      provider,
+      defaultChatModel: "custom-global-default"
+    });
+
+    const chat = NodeLLM.chat();
+    expect(chat.modelId).toBe("custom-global-default");
+  });
+
+  it("prioritizes explicit argument over all defaults", () => {
+    const provider = new FakeProvider();
+    NodeLLM.configure({ 
+      provider,
+      defaultChatModel: "custom-global-default"
+    });
+
+    const chat = NodeLLM.chat("explicit-model");
+    expect(chat.modelId).toBe("explicit-model");
+  });
+});
+
 class MockCapabilitiesProvider extends FakeProvider {
   // Explicitly deny support for everything
   capabilities = {

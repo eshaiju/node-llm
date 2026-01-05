@@ -61,7 +61,7 @@ await chat.ask("What was the tone of the speaker?", {
 });
 ```
 
-*Note: For pure transcription without chat, see [Audio Transcription](./audio-transcription).*
+*Note: For pure transcription without chat, see [Audio Transcription](/core-features/audio-transcription.html).*
 
 ## Working with Videos
 

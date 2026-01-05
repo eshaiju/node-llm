@@ -29,6 +29,10 @@ export abstract class BaseProvider implements Provider {
     return this.providerName();
   }
 
+  public defaultModel(feature?: string): string {
+    return "";
+  }
+
   protected throwUnsupportedError(feature: string): never {
     throw new Error(`${this.providerName()} does not support ${feature}`);
   }

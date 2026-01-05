@@ -79,5 +79,5 @@ The following features are **not** supported natively by Ollama's OpenAI-compati
 *   **Image Generation**: Not available via the `/v1/images` endpoint.
 *   **Moderation**: Not supported.
 
-For full feature parity locally, consider using [LocalAI](https://localai.io/) and connecting via the [OpenAI Provider](./openai.md) with a custom `openaiApiBase`.
+For full feature parity locally, consider using [LocalAI](https://localai.io/) and connecting via the [OpenAI Provider](/providers/openai.html) with a custom `openaiApiBase`.
 

@@ -52,3 +52,27 @@ a {
   height: 20px;
 }
 </style>
+
+{% if page.back_to_top == false %}
+<style>
+  /* Attempt multiple common selectors */
+  .back-to-top, a[href="#top"], .text-small.text-grey-dk-000.mb-4 {
+    display: none !important;
+  }
+</style>
+<script>
+  // Fallback JS to find the link by text content
+  document.addEventListener("DOMContentLoaded", function() {
+    var links = document.querySelectorAll('a');
+    for (var i = 0; i < links.length; i++) {
+      if (links[i].textContent.trim() === "Scroll to Top") {
+        links[i].style.display = 'none';
+        // Also hide the parent paragraph if it's just this link
+        if (links[i].parentElement.tagName === 'P' && links[i].parentElement.childNodes.length === 1) {
+             links[i].parentElement.style.display = 'none';
+        }
+      }
+    }
+  });
+</script>
+{% endif %}

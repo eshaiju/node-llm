@@ -53,7 +53,7 @@ The logs include:
 
 ## Lifecycle Handlers
 
-For programmatic observability (e.g., sending logs to Datadog or Sentry), use the [Chat Event Handlers](../core-features/chat.html#lifecycle-events).
+For programmatic observability (e.g., sending logs to Datadog or Sentry), use the [Chat Event Handlers](/core-features/chat.html#lifecycle-events).
 
 ```ts
 chat

@@ -51,6 +51,10 @@ export class DeepSeekProvider extends BaseProvider implements Provider {
     return "DeepSeek";
   }
 
+  public override defaultModel(feature?: string): string {
+    return "deepseek-chat";
+  }
+
   async chat(request: ChatRequest): Promise<ChatResponse> {
     return this.chatHandler.execute(request);
   }
