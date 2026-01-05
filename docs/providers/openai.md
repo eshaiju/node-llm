@@ -44,4 +44,4 @@ const chat = NodeLLM.chat("gpt-4o")
 
 ## Custom Endpoints
 
-OpenAI's client is also used for compatible services like Ollama, LocalAI, and Azure OpenAI. See [Custom Endpoints](../advanced/custom_endpoints.md) for details.
+OpenAI's client is also used for compatible services like Ollama, LocalAI, and Azure OpenAI. See [Custom Endpoints](/advanced/custom_endpoints.html) for details.

@@ -3,6 +3,7 @@ layout: default
 title: Home
 nav_order: 1
 permalink: /
+back_to_top: false
 ---
 
 <p align="left">

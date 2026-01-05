@@ -69,6 +69,6 @@ for await (const chunk of chat.stream("Write a poem")) {
 
 ## Next Steps
 
-*   [Chat Features](../core-features/chat.html): Learn about history, system prompts, and JSON mode.
-*   [Multimodal](../core-features/multimodal.html): Send images, audio, and documents.
-*   [Tool Calling](../core-features/tools.html): Give your AI ability to execute code.
+*   [Chat Features](/core-features/chat.html): Learn about history, system prompts, and JSON mode.
+*   [Multimodal](/core-features/multimodal.html): Send images, audio, and documents.
+*   [Tool Calling](/core-features/tools.html): Give your AI ability to execute code.
