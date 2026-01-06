@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 Ask Questions
+    url: https://github.com/eshaiju/node-llm/discussions
+    about: Questions about using NodeLLM, implementation approaches, or general discussion
+  - name: 📖 Documentation
+    url: https://node-llm.eshaiju.com/
+    about: Check the docs first - guides and examples

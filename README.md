@@ -232,7 +232,13 @@ npm install @node-llm/core
 
 ---
 
-## 🫶 Credits
+## � Contributing
+
+We welcome contributions! Please see our **[Contributing Guide](CONTRIBUTING.md)** for more details on how to get started.
+
+---
+
+## �🫶 Credits
 
 Heavily inspired by the elegant design of [RubyLLM](https://rubyllm.com/).
 
