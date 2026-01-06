@@ -139,10 +139,11 @@ NodeLLM.configure({
 
 ### Scoped Configuration (Parallel Execution)
 
-By default, `NodeLLM` is a singleton. If you need to use multiple providers in parallel, calling `NodeLLM.configure()` concurrently can lead to race conditions.
+By default, `NodeLLM` is a singleton. If you need to use multiple providers in parallel, or if you need to use different API keys for the same provider, calling `NodeLLM.configure()` concurrently can lead to race conditions.
 
-Use `.withProvider()` to create a **scoped context**. This returns an isolated instance of `NodeLLM` that shares your global API keys but has its own independent provider state.
+Use `.withProvider()` to create a **scoped context**. This returns an isolated instance of `NodeLLM` that inherits your global configuration but allows for local overrides.
 
+#### 1. Isolated Provider State
 Run multiple providers in parallel safely without global configuration side effects:
 
 ```ts
@@ -152,4 +153,24 @@ const [gpt, claude] = await Promise.all([
 ]);
 ```
 
-This ensures each parallel call uses the correct provider without interfering with others.
+#### 2. Scoped Credentials
+You can also pass a second argument to `withProvider` to override configuration keys (like API keys) for that specific instance only. This is useful for multi-tenant applications.
+
+```ts
+const userA = NodeLLM.withProvider("openai", { 
+  openaiApiKey: "USER_A_KEY" 
+});
+
+const userB = NodeLLM.withProvider("openai", { 
+  openaiApiKey: "USER_B_KEY" 
+});
+
+// These calls use different API keys simultaneously
+const [resA, resB] = await Promise.all([
+  userA.chat().ask("Hello from A"),
+  userB.chat().ask("Hello from B"),
+]);
+```
+
+This ensures each parallel call uses the correct provider and credentials without interfering with others.
+
