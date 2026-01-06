@@ -129,19 +129,21 @@ await chat.ask("Analyze this interface", {
 Define tools once;`NodeLLM` manages the recursive execution loop for you, keeping your controller logic clean. **Works seamlessly with both regular chat and streaming!**
 
 ```ts
+import { Tool, z } from "@node-llm/core";
+
 // Class-based DSL
 class WeatherTool extends Tool {
   name = "get_weather";
   description = "Get current weather";
   schema = z.object({ location: z.string() });
-  async execute({ location }) { return `Sunny in ${location}`; }
+
+  async handler({ location }) { 
+    return `Sunny in ${location}`; 
+  }
 }
 
-// Register tools
-chat.withTools([WeatherTool]);
-
 // Now the model can use it automatically
-await chat.ask("What's the weather in Tokyo?");
+await chat.withTool(WeatherTool).ask("What's the weather in Tokyo?");
 ```
 **[Full Tool Calling Guide →](https://node-llm.eshaiju.com/core-features/tool-calling)**
 

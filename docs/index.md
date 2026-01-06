@@ -123,14 +123,22 @@ await chat.ask("Analyze this interface", {
 ```
 
 ### 🛠️ Auto-Executing Tools
-Define tools once; NodeLLM manages the recursive execution loop for you, keeping your controller logic clean.
-```ts
-const tools = [{
-  handler: async ({ loc }) => `Sunny in ${loc}`,
-  function: { name: 'get_weather', description: 'Get current weather', parameters: { ... } }
-}];
+Define tools once using our clean **Class-Based DSL**; NodeLLM manages the recursive execution loop for you.
 
-await chat.withTools(tools).ask("Weather in Tokyo?");
+```ts
+import { Tool, z } from "@node-llm/core";
+
+class WeatherTool extends Tool {
+  name = "get_weather";
+  description = "Get current weather";
+  schema = z.object({ loc: z.string() });
+
+  async handler({ loc }) {
+    return `Sunny in ${loc}`;
+  }
+}
+
+await chat.withTool(WeatherTool).ask("Weather in Tokyo?");
 ```
 
 ### ✨ Structured Output
