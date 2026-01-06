@@ -1,5 +1,5 @@
-// @ts-expect-error - Node.js requires 'assert', TypeScript wants 'with'
-import aliases from "./aliases.json" assert { type: "json" };
+import aliases from "./aliases.js";
+
 import { logger } from "./utils/logger.js";
 
 export type ProviderName = "openai" | "anthropic" | "gemini" | "vertexai" | "openrouter" | "mistral" | "deepseek" | "bedrock" | string;

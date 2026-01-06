@@ -123,7 +123,7 @@ const visionModel = allModels.find(m =>
 
 ## Model Aliases
 
-`NodeLLM` uses aliases (defined strictly in `packages/core/src/aliases.json`) for convenience, mapping common names to specific provider-specific versions. This allows you to use a generic name like `"gpt-4o"` or `"claude-3-5-sonnet"` and have it resolve to the correct ID for your configured provider.
+`NodeLLM` uses aliases (defined strictly in `packages/core/src/aliases.ts`) for convenience, mapping common names to specific provider-specific versions. This allows you to use a generic name like `"gpt-4o"` or `"claude-3-5-sonnet"` and have it resolve to the correct ID for your configured provider.
 
 ### How It Works
 
@@ -153,7 +153,7 @@ const chat = NodeLLM.chat("claude-3-5-sonnet");
 If an alias exists for multiple providers, the resolution depends entirely on the `provider` you have currently configured/passed.
 
 ```json
-// Example [aliases.json](https://github.com/eshaiju/node-llm/blob/main/packages/core/src/aliases.json) structure
+// Example [aliases.ts](https://github.com/eshaiju/node-llm/blob/main/packages/core/src/aliases.ts) structure
 {
   "gemini-flash": {
     "gemini": "gemini-1.5-flash-001",

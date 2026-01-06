@@ -5,7 +5,7 @@ import { FakeProvider } from "../../fake-provider.js";
 import { Provider } from "../../../src/providers/Provider.js";
 
 // Mock aliases
-vi.mock("../../../src/aliases.json", () => ({
+vi.mock("../../../src/aliases.js", () => ({
   default: {
     "test-alias": {
       "fake": "resolved-model-id"

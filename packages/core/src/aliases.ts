@@ -1,4 +1,4 @@
-{
+export default {
   "chatgpt-4o": {
     "openai": "chatgpt-4o-latest",
     "openrouter": "openai/chatgpt-4o-latest"
@@ -129,4 +129,4 @@
     "mistral": "mistral-small-latest",
     "openrouter": "mistralai/mistral-small"
   }
-}
+} as const;
