@@ -7,10 +7,6 @@ favicon_ico: assets/images/favicon.jpg
 url: "https://node-llm.eshaiju.com"
 baseurl: ""
 
-aux_links:
-  "GitHub Repository":
-    - "//github.com/eshaiju/node-llm"
-
 aux_links_new_tab: true
 
 # Custom CSS for logo sizing
