@@ -1,6 +1,6 @@
-# LLM Examples
+# NodeLLM Examples
 
-This directory contains examples demonstrating how to use various providers with `NodeLLM`.
+This directory contains examples demonstrating how to integrate LLMs as an architectural surface using `NodeLLM`.
 
 ## Available Providers
 - **DeepSeek**: `examples/deepseek/`

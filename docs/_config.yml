@@ -7,6 +7,8 @@ favicon_ico: assets/images/favicon.jpg
 url: "https://node-llm.eshaiju.com"
 baseurl: ""
 
+aux_links:
+  "Blog": "https://eshaiju.com"
 aux_links_new_tab: true
 
 # Custom CSS for logo sizing

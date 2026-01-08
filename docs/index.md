@@ -9,12 +9,12 @@ back_to_top: false
 <p align="left">
   <img src="assets/images/logo.png" alt="NodeLLM" width="200" />
 </p>
-**An opinionated architectural layer for using Large Language Models in Node.js.**
+## Treat LLMs as an integration surface — not a dependency.
+**An opinionated architectural layer for integrating Large Language Models in Node.js.**
 
-Build chatbots, autonomous agents, and RAG pipelines without the SDK fatigue. NodeLLM provides a unified, production-oriented API for interacting with multiple LLM providers (OpenAI, Gemini, Anthropic, DeepSeek, OpenRouter, Ollama, etc.) without coupling your application to any single SDK.
+Most LLM SDKs **tightly couple** your application to vendors, APIs, and churn. NodeLLM provides a unified, production-oriented API without the SDK fatigue.
 
-<br/>
-
+**Provider-agnostic by design.**
 <div class="provider-icons">
   <div class="provider-logo">
     <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/openai.svg" alt="OpenAI" class="logo-medium">
@@ -42,12 +42,41 @@ Build chatbots, autonomous agents, and RAG pipelines without the SDK fatigue. No
 </div>
 
 <br/>
+<br/>
 
-[Get Started](/getting-started/overview){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 } [View on GitHub](https://github.com/eshaiju/node-llm){: .btn .fs-5 .mb-4 .mb-md-0 .mr-2 } [View on npm](https://www.npmjs.com/package/@node-llm/core){: .btn .fs-5 .mb-4 .mb-md-0 .mr-2 } [Read on Blog](https://eshaiju.com){: .btn .fs-5 .mb-4 .mb-md-0 }
+[Get Started](/getting-started/overview){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 } [Read the Philosophy](#why-nodellm){: .btn .fs-5 .mb-4 .mb-md-0 .mr-2 } [View on GitHub](https://github.com/eshaiju/node-llm){: .btn .fs-5 .mb-4 .mb-md-0 }
+
+<p class="text-small text-grey-dk-000 mt-4">
+  Distributed via <a href="https://www.npmjs.com/package/@node-llm/core">npm</a> &bull; Featured on <a href="https://eshaiju.com">eshaiju.com</a>
+</p>
 
 ---
 
-## ⚡ The Golden Path
+## 🛑 What NodeLLM is NOT
+
+NodeLLM represents a clear architectural boundary between your system and LLM vendors.
+
+NodeLLM is **NOT**:
+ - A wrapper around a single provider SDK (like `openai` or `@google/generative-ai`)
+ - A prompt-engineering framework
+ - An agent playground or experimental toy
+
+---
+
+## 🏗️ Why NodeLLM?
+
+Most AI integrations today are provider-specific, SDK-driven, and leaky at abstraction boundaries. This creates long-term architectural risk. **LLMs are becoming another integration surface**, and NodeLLM exists to help you treat them as infrastructure, not just a dependency.
+
+NodeLLM exists to solve **architectural problems**, not just provide API access. It is the core architectural layer for LLMs in the Node.js ecosystem.
+
+### Strategic Principles
+- **Provider Isolation**: Decouple your services from vendor SDKs.
+- **Production-Ready**: Native support for streaming, retries, and unified error handling.
+- **Predictable API**: Consistent behavior for Tools, Vision, and Structured Outputs across all models.
+
+---
+
+## ⚡ The Architectural Path
 
 ```ts
 import { NodeLLM } from "@node-llm/core";
@@ -66,18 +95,6 @@ for await (const chunk of chat.stream("Explain event-driven architecture")) {
 }
 ```
 
----
-
-## 🏗️ Why NodeLLM?
-
-Most AI integrations today are provider-specific, SDK-driven, and leaky at abstraction boundaries. This creates long-term architectural risk. Switching models should not mean a total rewrite of your business logic.
-
-NodeLLM exists to solve **architectural problems**, not just provide API access. It is the "Standard Library" for LLMs in the Node.js ecosystem.
-
-### Strategic Principles
-- **Provider Isolation**: Decouple your services from vendor SDKs.
-- **Production-Ready**: Native support for streaming, retries, and unified error handling.
-- **Predictable API**: Consistent behavior for Tools, Vision, and Structured Outputs across all models.
 
 ---
 

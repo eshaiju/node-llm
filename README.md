@@ -5,11 +5,13 @@
 </p>
 
 # NodeLLM
-**An opinionated architectural layer for using Large Language Models in Node.js.**
+## Treat LLMs as an integration surface — not a dependency.
 
-Build chatbots, autonomous agents, and RAG pipelines without the SDK fatigue. NodeLLM provides a unified, production-oriented API for interacting with over **540+ models** across multiple providers (OpenAI, Gemini, Anthropic, DeepSeek, OpenRouter, Ollama, etc.) without coupling your application to any single SDK.
+**An opinionated architectural layer for integrating Large Language Models in Node.js.**
 
-<br/>
+Most LLM SDKs **tightly couple** your application to vendors, APIs, and churn. NodeLLM provides a unified, production-oriented API for interacting with over 540+ models across multiple providers (OpenAI, Gemini, Anthropic, DeepSeek, OpenRouter, Ollama, etc.) without the SDK fatigue.
+
+**Provider-agnostic by design.**
 
 <p align="left">
   <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/openai.svg" height="28" />
@@ -38,7 +40,31 @@ Build chatbots, autonomous agents, and RAG pipelines without the SDK fatigue. No
 
 ---
 
-## ⚡ The Golden Path
+## 🛑 What NodeLLM is NOT
+
+NodeLLM represents a clear architectural boundary between your system and LLM vendors.
+
+NodeLLM is **NOT**:
+ - A wrapper around a single provider SDK (like `openai` or `@google/generative-ai`)
+ - A prompt-engineering framework
+ - An agent playground or experimental toy
+
+---
+
+## 🏗️ Why NodeLLM?
+
+Most AI integrations today are provider-specific, SDK-driven, and leaky at abstraction boundaries. This creates long-term architectural risk. **LLMs are becoming another integration surface**, and NodeLLM exists to help you treat them as infrastructure, not just a dependency.
+
+NodeLLM exists to solve **architectural problems**, not just provide API access. It is the core architectural layer for LLMs in the Node.js ecosystem.
+
+### Strategic Goals
+- **Provider Isolation**: Decouple your services from vendor SDKs.
+- **Production-Ready**: Native support for streaming, retries, and unified error handling.
+- **Predictable API**: Consistent behavior for Tools, Vision, and Structured Outputs across all models.
+
+---
+
+## ⚡ The Architectural Path
 
 ```ts
 import { NodeLLM } from "@node-llm/core";
@@ -57,26 +83,6 @@ for await (const chunk of chat.stream("Explain event-driven architecture")) {
 }
 ```
 
----
-
-## Why NodeLLM?
-
-Most AI integrations today are provider-specific, SDK-driven, and leaky at abstraction boundaries. This creates long-term architectural risk. Switching models should not mean a total rewrite of your business logic.
-
-NodeLLM exists to solve **architectural problems**, not just provide API access.
-
-### Strategic Goals
-
-- **Provider Isolation**: Your application logic never touches a provider-specific SDK.
-- **Unified Mental Model**: Chat, streaming, tools, and structured outputs feel identical across providers.
-- **Production-Ready**: Streaming, retries, and errors are first-class concerns. 
-- **The "Standard Library" Voice**: It provides a beautiful, native-feeling API for modern Node.js.
-
-### Non-Goals
-
-- It is **not** a thin wrapper that mirrors every provider's unique API knobs.
-- It is **not** a UI framework or a simple chatbot builder.
-- It prioritizes **architectural clarity** over raw SDK convenience.
 
 ---
 
