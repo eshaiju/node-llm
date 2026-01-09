@@ -1,6 +1,6 @@
 {
   "name": "@node-llm/core",
-  "version": "1.4.0",
+  "version": "1.4.2",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -11,14 +11,46 @@
     }
   },
   "description": "A provider-agnostic LLM core for Node.js, inspired by ruby-llm.",
+  "keywords": [
+    "llm",
+    "large-language-models",
+    "ai",
+    "nodejs",
+    "llm-integration",
+    "architecture",
+    "integration-layer",
+    "provider-agnostic",
+    "vendor-agnostic",
+    "infrastructure",
+    "openai",
+    "anthropic",
+    "gemini",
+    "deepseek",
+    "openrouter",
+    "ollama",
+    "chat",
+    "streaming",
+    "rag",
+    "production"
+  ],
   "author": "NodeLLM contributors",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/eshaiju/node-llm",
+    "directory": "packages/core"
+  },
+  "homepage": "https://node-llm.eshaiju.com",
+  "bugs": {
+    "url": "https://github.com/eshaiju/node-llm/issues"
+  },
   "engines": {
     "node": ">=20.0.0"
   },
   "files": [
     "dist",
-    "README.md"
+    "README.md",
+    "LICENSE"
   ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
