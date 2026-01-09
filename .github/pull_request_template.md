@@ -12,7 +12,7 @@
 
 ## Scope check
 
-- [ ] I read the [Contributing Guide](https://github.com/eshaiju/node-llm/blob/main/CONTRIBUTING.md)
+- [ ] I read the [Contributing Guide](https://github.com/node-llm/node-llm/blob/main/CONTRIBUTING.md)
 - [ ] This aligns with NodeLLM's focus on **LLM communication**
 - [ ] This isn't application-specific logic that belongs in user code
 - [ ] This benefits most users, not just my specific use case

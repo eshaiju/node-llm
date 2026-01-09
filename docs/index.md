@@ -43,7 +43,7 @@ Most LLM SDKs **tightly couple** your application to vendors, APIs, and churn. N
 <br/>
 <br/>
 
-[Get Started](/getting-started/overview){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 } [Read on Blog](https://eshaiju.com){: .btn .fs-5 .mb-4 .mb-md-0 .mr-2 } [View on GitHub](https://github.com/eshaiju/node-llm){: .btn .fs-5 .mb-4 .mb-md-0 }
+[Get Started](/getting-started/overview){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 } [Read on Blog](https://eshaiju.com){: .btn .fs-5 .mb-4 .mb-md-0 .mr-2 } [View on GitHub](https://github.com/node-llm/node-llm){: .btn .fs-5 .mb-4 .mb-md-0 }
 
 <p class="text-small text-grey-dk-000 mt-4">
   Distributed via <a href="https://www.npmjs.com/package/@node-llm/core">npm</a>
@@ -225,7 +225,7 @@ console.log(res.reasoning); // Chain-of-thought
 
 ## 🤝 Contributing
 
-We welcome contributions! Please see our [Contributing Guide](https://github.com/eshaiju/node-llm/blob/main/CONTRIBUTING.md) for more details on how to get started.
+We welcome contributions! Please see our [Contributing Guide](https://github.com/node-llm/node-llm/blob/main/CONTRIBUTING.md) for more details on how to get started.
 
 ---
 

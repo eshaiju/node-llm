@@ -1,17 +1,16 @@
 <p align="left">
-  <img src="https://github.com/eshaiju/node-llm/raw/main/docs/assets/images/logo.jpg" alt="NodeLLMlogo" width="300" />
+  <a href="https://node-llm.eshaiju.com/">
+    <img src="https://github.com/node-llm/node-llm/raw/main/docs/assets/images/logo.jpg" alt="NodeLLM logo" width="300" />
+  </a>
 </p>
 
 # NodeLLM
-
 
 **An opinionated architectural layer for integrating Large Language Models in Node.js.**
 
 **Provider-agnostic by design.**
 
 Most LLM SDKs **tightly couple** your application to vendors, APIs, and churn. NodeLLM provides a unified, production-oriented API for interacting with over 540+ models across multiple providers (OpenAI, Gemini, Anthropic, DeepSeek, OpenRouter, Ollama, etc.) without the SDK fatigue.
-
-<br/>
 
 <p align="left">
   <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/openai.svg" height="28" />
@@ -88,7 +87,7 @@ for await (const chunk of chat.stream("Explain event-driven architecture")) {
 
 ## 🔧 Strategic Configuration
 
-NodeLLMprovides a flexible configuration system designed for enterprise usage:
+NodeLLM provides a flexible configuration system designed for enterprise usage:
 
 ```ts
 // Recommended for multi-provider pipelines
@@ -108,7 +107,7 @@ NodeLLM.configure({
 });
 ```
 
-**[Full Configuration Guide →](docs/getting_started/configuration.md)**
+**[Full Configuration Guide →](https://node-llm.eshaiju.com/getting-started/configuration)**
 
 ---
 
@@ -135,19 +134,21 @@ await chat.ask("Analyze this interface", {
 Define tools once;`NodeLLM` manages the recursive execution loop for you, keeping your controller logic clean. **Works seamlessly with both regular chat and streaming!**
 
 ```ts
+import { Tool, z } from "@node-llm/core";
+
 // Class-based DSL
 class WeatherTool extends Tool {
   name = "get_weather";
   description = "Get current weather";
   schema = z.object({ location: z.string() });
-  async execute({ location }) { return `Sunny in ${location}`; }
+
+  async handler({ location }) { 
+    return `Sunny in ${location}`; 
+  }
 }
 
-// Register tools
-chat.withTools([WeatherTool]);
-
 // Now the model can use it automatically
-await chat.ask("What's the weather in Tokyo?");
+await chat.withTool(WeatherTool).ask("What's the weather in Tokyo?");
 ```
 **[Full Tool Calling Guide →](https://node-llm.eshaiju.com/core-features/tool-calling)**
 
@@ -186,16 +187,14 @@ await NodeLLM.transcribe("meeting-recording.wav");
 ```
 
 ### ⚡ Scoped Parallelism
-Run multiple providers in parallel safely without global configuration side effects using isolated contexts. You can also override credentials (API keys) for specific instances.
-
+Run multiple providers in parallel safely without global configuration side effects using isolated contexts.
 ```ts
 const [gpt, claude] = await Promise.all([
   // Each call branch off into its own isolated context
   NodeLLM.withProvider("openai").chat("gpt-4o").ask(prompt),
-  NodeLLM.withProvider("anthropic", { anthropicApiKey: "..." }).chat("claude-3.5-sonnet").ask(prompt),
+  NodeLLM.withProvider("anthropic").chat("claude-3-5-sonnet").ask(prompt),
 ]);
 ```
-
 
 ### 🧠 Deep Reasoning
 Direct access to the thought process of models like **DeepSeek R1** or **OpenAI o1/o3** using the `.reasoning` field.
@@ -208,7 +207,7 @@ console.log(res.reasoning); // Chain-of-thought
 
 ## 🚀 Why use this over official SDKs?
 
-| Feature |`NodeLLM` | Official SDKs | Architectural Impact |
+| Feature | NodeLLM | Official SDKs | Architectural Impact |
 | :--- | :--- | :--- | :--- |
 | **Provider Logic** | Transparently Handled | Exposed to your code | **Low Coupling** |
 | **Streaming** | Standard `AsyncIterator` | Vendor-specific Events | **Predictable Data Flow** |
@@ -242,6 +241,12 @@ npm install @node-llm/core
 
 ---
 
+## 🤝 Contributing
+
+We welcome contributions! Please see our **[Contributing Guide](https://github.com/node-llm/node-llm/blob/main/CONTRIBUTING.md)** for more details on how to get started.
+
+---
+
 ## 🫶 Credits
 
 Heavily inspired by the elegant design of [RubyLLM](https://rubyllm.com/).
@@ -250,4 +255,4 @@ Heavily inspired by the elegant design of [RubyLLM](https://rubyllm.com/).
 
 ## 📄 License
 
-MIT © [NodeLLMcontributors]
+MIT © [NodeLLM contributors]

@@ -2,9 +2,9 @@
 
 ## Did you find a bug?
 
-* **Ensure the bug was not already reported** by searching on GitHub under [Issues](https://github.com/eshaiju/node-llm/issues).
+* **Ensure the bug was not already reported** by searching on GitHub under [Issues](https://github.com/node-llm/node-llm/issues).
 
-* If you're unable to find an open issue addressing the problem, [open a new one](https://github.com/eshaiju/node-llm/issues/new). Include a **title and clear description**, relevant information, and a **code sample** demonstrating the issue.
+* If you're unable to find an open issue addressing the problem, [open a new one](https://github.com/node-llm/node-llm/issues/new). Include a **title and clear description**, relevant information, and a **code sample** demonstrating the issue.
 
 * **Verify it's a NodeLLM bug**, not your application code, before opening an issue.
 
@@ -35,7 +35,7 @@
 ## Quick Start
 
 ```bash
-git clone https://github.com/eshaiju/node-llm.git
+git clone https://github.com/node-llm/node-llm.git
 cd node-llm
 npm install
 # make changes, add tests

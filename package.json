@@ -1,6 +1,6 @@
 {
   "name": "@node-llm/core",
-  "version": "1.4.1",
+  "version": "1.4.3",
   "description": "An opinionated architectural layer for integrating Large Language Models in Node.js.",
   "main": "index.js",
   "workspaces": [
@@ -35,6 +35,14 @@
   ],
   "author": "Shaiju Edakulangara",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/node-llm/node-llm"
+  },
+  "bugs": {
+    "url": "https://github.com/node-llm/node-llm/issues"
+  },
+  "homepage": "https://node-llm.eshaiju.com",
   "devDependencies": {
     "@types/node": "^25.0.3",
     "typescript": "^5.9.3",

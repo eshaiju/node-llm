@@ -1,6 +1,6 @@
 {
   "name": "@node-llm/core",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -37,12 +37,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/eshaiju/node-llm",
+    "url": "https://github.com/node-llm/node-llm",
     "directory": "packages/core"
   },
   "homepage": "https://node-llm.eshaiju.com",
   "bugs": {
-    "url": "https://github.com/eshaiju/node-llm/issues"
+    "url": "https://github.com/node-llm/node-llm/issues"
   },
   "engines": {
     "node": ">=20.0.0"

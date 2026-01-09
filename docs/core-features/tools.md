@@ -94,7 +94,7 @@ See the [Streaming documentation](streaming.html#streaming-with-tools-) for more
 
 If the provider supports it (like OpenAI and Anthropic), the model can call multiple tools in a single turn. `NodeLLM` handles the concurrent execution of these tools automatically.
 
-See [examples/openai/chat/parallel-tools.mjs](https://github.com/eshaiju/node-llm/blob/main/examples/openai/chat/parallel-tools.mjs) for a demo.
+See [examples/openai/chat/parallel-tools.mjs](https://github.com/node-llm/node-llm/blob/main/examples/openai/chat/parallel-tools.mjs) for a demo.
 
 ## Advanced Tool Metadata
 
