@@ -150,7 +150,22 @@ class WeatherTool extends Tool {
 // Now the model can use it automatically
 await chat.withTool(WeatherTool).ask("What's the weather in Tokyo?");
 ```
-**[Full Tool Calling Guide →](https://node-llm.eshaiju.com/core-features/tool-calling)**
+
+### 🛡️ Loop Protection (Loop Guard)
+Prevent runaway costs and infinite loops with automatic protection against recursive tool loops and excessive retries.
+
+NodeLLM provides default protection that you can configure globally or per-request:
+
+```ts
+// 1. Global config
+NodeLLM.configure({ 
+  maxToolCalls: 5,  // Stop after 5 sequential tool execution turns
+  maxRetries: 2     // Retry provider-level errors up to 2 times
+});
+
+// 2. Per request override
+await chat.ask("Deep search task", { maxToolCalls: 10 });
+```
 
 ### 🔍 Comprehensive Debug Logging
 Enable detailed logging for all API requests and responses across every feature and provider:

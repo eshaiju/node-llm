@@ -18,4 +18,5 @@ export interface ChatOptions {
   params?: Record<string, any>;
   assumeModelExists?: boolean;
   provider?: string;
+  maxToolCalls?: number;
 }

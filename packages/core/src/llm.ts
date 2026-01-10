@@ -74,6 +74,10 @@ export class NodeLLMCore {
    */
   constructor(customConfig?: NodeLLMConfig) {
     this.config = customConfig || config;
+    
+    if (this.config.maxRetries !== undefined) {
+      this.retry.attempts = this.config.maxRetries + 1;
+    }
   }
 
   /**
@@ -143,6 +147,10 @@ export class NodeLLMCore {
 
     // Merge API keys into global config
     Object.assign(this.config, apiConfig);
+
+    if (apiConfig.maxRetries !== undefined) {
+      this.retry.attempts = apiConfig.maxRetries + 1;
+    }
     
     if (defaultChatModel) {
       this.defaultChatModelId = defaultChatModel;

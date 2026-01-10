@@ -96,6 +96,26 @@ If the provider supports it (like OpenAI and Anthropic), the model can call mult
 
 See [examples/openai/chat/parallel-tools.mjs](https://github.com/node-llm/node-llm/blob/main/examples/openai/chat/parallel-tools.mjs) for a demo.
 
+## Loop Protection (Loop Guard) 🛡️
+
+To prevent infinite recursion and runaway costs (where a model keeps calling tools without reaching a conclusion), `NodeLLM` includes a built-in Loop Guard.
+
+By default, `NodeLLM` will throw an error if a model performs more than **5 sequential tool execution turns** in a single request. 
+
+### Customizing the limit
+
+You can configure this limit globally or override it for a specific request:
+
+```ts
+// 1. Global Change
+NodeLLM.configure({ maxToolCalls: 10 });
+
+// 2. Per-request override
+await chat.ask("Perform a complex deep research task", { 
+  maxToolCalls: 15 
+});
+```
+
 ## Advanced Tool Metadata
 
 Some providers support additional metadata in tool definitions, such as Anthropic's **Prompt Caching**. You can include these fields in your tool class, and `NodeLLM` will pass them through.

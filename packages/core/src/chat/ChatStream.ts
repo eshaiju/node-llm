@@ -67,8 +67,16 @@ export class ChatStream {
       let toolCalls: any[] | undefined;
       let isFirst = true;
 
+      const maxToolCalls = options.maxToolCalls ?? 5;
+      let stepCount = 0;
+
       // Main streaming loop - may iterate multiple times for tool calls
       while (true) {
+        stepCount++;
+        if (stepCount > maxToolCalls) {
+          throw new Error(`[NodeLLM] Maximum tool execution calls (${maxToolCalls}) exceeded during streaming.`);
+        }
+
         fullContent = "";
         fullReasoning = "";
         toolCalls = undefined;

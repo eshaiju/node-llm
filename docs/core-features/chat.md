@@ -143,6 +143,24 @@ chat
 await chat.ask("What's the weather?");
 ```
 
+## Retry Logic & Safety 🛡️
+
+By default, `NodeLLM` handles network instabilities or temporary provider errors (like 500s or 429 Rate Limits) by retrying the request.
+
+*   **Default Retries**: 2 retries (3 total attempts).
+*   **Loop Guard**: Tool calling is limited to 5 turns to prevent infinite loops.
+
+You can configure these limits globally:
+
+```ts
+NodeLLM.configure({
+  maxRetries: 3,     // Increase retries for unstable connections
+  maxToolCalls: 10,  // Allow deeper tool calling sequences
+});
+```
+
+See the [Configuration Guide](/getting-started/configuration) for more details.
+
 ## Next Steps
 
 - [Multi-modal Capabilities](/core-features/multimodal.html) (Images, Audio, Files)

@@ -16,6 +16,7 @@ export interface AskOptions {
   temperature?: number;
   maxTokens?: number;
   headers?: Record<string, string>;
+  maxToolCalls?: number;
 }
 
 import { ChatResponseString } from "./ChatResponse.js";
@@ -370,8 +371,16 @@ export class Chat {
     if (this.options.onEndMessage && (!response.tool_calls || response.tool_calls.length === 0)) {
       this.options.onEndMessage(firstAssistantMessage);
     }
+    
+    const maxToolCalls = options?.maxToolCalls ?? this.options.maxToolCalls ?? 5;
+    let stepCount = 0;
 
     while (response.tool_calls && response.tool_calls.length > 0) {
+      stepCount++;
+      if (stepCount > maxToolCalls) {
+        throw new Error(`[NodeLLM] Maximum tool execution calls (${maxToolCalls}) exceeded.`);
+      }
+
       for (const toolCall of response.tool_calls) {
         if (this.options.onToolCall) this.options.onToolCall(toolCall);
 

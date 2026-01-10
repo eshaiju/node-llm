@@ -66,6 +66,17 @@ NodeLLM.configure({
 });
 ```
 
+### Loop Protection (Loop Guard)
+
+Prevent runaway costs and infinite loops by limiting tool execution depth and API retries:
+
+```typescript
+NodeLLM.configure({
+  maxToolCalls: 5,  // Stop after 5 sequential tool execution turns
+  maxRetries: 2,    // Retry network/server errors 2 times
+});
+```
+
 ## Supported Configuration Keys
 
 | Key | Description | Default |
@@ -84,7 +95,9 @@ NodeLLM.configure({
 | `defaultTranscriptionModel` | Default model for `.transcribe()` | Provider default |
 | `defaultModerationModel` | Default model for `.moderate()` | Provider default |
 | `defaultEmbeddingModel` | Default model for `.embed()` | Provider default |
-| `retry` | Retry configuration | `{ attempts: 1, delayMs: 0 }` |
+| `maxToolCalls` | Max sequential tool execution turns | `5` |
+| `maxRetries` | Max retries for provider errors | `2` |
+| `retry` | Retry configuration (legacy) | `{ attempts: 1, delayMs: 0 }` |
 
 ## Inspecting Configuration
 

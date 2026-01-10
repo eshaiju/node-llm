@@ -15,6 +15,8 @@ export interface NodeLLMConfig {
   openrouterApiKey?: string;
   openrouterApiBase?: string;
   debug?: boolean;
+  maxToolCalls?: number;
+  maxRetries?: number;
 }
 
 class Configuration implements NodeLLMConfig {
@@ -30,6 +32,8 @@ class Configuration implements NodeLLMConfig {
   public openrouterApiKey?: string = process.env.OPENROUTER_API_KEY?.trim();
   public openrouterApiBase?: string = process.env.OPENROUTER_API_BASE?.trim();
   public debug?: boolean = process.env.NODELLM_DEBUG === "true";
+  public maxToolCalls: number = 5;
+  public maxRetries: number = 2;
 }
 
 export const config = new Configuration();
