@@ -8,6 +8,12 @@ nav_order: 7
 
 A comprehensive list of runnable examples available in the [examples/](https://github.com/node-llm/node-llm/tree/main/examples) directory of the repository.
 
+## 🌟 Showcase
+
+| Example | Description |
+| :--- | :--- |
+| [`examples/real-world-support-agent.mjs`](https://github.com/node-llm/node-llm/blob/main/examples/real-world-support-agent.mjs) | **Real-world Travel Support AI Agent** using Context Isolation, Auto-executing Tools, and Structured Output. |
+
 ## OpenAI Examples
 
 | Example | Description |
