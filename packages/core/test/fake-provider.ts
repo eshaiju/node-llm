@@ -19,6 +19,16 @@ export class FakeProvider implements Provider {
     return reply;
   }
 
+  async *stream(request: ChatRequest) {
+    this.lastRequest = request;
+    const reply = this.replies.shift() ?? "default reply";
+    const content = typeof reply === "string" ? reply : reply.content ?? "";
+    const words = content.split(" ");
+    for (const word of words) {
+      yield { content: word + " " };
+    }
+  }
+
   defaultModel(_feature?: string): string {
     return "fake-default-model";
   }

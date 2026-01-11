@@ -92,9 +92,17 @@ export class ChatStream {
         toolCalls = undefined;
 
         try {
+          let requestMessages = [...systemMessages, ...messages];
+          if (options.onBeforeRequest) {
+            const result = await options.onBeforeRequest(requestMessages);
+            if (result) {
+              requestMessages = result;
+            }
+          }
+
           for await (const chunk of provider.stream({
             model,
-            messages: [...systemMessages, ...messages],
+            messages: requestMessages,
             tools: options.tools,
             temperature: options.temperature,
             max_tokens: options.maxTokens,
@@ -121,10 +129,27 @@ export class ChatStream {
             }
           }
 
-          // Add assistant message to history
+          // Build the response object for hooks and history
+          let assistantResponse = new ChatResponseString(
+            fullContent || "",
+            { input_tokens: 0, output_tokens: 0, total_tokens: 0 },
+            model,
+            provider.id,
+            fullReasoning || undefined
+          );
+
+          // --- Content Policy Hooks (Output) ---
+          if (options.onAfterResponse) {
+            const result = await options.onAfterResponse(assistantResponse);
+            if (result) {
+              assistantResponse = result;
+            }
+          }
+
+          // Add assistant message to history (now potentially redacted)
           messages.push({
             role: "assistant",
-            content: fullContent || null,
+            content: assistantResponse || null,
             tool_calls: toolCalls,
             reasoning: fullReasoning || undefined
           });
@@ -132,13 +157,7 @@ export class ChatStream {
           // If no tool calls, we're done
           if (!toolCalls || toolCalls.length === 0) {
             if (options.onEndMessage) {
-              options.onEndMessage(new ChatResponseString(
-                fullContent,
-                { input_tokens: 0, output_tokens: 0, total_tokens: 0 },
-                model,
-                provider.id,
-                fullReasoning || undefined
-              ));
+              options.onEndMessage(assistantResponse);
             }
             break;
           }

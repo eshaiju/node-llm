@@ -240,6 +240,24 @@ export class Chat {
   }
 
   /**
+   * Add a hook to process messages before sending to the LLM.
+   * Useful for PII detection, redaction, and input moderation.
+   */
+  beforeRequest(handler: (messages: Message[]) => Promise<Message[] | void>): this {
+    this.options.onBeforeRequest = handler;
+    return this;
+  }
+
+  /**
+   * Add a hook to process the response before returning it.
+   * Useful for output redaction, compliance, and post-moderation.
+   */
+  afterResponse(handler: (response: ChatResponseString) => Promise<ChatResponseString | void>): this {
+    this.options.onAfterResponse = handler;
+    return this;
+  }
+
+  /**
    * Ask the model a question
    */
   async ask(content: string | any[], options?: AskOptions): Promise<ChatResponseString> {
@@ -329,6 +347,16 @@ export class Chat {
       ...this.options.params,
     };
 
+    // --- Content Policy Hooks (Input) ---
+    if (this.options.onBeforeRequest) {
+      const messagesToProcess = [...this.systemMessages, ...this.messages];
+      const result = await this.options.onBeforeRequest(messagesToProcess);
+      if (result) {
+        // If the hook returned modified messages, use them for this request
+        executeOptions.messages = result;
+      }
+    }
+
     let totalUsage: Usage = { input_tokens: 0, output_tokens: 0, total_tokens: 0 };
     const trackUsage = (u?: Usage) => {
       if (u) {
@@ -349,7 +377,7 @@ export class Chat {
     let response = await this.executor.executeChat(executeOptions);
     trackUsage(response.usage);
 
-    const firstAssistantMessage = new ChatResponseString(
+    let assistantMessage = new ChatResponseString(
       response.content ?? "", 
       response.usage ?? { input_tokens: 0, output_tokens: 0, total_tokens: 0 }, 
       this.model,
@@ -357,15 +385,23 @@ export class Chat {
       response.reasoning
     );
 
+    // --- Content Policy Hooks (Output - Turn 1) ---
+    if (this.options.onAfterResponse) {
+      const result = await this.options.onAfterResponse(assistantMessage);
+      if (result) {
+        assistantMessage = result;
+      }
+    }
+
     this.messages.push({
       role: "assistant",
-      content: firstAssistantMessage,
+      content: assistantMessage || null,
       tool_calls: response.tool_calls,
       usage: response.usage,
     });
 
     if (this.options.onEndMessage && (!response.tool_calls || response.tool_calls.length === 0)) {
-      this.options.onEndMessage(firstAssistantMessage);
+      this.options.onEndMessage(assistantMessage);
     }
     
     const maxToolCalls = options?.maxToolCalls ?? this.options.maxToolCalls ?? 5;
@@ -419,7 +455,7 @@ export class Chat {
       });
       trackUsage(response.usage);
 
-      const assistantMessage = new ChatResponseString(
+      assistantMessage = new ChatResponseString(
         response.content ?? "", 
         response.usage ?? { input_tokens: 0, output_tokens: 0, total_tokens: 0 }, 
         this.model,
@@ -427,9 +463,17 @@ export class Chat {
         response.reasoning
       );
 
+      // --- Content Policy Hooks (Output - Tool Turns) ---
+      if (this.options.onAfterResponse) {
+        const result = await this.options.onAfterResponse(assistantMessage);
+        if (result) {
+          assistantMessage = result;
+        }
+      }
+
       this.messages.push({
         role: "assistant",
-        content: assistantMessage,
+        content: assistantMessage || null,
         tool_calls: response.tool_calls,
         usage: response.usage,
       });
@@ -441,7 +485,7 @@ export class Chat {
 
     // For the final return, we might want to aggregate reasoning too if it happened in multiple turns? 
     // Usually reasoning only happens once or we just want the last one.
-    return new ChatResponseString(response.content ?? "", totalUsage, this.model, this.provider.id, response.reasoning);
+    return new ChatResponseString(assistantMessage.toString() || "", totalUsage, this.model, this.provider.id, response.reasoning);
   }
 
   /**

@@ -1,6 +1,7 @@
 import { Message } from "./Message.js";
 import { ToolDefinition } from "./Tool.js";
 import { Schema } from "../schema/Schema.js";
+import { ChatResponseString } from "./ChatResponse.js";
 
 export interface ChatOptions {
   systemPrompt?: string;
@@ -19,4 +20,6 @@ export interface ChatOptions {
   assumeModelExists?: boolean;
   provider?: string;
   maxToolCalls?: number;
+  onBeforeRequest?: (messages: Message[]) => Promise<Message[] | void>;
+  onAfterResponse?: (response: ChatResponseString) => Promise<ChatResponseString | void>;
 }

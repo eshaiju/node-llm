@@ -13,5 +13,5 @@ it("streams tokens and stores final assistant message", async () => {
   }
  
   expect(result).toBe("Hello world");
-  expect(handler.history.at(-1)?.content).toBe("Hello world");
+  expect(String(handler.history.at(-1)?.content)).toBe("Hello world");
 });

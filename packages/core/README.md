@@ -181,6 +181,24 @@ process.env.NODELLM_DEBUG = "true";
 ```
 **Covers:** Chat, Streaming, Images, Embeddings, Transcription, Moderation - across all providers!
 
+### 🛡️ Content Policy Hooks
+NodeLLM provides pluggable hooks to implement custom security, compliance, and moderation logic. Instead of hard-coded rules, you can inject your own policies at the edge.
+
+- **`beforeRequest()`**: Intercept and modify messages before they hit the LLM (e.g., PII detection/redaction).
+- **`afterResponse()`**: Process the final response before it returns to your code (e.g., output masking or compliance checks).
+
+```ts
+chat
+  .beforeRequest(async (messages) => {
+    // Detect PII and redact
+    return redactSSN(messages);
+  })
+  .afterResponse(async (response) => {
+    // Ensure output compliance
+    return response.withContent(maskSensitiveData(response.content));
+  });
+```
+
 ### 🧱 Smart Context Isolation
 Stop worrying about prompt injection or instruction drift. NodeLLM automatically separates system instructions from the conversation history, providing a higher level of protection and strictness.
 

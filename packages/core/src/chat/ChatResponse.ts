@@ -36,6 +36,19 @@ export class ChatResponseString extends String {
   }
 
   /**
+   * Return a new ChatResponseString with modified content but preserved metadata.
+   */
+  withContent(newContent: string): ChatResponseString {
+    return new ChatResponseString(
+      newContent,
+      this.usage,
+      this.model,
+      this.provider,
+      this.reasoning
+    );
+  }
+
+  /**
    * Attempt to parse the content as JSON.
    * Returns the parsed object or null if parsing fails.
    */

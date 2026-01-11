@@ -143,6 +143,30 @@ chat
 await chat.ask("What's the weather?");
 ```
 
+## 🛡️ Content Policy Hooks
+
+NodeLLM allows you to plug in custom security and compliance logic through asynchronous hooks. This is useful for PII detection, redaction, and enterprise moderation policies.
+
+- **`beforeRequest(handler)`**: Analyze or modify the message history before it is sent to the provider.
+- **`afterResponse(handler)`**: Analyze or modify the AI's response before it is returned to your application.
+
+```ts
+chat
+  .beforeRequest(async (messages) => {
+    // Redact SSNs from user input
+    return messages.map(m => ({
+      ...m,
+      content: m.content.replace(/\d{3}-\d{2}-\d{4}/g, "[REDACTED]")
+    }));
+  })
+  .afterResponse(async (response) => {
+    // Block responses containing prohibited words
+    if (response.content.includes("Prohibited")) {
+       throw new Error("Compliance Violation");
+    }
+  });
+```
+
 ## Retry Logic & Safety 🛡️
 
 By default, `NodeLLM` handles network instabilities or temporary provider errors (like 500s or 429 Rate Limits) by retrying the request.
