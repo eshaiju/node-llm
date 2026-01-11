@@ -262,6 +262,26 @@ export class Chat {
   }
 
   /**
+   * Set the tool execution mode.
+   * - "auto": (Default) Automatically execute all tool calls.
+   * - "confirm": Call onConfirmToolCall before executing each tool.
+   * - "dry-run": Propose tool calls but do not execute them.
+   */
+  withToolExecution(mode: "auto" | "confirm" | "dry-run"): this {
+    this.options.toolExecution = mode;
+    return this;
+  }
+
+  /**
+   * Hook for confirming tool execution in "confirm" mode.
+   * Return true to proceed, false to cancel the specific call.
+   */
+  onConfirmToolCall(handler: (toolCall: any) => Promise<boolean> | boolean): this {
+    this.options.onConfirmToolCall = handler;
+    return this;
+  }
+
+  /**
    * Add a hook to process messages before sending to the LLM.
    * Useful for PII detection, redaction, and input moderation.
    */
@@ -404,7 +424,8 @@ export class Chat {
       response.usage ?? { input_tokens: 0, output_tokens: 0, total_tokens: 0 }, 
       this.model,
       this.provider.id,
-      response.reasoning
+      response.reasoning,
+      response.tool_calls
     );
 
     // --- Content Policy Hooks (Output - Turn 1) ---
@@ -430,6 +451,10 @@ export class Chat {
     let stepCount = 0;
 
     while (response.tool_calls && response.tool_calls.length > 0) {
+      if (this.options.toolExecution === "dry-run") {
+        break;
+      }
+
       stepCount++;
       if (stepCount > maxToolCalls) {
         throw new Error(`[NodeLLM] Maximum tool execution calls (${maxToolCalls}) exceeded.`);
@@ -437,6 +462,18 @@ export class Chat {
 
       for (const toolCall of response.tool_calls) {
         if (this.options.onToolCallStart) this.options.onToolCallStart(toolCall);
+
+        if (this.options.toolExecution === "confirm") {
+          const confirmed = await this.options.onConfirmToolCall?.(toolCall);
+          if (confirmed === false) {
+            this.messages.push({
+              role: "tool",
+              tool_call_id: toolCall.id,
+              content: "Action cancelled by user.",
+            });
+            continue;
+          }
+        }
 
         const tool = this.options.tools?.find(
           (t) => t.function.name === toolCall.function.name
@@ -513,7 +550,14 @@ export class Chat {
 
     // For the final return, we might want to aggregate reasoning too if it happened in multiple turns? 
     // Usually reasoning only happens once or we just want the last one.
-    return new ChatResponseString(assistantMessage.toString() || "", totalUsage, this.model, this.provider.id, response.reasoning);
+    return new ChatResponseString(
+      assistantMessage.toString() || "", 
+      totalUsage, 
+      this.model, 
+      this.provider.id, 
+      assistantMessage.reasoning,
+      response.tool_calls
+    );
   }
 
   /**

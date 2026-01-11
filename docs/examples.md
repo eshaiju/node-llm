@@ -14,6 +14,7 @@ A comprehensive list of runnable examples available in the [examples/](https://g
 | :--- | :--- |
 | [`examples/real-world-support-agent.mjs`](https://github.com/node-llm/node-llm/blob/main/examples/real-world-support-agent.mjs) | **Real-world Travel Support AI Agent** using Context Isolation, Auto-executing Tools, and Structured Output. |
 | [`examples/content-policy-hooks.mjs`](https://github.com/node-llm/node-llm/blob/main/examples/content-policy-hooks.mjs) | **Content Policy & Security** using `beforeRequest` and `afterResponse` hooks for PII redaction. |
+| [`examples/security-tool-policies.mjs`](https://github.com/node-llm/node-llm/blob/main/examples/security-tool-policies.mjs) | **Advanced Tool Security** using `confirm` and `dry-run` modes for human-in-the-loop auditing. |
 
 ## OpenAI Examples
 

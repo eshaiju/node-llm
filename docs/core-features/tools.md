@@ -110,10 +110,35 @@ You can configure this limit globally or override it for a specific request:
 // 1. Global Change
 NodeLLM.configure({ maxToolCalls: 10 });
 
-// 2. Per-request override
 await chat.ask("Perform a complex deep research task", { 
   maxToolCalls: 15 
 });
+```
+
+## Tool Execution Policies (Security) 🚥
+
+For sensitive operations, you can control the "autonomy" of the tool execution loop using `withToolExecution()`.
+
+- **`auto`**: (Default) Tools are executed immediately as proposed by the LLM.
+- **`confirm`**: Enables **Human-in-the-loop**. NodeLLM pauses before execution and awaits approval via the `onConfirmToolCall` hook.
+- **`dry-run`**: Proposes the tool call structure but **never executes it**. Useful for UI previews or verification-only flows.
+
+```ts
+chat
+  .withToolExecution("confirm")
+  .onConfirmToolCall(async (call) => {
+    // Audit the call or ask the user
+    console.log(`LLM wants to call ${call.function.name}`);
+    return true; // Return true to execute, false to cancel
+  });
+```
+
+### Inspected Proposals
+In `confirm` and `dry-run` modes, the `ChatResponseString` object returned by `.ask()` includes a `.tool_calls` property. This allows you to inspect exactly what the model *wanted* to do.
+
+```ts
+const res = await chat.withToolExecution("dry-run").ask("Delete all users");
+console.log(res.tool_calls); // [{ id: '...', function: { name: 'delete_users', ... } }]
 ```
 
 ## Advanced Tool Metadata

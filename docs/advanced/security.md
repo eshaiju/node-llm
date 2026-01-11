@@ -72,6 +72,29 @@ chat
 
 ---
 
+## 🚦 Tool Execution Policies
+
+For sensitive operations (like database writes or financial transactions), NodeLLM provides granular control over the tool execution lifecycle via `toolExecution` modes.
+
+- **`auto`**: (Default) Tools are executed immediately as proposed by the LLM.
+- **`confirm`**: Enables **Human-in-the-loop**. NodeLLM pauses before execution and awaits approval via the `onConfirmToolCall` hook.
+- **`dry-run`**: Proposes the tool call structure but **never executes it**. Useful for UI previews or verification-only flows.
+
+```ts
+chat
+  .withToolExecution("confirm")
+  .onConfirmToolCall(async (call) => {
+    // Return true to execute, false to cancel
+    return await userResponse.confirm(`Allow tool: ${call.function.name}?`);
+  });
+```
+
+Security value:
+- **Prevents Destructive Actions**: Stops the model from accidentally deleting data without oversight.
+- **Human-in-the-loop**: Increases trust by ensuring critical business logic remains under human control.
+
+---
+
 ## ⚡ Smart Developer Role
 
 Modern models (like OpenAI's **o1**, **o3**, and **GPT-4o**) have introduced a specialized `developer` role. This role has higher "Instruction Authority" than the standard `system` role.

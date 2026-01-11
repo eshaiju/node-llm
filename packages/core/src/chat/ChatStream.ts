@@ -162,9 +162,25 @@ export class ChatStream {
             break;
           }
 
+          if (options.toolExecution === "dry-run") {
+            break;
+          }
+
           // Execute tool calls
           for (const toolCall of toolCalls) {
             if (options.onToolCallStart) options.onToolCallStart(toolCall);
+
+            if (options.toolExecution === "confirm") {
+              const confirmed = await options.onConfirmToolCall?.(toolCall);
+              if (confirmed === false) {
+                messages.push({
+                  role: "tool",
+                  tool_call_id: toolCall.id,
+                  content: "Action cancelled by user.",
+                });
+                continue;
+              }
+            }
 
             const tool = options.tools?.find(
               (t) => t.function.name === toolCall.function.name

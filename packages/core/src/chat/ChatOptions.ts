@@ -21,6 +21,8 @@ export interface ChatOptions {
   assumeModelExists?: boolean;
   provider?: string;
   maxToolCalls?: number;
+  toolExecution?: "auto" | "confirm" | "dry-run";
+  onConfirmToolCall?: (toolCall: any) => Promise<boolean> | boolean;
   onBeforeRequest?: (messages: Message[]) => Promise<Message[] | void>;
   onAfterResponse?: (response: ChatResponseString) => Promise<ChatResponseString | void>;
 }
