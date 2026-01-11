@@ -167,10 +167,10 @@ const res = await chat.withSchema(Product).ask("Generate a gadget");
 console.log(res.parsed.name); // Full type-safety
 ```
 
-### 🛡️ Content Policy Hooks
+### 🛡️ [Security & Compliance](/advanced/security.html)
 Implement custom security, PII detection, and compliance logic using pluggable asynchronous hooks (`beforeRequest` and `afterResponse`).
  
-### 🧱 Smart Context Isolation
+### 🧱 [Smart Context Isolation](/advanced/security.html)
 Stop worrying about prompt injection or instruction drift. NodeLLM automatically separates system instructions from the conversation history, providing a higher level of protection and strictness while automatically mapping roles like OpenAI's `developer` role.
  
 ### 🎨 Image Generation

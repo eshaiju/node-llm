@@ -205,3 +205,4 @@ This behavior is **enabled by default** for all chats.
 - [Structured Output](/core-features/structured_output.html) (JSON Schemas, Zod)
 - [Tool Calling](/core-features/tools.html)
 - [Reasoning](/core-features/reasoning.html) (DeepSeek R1, OpenAI o1/o3)
+- [Security & Compliance](/advanced/security.html)
