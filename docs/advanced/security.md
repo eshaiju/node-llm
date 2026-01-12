@@ -25,7 +25,7 @@ NodeLLM solves this by maintaining a strict architectural boundary between **Sys
 
 ---
 
-## 🛡️ Content Policy Hooks <span style="background-color: #0d9488; color: white; padding: 1px 6px; border-radius: 3px; font-size: 0.65em; font-weight: 600; vertical-align: middle;">v1.4.0+</span>
+## 🛡️ Content Policy Hooks <span style="background-color: #0d9488; color: white; padding: 1px 6px; border-radius: 3px; font-size: 0.65em; font-weight: 600; vertical-align: middle;">v1.5.0+</span>
 
 NodeLLM allows you to inject security and compliance policies at the **edge** of the request/response cycle using asynchronous hooks.
 
@@ -95,7 +95,7 @@ Security value:
 
 ---
 
-## 🛡️ Loop Protection & Resource Limits <span style="background-color: #0d9488; color: white; padding: 1px 6px; border-radius: 3px; font-size: 0.65em; font-weight: 600; vertical-align: middle;">v1.6.0+</span>
+## 🛡️ Loop Protection & Resource Limits <span style="background-color: #0d9488; color: white; padding: 1px 6px; border-radius: 3px; font-size: 0.65em; font-weight: 600; vertical-align: middle;">v1.5.0+</span>
 
 NodeLLM provides **defense-in-depth** protection against resource exhaustion, runaway costs, and denial-of-service attacks through configurable execution limits.
 
