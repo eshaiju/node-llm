@@ -4,9 +4,17 @@ import { handleOpenAIError } from "./Errors.js";
 import { buildUrl } from "./utils.js";
 import { APIError } from "../../errors/index.js";
 import { logger } from "../../utils/logger.js";
+import { fetchWithTimeout } from "../../utils/fetch.js";
+
+import { OpenAIProvider } from "./OpenAIProvider.js";
+import { mapSystemMessages } from "../utils.js";
 
 export class OpenAIStreaming {
-  constructor(private readonly baseUrl: string, private readonly apiKey: string) {}
+  private readonly baseUrl: string;
+
+  constructor(private readonly providerOrUrl: OpenAIProvider | string, private readonly apiKey: string) {
+    this.baseUrl = typeof providerOrUrl === "string" ? providerOrUrl : providerOrUrl.apiBase();
+  }
 
   async *execute(
     request: ChatRequest,
@@ -15,9 +23,18 @@ export class OpenAIStreaming {
     const abortController = controller || new AbortController();
     const temperature = Capabilities.normalizeTemperature(request.temperature, request.model);
     
+    const isMainOpenAI = this.baseUrl.includes("api.openai.com");
+    const supportsDeveloperRole = isMainOpenAI && (
+      typeof this.providerOrUrl === "string" 
+        ? Capabilities.supportsDeveloperRole(request.model)
+        : this.providerOrUrl.capabilities?.supportsDeveloperRole(request.model)
+    );
+
+    const mappedMessages = mapSystemMessages(request.messages, !!supportsDeveloperRole);
+
     const body: any = {
       model: request.model,
-      messages: request.messages,
+      messages: mappedMessages,
       stream: true,
     };
 
@@ -45,7 +62,7 @@ export class OpenAIStreaming {
       const url = buildUrl(this.baseUrl, '/chat/completions');
       logger.logRequest("OpenAI", "POST", url, body);
 
-      const response = await fetch(url, {
+      const response = await fetchWithTimeout(url, {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${this.apiKey}`,
@@ -54,7 +71,7 @@ export class OpenAIStreaming {
         },
         body: JSON.stringify(body),
         signal: abortController.signal,
-      });
+      }, request.requestTimeout);
 
       if (!response.ok) {
         await handleOpenAIError(response, request.model);

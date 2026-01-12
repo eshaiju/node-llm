@@ -8,9 +8,9 @@ export class GeminiChatUtils {
     const systemInstructionParts: GeminiPart[] = [];
 
     for (const msg of messages) {
-      if (msg.role === "system") {
-        if (typeof msg.content === "string") {
-          systemInstructionParts.push({ text: msg.content });
+      if (msg.role === "system" || msg.role === "developer") {
+        if (msg.content) {
+          systemInstructionParts.push({ text: String(msg.content) });
         }
       } else if (msg.role === "user" || msg.role === "assistant" || msg.role === "tool") {
         const parts: GeminiPart[] = [];
@@ -26,8 +26,8 @@ export class GeminiChatUtils {
         } else {
           const role = msg.role === "assistant" ? "model" : "user";
           
-          if (typeof msg.content === "string" && msg.content) {
-            parts.push({ text: msg.content });
+          if (msg.content && (typeof msg.content === "string" || msg.content instanceof String)) {
+            parts.push({ text: String(msg.content) });
           } else if (Array.isArray(msg.content)) {
             for (const part of msg.content) {
               if (part.type === "text") {

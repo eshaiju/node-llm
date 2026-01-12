@@ -2,6 +2,7 @@ import { ImageRequest, ImageResponse } from "../Provider.js";
 import { handleOpenAIError } from "./Errors.js";
 import { buildUrl } from "./utils.js";
 import { logger } from "../../utils/logger.js";
+import { fetchWithTimeout } from "../../utils/fetch.js";
 
 export class OpenAIImage {
   constructor(private readonly baseUrl: string, private readonly apiKey: string) {}
@@ -18,14 +19,14 @@ export class OpenAIImage {
     const url = buildUrl(this.baseUrl, '/images/generations');
     logger.logRequest("OpenAI", "POST", url, body);
 
-    const response = await fetch(url, {
+    const response = await fetchWithTimeout(url, {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${this.apiKey}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(body),
-    });
+    }, request.requestTimeout);
 
     if (!response.ok) {
       await handleOpenAIError(response, request.model);

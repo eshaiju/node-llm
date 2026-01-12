@@ -96,6 +96,51 @@ If the provider supports it (like OpenAI and Anthropic), the model can call mult
 
 See [examples/openai/chat/parallel-tools.mjs](https://github.com/node-llm/node-llm/blob/main/examples/openai/chat/parallel-tools.mjs) for a demo.
 
+## Loop Protection (Loop Guard) 🛡️
+
+To prevent infinite recursion and runaway costs (where a model keeps calling tools without reaching a conclusion), `NodeLLM` includes a built-in Loop Guard.
+
+By default, `NodeLLM` will throw an error if a model performs more than **5 sequential tool execution turns** in a single request. 
+
+### Customizing the limit
+
+You can configure this limit globally or override it for a specific request:
+
+```ts
+// 1. Global Change
+NodeLLM.configure({ maxToolCalls: 10 });
+
+await chat.ask("Perform a complex deep research task", { 
+  maxToolCalls: 15 
+});
+```
+
+## Tool Execution Policies (Security) 🚥 <span style="background-color: #0d9488; color: white; padding: 1px 6px; border-radius: 3px; font-size: 0.65em; font-weight: 600; vertical-align: middle;">v1.5.0+</span>
+
+For sensitive operations, you can control the "autonomy" of the tool execution loop using `withToolExecution()`.
+
+- **`auto`**: (Default) Tools are executed immediately as proposed by the LLM.
+- **`confirm`**: Enables **Human-in-the-loop**. NodeLLM pauses before execution and awaits approval via the `onConfirmToolCall` hook.
+- **`dry-run`**: Proposes the tool call structure but **never executes it**. Useful for UI previews or verification-only flows.
+
+```ts
+chat
+  .withToolExecution("confirm")
+  .onConfirmToolCall(async (call) => {
+    // Audit the call or ask the user
+    console.log(`LLM wants to call ${call.function.name}`);
+    return true; // Return true to execute, false to cancel
+  });
+```
+
+### Inspected Proposals
+In `confirm` and `dry-run` modes, the `ChatResponseString` object returned by `.ask()` includes a `.tool_calls` property. This allows you to inspect exactly what the model *wanted* to do.
+
+```ts
+const res = await chat.withToolExecution("dry-run").ask("Delete all users");
+console.log(res.tool_calls); // [{ id: '...', function: { name: 'delete_users', ... } }]
+```
+
 ## Advanced Tool Metadata
 
 Some providers support additional metadata in tool definitions, such as Anthropic's **Prompt Caching**. You can include these fields in your tool class, and `NodeLLM` will pass them through.

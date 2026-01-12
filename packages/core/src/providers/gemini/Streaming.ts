@@ -4,6 +4,7 @@ import { handleGeminiError } from "./Errors.js";
 import { GeminiGenerateContentResponse } from "./types.js";
 import { GeminiChatUtils } from "./ChatUtils.js";
 import { logger } from "../../utils/logger.js";
+import { fetchWithTimeout } from "../../utils/fetch.js";
 
 export class GeminiStreaming {
   constructor(private readonly baseUrl: string, private readonly apiKey: string) {}
@@ -59,14 +60,14 @@ export class GeminiStreaming {
     try {
       logger.logRequest("Gemini", "POST", url, payload);
 
-      const response = await fetch(url, {
+      const response = await fetchWithTimeout(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(payload),
         signal: abortController.signal,
-      });
+      }, request.requestTimeout);
 
       if (!response.ok) {
         await handleGeminiError(response, request.model);

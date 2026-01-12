@@ -7,6 +7,8 @@ describe("Moderation Unit Tests", () => {
 
   beforeEach(() => {
     mockProvider = {
+      id: "test",
+      defaultModel: () => "test-model",
       chat: vi.fn(),
       moderate: vi.fn().mockResolvedValue({
         id: "mod-123",
@@ -19,7 +21,7 @@ describe("Moderation Unit Tests", () => {
           }
         ]
       })
-    };
+    } as any;
     NodeLLM.configure({ provider: mockProvider });
   });
 
@@ -27,7 +29,8 @@ describe("Moderation Unit Tests", () => {
     await NodeLLM.moderate("hello world", { model: "custom-mod" });
     expect(mockProvider.moderate).toHaveBeenCalledWith({
       input: "hello world",
-      model: "custom-mod"
+      model: "custom-mod",
+      requestTimeout: 30000
     });
   });
 
@@ -36,7 +39,8 @@ describe("Moderation Unit Tests", () => {
     await NodeLLM.moderate("hello world");
     expect(mockProvider.moderate).toHaveBeenCalledWith({
       input: "hello world",
-      model: "default-mod"
+      model: "default-mod",
+      requestTimeout: 30000
     });
   });
 

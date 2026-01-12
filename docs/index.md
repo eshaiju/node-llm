@@ -167,6 +167,12 @@ const res = await chat.withSchema(Product).ask("Generate a gadget");
 console.log(res.parsed.name); // Full type-safety
 ```
 
+### 🛡️ [Security & Compliance](/advanced/security.html)
+Implement custom security, PII detection, and compliance logic using pluggable asynchronous hooks (`beforeRequest` and `afterResponse`).
+ 
+### 🧱 [Smart Context Isolation](/advanced/security.html)
+Stop worrying about prompt injection or instruction drift. NodeLLM automatically separates system instructions from the conversation history, providing a higher level of protection and strictness while automatically mapping roles like OpenAI's `developer` role.
+ 
 ### 🎨 Image Generation
 ```ts
 await NodeLLM.paint("A cyberpunk city in rain");
@@ -214,7 +220,7 @@ console.log(res.reasoning); // Chain-of-thought
 
 | Provider | Supported Features |
 | :--- | :--- |
-| <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/openai.svg" height="18"> **OpenAI** | Chat, Streaming, Tools, Vision, Audio, Images, Transcription, **Reasoning** |
+| <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/openai.svg" height="18"> **OpenAI** | Chat, Streaming, Tools, Vision, Audio, Images, Transcription, **Reasoning**, **Smart Developer Role** |
 | <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/gemini-color.svg" height="18"> **Gemini** | Chat, Streaming, Tools, Vision, Audio, Video, Embeddings |
 | <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/anthropic-text.svg" height="12"> **Anthropic** | Chat, Streaming, Tools, Vision, PDF, Structured Output |
 | <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/deepseek-color.svg" height="18"> **DeepSeek** | Chat (V3), **Reasoning (R1)**, Tools, Streaming |

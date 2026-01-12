@@ -127,15 +127,16 @@ const factual = NodeLLM.chat("gpt-4o").withTemperature(0.0);
 const creative = NodeLLM.chat("gpt-4o").withTemperature(0.9);
 ```
 
-## Lifecycle Events
+## Lifecycle Events <span style="background-color: #0d9488; color: white; padding: 1px 6px; border-radius: 3px; font-size: 0.65em; font-weight: 600; vertical-align: middle;">Enhanced in v1.5.0</span>
 
 Hook into the chat lifecycle for logging, UI updates, audit trails, or debugging.
 
 ```ts
 chat
   .onNewMessage(() => console.log("AI started typing..."))
-  .onToolCall((tool) => console.log(`Calling tool: ${tool.function.name}`))
-  .onToolResult((result) => console.log(`Tool result: ${result}`))
+  .onToolCallStart((call) => console.log(`Starting tool: ${call.function.name}`))
+  .onToolCallEnd((call, res) => console.log(`Tool ${call.id} finished with: ${res}`))
+  .onToolCallError((call, err) => console.error(`Tool ${call.function.name} failed: ${err.message}`))
   .onEndMessage((response) => {
     console.log(`Finished. Total tokens: ${response.total_tokens}`);
   });
@@ -143,9 +144,76 @@ chat
 await chat.ask("What's the weather?");
 ```
 
+## 🛡️ Content Policy Hooks
+
+NodeLLM allows you to plug in custom security and compliance logic through asynchronous hooks. This is useful for PII detection, redaction, and enterprise moderation policies.
+
+- **`beforeRequest(handler)`**: Analyze or modify the message history before it is sent to the provider.
+- **`afterResponse(handler)`**: Analyze or modify the AI's response before it is returned to your application.
+
+```ts
+chat
+  .beforeRequest(async (messages) => {
+    // Redact SSNs from user input
+    return messages.map(m => ({
+      ...m,
+      content: m.content.replace(/\d{3}-\d{2}-\d{4}/g, "[REDACTED]")
+    }));
+  })
+  .afterResponse(async (response) => {
+    // Block responses containing prohibited words
+    if (response.content.includes("Prohibited")) {
+       throw new Error("Compliance Violation");
+    }
+  });
+```
+
+## Retry Logic & Safety 🛡️
+
+By default, `NodeLLM` handles network instabilities or temporary provider errors (like 500s or 429 Rate Limits) by retrying the request.
+
+*   **Default Retries**: 2 retries (3 total attempts).
+*   **Request Timeout**: 30 seconds (prevents hanging requests).
+*   **Loop Guard**: Tool calling is limited to 5 turns to prevent infinite loops.
+
+You can configure these limits globally:
+
+```ts
+NodeLLM.configure({
+  maxRetries: 3,        // Increase retries for unstable connections
+  maxToolCalls: 10,     // Allow deeper tool calling sequences
+  requestTimeout: 60000 // 60 second timeout for long-running requests
+});
+```
+
+Or override per-request:
+
+```ts
+// Long-running task with extended timeout
+await chat.ask("Analyze this large dataset", { 
+  requestTimeout: 120000  // 2 minutes
+});
+```
+
+See the [Configuration Guide](/getting-started/configuration) for more details.
+ 
+## 🧱 Smart Context Isolation
+ 
+NodeLLM provides **Zero-Config Context Isolation** to ensure maximum instruction following and security. 
+ 
+Inspired by modern LLM architectures (like OpenAI's Developer Role), NodeLLM internally separates your system instructions from the conversation history. This prevents "instruction drift" as the conversation grows and provides a strong layer of protection against prompt injection.
+ 
+### How it works:
+- **Implicit Untangling**: If you pass a mixed array of messages to the Chat constructor, NodeLLM automatically identifies and isolates system-level instructions.
+- **Dynamic Role Mapping**: On the official OpenAI API, instructions for modern models (`gpt-4o`, `o1`, `o3`) are automatically promoted to the high-privilege `developer` role.
+- **Safe Fallbacks**: For older models or local providers (like Ollama or DeepSeek), NodeLLM safely maps instructions back to the standard `system` role to ensure perfect compatibility.
+ 
+This behavior is **enabled by default** for all chats.
+ 
 ## Next Steps
 
 - [Multi-modal Capabilities](/core-features/multimodal.html) (Images, Audio, Files)
 - [Structured Output](/core-features/structured_output.html) (JSON Schemas, Zod)
 - [Tool Calling](/core-features/tools.html)
 - [Reasoning](/core-features/reasoning.html) (DeepSeek R1, OpenAI o1/o3)
+- [Security & Compliance](/advanced/security.html)

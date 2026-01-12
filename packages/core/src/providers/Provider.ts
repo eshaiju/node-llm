@@ -9,6 +9,7 @@ export interface ChatRequest {
   max_tokens?: number;
   response_format?: any;
   headers?: Record<string, string>;
+  requestTimeout?: number;
   [key: string]: any;
 }
 
@@ -46,6 +47,7 @@ export interface ProviderCapabilities {
   supportsTranscription(modelId: string): boolean;
   supportsModeration(modelId: string): boolean;
   supportsReasoning(modelId: string): boolean;
+  supportsDeveloperRole(modelId: string): boolean;
   getContextWindow(modelId: string): number | null;
 }
 
@@ -68,6 +70,7 @@ export interface ImageRequest {
   size?: string;
   quality?: string;
   n?: number;
+  requestTimeout?: number;
 }
 
 export interface ImageResponse {
@@ -84,6 +87,7 @@ export interface TranscriptionRequest {
   language?: string;
   speakerNames?: string[];
   speakerReferences?: string[];
+  requestTimeout?: number;
 }
 
 export interface TranscriptionSegment {
@@ -105,6 +109,7 @@ export interface TranscriptionResponse {
 export interface ModerationRequest {
   input: string | string[];
   model?: string;
+  requestTimeout?: number;
 }
 
 export interface ModerationResult {
@@ -124,6 +129,7 @@ export interface EmbeddingRequest {
   model?: string;
   dimensions?: number;
   user?: string;
+  requestTimeout?: number;
 }
 
 export interface EmbeddingVector {

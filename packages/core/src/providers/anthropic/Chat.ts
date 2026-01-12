@@ -6,6 +6,7 @@ import { Message } from "../../chat/Message.js";
 import { ContentPart } from "../../chat/Content.js";
 import { ModelRegistry } from "../../models/ModelRegistry.js";
 import { logger } from "../../utils/logger.js";
+import { fetchWithTimeout } from "../../utils/fetch.js";
 
 import { formatSystemPrompt, formatMessages } from "./Utils.js";
 
@@ -29,7 +30,7 @@ export class AnthropicChat {
       system = system ? `${system}\n\n${instruction}` : instruction;
     }
 
-    const { model: _model, messages: _messages, tools: _tools, temperature: _temp, max_tokens: _max, response_format: _format, headers: _headers, ...rest } = request;
+    const { model: _model, messages: _messages, tools: _tools, temperature: _temp, max_tokens: _max, response_format: _format, headers: _headers, requestTimeout, ...rest } = request;
 
     const body: any = {
       model: model,
@@ -72,11 +73,11 @@ export class AnthropicChat {
     const url = `${this.baseUrl}/messages`;
     logger.logRequest("Anthropic", "POST", url, body);
 
-    const response = await fetch(url, {
+    const response = await fetchWithTimeout(url, {
       method: "POST",
       headers: headers,
       body: JSON.stringify(body),
-    });
+    }, requestTimeout);
 
     if (!response.ok) {
       await handleAnthropicError(response, model);

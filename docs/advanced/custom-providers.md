@@ -67,6 +67,31 @@ class MyCustomProvider extends BaseProvider {
 }
 ```
 
+## Defining Capabilities
+
+Capabilities tell NodeLLM what your provider is actually capable of. By default, `BaseProvider` assumes most advanced features are disabled. You can override these to opt-in to specific framework behaviors.
+
+```ts
+class MyCustomProvider extends BaseProvider {
+  // ... rest of implementation
+
+  public capabilities = {
+    ...this.defaultCapabilities(), // Start with defaults
+    
+    // Enable support for OpenAI-style 'developer' roles
+    supportsDeveloperRole: (modelId: string) => true,
+    
+    // Declare vision support
+    supportsVision: (modelId: string) => modelId.includes("vision"),
+    
+    // Declare the context window size
+    getContextWindow: (modelId: string) => 128000
+  };
+}
+```
+
+Notably, if `supportsDeveloperRole` is true, NodeLLM will automatically map isolated system instructions to the `developer` role. If false (the default), it will keep them as the standard `system` role.
+
 ## Registering Your Provider
 
 Register your provider with `NodeLLM` during your application's initialization.
@@ -121,6 +146,42 @@ async chat(request) {
   }
 }
 ```
+
+### Handling Request Timeouts
+
+NodeLLM passes `requestTimeout` (in milliseconds) through all request interfaces. Your custom provider should respect this timeout to ensure consistent security behavior across all providers.
+
+Use the built-in `fetchWithTimeout` utility:
+
+```ts
+import { fetchWithTimeout } from "@node-llm/core/utils/fetch";
+
+async chat(request: ChatRequest): Promise<ChatResponse> {
+  const response = await fetchWithTimeout(
+    `${this.apiBase()}/chat`,
+    {
+      method: "POST",
+      headers: this.headers(),
+      body: JSON.stringify({
+        model: request.model,
+        messages: request.messages
+      })
+    },
+    request.requestTimeout  // Pass through the timeout
+  );
+
+  const json = await response.json();
+  return {
+    content: json.response,
+    usage: json.usage
+  };
+}
+```
+
+**Note**: The `requestTimeout` parameter is available in all provider methods:
+- `chat(request)`, `stream(request)`, `paint(request)`, `transcribe(request)`, `moderate(request)`, `embed(request)`
+
+
 
 ## Example Implementation
 

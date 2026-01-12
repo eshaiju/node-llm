@@ -1,6 +1,8 @@
 import { Message } from "./Message.js";
 import { ToolDefinition } from "./Tool.js";
 import { Schema } from "../schema/Schema.js";
+import { ChatResponseString } from "./ChatResponse.js";
+import { ToolExecutionMode } from "../constants.js";
 
 export interface ChatOptions {
   systemPrompt?: string;
@@ -10,12 +12,19 @@ export interface ChatOptions {
   maxTokens?: number;
   onNewMessage?: () => void;
   onEndMessage?: (message: any) => void;
-  onToolCall?: (toolCall: any) => void;
-  onToolResult?: (result: any) => void;
+  onToolCallStart?: (toolCall: any) => void;
+  onToolCallEnd?: (toolCall: any, result: any) => void;
+  onToolCallError?: (toolCall: any, error: Error) => void;
   headers?: Record<string, string>;
   schema?: Schema;
   responseFormat?: { type: "json_object" | "text" };
   params?: Record<string, any>;
   assumeModelExists?: boolean;
   provider?: string;
+  maxToolCalls?: number;
+  requestTimeout?: number;
+  toolExecution?: ToolExecutionMode;
+  onConfirmToolCall?: (toolCall: any) => Promise<boolean> | boolean;
+  onBeforeRequest?: (messages: Message[]) => Promise<Message[] | void>;
+  onAfterResponse?: (response: ChatResponseString) => Promise<ChatResponseString | void>;
 }

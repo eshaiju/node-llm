@@ -3,6 +3,7 @@ import { handleOpenAIError } from "./Errors.js";
 import { DEFAULT_MODELS } from "../../constants.js";
 import { buildUrl } from "./utils.js";
 import { logger } from "../../utils/logger.js";
+import { fetchWithTimeout } from "../../utils/fetch.js";
 
 export class OpenAIModeration {
   constructor(private readonly baseUrl: string, private readonly apiKey: string) {}
@@ -16,14 +17,14 @@ export class OpenAIModeration {
     const url = buildUrl(this.baseUrl, '/moderations');
     logger.logRequest("OpenAI", "POST", url, body);
 
-    const response = await fetch(url, {
+    const response = await fetchWithTimeout(url, {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${this.apiKey}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(body),
-    });
+    }, request.requestTimeout);
 
     if (!response.ok) {
       await handleOpenAIError(response, request.model || DEFAULT_MODELS.MODERATION);

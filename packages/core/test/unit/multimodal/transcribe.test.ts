@@ -8,6 +8,7 @@ describe("Transcription Unit Tests", () => {
   beforeEach(() => {
     mockProvider = {
       id: "mock-provider",
+      defaultModel: () => "test-model",
       chat: vi.fn(),
       transcribe: vi.fn().mockResolvedValue({
         text: "Mock transcription",
@@ -18,7 +19,7 @@ describe("Transcription Unit Tests", () => {
       capabilities: {
         supportsTranscription: vi.fn().mockReturnValue(true),
       } as any
-    };
+    } as any;
     NodeLLM.configure({ provider: mockProvider });
   });
 
@@ -30,6 +31,7 @@ describe("Transcription Unit Tests", () => {
       language: "en",
       prompt: "Test prompt",
       model: "",
+      requestTimeout: 30000,
     });
   });
 
@@ -82,8 +84,9 @@ describe("Transcription Unit Tests", () => {
   it("should throw error if provider does not support transcribe", async () => {
     const limitedProvider: Provider = {
       id: "limited-provider",
+      defaultModel: () => "test-model",
       chat: vi.fn()
-    };
+    } as any;
     NodeLLM.configure({ provider: limitedProvider });
 
     await expect(NodeLLM.transcribe("test.mp3")).rejects.toThrow("Provider does not support transcribe");

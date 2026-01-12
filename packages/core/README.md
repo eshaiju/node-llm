@@ -150,7 +150,34 @@ class WeatherTool extends Tool {
 // Now the model can use it automatically
 await chat.withTool(WeatherTool).ask("What's the weather in Tokyo?");
 ```
-**[Full Tool Calling Guide →](https://node-llm.eshaiju.com/core-features/tool-calling)**
+
+### 🛡️ Loop Protection & Resource Limits
+Prevent runaway costs, infinite loops, and hanging requests with comprehensive protection against resource exhaustion.
+
+NodeLLM provides **defense-in-depth** security that you can configure globally or per-request:
+
+```ts
+// 1. Global config
+NodeLLM.configure({ 
+  requestTimeout: 30000, // Timeout requests after 30 seconds (default)
+  maxToolCalls: 5,       // Stop after 5 sequential tool execution turns
+  maxRetries: 2,         // Retry provider-level errors up to 2 times
+  maxTokens: 4096        // Limit output to 4K tokens (default)
+});
+
+// 2. Per request override
+await chat.ask("Deep search task", { 
+  requestTimeout: 120000, // 2 minutes for this request
+  maxToolCalls: 10,
+  maxTokens: 8192         // 8K tokens for this request
+});
+```
+
+**Security Benefits:**
+- **`requestTimeout`**: Prevents DoS attacks and hanging requests
+- **`maxToolCalls`**: Prevents infinite tool execution loops
+- **`maxRetries`**: Prevents retry storms during outages
+- **`maxTokens`**: Prevents excessive output and cost overruns
 
 ### 🔍 Comprehensive Debug Logging
 Enable detailed logging for all API requests and responses across every feature and provider:
@@ -165,6 +192,42 @@ process.env.NODELLM_DEBUG = "true";
 // { "id": "chatcmpl-123", ... }
 ```
 **Covers:** Chat, Streaming, Images, Embeddings, Transcription, Moderation - across all providers!
+
+### 🛡️ Content Policy Hooks
+NodeLLM provides pluggable hooks to implement custom security, compliance, and moderation logic. Instead of hard-coded rules, you can inject your own policies at the edge.
+
+- **`beforeRequest()`**: Intercept and modify messages before they hit the LLM (e.g., PII detection/redaction).
+- **`afterResponse()`**: Process the final response before it returns to your code (e.g., output masking or compliance checks).
+
+```ts
+chat
+  .beforeRequest(async (messages) => {
+    // Detect PII and redact
+    return redactSSN(messages);
+  })
+  .afterResponse(async (response) => {
+    // Ensure output compliance
+    return response.withContent(maskSensitiveData(response.content));
+  });
+```
+
+### 🧱 Smart Context Isolation
+Stop worrying about prompt injection or instruction drift. NodeLLM automatically separates system instructions from the conversation history, providing a higher level of protection and strictness.
+
+- **Zero-Config Security**: Enabled by default for all chats. No special flags required.
+- **Smart Model Mapping**: Automatically uses OpenAI's modern `developer` role for compatible models (GPT-4o, o1, o3) while safely falling back to the standard `system` role for older or local models (Ollama, DeepSeek, etc.).
+- **Universal Context**: Instructions stay separated internally, ensuring they are always prioritized by the model and never accidentally overridden by user messages.
+- **Provider Agnostic**: Write instructions once; NodeLLM handles the specific role requirements for every major provider (OpenAI, Anthropic, Gemini).
+
+### 🔍 Observability & Tool Auditing
+For enterprise compliance, NodeLLM provides deep visibility into the tool execution lifecycle. You can monitor, log, and audit every step of a tool's execution.
+
+```ts
+chat
+  .onToolCallStart((call) => log(`Starting tool: ${call.function.name}`))
+  .onToolCallEnd((call, res) => log(`Tool ${call.id} finished with: ${res}`))
+  .onToolCallError((call, err) => alert(`Tool ${call.function.name} failed: ${err.message}`));
+```
 
 ### ✨ Structured Output
 Get type-safe, validated JSON back using **Zod** schemas.
@@ -222,7 +285,7 @@ console.log(res.reasoning); // Chain-of-thought
 
 | Provider | Supported Features |
 | :--- | :--- |
-| <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/openai.svg" height="18"> **OpenAI** | Chat, **Streaming + Tools**, Vision, Audio, Images, Transcription, **Reasoning** |
+| <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/openai.svg" height="18"> **OpenAI** | Chat, **Streaming + Tools**, Vision, Audio, Images, Transcription, **Reasoning**, **Smart Developer Role** |
 | <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/gemini-color.svg" height="18"> **Gemini** | Chat, **Streaming + Tools**, Vision, Audio, Video, Embeddings |
 | <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/anthropic-text.svg" height="12"> **Anthropic** | Chat, **Streaming + Tools**, Vision, PDF, Structured Output |
 | <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/deepseek-color.svg" height="18"> **DeepSeek** | Chat (V3), **Reasoning (R1)**, **Streaming + Tools** |

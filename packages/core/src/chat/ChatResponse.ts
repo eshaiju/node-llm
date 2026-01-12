@@ -1,4 +1,5 @@
 import { Usage } from "../providers/Provider.js";
+import { ToolCall } from "./Tool.js";
 
 /**
  * Enhanced string that includes token usage metadata.
@@ -10,7 +11,8 @@ export class ChatResponseString extends String {
     public readonly usage: Usage,
     public readonly model: string,
     public readonly provider: string,
-    public readonly reasoning?: string | null
+    public readonly reasoning?: string | null,
+    public readonly tool_calls?: ToolCall[]
   ) {
     super(content);
   }
@@ -33,6 +35,20 @@ export class ChatResponseString extends String {
 
   toString() {
     return this.valueOf();
+  }
+
+  /**
+   * Return a new ChatResponseString with modified content but preserved metadata.
+   */
+  withContent(newContent: string): ChatResponseString {
+    return new ChatResponseString(
+      newContent,
+      this.usage,
+      this.model,
+      this.provider,
+      this.reasoning,
+      this.tool_calls
+    );
   }
 
   /**
