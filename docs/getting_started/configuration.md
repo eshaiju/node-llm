@@ -66,16 +66,22 @@ NodeLLM.configure({
 });
 ```
 
-### Loop Protection (Loop Guard)
+### Loop Protection & Security Limits
 
-Prevent runaway costs and infinite loops by limiting tool execution depth and API retries:
+Prevent runaway costs, infinite loops, and hanging requests by setting execution and timeout limits:
 
 ```typescript
 NodeLLM.configure({
-  maxToolCalls: 5,  // Stop after 5 sequential tool execution turns
-  maxRetries: 2,    // Retry network/server errors 2 times
+  maxToolCalls: 5,      // Stop after 5 sequential tool execution turns
+  maxRetries: 2,        // Retry network/server errors 2 times
+  requestTimeout: 30000 // Timeout requests after 30 seconds (default)
 });
 ```
+
+**Security Benefits:**
+- **`maxToolCalls`**: Prevents infinite tool execution loops
+- **`maxRetries`**: Prevents retry storms that could exhaust resources
+- **`requestTimeout`**: Prevents hanging requests and DoS attacks
 
 ## Supported Configuration Keys
 
@@ -97,6 +103,7 @@ NodeLLM.configure({
 | `defaultEmbeddingModel` | Default model for `.embed()` | Provider default |
 | `maxToolCalls` | Max sequential tool execution turns | `5` |
 | `maxRetries` | Max retries for provider errors | `2` |
+| `requestTimeout` | Request timeout in milliseconds | `30000` (30s) |
 | `retry` | Retry configuration (legacy) | `{ attempts: 1, delayMs: 0 }` |
 
 ## Inspecting Configuration

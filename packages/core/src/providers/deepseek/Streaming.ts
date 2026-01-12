@@ -2,6 +2,7 @@ import { ChatRequest, ChatChunk } from "../Provider.js";
 import { APIError } from "../../errors/index.js";
 import { logger } from "../../utils/logger.js";
 import { mapSystemMessages } from "../utils.js";
+import { fetchWithTimeout } from "../../utils/fetch.js";
 
 export class DeepSeekStreaming {
   constructor(private readonly baseUrl: string, private readonly apiKey: string) {}
@@ -11,7 +12,7 @@ export class DeepSeekStreaming {
     controller?: AbortController
   ): AsyncGenerator<ChatChunk> {
     const abortController = controller || new AbortController();
-    const { model, messages, tools, max_tokens, response_format, headers, ...rest } = request;
+    const { model, messages, tools, max_tokens, response_format, headers, requestTimeout, ...rest } = request;
 
     const mappedMessages = mapSystemMessages(messages, false);
 
@@ -34,7 +35,7 @@ export class DeepSeekStreaming {
       const url = `${this.baseUrl}/chat/completions`;
       logger.logRequest("DeepSeek", "POST", url, body);
 
-      const response = await fetch(url, {
+      const response = await fetchWithTimeout(url, {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${this.apiKey}`,
@@ -43,7 +44,7 @@ export class DeepSeekStreaming {
         },
         body: JSON.stringify(body),
         signal: abortController.signal,
-      });
+      }, requestTimeout);
 
       if (!response.ok) {
         const errorText = await response.text();

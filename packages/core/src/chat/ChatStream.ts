@@ -113,6 +113,7 @@ export class ChatStream {
             tools: options.tools,
             temperature: options.temperature,
             max_tokens: options.maxTokens,
+            requestTimeout: options.requestTimeout ?? config.requestTimeout,
             signal: abortController.signal,
           })) {
             if (isFirst) {

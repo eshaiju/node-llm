@@ -19,6 +19,7 @@ export interface AskOptions {
   maxTokens?: number;
   headers?: Record<string, string>;
   maxToolCalls?: number;
+  requestTimeout?: number;
 }
 
 import { ChatResponseString } from "./ChatResponse.js";
@@ -392,6 +393,7 @@ export class Chat {
       max_tokens: options?.maxTokens ?? this.options.maxTokens,
       headers: { ...this.options.headers, ...options?.headers },
       response_format: responseFormat, // Pass to provider
+      requestTimeout: options?.requestTimeout ?? this.options.requestTimeout ?? config.requestTimeout,
       ...this.options.params,
     };
 
@@ -497,6 +499,7 @@ export class Chat {
         messages: [...this.systemMessages, ...this.messages],
         tools: this.options.tools,
         headers: this.options.headers,
+        requestTimeout: options?.requestTimeout ?? this.options.requestTimeout ?? config.requestTimeout,
       });
       trackUsage(response.usage);
 

@@ -221,7 +221,7 @@ export class NodeLLMCore {
     return models;
   }
 
-  async paint(prompt: string, options?: { model?: string; size?: string; quality?: string; assumeModelExists?: boolean }): Promise<GeneratedImage> {
+  async paint(prompt: string, options?: { model?: string; size?: string; quality?: string; assumeModelExists?: boolean; requestTimeout?: number }): Promise<GeneratedImage> {
     const provider = this.ensureProviderSupport("paint");
     
     // Default to resolving aliases
@@ -238,6 +238,7 @@ export class NodeLLMCore {
       prompt,
       ...options,
       model,
+      requestTimeout: options?.requestTimeout ?? this.config.requestTimeout,
     });
 
     return new GeneratedImage(response);
@@ -252,6 +253,7 @@ export class NodeLLMCore {
       speakerNames?: string[];
       speakerReferences?: string[];
       assumeModelExists?: boolean;
+      requestTimeout?: number;
     }
   ): Promise<Transcription> {
     const provider = this.ensureProviderSupport("transcribe");
@@ -268,6 +270,7 @@ export class NodeLLMCore {
       file,
       ...options,
       model,
+      requestTimeout: options?.requestTimeout ?? this.config.requestTimeout,
     });
 
     return new Transcription(response);
@@ -289,7 +292,7 @@ export class NodeLLMCore {
     return this.retry;
   }
 
-  async moderate(input: string | string[], options?: { model?: string; assumeModelExists?: boolean }): Promise<Moderation> {
+  async moderate(input: string | string[], options?: { model?: string; assumeModelExists?: boolean; requestTimeout?: number }): Promise<Moderation> {
     const provider = this.ensureProviderSupport("moderate");
 
     const rawModel = options?.model || this.defaultModerationModelId || "";
@@ -304,6 +307,7 @@ export class NodeLLMCore {
       input,
       ...options,
       model,
+      requestTimeout: options?.requestTimeout ?? this.config.requestTimeout,
     });
 
     return new Moderation(response);
@@ -311,7 +315,7 @@ export class NodeLLMCore {
 
   async embed(
     input: string | string[],
-    options?: { model?: string; dimensions?: number; assumeModelExists?: boolean }
+    options?: { model?: string; dimensions?: number; assumeModelExists?: boolean; requestTimeout?: number }
   ): Promise<Embedding> {
     const provider = this.ensureProviderSupport("embed");
 
@@ -322,6 +326,7 @@ export class NodeLLMCore {
       input,
       model,
       dimensions: options?.dimensions,
+      requestTimeout: options?.requestTimeout ?? this.config.requestTimeout,
     };
 
     if (options?.assumeModelExists) {

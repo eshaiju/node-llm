@@ -17,12 +17,14 @@ export interface NodeLLMConfig {
   debug?: boolean;
   maxToolCalls?: number;
   maxRetries?: number;
+  requestTimeout?: number;
   toolExecution?: ToolExecutionMode;
 }
 
 import { 
   DEFAULT_MAX_TOOL_CALLS, 
   DEFAULT_MAX_RETRIES, 
+  DEFAULT_REQUEST_TIMEOUT,
   DEFAULT_TOOL_EXECUTION, 
   DEFAULT_OLLAMA_BASE_URL,
   ToolExecutionMode
@@ -43,6 +45,7 @@ class Configuration implements NodeLLMConfig {
   public debug?: boolean = process.env.NODELLM_DEBUG === "true";
   public maxToolCalls: number = DEFAULT_MAX_TOOL_CALLS;
   public maxRetries: number = DEFAULT_MAX_RETRIES;
+  public requestTimeout: number = DEFAULT_REQUEST_TIMEOUT;
   public toolExecution: ToolExecutionMode = DEFAULT_TOOL_EXECUTION;
 }
 

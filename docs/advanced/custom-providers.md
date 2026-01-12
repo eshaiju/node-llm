@@ -147,6 +147,42 @@ async chat(request) {
 }
 ```
 
+### Handling Request Timeouts
+
+NodeLLM passes `requestTimeout` (in milliseconds) through all request interfaces. Your custom provider should respect this timeout to ensure consistent security behavior across all providers.
+
+Use the built-in `fetchWithTimeout` utility:
+
+```ts
+import { fetchWithTimeout } from "@node-llm/core/utils/fetch";
+
+async chat(request: ChatRequest): Promise<ChatResponse> {
+  const response = await fetchWithTimeout(
+    `${this.apiBase()}/chat`,
+    {
+      method: "POST",
+      headers: this.headers(),
+      body: JSON.stringify({
+        model: request.model,
+        messages: request.messages
+      })
+    },
+    request.requestTimeout  // Pass through the timeout
+  );
+
+  const json = await response.json();
+  return {
+    content: json.response,
+    usage: json.usage
+  };
+}
+```
+
+**Note**: The `requestTimeout` parameter is available in all provider methods:
+- `chat(request)`, `stream(request)`, `paint(request)`, `transcribe(request)`, `moderate(request)`, `embed(request)`
+
+
+
 ## Example Implementation
 
 See the [Custom Provider Example](https://github.com/node-llm/node-llm/blob/main/examples/custom-provider.mjs) in the repository for a complete working implementation including error handling, streaming, and extra field support.

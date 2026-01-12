@@ -4,6 +4,7 @@ import { Capabilities } from "./Capabilities.js";
 import { DEFAULT_MODELS } from "../../constants.js";
 import { buildUrl } from "./utils.js";
 import { logger } from "../../utils/logger.js";
+import { fetchWithTimeout } from "../../utils/fetch.js";
 
 export class OpenAIEmbedding {
   constructor(
@@ -42,14 +43,14 @@ export class OpenAIEmbedding {
     const url = buildUrl(this.baseUrl, '/embeddings');
     logger.logRequest("OpenAI", "POST", url, body);
 
-    const response = await fetch(url, {
+    const response = await fetchWithTimeout(url, {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${this.apiKey}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(body),
-    });
+    }, request.requestTimeout);
 
     if (!response.ok) {
       await handleOpenAIError(response, request.model || DEFAULT_MODELS.EMBEDDING);

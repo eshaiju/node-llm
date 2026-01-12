@@ -1,17 +1,19 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { NodeLLM } from "../../../src/llm.js";
-import { EmbeddingRequest, EmbeddingResponse } from "../../../src/providers/Embedding.js";
+import { EmbeddingRequest, EmbeddingResponse } from "../../../src/providers/Provider.js";
 
 // Mock Provider
 const mockEmbed = vi.fn();
 const mockSupportsEmbeddings = vi.fn().mockReturnValue(true);
 
 const mockProvider = {
+  id: "test",
+  defaultModel: () => "test-model",
   embed: mockEmbed,
   capabilities: {
     supportsEmbeddings: mockSupportsEmbeddings,
   },
-};
+} as any;
 
 describe("NodeLLM Embeddings", () => {
   beforeEach(() => {
@@ -37,6 +39,7 @@ describe("NodeLLM Embeddings", () => {
       input,
       model: "text-embedding-3-small", // Default
       dimensions: undefined,
+      requestTimeout: 30000,
     });
 
     expect(response.vectors).toEqual([[0.1, 0.2]]);
@@ -70,6 +73,7 @@ describe("NodeLLM Embeddings", () => {
       input: "test",
       model: "custom-model",
       dimensions: 128,
+      requestTimeout: 30000,
     });
   });
 
@@ -86,6 +90,7 @@ describe("NodeLLM Embeddings", () => {
       input: "test",
       model: "configured-default",
       dimensions: undefined,
+      requestTimeout: 30000,
     });
   });
 

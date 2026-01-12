@@ -95,6 +95,79 @@ Security value:
 
 ---
 
+## 🛡️ Loop Protection & Resource Limits <span style="background-color: #0d9488; color: white; padding: 1px 6px; border-radius: 3px; font-size: 0.65em; font-weight: 600; vertical-align: middle;">v1.6.0+</span>
+
+NodeLLM provides **defense-in-depth** protection against resource exhaustion, runaway costs, and denial-of-service attacks through configurable execution limits.
+
+### Request Timeout
+
+Prevent hanging requests that could tie up resources or enable DoS attacks. By default, all requests timeout after **30 seconds**.
+
+```ts
+// Global configuration
+NodeLLM.configure({
+  requestTimeout: 30000 // 30 seconds (default)
+});
+
+// Per-request override for long-running tasks
+await chat.ask("Analyze this large dataset", {
+  requestTimeout: 120000 // 2 minutes
+});
+```
+
+**Security Benefits:**
+- **DoS Protection**: Prevents malicious or buggy providers from hanging indefinitely
+- **Resource Control**: Limits memory, connection, and thread pool consumption
+- **Cost Control**: Prevents runaway requests from generating unexpected costs
+- **Predictable SLAs**: Ensures applications have predictable response times
+
+### Loop Guard (Tool Execution Limit)
+
+Prevent infinite tool execution loops that could exhaust resources or rack up costs.
+
+```ts
+NodeLLM.configure({
+  maxToolCalls: 5 // Stop after 5 sequential tool execution turns (default)
+});
+
+// Override for complex workflows
+await chat.ask("Deep research task", { maxToolCalls: 10 });
+```
+
+**Security Benefits:**
+- **Cost Control**: Prevents infinite loops from generating unbounded API costs
+- **Resource Protection**: Stops runaway tool executions from exhausting system resources
+
+### Retry Limit
+
+Prevent retry storms that could cascade through your system during provider outages.
+
+```ts
+NodeLLM.configure({
+  maxRetries: 2 // Retry failed requests twice (default)
+});
+```
+
+**Security Benefits:**
+- **Cascading Failure Prevention**: Stops retry storms during provider outages
+- **Resource Protection**: Prevents excessive retries from exhausting connection pools
+
+### Complete Security Configuration
+
+Combine all limits for comprehensive protection:
+
+```ts
+NodeLLM.configure({
+  requestTimeout: 30000,  // 30 second timeout
+  maxRetries: 2,          // Retry failed requests twice
+  maxToolCalls: 5,        // Limit tool execution loops
+});
+```
+
+This creates a **defense-in-depth** strategy where multiple layers of protection work together to prevent resource exhaustion, cost overruns, and service disruptions.
+
+---
+
 ## ⚡ Smart Developer Role
 
 Modern models (like OpenAI's **o1**, **o3**, and **GPT-4o**) have introduced a specialized `developer` role. This role has higher "Instruction Authority" than the standard `system` role.

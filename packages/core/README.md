@@ -151,21 +151,30 @@ class WeatherTool extends Tool {
 await chat.withTool(WeatherTool).ask("What's the weather in Tokyo?");
 ```
 
-### 🛡️ Loop Protection (Loop Guard)
-Prevent runaway costs and infinite loops with automatic protection against recursive tool loops and excessive retries.
+### 🛡️ Loop Protection & Resource Limits
+Prevent runaway costs, infinite loops, and hanging requests with comprehensive protection against resource exhaustion.
 
-NodeLLM provides default protection that you can configure globally or per-request:
+NodeLLM provides **defense-in-depth** security that you can configure globally or per-request:
 
 ```ts
 // 1. Global config
 NodeLLM.configure({ 
-  maxToolCalls: 5,  // Stop after 5 sequential tool execution turns
-  maxRetries: 2     // Retry provider-level errors up to 2 times
+  requestTimeout: 30000, // Timeout requests after 30 seconds (default)
+  maxToolCalls: 5,       // Stop after 5 sequential tool execution turns
+  maxRetries: 2          // Retry provider-level errors up to 2 times
 });
 
 // 2. Per request override
-await chat.ask("Deep search task", { maxToolCalls: 10 });
+await chat.ask("Deep search task", { 
+  requestTimeout: 120000, // 2 minutes for this request
+  maxToolCalls: 10 
+});
 ```
+
+**Security Benefits:**
+- **`requestTimeout`**: Prevents DoS attacks and hanging requests
+- **`maxToolCalls`**: Prevents infinite tool execution loops
+- **`maxRetries`**: Prevents retry storms during outages
 
 ### 🔍 Comprehensive Debug Logging
 Enable detailed logging for all API requests and responses across every feature and provider:

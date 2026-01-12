@@ -3,6 +3,7 @@ import { Capabilities } from "./Capabilities.js";
 import { ModelRegistry } from "../../models/ModelRegistry.js";
 import { logger } from "../../utils/logger.js";
 import { mapSystemMessages } from "../utils.js";
+import { fetchWithTimeout } from "../../utils/fetch.js";
 
 interface DeepSeekChatResponse {
   id: string;
@@ -25,7 +26,7 @@ export class DeepSeekChat {
   constructor(private readonly baseUrl: string, private readonly apiKey: string) {}
 
   async execute(request: ChatRequest): Promise<ChatResponse> {
-    const { model, messages, tools, max_tokens, response_format, headers, ...rest } = request;
+    const { model, messages, tools, max_tokens, response_format, headers, requestTimeout, ...rest } = request;
 
     const mappedMessages = mapSystemMessages(messages, false);
 
@@ -69,7 +70,7 @@ export class DeepSeekChat {
     const url = `${this.baseUrl}/chat/completions`;
     logger.logRequest("DeepSeek", "POST", url, body);
 
-    const response = await fetch(url, {
+    const response = await fetchWithTimeout(url, {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${this.apiKey}`,
@@ -77,7 +78,7 @@ export class DeepSeekChat {
         ...request.headers,
       },
       body: JSON.stringify(body),
-    });
+    }, requestTimeout);
 
     if (!response.ok) {
       const errorText = await response.text();

@@ -7,6 +7,7 @@ export enum ToolExecutionMode {
 export const DEFAULT_MAX_TOOL_CALLS = 5;
 export const DEFAULT_MAX_RETRIES = 2;
 export const DEFAULT_TOOL_EXECUTION = ToolExecutionMode.AUTO;
+export const DEFAULT_REQUEST_TIMEOUT = 30000; // 30 seconds
 export const DEFAULT_OLLAMA_BASE_URL = "http://localhost:11434/v1";
 
 export const DEFAULT_MODELS = {

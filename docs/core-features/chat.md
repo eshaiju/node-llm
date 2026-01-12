@@ -173,14 +173,25 @@ chat
 By default, `NodeLLM` handles network instabilities or temporary provider errors (like 500s or 429 Rate Limits) by retrying the request.
 
 *   **Default Retries**: 2 retries (3 total attempts).
+*   **Request Timeout**: 30 seconds (prevents hanging requests).
 *   **Loop Guard**: Tool calling is limited to 5 turns to prevent infinite loops.
 
 You can configure these limits globally:
 
 ```ts
 NodeLLM.configure({
-  maxRetries: 3,     // Increase retries for unstable connections
-  maxToolCalls: 10,  // Allow deeper tool calling sequences
+  maxRetries: 3,        // Increase retries for unstable connections
+  maxToolCalls: 10,     // Allow deeper tool calling sequences
+  requestTimeout: 60000 // 60 second timeout for long-running requests
+});
+```
+
+Or override per-request:
+
+```ts
+// Long-running task with extended timeout
+await chat.ask("Analyze this large dataset", { 
+  requestTimeout: 120000  // 2 minutes
 });
 ```
 

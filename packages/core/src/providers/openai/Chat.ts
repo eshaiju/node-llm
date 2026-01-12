@@ -5,6 +5,7 @@ import { handleOpenAIError } from "./Errors.js";
 import { ModelRegistry } from "../../models/ModelRegistry.js";
 import { buildUrl } from "./utils.js";
 import { logger } from "../../utils/logger.js";
+import { fetchWithTimeout } from "../../utils/fetch.js";
 
 import { OpenAIProvider } from "./OpenAIProvider.js";
 import { mapSystemMessages } from "../utils.js";
@@ -26,7 +27,7 @@ export class OpenAIChat {
         : this.providerOrUrl.capabilities?.supportsDeveloperRole(request.model)
     );
 
-    const { model, messages, tools, temperature: _, max_tokens, response_format, headers, ...rest } = request;
+    const { model, messages, tools, temperature: _, max_tokens, response_format, headers, requestTimeout, ...rest } = request;
 
     const mappedMessages = mapSystemMessages(messages, !!supportsDeveloperRole);
 
@@ -44,7 +45,7 @@ export class OpenAIChat {
     const url = buildUrl(this.baseUrl, '/chat/completions');
     logger.logRequest("OpenAI", "POST", url, body);
 
-    const response = await fetch(url, {
+    const response = await fetchWithTimeout(url, {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${this.apiKey}`,
@@ -52,7 +53,7 @@ export class OpenAIChat {
         ...request.headers,
       },
       body: JSON.stringify(body),
-    });
+    }, request.requestTimeout);
 
     if (!response.ok) {
       await handleOpenAIError(response, request.model);
