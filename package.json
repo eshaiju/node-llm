@@ -1,6 +1,6 @@
 {
   "name": "@node-llm/core",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "description": "An opinionated architectural layer for integrating Large Language Models in Node.js.",
   "main": "index.js",
   "workspaces": [
@@ -9,7 +9,8 @@
   "scripts": {
     "test": "npm test --workspaces --if-present",
     "build": "npm run build --workspaces --if-present",
-    "docs": "cd docs && bundle install && bundle exec jekyll serve"
+    "docs": "cd docs && bundle install && bundle exec jekyll serve",
+    "sync-models": "node scripts/sync-models.mjs"
   },
   "keywords": [
     "llm",
