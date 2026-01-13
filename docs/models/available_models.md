@@ -8,7 +8,9 @@ permalink: /available-models
 
 # Available Models
 
-`NodeLLM` includes a comprehensive registry of models with metadata for pricing, context windows, and capabilities. Below are the most popular models supported out of the box.
+`NodeLLM` includes a comprehensive registry of models with metadata for pricing, context windows, and capabilities. The registry is automatically synced with [models.dev](https://models.dev) to ensure up-to-date information.
+
+Below are the most popular models supported out of the box.
 
 ## OpenAI
 
