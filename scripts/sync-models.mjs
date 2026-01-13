@@ -134,10 +134,297 @@ async function syncModels() {
     fs.writeFileSync(ALIASES_FILE, `export default ${JSON.stringify(finalAliases, null, 2)} as const;\n`);
     console.log(`Successfully generated verified aliases to ${ALIASES_FILE}`);
 
+    // Generate available-models.md documentation
+    generateAvailableModelsDoc(finalModels);
+
   } catch (error) {
     console.error('Error syncing:', error);
     process.exit(1);
   }
 }
+
+function generateAvailableModelsDoc(models) {
+  const DOCS_FILE = path.join(ROOT_DIR, 'docs/models/available_models.md');
+  
+  // Group models by provider
+  const byProvider = {};
+  models.forEach(model => {
+    if (!byProvider[model.provider]) {
+      byProvider[model.provider] = [];
+    }
+    byProvider[model.provider].push(model);
+  });
+
+  // Helper to format cost
+  const formatCost = (model) => {
+    const pricing = model.pricing?.text_tokens?.standard;
+    if (!pricing) return '-';
+    
+    const parts = [];
+    if (pricing.input_per_million) parts.push(`In: $${pricing.input_per_million.toFixed(2)}`);
+    if (pricing.output_per_million) parts.push(`Out: $${pricing.output_per_million.toFixed(2)}`);
+    if (pricing.cached_input_per_million) parts.push(`Cache: $${pricing.cached_input_per_million.toFixed(2)}`);
+    
+    return parts.length > 0 ? parts.join(', ') : '-';
+  };
+
+  // Helper to format context window
+  const formatContext = (tokens) => {
+    if (!tokens) return '-';
+    if (tokens >= 1000000) return `${(tokens / 1000000).toFixed(1)}M`;
+    if (tokens >= 1000) return `${(tokens / 1000)}k`;
+    return tokens.toString();
+  };
+
+  let markdown = `---
+layout: default
+title: Available Models
+nav_order: 5
+has_children: false
+permalink: /available-models
+description: Browse AI models from every major provider. Always up-to-date, automatically generated.
+---
+
+# {{ page.title }}
+{: .no_toc }
+
+{{ page.description }}
+{: .fs-6 .fw-300 }
+
+## Table of contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
+
+_Model information enriched by [models.dev](https://models.dev)._
+
+## Last Updated
+{: .d-inline-block }
+
+${new Date().toISOString().split('T')[0]}
+{: .label .label-green }
+
+## Models by Provider
+
+`;
+
+  // Generate tables for each provider
+  const providerOrder = ['openai', 'anthropic', 'gemini', 'deepseek', 'openrouter', 'ollama'];
+  const providerNames = {
+    'openai': 'OpenAI',
+    'anthropic': 'Anthropic',
+    'gemini': 'Gemini',
+    'deepseek': 'DeepSeek',
+    'openrouter': 'OpenRouter',
+    'ollama': 'Ollama (Local)'
+  };
+
+  providerOrder.forEach(provider => {
+    if (!byProvider[provider]) return;
+    
+    const providerModels = byProvider[provider]
+      .sort((a, b) => (b.context_window || 0) - (a.context_window || 0));
+
+    markdown += `### ${providerNames[provider]} (${providerModels.length})\n\n`;
+    markdown += `| Model | Context | Max Output | Pricing (per 1M tokens) |\n`;
+    markdown += `| :--- | ---: | ---: | :--- |\n`;
+
+    providerModels.forEach(model => {
+      const context = formatContext(model.context_window);
+      const maxOutput = formatContext(model.max_output_tokens);
+      const cost = formatCost(model);
+      
+      markdown += `| \`${model.id}\` | ${context} | ${maxOutput} | ${cost} |\n`;
+    });
+
+    markdown += `\n`;
+  });
+
+  // Models by Capability
+  markdown += `## Models by Capability\n\n`;
+
+  const capabilities = {
+    'Function Calling': models.filter(m => m.capabilities?.includes('function_calling')),
+    'Vision': models.filter(m => m.capabilities?.includes('vision')),
+    'Reasoning': models.filter(m => m.capabilities?.includes('reasoning')),
+    'Streaming': models.filter(m => m.capabilities?.includes('streaming')),
+    'Structured Output': models.filter(m => m.capabilities?.includes('structured_output'))
+  };
+
+  Object.entries(capabilities).forEach(([capability, capModels]) => {
+    if (capModels.length === 0) return;
+
+    markdown += `### ${capability} (${capModels.length})\n\n`;
+    markdown += `| Model | Provider | Context | Pricing |\n`;
+    markdown += `| :--- | :--- | ---: | :--- |\n`;
+
+    capModels.slice(0, 20).forEach(model => {
+      const context = formatContext(model.context_window);
+      const cost = formatCost(model);
+      markdown += `| \`${model.id}\` | ${model.provider} | ${context} | ${cost} |\n`;
+    });
+
+    markdown += `\n`;
+  });
+
+  // Models by Modality
+  markdown += `## Models by Modality\n\n`;
+
+  const visionModels = models.filter(m => m.modalities?.input?.includes('image'));
+  if (visionModels.length > 0) {
+    markdown += `### Vision Models (${visionModels.length})\n\nModels that can process images:\n\n`;
+    markdown += `| Model | Provider | Context | Pricing |\n`;
+    markdown += `| :--- | :--- | ---: | :--- |\n`;
+    visionModels.slice(0, 15).forEach(model => {
+      markdown += `| \`${model.id}\` | ${model.provider} | ${formatContext(model.context_window)} | ${formatCost(model)} |\n`;
+    });
+    markdown += `\n`;
+  }
+
+  const audioModels = models.filter(m => m.modalities?.input?.includes('audio'));
+  if (audioModels.length > 0) {
+    markdown += `### Audio Input Models (${audioModels.length})\n\nModels that can process audio:\n\n`;
+    markdown += `| Model | Provider | Context | Pricing |\n`;
+    markdown += `| :--- | :--- | ---: | :--- |\n`;
+    audioModels.slice(0, 15).forEach(model => {
+      markdown += `| \`${model.id}\` | ${model.provider} | ${formatContext(model.context_window)} | ${formatCost(model)} |\n`;
+    });
+    markdown += `\n`;
+  }
+
+  const embeddingModels = models.filter(m => m.modalities?.output?.includes('embeddings'));
+  if (embeddingModels.length > 0) {
+    markdown += `### Embedding Models (${embeddingModels.length})\n\nModels that generate embeddings:\n\n`;
+    markdown += `| Model | Provider | Dimensions | Pricing |\n`;
+    markdown += `| :--- | :--- | ---: | :--- |\n`;
+    embeddingModels.slice(0, 15).forEach(model => {
+      markdown += `| \`${model.id}\` | ${model.provider} | - | ${formatCost(model)} |\n`;
+    });
+    markdown += `\n`;
+  }
+
+  // Add programmatic access section (preserve original content)
+  markdown += `## Programmatic Access
+
+You can access this data programmatically using the registry:
+
+\`\`\`ts
+import { NodeLLM } from "@node-llm/core";
+
+// Get metadata for a specific model
+const model = await NodeLLM.model("gpt-4o");
+
+console.log(model.context_window); // 128000
+console.log(model.pricing.text_tokens.standard.input_per_million); // 2.5
+console.log(model.capabilities); // ["vision", "function_calling", ...]
+
+// Get all models in the registry
+const allModels = await NodeLLM.listModels();
+\`\`\`
+
+## Finding Models
+
+Use the registry to find models dynamically based on capabilities:
+
+\`\`\`ts
+const allModels = await NodeLLM.listModels();
+
+// Find a model that supports vision and tools
+const visionModel = allModels.find(m => 
+  m.capabilities.includes("vision") && m.capabilities.includes("function_calling")
+);
+\`\`\`
+
+## Model Aliases
+
+\`NodeLLM\` uses aliases (defined strictly in \`packages/core/src/aliases.ts\`) for convenience, mapping common names to specific provider-specific versions. This allows you to use a generic name like \`"gpt-4o"\` or \`"claude-3-5-sonnet"\` and have it resolve to the correct ID for your configured provider.
+
+### How It Works
+
+Aliases abstract away the specific model ID strings required by different providers. For example, \`claude-3-5-sonnet\` might map to:
+
+- **Anthropic**: \`claude-3-5-sonnet-20241022\`
+- **OpenRouter**: \`anthropic/claude-3.5-sonnet\`
+
+When you call a method like \`NodeLLM.chat("claude-3-5-sonnet")\`, \`NodeLLM\` checks the configured provider and automatically resolves the alias.
+
+\`\`\`ts
+// If configured with Anthropic
+NodeLLM.configure({ provider: "anthropic" });
+const chat = NodeLLM.chat("claude-3-5-sonnet"); 
+// Resolves internally to "claude-3-5-sonnet-20241022" (or latest stable version)
+\`\`\`
+
+### Provider-Specific Resolution
+
+If an alias exists for multiple providers, the resolution depends entirely on the \`provider\` you have currently configured/passed.
+
+\`\`\`json
+// Example aliases.ts structure
+{
+  "gemini-flash": {
+    "gemini": "gemini-1.5-flash-001",
+    "openrouter": "google/gemini-1.5-flash-001"
+  }
+}
+\`\`\`
+
+This ensures your code remains portable across providers without changing the model string manually.
+
+### Prioritization
+
+\`NodeLLM\` prioritizes exact ID matches first (if you pass a specific ID like \`"gpt-4-0613"\`, it uses it). If no exact match or known ID is found, it attempts to resolve it as an alias.
+
+### Programmatic Access
+
+You can access the alias mappings programmatically for validation or UI purposes:
+
+\`\`\`ts
+import { MODEL_ALIASES, resolveModelAlias } from "@node-llm/core";
+
+// Check if an alias exists
+const isValidAlias = "claude-3-5-haiku" in MODEL_ALIASES;
+
+// Get all providers supporting an alias
+const providers = Object.keys(MODEL_ALIASES["claude-3-5-haiku"]);
+// => ["anthropic", "openrouter"]
+
+// Resolve alias for a specific provider
+const resolved = resolveModelAlias("claude-3-5-haiku", "anthropic");
+// => "claude-3-5-haiku-20241022"
+
+// List all available aliases
+const allAliases = Object.keys(MODEL_ALIASES);
+
+// Validate user input
+function validateModel(input, provider) {
+  if (input in MODEL_ALIASES) {
+    if (MODEL_ALIASES[input][provider]) {
+      return { valid: true, resolved: MODEL_ALIASES[input][provider] };
+    }
+    return { valid: false, reason: \`Alias not supported for \${provider}\` };
+  }
+  return { valid: true, resolved: input };
+}
+\`\`\`
+
+This is useful for:
+- Building model selection UIs
+- Validating user input before API calls
+- Checking provider compatibility
+- Debugging 404 errors
+
+---
+
+**Auto-generated by \`npm run sync-models\`** • Last updated: ${new Date().toISOString().split('T')[0]}
+`;
+
+  fs.writeFileSync(DOCS_FILE, markdown);
+  console.log(`Generated documentation: ${DOCS_FILE}`);
+}
+
 
 syncModels();
