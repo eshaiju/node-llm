@@ -133,3 +133,16 @@ export class ModelCapabilityError extends LLMError {
     super(`Model ${model} does not support ${capability}`, "MODEL_CAPABILITY_ERROR");
   }
 }
+/**
+ * Thrown when a tool execution fails
+ */
+export class ToolError extends LLMError {
+  constructor(
+    message: string,
+    public readonly toolName?: string,
+    public readonly fatal: boolean = false
+  ) {
+    super(message, "TOOL_ERROR");
+    this.name = "ToolError";
+  }
+}

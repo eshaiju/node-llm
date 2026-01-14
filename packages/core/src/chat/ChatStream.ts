@@ -5,6 +5,7 @@ import { ChatResponseString } from "./ChatResponse.js";
 import { Stream } from "../streaming/Stream.js";
 import { config } from "../config.js";
 import { ToolExecutionMode } from "../constants.js";
+import { ToolError } from "../errors/index.js";
 
 /**
  * Internal handler for chat streaming logic.
@@ -24,7 +25,6 @@ export class ChatStream {
     this.messages = messages ?? [];
     this.systemMessages = systemMessages ?? [];
 
-    // Only initialize if we're starting a new history
     if (this.messages.length === 0 && this.systemMessages.length === 0) {
       if (options.systemPrompt) {
         this.systemMessages.push({
@@ -49,21 +49,13 @@ export class ChatStream {
     }
   }
 
-  /**
-   * Read-only access to message history
-   */
   get history(): readonly Message[] {
     return [...this.systemMessages, ...this.messages];
   }
 
-  /**
-   * Creates a high-level Stream object for the chat response.
-   * @param content The user's question.
-   */
   create(content: string): Stream<ChatChunk> {
     const controller = new AbortController();
     
-    // We create a wrapper async generator that handles our side effects
     const sideEffectGenerator = async function* (
       self: ChatStream,
       provider: Provider,
@@ -71,7 +63,8 @@ export class ChatStream {
       messages: Message[],
       systemMessages: Message[],
       options: ChatOptions,
-      abortController: AbortController
+      abortController: AbortController,
+      content: string
     ) {
       messages.push({ role: "user", content });
 
@@ -79,24 +72,19 @@ export class ChatStream {
         throw new Error("Streaming not supported by provider");
       }
 
-      let fullContent = "";
-      let fullReasoning = "";
-      let toolCalls: any[] | undefined;
       let isFirst = true;
-
       const maxToolCalls = options.maxToolCalls ?? 5;
       let stepCount = 0;
 
-      // Main streaming loop - may iterate multiple times for tool calls
       while (true) {
         stepCount++;
         if (stepCount > maxToolCalls) {
           throw new Error(`[NodeLLM] Maximum tool execution calls (${maxToolCalls}) exceeded during streaming.`);
         }
 
-        fullContent = "";
-        fullReasoning = "";
-        toolCalls = undefined;
+        let fullContent = "";
+        let fullReasoning = "";
+        let toolCalls: any[] | undefined;
 
         try {
           let requestMessages = [...systemMessages, ...messages];
@@ -113,6 +101,7 @@ export class ChatStream {
             tools: options.tools,
             temperature: options.temperature,
             max_tokens: options.maxTokens ?? config.maxTokens,
+            headers: options.headers,
             requestTimeout: options.requestTimeout ?? config.requestTimeout,
             signal: abortController.signal,
           })) {
@@ -131,13 +120,11 @@ export class ChatStream {
               yield { content: "", reasoning: chunk.reasoning };
             }
 
-            // Accumulate tool calls from the final chunk
             if (chunk.tool_calls) {
               toolCalls = chunk.tool_calls;
             }
           }
 
-          // Build the response object for hooks and history
           let assistantResponse = new ChatResponseString(
             fullContent || "",
             { input_tokens: 0, output_tokens: 0, total_tokens: 0 },
@@ -146,7 +133,6 @@ export class ChatStream {
             fullReasoning || undefined
           );
 
-          // --- Content Policy Hooks (Output) ---
           if (options.onAfterResponse) {
             const result = await options.onAfterResponse(assistantResponse);
             if (result) {
@@ -154,7 +140,6 @@ export class ChatStream {
             }
           }
 
-          // Add assistant message to history (now potentially redacted)
           messages.push({
             role: "assistant",
             content: assistantResponse || null,
@@ -162,7 +147,6 @@ export class ChatStream {
             reasoning: fullReasoning || undefined
           });
 
-          // If no tool calls, we're done
           if (!toolCalls || toolCalls.length === 0) {
             if (options.onEndMessage) {
               options.onEndMessage(assistantResponse);
@@ -170,14 +154,11 @@ export class ChatStream {
             break;
           }
 
-          // Dry-run mode: stop after proposing tools
           if (!self.shouldExecuteTools(toolCalls, options.toolExecution)) {
             break;
           }
 
-          // Execute tool calls
           for (const toolCall of toolCalls) {
-            // Confirm mode: request approval
             if (options.toolExecution === ToolExecutionMode.CONFIRM) {
               const approved = await self.requestToolConfirmation(toolCall, options.onConfirmToolCall);
               if (!approved) {
@@ -191,20 +172,36 @@ export class ChatStream {
             }
 
             // Execute the tool
-            const toolResult = await self.executeToolCall(
-              toolCall,
-              options.tools,
-              options.onToolCallStart,
-              options.onToolCallEnd,
-              options.onToolCallError
-            );
-            messages.push(toolResult);
-          }
+            try {
+              const toolResult = await self.executeToolCall(
+                toolCall,
+                options.tools,
+                options.onToolCallStart,
+                options.onToolCallEnd,
+                options.onToolCallError
+              );
+              messages.push(toolResult);
+            } catch (error: any) {
+              // Add error to history so the assistant (or user) knows what happened
+              messages.push({
+                role: "tool",
+                tool_call_id: toolCall.id,
+                content: `Fatal error executing tool '${toolCall.function.name}': ${error.message}`,
+              });
 
-          // Continue loop to stream the next response after tool execution
+              // Short-circuit if it's a fatal error (e.g., 401/403 or explicitly fatal)
+              const isFatal = error.fatal === true || error.status === 401 || error.status === 403;
+              if (isFatal) {
+                throw error;
+              }
+
+              // Non-fatal: log and continue
+              console.error(`[NodeLLM] Tool execution failed for '${toolCall.function.name}':`, error);
+            }
+          }
         } catch (error) {
           if (error instanceof Error && error.name === 'AbortError') {
-            // Stream was aborted
+            // Aborted
           }
           throw error;
         }
@@ -212,24 +209,17 @@ export class ChatStream {
     };
 
     return new Stream(
-      () => sideEffectGenerator(this, this.provider, this.model, this.messages, this.systemMessages, this.options, controller),
+      () => sideEffectGenerator(this, this.provider, this.model, this.messages, this.systemMessages, this.options, controller, content),
       controller
     );
   }
 
-  /**
-   * Check if tool execution should proceed based on the current mode.
-   */
   private shouldExecuteTools(toolCalls: any[] | undefined, mode?: ToolExecutionMode): boolean {
     if (!toolCalls || toolCalls.length === 0) return false;
     if (mode === ToolExecutionMode.DRY_RUN) return false;
     return true;
   }
 
-  /**
-   * Request user confirmation for a tool call in "confirm" mode.
-   * Returns true if approved, false if rejected.
-   */
   private async requestToolConfirmation(
     toolCall: any,
     onConfirm?: (call: any) => Promise<boolean> | boolean
@@ -239,9 +229,6 @@ export class ChatStream {
     return confirmed !== false;
   }
 
-  /**
-   * Execute a single tool call and return the result message.
-   */
   private async executeToolCall(
     toolCall: any,
     tools: any[] | undefined,
@@ -267,22 +254,12 @@ export class ChatStream {
         };
       } catch (error: any) {
         if (onError) onError(toolCall, error);
-
-        return {
-          role: "tool",
-          tool_call_id: toolCall.id,
-          content: `Error executing tool: ${error.message}`,
-        };
+        throw error;
       }
     } else {
-      const error = new Error("Tool not found or no handler provided");
+      const error = new ToolError("Tool not found or no handler provided", toolCall.function?.name ?? "unknown");
       if (onError) onError(toolCall, error);
-
-      return {
-        role: "tool",
-        tool_call_id: toolCall.id,
-        content: "Error: Tool not found or no handler provided",
-      };
+      throw error;
     }
   }
 }

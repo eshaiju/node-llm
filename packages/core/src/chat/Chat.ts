@@ -11,7 +11,7 @@ import { toJsonSchema } from "../schema/to-json-schema.js";
 import { z } from "zod";
 import { config } from "../config.js";
 import { ToolExecutionMode } from "../constants.js";
-import { ConfigurationError } from "../errors/index.js";
+import { ConfigurationError, ToolError } from "../errors/index.js";
 
 export interface AskOptions {
   images?: string[];
@@ -474,14 +474,34 @@ export class Chat {
         }
 
         // Execute the tool
-        const toolResult = await this.executeToolCall(
-          toolCall,
-          this.options.tools,
-          this.options.onToolCallStart,
-          this.options.onToolCallEnd,
-          this.options.onToolCallError
-        );
-        this.messages.push(toolResult);
+        try {
+          const toolResult = await this.executeToolCall(
+            toolCall,
+            this.options.tools,
+            this.options.onToolCallStart,
+            this.options.onToolCallEnd,
+            this.options.onToolCallError
+          );
+          this.messages.push(toolResult);
+        } catch (error: any) {
+          // Add error to history so the assistant (or user) knows what happened
+          this.messages.push({
+            role: "tool",
+            tool_call_id: toolCall.id,
+            content: `Fatal error executing tool '${toolCall.function.name}': ${error.message}`,
+          });
+
+          // Short-circuit if it's a fatal error (e.g. AuthenticationError, or ToolError{fatal: true})
+          // Also short-circuit on standard API Errors like 401/403 which are fatal for the loop
+          const isFatal = error.fatal === true || error.status === 401 || error.status === 403;
+          
+          if (isFatal) {
+            throw error;
+          }
+
+          // Non-fatal: log it and continue to let the LLM handle the tool result (error message)
+          console.error(`[NodeLLM] Tool execution failed for '${toolCall.function.name}':`, error);
+        }
       }
 
       response = await this.executor.executeChat({
@@ -591,22 +611,12 @@ export class Chat {
         };
       } catch (error: any) {
         if (onError) onError(toolCall, error);
-
-        return {
-          role: "tool",
-          tool_call_id: toolCall.id,
-          content: `Error executing tool: ${error.message}`,
-        };
+        throw error;
       }
     } else {
-      const error = new Error("Tool not found or no handler provided");
+      const error = new ToolError("Tool not found or no handler provided", toolCall.function?.name ?? "unknown");
       if (onError) onError(toolCall, error);
-
-      return {
-        role: "tool",
-        tool_call_id: toolCall.id,
-        content: "Error: Tool not found or no handler provided",
-      };
+      throw error;
     }
   }
 
@@ -616,6 +626,7 @@ export class Chat {
   private normalizeTool(tool: ToolResolvable): ToolDefinition | null {
     let toolInstance: any;
 
+    // Handle class constructor
     if (typeof tool === "function") {
       try {
         toolInstance = new (tool as any)();
@@ -629,19 +640,23 @@ export class Chat {
 
     if (!toolInstance) return null;
 
+    // Normalized to standard ToolDefinition interface if it's a Tool class instance
     if (typeof toolInstance.toLLMTool === "function") {
       return toolInstance.toLLMTool();
     }
 
     if (!toolInstance.function || !toolInstance.function.name) {
+      // 1. Validate structure
       throw new ConfigurationError(`[NodeLLM] Tool validation failed: 'function.name' is required for raw tool objects.`);
     }
 
     if (toolInstance.type !== 'function') {
+      // 2. Ensure 'type: function' exists (standardize for providers)
       toolInstance.type = 'function';
     }
 
     if (typeof toolInstance.handler !== 'function') {
+      // 3. Validate handler existence
       throw new ConfigurationError(`[NodeLLM] Tool validation failed: Tool '${toolInstance.function.name}' must have a 'handler' function. (Note: Only Tool subclasses use 'execute()')`);
     }
 
