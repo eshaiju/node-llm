@@ -11,6 +11,7 @@ import { toJsonSchema } from "../schema/to-json-schema.js";
 import { z } from "zod";
 import { config } from "../config.js";
 import { ToolExecutionMode } from "../constants.js";
+import { ConfigurationError } from "../errors/index.js";
 
 export interface AskOptions {
   images?: string[];
@@ -122,26 +123,9 @@ export class Chat {
     }
 
     for (const tool of tools) {
-      let toolInstance: any;
-
-      // Handle class constructor
-      if (typeof tool === "function") {
-        try {
-          toolInstance = new tool();
-        } catch (e) {
-          console.error(`[NodeLLM] Failed to instantiate tool class: ${tool.name}`, e);
-          continue;
-        }
-      } else {
-        toolInstance = tool;
-      }
-
-      // Normalized to standard ToolDefinition interface if it's a Tool class instance
-      if (toolInstance && typeof toolInstance.toLLMTool === "function") {
-        this.options.tools.push(toolInstance.toLLMTool());
-      } else {
-        // Fallback for legacy raw tool objects (defined as objects with type: 'function')
-        this.options.tools.push(toolInstance);
+      const normalized = this.normalizeTool(tool);
+      if (normalized) {
+        this.options.tools.push(normalized);
       }
     }
     return this;
@@ -624,5 +608,43 @@ export class Chat {
         content: "Error: Tool not found or no handler provided",
       };
     }
+  }
+
+  /**
+   * Normalizes a ToolResolvable into a ToolDefinition.
+   */
+  private normalizeTool(tool: ToolResolvable): ToolDefinition | null {
+    let toolInstance: any;
+
+    if (typeof tool === "function") {
+      try {
+        toolInstance = new (tool as any)();
+      } catch (e) {
+        console.error(`[NodeLLM] Failed to instantiate tool class: ${(tool as any).name}`, e);
+        return null;
+      }
+    } else {
+      toolInstance = tool;
+    }
+
+    if (!toolInstance) return null;
+
+    if (typeof toolInstance.toLLMTool === "function") {
+      return toolInstance.toLLMTool();
+    }
+
+    if (!toolInstance.function || !toolInstance.function.name) {
+      throw new ConfigurationError(`[NodeLLM] Tool validation failed: 'function.name' is required for raw tool objects.`);
+    }
+
+    if (toolInstance.type !== 'function') {
+      toolInstance.type = 'function';
+    }
+
+    if (typeof toolInstance.handler !== 'function') {
+      throw new ConfigurationError(`[NodeLLM] Tool validation failed: Tool '${toolInstance.function.name}' must have a 'handler' function. (Note: Only Tool subclasses use 'execute()')`);
+    }
+
+    return toolInstance as ToolDefinition;
   }
 }

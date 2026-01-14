@@ -93,4 +93,42 @@ describe("Tool Normalization Regression Tests", () => {
     expect(tools[1].function.name).toBe("complex_tool");
     expect(tools[1].type).toBe("function");
   });
+
+  describe("Validation", () => {
+    it("should throw error if using 'execute' instead of 'handler' for raw objects", () => {
+      const provider = new FakeProvider([]);
+      const toolWithExecute = {
+        function: { name: "execute_tool", parameters: {} },
+        execute: async () => "executed"
+      };
+
+      expect(() => new Chat(provider, "test-model", {
+        tools: [toolWithExecute as any]
+      })).toThrow(/must have a 'handler' function/);
+    });
+
+    it("should throw ConfigurationError if function.name is missing", () => {
+      const provider = new FakeProvider([]);
+      const badTool = {
+        function: { parameters: {} }, // name missing
+        handler: async () => "ok"
+      };
+
+      expect(() => new Chat(provider, "test-model", {
+        tools: [badTool as any]
+      })).toThrow(/function.name/);
+    });
+
+    it("should throw ConfigurationError if handler is missing and cannot be auto-mapped", () => {
+      const provider = new FakeProvider([]);
+      const badTool = {
+        function: { name: "no_handler", parameters: {} }
+        // neither handler nor execute
+      };
+
+      expect(() => new Chat(provider, "test-model", {
+        tools: [badTool as any]
+      })).toThrow(/must have a 'handler' function/);
+    });
+  });
 });
