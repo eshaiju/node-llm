@@ -1,11 +1,17 @@
 import { Message } from "./Message.js";
+import { ContentPart, isBinaryContent, formatMultimodalContent } from "./Content.js";
 import { ChatOptions } from "./ChatOptions.js";
-import { Provider, ChatChunk } from "../providers/Provider.js";
+import { Provider, ChatChunk, Usage } from "../providers/Provider.js";
 import { ChatResponseString } from "./ChatResponse.js";
 import { Stream } from "../streaming/Stream.js";
 import { config } from "../config.js";
 import { ToolExecutionMode } from "../constants.js";
-import { ToolError } from "../errors/index.js";
+import { AskOptions } from "./Chat.js";
+import { FileLoader } from "../utils/FileLoader.js";
+import { toJsonSchema } from "../schema/to-json-schema.js";
+import { ToolDefinition } from "./Tool.js";
+import { ChatValidator } from "./Validation.js";
+import { ToolHandler } from "./ToolHandler.js";
 
 /**
  * Internal handler for chat streaming logic.
@@ -53,7 +59,7 @@ export class ChatStream {
     return [...this.systemMessages, ...this.messages];
   }
 
-  create(content: string): Stream<ChatChunk> {
+  create(content: string | ContentPart[], options: AskOptions = {}): Stream<ChatChunk> {
     const controller = new AbortController();
     
     const sideEffectGenerator = async function* (
@@ -62,11 +68,55 @@ export class ChatStream {
       model: string,
       messages: Message[],
       systemMessages: Message[],
-      options: ChatOptions,
+      baseOptions: ChatOptions,
       abortController: AbortController,
-      content: string
+      content: string | ContentPart[],
+      requestOptions: AskOptions
     ) {
-      messages.push({ role: "user", content });
+      const options = { 
+        ...baseOptions, 
+        ...requestOptions,
+        headers: { ...baseOptions.headers, ...requestOptions.headers }
+      };
+      
+      // Process Multimodal Content
+      let messageContent: any = content;
+      const files = [...(requestOptions.images ?? []), ...(requestOptions.files ?? [])];
+
+      if (files.length > 0) {
+        const processedFiles = await Promise.all(files.map((f: string) => FileLoader.load(f)));
+        const hasBinary = processedFiles.some(isBinaryContent);
+
+        ChatValidator.validateVision(provider, model, hasBinary, options);
+        messageContent = formatMultimodalContent(content, processedFiles);
+      }
+
+      if (options.tools && options.tools.length > 0) {
+        ChatValidator.validateTools(provider, model, true, options);
+      }
+
+      messages.push({ role: "user", content: messageContent });
+
+      if (!provider.stream) {
+        throw new Error("Streaming not supported by provider");
+      }
+
+      // Process Schema/Structured Output
+      let responseFormat: any = options.responseFormat;
+      if (options.schema) {
+        ChatValidator.validateStructuredOutput(provider, model, true, options);
+        
+        const jsonSchema = toJsonSchema(options.schema.definition.schema);
+        responseFormat = {
+          type: "json_schema",
+          json_schema: {
+            name: options.schema.definition.name,
+            description: options.schema.definition.description,
+            strict: options.schema.definition.strict ?? true,
+            schema: jsonSchema,
+          }
+        };
+      }
 
       if (!provider.stream) {
         throw new Error("Streaming not supported by provider");
@@ -75,6 +125,18 @@ export class ChatStream {
       let isFirst = true;
       const maxToolCalls = options.maxToolCalls ?? 5;
       let stepCount = 0;
+
+      let totalUsage: Usage = { input_tokens: 0, output_tokens: 0, total_tokens: 0 };
+      const trackUsage = (u?: Usage) => {
+        if (u) {
+          totalUsage.input_tokens += u.input_tokens;
+          totalUsage.output_tokens += u.output_tokens;
+          totalUsage.total_tokens += u.total_tokens;
+          if (u.cached_tokens) {
+            totalUsage.cached_tokens = (totalUsage.cached_tokens ?? 0) + u.cached_tokens;
+          }
+        }
+      };
 
       while (true) {
         stepCount++;
@@ -85,6 +147,7 @@ export class ChatStream {
         let fullContent = "";
         let fullReasoning = "";
         let toolCalls: any[] | undefined;
+        let currentTurnUsage: Usage | undefined;
 
         try {
           let requestMessages = [...systemMessages, ...messages];
@@ -98,12 +161,14 @@ export class ChatStream {
           for await (const chunk of provider.stream({
             model,
             messages: requestMessages,
-            tools: options.tools,
+            tools: options.tools as ToolDefinition[],
             temperature: options.temperature,
             max_tokens: options.maxTokens ?? config.maxTokens,
+            response_format: responseFormat,
             headers: options.headers,
             requestTimeout: options.requestTimeout ?? config.requestTimeout,
             signal: abortController.signal,
+            ...options.params,
           })) {
             if (isFirst) {
               if (options.onNewMessage) options.onNewMessage();
@@ -123,11 +188,16 @@ export class ChatStream {
             if (chunk.tool_calls) {
               toolCalls = chunk.tool_calls;
             }
+
+            if ((chunk as any).usage) {
+              currentTurnUsage = (chunk as any).usage;
+              trackUsage(currentTurnUsage);
+            }
           }
 
           let assistantResponse = new ChatResponseString(
             fullContent || "",
-            { input_tokens: 0, output_tokens: 0, total_tokens: 0 },
+            currentTurnUsage || { input_tokens: 0, output_tokens: 0, total_tokens: 0 },
             model,
             provider.id,
             fullReasoning || undefined
@@ -144,7 +214,8 @@ export class ChatStream {
             role: "assistant",
             content: assistantResponse || null,
             tool_calls: toolCalls,
-            reasoning: fullReasoning || undefined
+            reasoning: fullReasoning || undefined,
+            usage: currentTurnUsage
           });
 
           if (!toolCalls || toolCalls.length === 0) {
@@ -154,13 +225,13 @@ export class ChatStream {
             break;
           }
 
-          if (!self.shouldExecuteTools(toolCalls, options.toolExecution)) {
+          if (!ToolHandler.shouldExecuteTools(toolCalls, options.toolExecution)) {
             break;
           }
 
           for (const toolCall of toolCalls) {
             if (options.toolExecution === ToolExecutionMode.CONFIRM) {
-              const approved = await self.requestToolConfirmation(toolCall, options.onConfirmToolCall);
+              const approved = await ToolHandler.requestToolConfirmation(toolCall, options.onConfirmToolCall);
               if (!approved) {
                 messages.push({
                   role: "tool",
@@ -172,7 +243,7 @@ export class ChatStream {
             }
 
             try {
-              const toolResult = await self.executeToolCall(
+              const toolResult = await ToolHandler.execute(
                 toolCall,
                 options.tools,
                 options.onToolCallStart,
@@ -214,54 +285,8 @@ export class ChatStream {
     };
 
     return new Stream(
-      () => sideEffectGenerator(this, this.provider, this.model, this.messages, this.systemMessages, this.options, controller, content),
+      () => sideEffectGenerator(this, this.provider, this.model, this.messages, this.systemMessages, this.options, controller, content, options),
       controller
     );
-  }
-
-  private shouldExecuteTools(toolCalls: any[] | undefined, mode?: ToolExecutionMode): boolean {
-    if (!toolCalls || toolCalls.length === 0) return false;
-    if (mode === ToolExecutionMode.DRY_RUN) return false;
-    return true;
-  }
-
-  private async requestToolConfirmation(
-    toolCall: any,
-    onConfirm?: (call: any) => Promise<boolean> | boolean
-  ): Promise<boolean> {
-    if (!onConfirm) return true;
-    const confirmed = await onConfirm(toolCall);
-    return confirmed !== false;
-  }
-
-  private async executeToolCall(
-    toolCall: any,
-    tools: any[] | undefined,
-    onStart?: (call: any) => void,
-    onEnd?: (call: any, result: any) => void
-  ): Promise<{ role: "tool"; tool_call_id: string; content: string }> {
-    if (onStart) onStart(toolCall);
-
-    const tool = tools?.find((t) => t.function.name === toolCall.function.name);
-
-    if (tool?.handler) {
-      try {
-        const args = JSON.parse(toolCall.function.arguments);
-        const result = await tool.handler(args);
-        
-        if (onEnd) onEnd(toolCall, result);
-
-        return {
-          role: "tool",
-          tool_call_id: toolCall.id,
-          content: result,
-        };
-      } catch (error: any) {
-        throw error;
-      }
-    } else {
-      const error = new ToolError("Tool not found or no handler provided", toolCall.function?.name ?? "unknown");
-      throw error;
-    }
   }
 }

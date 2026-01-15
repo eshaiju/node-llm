@@ -12,6 +12,8 @@ class MockToolProvider implements Provider {
     this.responses = responses;
   }
 
+  id = "mock-provider";
+  
   async chat(request: ChatRequest): Promise<ChatResponse> {
     // Clone messages to capture state at this point in time
     this.requests.push({
@@ -24,18 +26,20 @@ class MockToolProvider implements Provider {
     }
     return response;
   }
+
+  defaultModel() { return "test-model"; }
 }
 
 describe("Chat Tool Calling", () => {
   it("should execute a tool and return the final response", async () => {
-    const weatherTool: Tool = {
+    const weatherTool = {
       type: "function",
       function: {
         name: "get_weather",
         description: "Get weather",
         parameters: { type: "object", properties: {} },
       },
-      handler: async (args) => {
+      handler: async (args: any) => {
         return JSON.stringify({ temperature: 25, condition: "Sunny" });
       },
     };
@@ -90,7 +94,7 @@ describe("Chat Tool Calling", () => {
   });
 
   it("should handle tool execution errors gracefully", async () => {
-    const errorTool: Tool = {
+    const errorTool = {
       type: "function",
       function: {
         name: "fail_tool",
@@ -126,16 +130,16 @@ describe("Chat Tool Calling", () => {
 
     const history = provider.requests[1].messages;
     const toolMessage = history.find(m => m.role === "tool");
-    expect(toolMessage?.content).toContain("Error executing tool: Something went wrong");
+    expect(toolMessage?.content).toContain("Fatal error executing tool 'fail_tool': Something went wrong");
   });
 
   it("should support both constructor tools and withTool fluent API", async () => {
-    const tool1: Tool = {
+    const tool1 = {
       type: "function",
       function: { name: "tool1", parameters: {} },
       handler: async () => "result1",
     };
-    const tool2: Tool = {
+    const tool2 = {
       type: "function",
       function: { name: "tool2", parameters: {} },
       handler: async () => "result2",

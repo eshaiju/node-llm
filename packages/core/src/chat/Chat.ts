@@ -1,5 +1,6 @@
 import { FileLoader } from "../utils/FileLoader.js";
 import { Message } from "./Message.js";
+import { ContentPart, isBinaryContent, formatMultimodalContent } from "./Content.js";
 import { ChatOptions } from "./ChatOptions.js";
 import { Provider, Usage, ChatChunk } from "../providers/Provider.js";
 import { Executor } from "../executor/Executor.js";
@@ -11,7 +12,9 @@ import { toJsonSchema } from "../schema/to-json-schema.js";
 import { z } from "zod";
 import { config } from "../config.js";
 import { ToolExecutionMode } from "../constants.js";
-import { ConfigurationError, ToolError } from "../errors/index.js";
+import { ConfigurationError } from "../errors/index.js";
+import { ChatValidator } from "./Validation.js";
+import { ToolHandler } from "./ToolHandler.js";
 
 export interface AskOptions {
   images?: string[];
@@ -299,48 +302,16 @@ export class Chat {
   async ask(content: string | any[], options?: AskOptions): Promise<ChatResponseString> {
     let messageContent: any = content;
     const files = [...(options?.images ?? []), ...(options?.files ?? [])];
-
     if (files.length > 0) {
-      const processedFiles = await Promise.all(files.map(f => FileLoader.load(f)));
-      
-      const hasBinary = processedFiles.some(p => p.type === "image_url" || p.type === "input_audio" || p.type === "video_url");
-      if (hasBinary && !this.options.assumeModelExists && this.provider.capabilities && !this.provider.capabilities.supportsVision(this.model)) {
-        throw new Error(`Model ${this.model} does not support vision/binary files.`);
-      }
-      
-      if (hasBinary && this.options.assumeModelExists) {
-        console.warn(`[NodeLLM] Skipping vision capability validation for model ${this.model}`);
-      }
+      const processedFiles = await Promise.all(files.map((f: string) => FileLoader.load(f)));
+      const hasBinary = processedFiles.some(isBinaryContent);
 
-      // Separate text files from binary files
-      const textFiles = processedFiles.filter(p => p.type === "text");
-      const binaryFiles = processedFiles.filter(p => p.type !== "text");
-
-      // Concatenate text files into the main content
-      let fullText = content;
-      if (textFiles.length > 0) {
-        fullText += "\n" + textFiles.map(f => f.text).join("\n");
-      }
-
-      // If we have binary files, create multimodal content
-      if (binaryFiles.length > 0) {
-        messageContent = [
-          { type: "text", text: fullText },
-          ...binaryFiles
-        ];
-      } else {
-        // Only text files, keep as string
-        messageContent = fullText;
-      }
+      ChatValidator.validateVision(this.provider, this.model, hasBinary, this.options);
+      messageContent = formatMultimodalContent(content, processedFiles);
     }
 
     if (this.options.tools && this.options.tools.length > 0) {
-      if (!this.options.assumeModelExists && this.provider.capabilities && !this.provider.capabilities.supportsTools(this.model)) {
-        throw new Error(`Model ${this.model} does not support tool calling.`);
-      }
-      if (this.options.assumeModelExists) {
-        console.warn(`[NodeLLM] Skipping tool capability validation for model ${this.model}`);
-      }
+      ChatValidator.validateTools(this.provider, this.model, true, this.options);
     }
 
     this.messages.push({
@@ -352,12 +323,7 @@ export class Chat {
     let responseFormat: any = this.options.responseFormat;
     
     if (this.options.schema) {
-      if (!this.options.assumeModelExists && this.provider.capabilities && !this.provider.capabilities.supportsStructuredOutput(this.model)) {
-        throw new Error(`Model ${this.model} does not support structured output.`);
-      }
-      if (this.options.assumeModelExists) {
-        console.warn(`[NodeLLM] Skipping structured output capability validation for model ${this.model}`);
-      }
+      ChatValidator.validateStructuredOutput(this.provider, this.model, true, this.options);
       
       const jsonSchema = toJsonSchema(this.options.schema.definition.schema);
       
@@ -447,7 +413,7 @@ export class Chat {
 
     while (response.tool_calls && response.tool_calls.length > 0) {
       // Dry-run mode: stop after proposing tools
-      if (!this.shouldExecuteTools(response.tool_calls, this.options.toolExecution)) {
+      if (!ToolHandler.shouldExecuteTools(response.tool_calls, this.options.toolExecution)) {
         break;
       }
 
@@ -457,9 +423,9 @@ export class Chat {
       }
 
       for (const toolCall of response.tool_calls) {
-        // Confirm mode: request approval
+        // Human-in-the-loop: check for approval
         if (this.options.toolExecution === ToolExecutionMode.CONFIRM) {
-          const approved = await this.requestToolConfirmation(toolCall, this.options.onConfirmToolCall);
+          const approved = await ToolHandler.requestToolConfirmation(toolCall, this.options.onConfirmToolCall);
           if (!approved) {
             this.messages.push({
               role: "tool",
@@ -471,7 +437,7 @@ export class Chat {
         }
 
         try {
-          const toolResult = await this.executeToolCall(
+          const toolResult = await ToolHandler.execute(
             toolCall,
             this.options.tools,
             this.options.onToolCallStart,
@@ -558,65 +524,9 @@ export class Chat {
   /**
    * Streams the model's response to a user question.
    */
-  stream(content: string): Stream<ChatChunk> {
+  stream(content: string | ContentPart[], options: AskOptions = {}): Stream<ChatChunk> {
     const streamer = new ChatStream(this.provider, this.model, this.options, this.messages, this.systemMessages);
-    return streamer.create(content);
-  }
-
-  /**
-   * Check if tool execution should proceed based on the current mode.
-   */
-  private shouldExecuteTools(toolCalls: any[] | undefined, mode?: ToolExecutionMode): boolean {
-    if (!toolCalls || toolCalls.length === 0) return false;
-    if (mode === ToolExecutionMode.DRY_RUN) return false;
-    return true;
-  }
-
-  /**
-   * Request user confirmation for a tool call in "confirm" mode.
-   * Returns true if approved, false if rejected.
-   */
-  private async requestToolConfirmation(
-    toolCall: any,
-    onConfirm?: (call: any) => Promise<boolean> | boolean
-  ): Promise<boolean> {
-    if (!onConfirm) return true;
-    const confirmed = await onConfirm(toolCall);
-    return confirmed !== false;
-  }
-
-  /**
-   * Execute a single tool call and return the result message.
-   */
-  private async executeToolCall(
-    toolCall: any,
-    tools: any[] | undefined,
-    onStart?: (call: any) => void,
-    onEnd?: (call: any, result: any) => void
-  ): Promise<{ role: "tool"; tool_call_id: string; content: string }> {
-    if (onStart) onStart(toolCall);
-
-    const tool = tools?.find((t) => t.function.name === toolCall.function.name);
-
-    if (tool?.handler) {
-      try {
-        const args = JSON.parse(toolCall.function.arguments);
-        const result = await tool.handler(args);
-        
-        if (onEnd) onEnd(toolCall, result);
-
-        return {
-          role: "tool",
-          tool_call_id: toolCall.id,
-          content: result,
-        };
-      } catch (error: any) {
-        throw error;
-      }
-    } else {
-      const error = new ToolError("Tool not found or no handler provided", toolCall.function?.name ?? "unknown");
-      throw error;
-    }
+    return streamer.create(content, options);
   }
 
   /**
