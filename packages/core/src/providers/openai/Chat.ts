@@ -27,7 +27,7 @@ export class OpenAIChat {
         : this.providerOrUrl.capabilities?.supportsDeveloperRole(request.model)
     );
 
-    const { model, messages, tools, temperature: _, max_tokens, response_format, headers, requestTimeout, ...rest } = request;
+    const { model, messages, tools, temperature: _, max_tokens, response_format, headers, requestTimeout, signal, ...rest } = request;
 
     const mappedMessages = mapSystemMessages(messages, !!supportsDeveloperRole);
 
@@ -61,6 +61,7 @@ export class OpenAIChat {
         ...request.headers,
       },
       body: JSON.stringify(body),
+      signal,
     }, request.requestTimeout);
 
     if (!response.ok) {

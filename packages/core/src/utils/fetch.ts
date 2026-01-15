@@ -13,7 +13,14 @@ export async function fetchWithTimeout(
   options: RequestInit = {},
   timeoutMs?: number
 ): Promise<Response> {
-  // If no timeout is specified, use standard fetch
+  const userSignal = options.signal;
+  
+  // If no timeout is specified and no user signal, use standard fetch
+  if ((!timeoutMs || timeoutMs <= 0) && !userSignal) {
+    return fetch(url, options);
+  }
+
+  // If only user signal (no timeout), use it directly
   if (!timeoutMs || timeoutMs <= 0) {
     return fetch(url, options);
   }
@@ -23,17 +30,22 @@ export async function fetchWithTimeout(
   if (timeoutId.unref) timeoutId.unref();
 
   try {
+    // Merge user signal with timeout signal
+    const mergedSignal = userSignal 
+      ? AbortSignal.any([userSignal, controller.signal])
+      : controller.signal;
+
     const response = await fetch(url, {
       ...options,
-      signal: controller.signal,
+      signal: mergedSignal,
     });
     clearTimeout(timeoutId);
     return response;
   } catch (error: any) {
     clearTimeout(timeoutId);
     
-    // Check if the error was due to abort (timeout)
-    if (error.name === 'AbortError') {
+    // Check if the error was due to timeout abort
+    if (error.name === 'AbortError' && controller.signal.aborted) {
       throw new Error(`Request timeout after ${timeoutMs}ms`);
     }
     

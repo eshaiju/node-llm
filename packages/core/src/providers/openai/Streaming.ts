@@ -20,7 +20,7 @@ export class OpenAIStreaming {
     request: ChatRequest,
     controller?: AbortController
   ): AsyncGenerator<ChatChunk> {
-    const abortController = controller || new AbortController();
+    const abortController = controller || (request.signal ? { signal: request.signal } as AbortController : new AbortController());
     const temperature = Capabilities.normalizeTemperature(request.temperature, request.model);
     
     const isMainOpenAI = this.baseUrl.includes("api.openai.com");

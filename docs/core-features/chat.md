@@ -208,6 +208,29 @@ await chat.ask("Analyze this large dataset", {
 });
 ```
 
+### Request Cancellation <span style="background-color: #0d9488; color: white; padding: 1px 6px; border-radius: 3px; font-size: 0.65em; font-weight: 600; vertical-align: middle;">New in v1.5.3</span>
+
+You can cancel long-running requests using the standard `AbortController` API. This is useful for interactive UIs where users might navigate away or click "Stop".
+
+```ts
+const controller = new AbortController();
+
+// Cancel after 5 seconds
+setTimeout(() => controller.abort(), 5000);
+
+try {
+  const response = await chat.ask("Write a very long essay...", {
+    signal: controller.signal
+  });
+} catch (error) {
+  if (error.name === 'AbortError') {
+    console.log('Request was cancelled');
+  }
+}
+```
+
+The signal is propagated through all tool-calling turns, so even multi-step agentic workflows can be cancelled cleanly.
+
 See the [Configuration Guide](/getting-started/configuration) for more details.
  
 ## 🧱 Smart Context Isolation

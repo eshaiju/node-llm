@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.5.3] - 2026-01-15
+
+### Fixed
+- **Multi-turn Tool Loop State Loss (CRITICAL)**: Fixed a critical bug where `response_format` (Structured Outputs), `temperature`, `max_tokens`, and provider-specific `params` were being dropped after the first tool call in agentic workflows. This caused the model to revert to plain text or markdown in subsequent turns, resulting in empty or malformed data when using `withSchema()`. The fix ensures all configuration state is maintained across all tool-calling turns in `Chat.ask()`.
+
+### Added
+- **AbortSignal Support**: Added proper cancellation support for long-running LLM requests via `signal?: AbortSignal` in `AskOptions`. Users can now abort requests using standard `AbortController`, enabling proper cleanup in interactive applications and server environments. The signal is propagated through all tool-calling turns and underlying fetch requests.
+
 ## [1.5.2] - 2026-01-15
 
 ### Fixed
