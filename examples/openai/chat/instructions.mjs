@@ -30,4 +30,4 @@ async function main() {
   console.log((await creative.ask("Suggest a Name for a new Coffee Shop.")).content);
 }
 
-main().catch(console.error);
+main().then(() => process.exit(0)).catch((err) => { console.error(err); process.exit(1); });

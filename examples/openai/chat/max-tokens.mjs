@@ -22,4 +22,4 @@ async function main() {
   console.log(`Generated Tokens: ${response.usage.output_tokens}`);
 }
 
-main().catch(console.error);
+main().then(() => process.exit(0)).catch((err) => { console.error(err); process.exit(1); });

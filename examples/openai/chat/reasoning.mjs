@@ -37,4 +37,4 @@ async function main() {
   console.log(`Estimated Cost: $${response.usage.cost}`);
 }
 
-main().catch(console.error);
+main().then(() => process.exit(0)).catch((err) => { console.error(err); process.exit(1); });

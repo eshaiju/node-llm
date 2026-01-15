@@ -24,4 +24,4 @@ async function main() {
   console.log(`Session Cost:  $${chat.totalUsage.cost?.toFixed(6) || "0.000000"}`);
 }
 
-main().catch(console.error);
+main().then(() => process.exit(0)).catch((err) => { console.error(err); process.exit(1); });
