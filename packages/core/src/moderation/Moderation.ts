@@ -62,9 +62,15 @@ export class Moderation implements Iterable<ModerationItem> {
   }
 
   // --- Ruby-compatible aliases ---
-  get flagged_categories(): string[] { return this.flaggedCategories; }
-  get category_scores(): Record<string, number> { return this.categoryScores; }
-  isFlagged(): boolean { return this.flagged; }
+  get flagged_categories(): string[] {
+    return this.flaggedCategories;
+  }
+  get category_scores(): Record<string, number> {
+    return this.categoryScores;
+  }
+  isFlagged(): boolean {
+    return this.flagged;
+  }
 
   /**
    * Makes the Moderation object iterable (yields results)
@@ -99,6 +105,10 @@ export class ModerationItem {
   }
 
   // --- Ruby-compatible aliases ---
-  get flagged_categories(): string[] { return this.flaggedCategories; }
-  get category_scores(): Record<string, number> { return this.categoryScores; }
+  get flagged_categories(): string[] {
+    return this.flaggedCategories;
+  }
+  get category_scores(): Record<string, number> {
+    return this.categoryScores;
+  }
 }

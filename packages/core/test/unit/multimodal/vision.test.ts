@@ -13,11 +13,14 @@ class MockVisionProvider implements Provider {
 
 describe("Chat Vision Support", () => {
   beforeEach(() => {
-    vi.stubGlobal("fetch", vi.fn(async () => ({
-      ok: true,
-      arrayBuffer: async () => new ArrayBuffer(8),
-      headers: { get: () => "image/jpeg" }
-    })));
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => ({
+        ok: true,
+        arrayBuffer: async () => new ArrayBuffer(8),
+        headers: { get: () => "image/jpeg" }
+      }))
+    );
   });
 
   it("should format image requests correctly", async () => {
@@ -25,16 +28,16 @@ describe("Chat Vision Support", () => {
     const chat = new Chat(provider, "gpt-4-vision-preview");
 
     await chat.ask("Describe this image", {
-      files: ["https://example.com/cat.jpg"],
+      files: ["https://example.com/cat.jpg"]
     });
 
     // We captured a copy of messages in MockVisionProvider, so at(-1) is the user message sent to the provider.
     const lastMessage = provider.lastRequest?.messages.at(-1);
     expect(lastMessage?.role).toBe("user");
-    
+
     const content = lastMessage?.content;
     expect(Array.isArray(content)).toBe(true);
-    
+
     if (Array.isArray(content)) {
       expect(content).toHaveLength(2);
       expect(content[0]).toEqual({ type: "text", text: "Describe this image" });
@@ -49,11 +52,11 @@ describe("Chat Vision Support", () => {
     const chat = new Chat(provider, "gpt-4-vision-preview");
 
     await chat.ask("Compare these", {
-      files: ["https://example.com/img1.jpg", "https://example.com/img2.jpg"],
+      files: ["https://example.com/img1.jpg", "https://example.com/img2.jpg"]
     });
 
     const content = provider.lastRequest?.messages.at(-1)?.content;
-    
+
     if (Array.isArray(content)) {
       expect(content).toHaveLength(3); // 1 text + 2 images
       const imgPart1 = content[1] as any;
@@ -68,7 +71,7 @@ describe("Chat Vision Support", () => {
   it("should handle local image files", async () => {
     const provider = new MockVisionProvider();
     const chat = new Chat(provider, "gpt-4-vision-preview");
-    
+
     // Create a dummy file
     const fs = await import("fs/promises");
     const dummyPath = "test-image.jpg";
@@ -76,12 +79,12 @@ describe("Chat Vision Support", () => {
 
     try {
       await chat.ask("Describe this local image", {
-        images: [dummyPath],
+        images: [dummyPath]
       });
 
       // Look at the user message
       const content = provider.lastRequest?.messages.at(-1)?.content;
-      
+
       if (Array.isArray(content)) {
         expect(content).toHaveLength(2);
         const imgPart = content[1] as any;
@@ -93,5 +96,4 @@ describe("Chat Vision Support", () => {
       await fs.unlink(dummyPath);
     }
   });
-
 });

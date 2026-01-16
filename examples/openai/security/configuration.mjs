@@ -15,10 +15,10 @@ async function main() {
     openaiApiKey: process.env.OPENAI_API_KEY,
 
     // Security Limits (Defense-in-Depth)
-    requestTimeout: 30000,  // 30 second timeout (prevents DoS)
-    maxRetries: 2,          // Retry failed requests twice (prevents retry storms)
-    maxToolCalls: 5,        // Limit tool execution loops (prevents infinite loops)
-    maxTokens: 4096,        // Limit output to 4K tokens (prevents cost overruns)
+    requestTimeout: 30000, // 30 second timeout (prevents DoS)
+    maxRetries: 2, // Retry failed requests twice (prevents retry storms)
+    maxToolCalls: 5, // Limit tool execution loops (prevents infinite loops)
+    maxTokens: 4096 // Limit output to 4K tokens (prevents cost overruns)
   });
 
   console.log("✓ Security limits configured:");
@@ -55,8 +55,8 @@ async function main() {
 
   // Long-running task with extended limits
   const longTask = await chat.ask("Write a comprehensive guide on Node.js", {
-    requestTimeout: 120000,  // 2 minutes for this request
-    maxTokens: 16384,        // 16K tokens for detailed response
+    requestTimeout: 120000, // 2 minutes for this request
+    maxTokens: 16384 // 16K tokens for detailed response
   });
 
   console.log("Long task completed:");
@@ -65,8 +65,8 @@ async function main() {
 
   // Quick task with strict limits
   const quickTask = await chat.ask("What is 2+2?", {
-    requestTimeout: 5000,    // 5 seconds max
-    maxTokens: 100,          // Very brief response
+    requestTimeout: 5000, // 5 seconds max
+    maxTokens: 100 // Very brief response
   });
 
   console.log("\nQuick task completed:");

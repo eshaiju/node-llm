@@ -7,16 +7,18 @@ description: Experience the Claude family of models with native support for PDF 
 ---
 
 # {{ page.title }}
+
 {: .no_toc }
 
 {{ page.description }}
 {: .fs-6 .fw-300 }
 
 ## Table of contents
+
 {: .no_toc .text-delta }
 
 1. TOC
-{:toc}
+   {:toc}
 
 ---
 
@@ -35,15 +37,14 @@ const llm = createLLM({ provider: "anthropic", anthropicApiKey: process.env.ANTH
 You can pass Anthropic-specific parameters or custom headers.
 
 ```ts
-const chat = llm.chat("claude-3-5-sonnet-20241022")
-  .withParams({ 
-    top_k: 50,
-    top_p: 0.9,
-    // Custom headers if needed
-    headers: {
-      "anthropic-beta": "max-tokens-3-5-sonnet-2024-07-15"
-    }
-  });
+const chat = llm.chat("claude-3-5-sonnet-20241022").withParams({
+  top_k: 50,
+  top_p: 0.9,
+  // Custom headers if needed
+  headers: {
+    "anthropic-beta": "max-tokens-3-5-sonnet-2024-07-15"
+  }
+});
 ```
 
 ## Features

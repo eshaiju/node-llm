@@ -6,17 +6,17 @@ class WeatherTool extends Tool {
   description = "Get the current weather for a location";
   schema = z.object({
     location: z.string().describe("City name"),
-    unit: z.enum(['celsius', 'fahrenheit']).default('celsius')
+    unit: z.enum(["celsius", "fahrenheit"]).default("celsius")
   });
 
   async execute({ location, unit }) {
     console.log(`\n[Tool Executed] get_weather(${location}, ${unit})`);
-    const temp = unit === 'celsius' ? 22 : 72;
+    const temp = unit === "celsius" ? 22 : 72;
     return {
       location,
       temperature: temp,
       unit,
-      condition: 'sunny'
+      condition: "sunny"
     };
   }
 }
@@ -24,7 +24,7 @@ class WeatherTool extends Tool {
 async function main() {
   const llm = createLLM({
     provider: "anthropic",
-    anthropicApiKey: process.env.ANTHROPIC_API_KEY,
+    anthropicApiKey: process.env.ANTHROPIC_API_KEY
   });
   // Example 1: Streaming with tool calling
   console.log("=== Example 1: Anthropic Streaming with Tool Calling ===\n");
@@ -56,7 +56,8 @@ async function main() {
 
   // Example 3: Streaming with tool events
   console.log("\n=== Example 3: Streaming with Tool Event Handlers ===\n");
-  const chat3 = llm.chat("claude-3-haiku-20240307")
+  const chat3 = llm
+    .chat("claude-3-haiku-20240307")
     .withTool(WeatherTool)
     .onToolCall((toolCall) => {
       console.log(`\n[Event] Tool called: ${toolCall.function.name}`);

@@ -15,7 +15,7 @@ class WeatherTool extends Tool {
       location,
       temperature: 22,
       unit: unit || "celsius",
-      conditions: "Sunny",
+      conditions: "Sunny"
     };
   }
 }
@@ -23,12 +23,11 @@ class WeatherTool extends Tool {
 async function main() {
   const llm = createLLM({
     provider: "anthropic",
-    anthropicApiKey: process.env.ANTHROPIC_API_KEY,
+    anthropicApiKey: process.env.ANTHROPIC_API_KEY
   });
   console.log("Creating chat with Class-Based Tools...");
 
-  const chat = llm.chat("claude-3-haiku-20240307")
-    .withTool(WeatherTool);
+  const chat = llm.chat("claude-3-haiku-20240307").withTool(WeatherTool);
 
   console.log("User: What is the weather in Paris?");
   const response = await chat.ask("What is the weather in Paris?");

@@ -5,14 +5,23 @@ import { mapSystemMessages } from "../utils.js";
 import { fetchWithTimeout } from "../../utils/fetch.js";
 
 export class DeepSeekStreaming {
-  constructor(private readonly baseUrl: string, private readonly apiKey: string) {}
+  constructor(
+    private readonly baseUrl: string,
+    private readonly apiKey: string
+  ) {}
 
-  async *execute(
-    request: ChatRequest,
-    controller?: AbortController
-  ): AsyncGenerator<ChatChunk> {
+  async *execute(request: ChatRequest, controller?: AbortController): AsyncGenerator<ChatChunk> {
     const abortController = controller || new AbortController();
-    const { model, messages, tools, max_tokens, response_format, headers, requestTimeout, ...rest } = request;
+    const {
+      model,
+      messages,
+      tools,
+      max_tokens,
+      response_format,
+      headers,
+      requestTimeout,
+      ...rest
+    } = request;
 
     const mappedMessages = mapSystemMessages(messages, false);
 
@@ -35,23 +44,30 @@ export class DeepSeekStreaming {
       const url = `${this.baseUrl}/chat/completions`;
       logger.logRequest("DeepSeek", "POST", url, body);
 
-      const response = await fetchWithTimeout(url, {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${this.apiKey}`,
-          "Content-Type": "application/json",
-          ...request.headers,
+      const response = await fetchWithTimeout(
+        url,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${this.apiKey}`,
+            "Content-Type": "application/json",
+            ...request.headers
+          },
+          body: JSON.stringify(body),
+          signal: abortController.signal
         },
-        body: JSON.stringify(body),
-        signal: abortController.signal,
-      }, requestTimeout);
+        requestTimeout
+      );
 
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(`DeepSeek API error: ${response.status} - ${errorText}`);
       }
 
-      logger.debug("DeepSeek streaming started", { status: response.status, statusText: response.statusText });
+      logger.debug("DeepSeek streaming started", {
+        status: response.status,
+        statusText: response.statusText
+      });
 
       if (!response.body) {
         throw new Error("No response body for streaming");
@@ -69,13 +85,13 @@ export class DeepSeekStreaming {
         buffer += chunk;
 
         const lines = buffer.split("\n\n");
-        buffer = lines.pop() || ""; 
+        buffer = lines.pop() || "";
 
         for (const line of lines) {
           let trimmed = line.trim();
-          
+
           // Handle carriage returns
-          if (trimmed.endsWith('\r')) {
+          if (trimmed.endsWith("\r")) {
             trimmed = trimmed.substring(0, trimmed.length - 1);
           }
 
@@ -84,10 +100,10 @@ export class DeepSeekStreaming {
           const data = trimmed.replace("data: ", "").trim();
           if (data === "[DONE]") {
             done = true;
-            
+
             // Yield final tool calls if any were accumulated
             if (toolCallsMap.size > 0) {
-              const toolCalls = Array.from(toolCallsMap.values()).map(tc => ({
+              const toolCalls = Array.from(toolCallsMap.values()).map((tc) => ({
                 id: tc.id,
                 type: "function" as const,
                 function: {
@@ -97,30 +113,26 @@ export class DeepSeekStreaming {
               }));
               yield { content: "", tool_calls: toolCalls, done: true };
             }
-            
+
             return;
           }
 
           try {
             const json = JSON.parse(data);
-            
+
             // Check for errors in the data
             if (json.error) {
-              throw new APIError(
-                "DeepSeek",
-                response.status,
-                json.error.message || "Stream error",
-              );
+              throw new APIError("DeepSeek", response.status, json.error.message || "Stream error");
             }
 
             const delta = json.choices?.[0]?.delta;
             const deltaContent = delta?.content;
             const deltaReasoning = delta?.reasoning_content;
-            
+
             if (deltaContent || deltaReasoning) {
-              yield { 
+              yield {
                 content: deltaContent || "",
-                reasoning: deltaReasoning || "" 
+                reasoning: deltaReasoning || ""
               };
             }
 
@@ -128,7 +140,7 @@ export class DeepSeekStreaming {
             if (delta?.tool_calls) {
               for (const toolCallDelta of delta.tool_calls) {
                 const index = toolCallDelta.index;
-                
+
                 if (!toolCallsMap.has(index)) {
                   toolCallsMap.set(index, {
                     id: toolCallDelta.id || "",
@@ -160,7 +172,7 @@ export class DeepSeekStreaming {
       done = true;
     } catch (e) {
       // Graceful exit on abort
-      if (e instanceof Error && e.name === 'AbortError') {
+      if (e instanceof Error && e.name === "AbortError") {
         return;
       }
       throw e;

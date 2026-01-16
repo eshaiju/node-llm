@@ -41,10 +41,7 @@ export class Chat {
     private readonly options: ChatOptions = {},
     retryConfig: { attempts: number; delayMs: number } = { attempts: 1, delayMs: 0 }
   ) {
-    this.executor = new Executor(
-      provider,
-      retryConfig
-    );
+    this.executor = new Executor(provider, retryConfig);
 
     if (options.systemPrompt) {
       this.withInstructions(options.systemPrompt);
@@ -93,12 +90,20 @@ export class Chat {
           acc.output_tokens += msg.usage.output_tokens;
           acc.total_tokens += msg.usage.total_tokens;
           acc.cached_tokens = (acc.cached_tokens ?? 0) + (msg.usage.cached_tokens ?? 0);
-          acc.cache_creation_tokens = (acc.cache_creation_tokens ?? 0) + (msg.usage.cache_creation_tokens ?? 0);
+          acc.cache_creation_tokens =
+            (acc.cache_creation_tokens ?? 0) + (msg.usage.cache_creation_tokens ?? 0);
           acc.cost = (acc.cost ?? 0) + (msg.usage.cost ?? 0);
         }
         return acc;
       },
-      { input_tokens: 0, output_tokens: 0, total_tokens: 0, cached_tokens: 0, cache_creation_tokens: 0, cost: 0 }
+      {
+        input_tokens: 0,
+        output_tokens: 0,
+        total_tokens: 0,
+        cached_tokens: 0,
+        cache_creation_tokens: 0,
+        cost: 0
+      }
     );
   }
 
@@ -110,11 +115,11 @@ export class Chat {
     return this.withTools([tool]);
   }
 
-    /**
+  /**
    * Add multiple tools to the chat session.
    * Supports passing Tool classes (which will be instantiated) or instances.
    * Can replace existing tools if options.replace is true.
-   * 
+   *
    * @example
    * chat.withTools([WeatherTool, new CalculatorTool()], { replace: true });
    */
@@ -145,10 +150,10 @@ export class Chat {
     if (options?.replace) {
       this.systemMessages = [];
     }
-    
+
     // Always push to isolated storage
     this.systemMessages.push({ role: "system", content: instruction });
-    
+
     return this;
   }
 
@@ -255,7 +260,12 @@ export class Chat {
     return this;
   }
 
-  onToolCallError(handler: (toolCall: any, error: Error) => 'STOP' | 'CONTINUE' | void | Promise<'STOP' | 'CONTINUE' | void>): this {
+  onToolCallError(
+    handler: (
+      toolCall: any,
+      error: Error
+    ) => "STOP" | "CONTINUE" | void | Promise<"STOP" | "CONTINUE" | void>
+  ): this {
     this.options.onToolCallError = handler;
     return this;
   }
@@ -293,7 +303,9 @@ export class Chat {
    * Add a hook to process the response before returning it.
    * Useful for output redaction, compliance, and post-moderation.
    */
-  afterResponse(handler: (response: ChatResponseString) => Promise<ChatResponseString | void>): this {
+  afterResponse(
+    handler: (response: ChatResponseString) => Promise<ChatResponseString | void>
+  ): this {
     this.options.onAfterResponse = handler;
     return this;
   }
@@ -318,24 +330,24 @@ export class Chat {
 
     this.messages.push({
       role: "user",
-      content: messageContent,
+      content: messageContent
     });
-    
+
     // Process Schema/Structured Output
     let responseFormat: any = this.options.responseFormat;
-    
+
     if (this.options.schema) {
       ChatValidator.validateStructuredOutput(this.provider, this.model, true, this.options);
-      
+
       const jsonSchema = toJsonSchema(this.options.schema.definition.schema);
-      
+
       responseFormat = {
         type: "json_schema",
         json_schema: {
           name: this.options.schema.definition.name,
           description: this.options.schema.definition.description,
           strict: this.options.schema.definition.strict ?? true,
-          schema: jsonSchema,
+          schema: jsonSchema
         }
       };
     }
@@ -348,9 +360,10 @@ export class Chat {
       max_tokens: options?.maxTokens ?? this.options.maxTokens ?? config.maxTokens,
       headers: { ...this.options.headers, ...options?.headers },
       response_format: responseFormat, // Pass to provider
-      requestTimeout: options?.requestTimeout ?? this.options.requestTimeout ?? config.requestTimeout,
+      requestTimeout:
+        options?.requestTimeout ?? this.options.requestTimeout ?? config.requestTimeout,
       signal: options?.signal,
-      ...this.options.params,
+      ...this.options.params
     };
 
     // --- Content Policy Hooks (Input) ---
@@ -363,7 +376,7 @@ export class Chat {
       }
     }
 
-    let totalUsage: Usage = { input_tokens: 0, output_tokens: 0, total_tokens: 0 };
+    const totalUsage: Usage = { input_tokens: 0, output_tokens: 0, total_tokens: 0 };
     const trackUsage = (u?: Usage) => {
       if (u) {
         totalUsage.input_tokens += u.input_tokens;
@@ -384,8 +397,8 @@ export class Chat {
     trackUsage(response.usage);
 
     let assistantMessage = new ChatResponseString(
-      response.content ?? "", 
-      response.usage ?? { input_tokens: 0, output_tokens: 0, total_tokens: 0 }, 
+      response.content ?? "",
+      response.usage ?? { input_tokens: 0, output_tokens: 0, total_tokens: 0 },
       this.model,
       this.provider.id,
       response.reasoning,
@@ -404,13 +417,13 @@ export class Chat {
       role: "assistant",
       content: assistantMessage || null,
       tool_calls: response.tool_calls,
-      usage: response.usage,
+      usage: response.usage
     });
 
     if (this.options.onEndMessage && (!response.tool_calls || response.tool_calls.length === 0)) {
       this.options.onEndMessage(assistantMessage);
     }
-    
+
     const maxToolCalls = options?.maxToolCalls ?? this.options.maxToolCalls ?? 5;
     let stepCount = 0;
 
@@ -428,12 +441,15 @@ export class Chat {
       for (const toolCall of response.tool_calls) {
         // Human-in-the-loop: check for approval
         if (this.options.toolExecution === ToolExecutionMode.CONFIRM) {
-          const approved = await ToolHandler.requestToolConfirmation(toolCall, this.options.onConfirmToolCall);
+          const approved = await ToolHandler.requestToolConfirmation(
+            toolCall,
+            this.options.onConfirmToolCall
+          );
           if (!approved) {
             this.messages.push({
               role: "tool",
               tool_call_id: toolCall.id,
-              content: "Action cancelled by user.",
+              content: "Action cancelled by user."
             });
             continue;
           }
@@ -450,23 +466,23 @@ export class Chat {
         } catch (error: any) {
           const directive = await this.options.onToolCallError?.(toolCall, error);
 
-          if (directive === 'STOP') {
+          if (directive === "STOP") {
             throw error;
           }
 
           this.messages.push({
             role: "tool",
             tool_call_id: toolCall.id,
-            content: `Fatal error executing tool '${toolCall.function.name}': ${error.message}`,
+            content: `Fatal error executing tool '${toolCall.function.name}': ${error.message}`
           });
 
-          if (directive === 'CONTINUE') {
+          if (directive === "CONTINUE") {
             continue;
           }
 
           // Default short-circuit logic
           const isFatal = error.fatal === true || error.status === 401 || error.status === 403;
-          
+
           if (isFatal) {
             throw error;
           }
@@ -483,15 +499,16 @@ export class Chat {
         max_tokens: options?.maxTokens ?? this.options.maxTokens ?? config.maxTokens,
         headers: this.options.headers,
         response_format: responseFormat,
-        requestTimeout: options?.requestTimeout ?? this.options.requestTimeout ?? config.requestTimeout,
+        requestTimeout:
+          options?.requestTimeout ?? this.options.requestTimeout ?? config.requestTimeout,
         signal: options?.signal,
-        ...this.options.params,
+        ...this.options.params
       });
       trackUsage(response.usage);
 
       assistantMessage = new ChatResponseString(
-        response.content ?? "", 
-        response.usage ?? { input_tokens: 0, output_tokens: 0, total_tokens: 0 }, 
+        response.content ?? "",
+        response.usage ?? { input_tokens: 0, output_tokens: 0, total_tokens: 0 },
         this.model,
         this.provider.id,
         response.reasoning
@@ -509,7 +526,7 @@ export class Chat {
         role: "assistant",
         content: assistantMessage || null,
         tool_calls: response.tool_calls,
-        usage: response.usage,
+        usage: response.usage
       });
 
       if (this.options.onEndMessage && (!response.tool_calls || response.tool_calls.length === 0)) {
@@ -517,13 +534,13 @@ export class Chat {
       }
     }
 
-    // For the final return, we might want to aggregate reasoning too if it happened in multiple turns? 
+    // For the final return, we might want to aggregate reasoning too if it happened in multiple turns?
     // Usually reasoning only happens once or we just want the last one.
     return new ChatResponseString(
-      assistantMessage.toString() || "", 
-      totalUsage, 
-      this.model, 
-      this.provider.id, 
+      assistantMessage.toString() || "",
+      totalUsage,
+      this.model,
+      this.provider.id,
       assistantMessage.reasoning,
       response.tool_calls
     );
@@ -533,7 +550,13 @@ export class Chat {
    * Streams the model's response to a user question.
    */
   stream(content: string | ContentPart[], options: AskOptions = {}): Stream<ChatChunk> {
-    const streamer = new ChatStream(this.provider, this.model, this.options, this.messages, this.systemMessages);
+    const streamer = new ChatStream(
+      this.provider,
+      this.model,
+      this.options,
+      this.messages,
+      this.systemMessages
+    );
     return streamer.create(content, options);
   }
 
@@ -564,17 +587,21 @@ export class Chat {
 
     if (!toolInstance.function || !toolInstance.function.name) {
       // 1. Validate structure
-      throw new ConfigurationError(`[NodeLLM] Tool validation failed: 'function.name' is required for raw tool objects.`);
+      throw new ConfigurationError(
+        `[NodeLLM] Tool validation failed: 'function.name' is required for raw tool objects.`
+      );
     }
 
-    if (toolInstance.type !== 'function') {
+    if (toolInstance.type !== "function") {
       // 2. Ensure 'type: function' exists (standardize for providers)
-      toolInstance.type = 'function';
+      toolInstance.type = "function";
     }
 
-    if (typeof toolInstance.handler !== 'function') {
+    if (typeof toolInstance.handler !== "function") {
       // 3. Validate handler existence
-      throw new ConfigurationError(`[NodeLLM] Tool validation failed: Tool '${toolInstance.function.name}' must have a 'handler' function. (Note: Only Tool subclasses use 'execute()')`);
+      throw new ConfigurationError(
+        `[NodeLLM] Tool validation failed: Tool '${toolInstance.function.name}' must have a 'handler' function. (Note: Only Tool subclasses use 'execute()')`
+      );
     }
 
     return toolInstance as ToolDefinition;

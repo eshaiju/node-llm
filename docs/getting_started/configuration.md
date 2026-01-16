@@ -8,16 +8,18 @@ description: Learn how to configure NodeLLM with API keys, custom base URLs, sec
 ---
 
 # {{ page.title }}
+
 {: .no_toc }
 
 {{ page.description }}
 {: .fs-6 .fw-300 }
 
 ## Table of contents
+
 {: .no_toc .text-delta }
 
 1. TOC
-{:toc}
+   {:toc}
 
 ---
 
@@ -28,18 +30,20 @@ description: Learn how to configure NodeLLM with API keys, custom base URLs, sec
 The simplest way to use NodeLLM is by relying on environment variables. NodeLLM will automatically snapshot your environment at load time.
 
 **Environment variables (`.env`):**
+
 ```env
 NODELLM_PROVIDER=openai
 OPENAI_API_KEY=sk-....
 ```
 
 **Code:**
+
 ```typescript
 import "dotenv/config";
 import { NodeLLM } from "@node-llm/core";
 
 // Zero setup required
-const chat = NodeLLM.chat(); 
+const chat = NodeLLM.chat();
 ```
 
 ---
@@ -54,9 +58,9 @@ Since `NodeLLM` is immutable, you switch providers by creating a new instance us
 
 ```typescript
 // Create an Anthropic instance
-const llm = createLLM({ 
-  provider: "anthropic", 
-  anthropicApiKey: process.env.ANTHROPIC_API_KEY, 
+const llm = createLLM({
+  provider: "anthropic",
+  anthropicApiKey: process.env.ANTHROPIC_API_KEY
 });
 ```
 
@@ -72,7 +76,7 @@ const llm = createLLM({
   anthropicApiKey: process.env.ANTHROPIC_API_KEY,
   geminiApiKey: process.env.GEMINI_API_KEY,
   deepseekApiKey: process.env.DEEPSEEK_API_KEY,
-  openrouterApiKey: process.env.OPENROUTER_API_KEY,
+  openrouterApiKey: process.env.OPENROUTER_API_KEY
 });
 ```
 
@@ -81,8 +85,11 @@ const llm = createLLM({
 Override the default API endpoints for custom deployments (e.g., Azure OpenAI):
 
 ```typescript
-const llm = createLLM({ provider: "openai", openaiApiKey: process.env.AZURE_OPENAI_API_KEY,
-  openaiApiBase: process.env.AZURE_OPENAI_API_BASE_ENDPOINT, });
+const llm = createLLM({
+  provider: "openai",
+  openaiApiKey: process.env.AZURE_OPENAI_API_KEY,
+  openaiApiBase: process.env.AZURE_OPENAI_API_BASE_ENDPOINT
+});
 ```
 
 ### Loop Protection & Security Limits
@@ -91,14 +98,15 @@ Prevent runaway costs, infinite loops, and hanging requests by setting execution
 
 ```typescript
 const llm = createLLM({
-  maxToolCalls: 5,      // Stop after 5 sequential tool execution turns
-  maxRetries: 2,        // Retry network/server errors 2 times
-  requestTimeout: 30000,// Timeout requests after 30 seconds (default)
-  maxTokens: 4096       // Limit output to 4K tokens (default)
+  maxToolCalls: 5, // Stop after 5 sequential tool execution turns
+  maxRetries: 2, // Retry network/server errors 2 times
+  requestTimeout: 30000, // Timeout requests after 30 seconds (default)
+  maxTokens: 4096 // Limit output to 4K tokens (default)
 });
 ```
 
 **Security Benefits:**
+
 - **`maxToolCalls`**: Prevents infinite tool execution loops
 - **`maxRetries`**: Prevents retry storms that could exhaust resources
 - **`requestTimeout`**: Prevents hanging requests and DoS attacks
@@ -106,27 +114,27 @@ const llm = createLLM({
 
 ## Supported Configuration Keys
 
-| Key | Description | Default |
-|-----|-------------|---------|
-| `openaiApiKey` | OpenAI API key | `process.env.OPENAI_API_KEY` |
-| `openaiApiBase` | OpenAI API base URL | `process.env.OPENAI_API_BASE` |
-| `anthropicApiKey` | Anthropic API key | `process.env.ANTHROPIC_API_KEY` |
-| `anthropicApiBase` | Anthropic API base URL | `process.env.ANTHROPIC_API_BASE` |
-| `geminiApiKey` | Google Gemini API key | `process.env.GEMINI_API_KEY` |
-| `geminiApiBase` | Gemini API base URL | `process.env.GEMINI_API_BASE` |
-| `deepseekApiKey` | DeepSeek API key | `process.env.DEEPSEEK_API_KEY` |
-| `deepseekApiBase` | DeepSeek API base URL | `process.env.DEEPSEEK_API_BASE` |
-| `openrouterApiKey` | OpenRouter API key | `process.env.OPENROUTER_API_KEY` |
-| `openrouterApiBase` | OpenRouter API base URL | `process.env.OPENROUTER_API_BASE` |
-| `defaultChatModel` | Default model for `.chat()` | Provider default |
-| `defaultTranscriptionModel` | Default model for `.transcribe()` | Provider default |
-| `defaultModerationModel` | Default model for `.moderate()` | Provider default |
-| `defaultEmbeddingModel` | Default model for `.embed()` | Provider default |
-| `maxToolCalls` | Max sequential tool execution turns | `5` |
-| `maxRetries` | Max retries for provider errors | `2` |
-| `requestTimeout` | Request timeout in milliseconds | `30000` (30s) |
-| `maxTokens` | Max output tokens per request | `4096` |
-| `retry` | Retry configuration (legacy) | `{ attempts: 1, delayMs: 0 }` |
+| Key                         | Description                         | Default                           |
+| --------------------------- | ----------------------------------- | --------------------------------- |
+| `openaiApiKey`              | OpenAI API key                      | `process.env.OPENAI_API_KEY`      |
+| `openaiApiBase`             | OpenAI API base URL                 | `process.env.OPENAI_API_BASE`     |
+| `anthropicApiKey`           | Anthropic API key                   | `process.env.ANTHROPIC_API_KEY`   |
+| `anthropicApiBase`          | Anthropic API base URL              | `process.env.ANTHROPIC_API_BASE`  |
+| `geminiApiKey`              | Google Gemini API key               | `process.env.GEMINI_API_KEY`      |
+| `geminiApiBase`             | Gemini API base URL                 | `process.env.GEMINI_API_BASE`     |
+| `deepseekApiKey`            | DeepSeek API key                    | `process.env.DEEPSEEK_API_KEY`    |
+| `deepseekApiBase`           | DeepSeek API base URL               | `process.env.DEEPSEEK_API_BASE`   |
+| `openrouterApiKey`          | OpenRouter API key                  | `process.env.OPENROUTER_API_KEY`  |
+| `openrouterApiBase`         | OpenRouter API base URL             | `process.env.OPENROUTER_API_BASE` |
+| `defaultChatModel`          | Default model for `.chat()`         | Provider default                  |
+| `defaultTranscriptionModel` | Default model for `.transcribe()`   | Provider default                  |
+| `defaultModerationModel`    | Default model for `.moderate()`     | Provider default                  |
+| `defaultEmbeddingModel`     | Default model for `.embed()`        | Provider default                  |
+| `maxToolCalls`              | Max sequential tool execution turns | `5`                               |
+| `maxRetries`                | Max retries for provider errors     | `2`                               |
+| `requestTimeout`            | Request timeout in milliseconds     | `30000` (30s)                     |
+| `maxTokens`                 | Max output tokens per request       | `4096`                            |
+| `retry`                     | Retry configuration (legacy)        | `{ attempts: 1, delayMs: 0 }`     |
 
 ## Inspecting Configuration
 
@@ -155,19 +163,19 @@ In the global `NodeLLM` instance, this initialization is **lazy**. It only snaps
 ```typescript
 // ✅ Safe in NodeLLM v1.6.0+: Initialized on first call
 import { NodeLLM } from "@node-llm/core";
-import "dotenv/config"; 
+import "dotenv/config";
 
 const chat = NodeLLM.chat(); // Snapshots environment NOW
 ```
 
-
 ## Best Practices
 
 1. **Use dotenv for local development**:
+
    ```typescript
    import "dotenv/config";
    import { createLLM } from "@node-llm/core";
-   
+
    const llm = createLLM({ provider: "openai" });
    ```
 
@@ -187,33 +195,34 @@ const chat = NodeLLM.chat(); // Snapshots environment NOW
 Use `createLLM()` or `.withProvider()` to create an **isolated context**.
 
 #### 1. Isolated Provider State
+
 Run multiple providers in parallel safely without any side effects:
 
 ```ts
 const [gpt, claude] = await Promise.all([
   NodeLLM.withProvider("openai").chat("gpt-4o").ask(prompt),
-  NodeLLM.withProvider("anthropic").chat("claude-3-5-sonnet").ask(prompt),
+  NodeLLM.withProvider("anthropic").chat("claude-3-5-sonnet").ask(prompt)
 ]);
 ```
 
 #### 2. Scoped Credentials
+
 You can also pass a second argument to `withProvider` to override configuration keys (like API keys) for that specific instance only. This is useful for multi-tenant applications.
 
 ```ts
-const userA = NodeLLM.withProvider("openai", { 
-  openaiApiKey: "USER_A_KEY" 
+const userA = NodeLLM.withProvider("openai", {
+  openaiApiKey: "USER_A_KEY"
 });
 
-const userB = NodeLLM.withProvider("openai", { 
-  openaiApiKey: "USER_B_KEY" 
+const userB = NodeLLM.withProvider("openai", {
+  openaiApiKey: "USER_B_KEY"
 });
 
 // These calls use different API keys simultaneously
 const [resA, resB] = await Promise.all([
   userA.chat().ask("Hello from A"),
-  userB.chat().ask("Hello from B"),
+  userB.chat().ask("Hello from B")
 ]);
 ```
 
 This ensures each parallel call uses the correct provider and credentials without interfering with others.
-

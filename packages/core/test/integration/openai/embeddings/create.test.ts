@@ -15,9 +15,9 @@ describe("OpenAI Embedding Integration (VCR)", { timeout: 30000 }, () => {
   it("should generate embeddings", async ({ task }) => {
     polly = setupVCR(task.name, "openai");
 
-        const llm = createLLM({
+    const llm = createLLM({
       openaiApiKey: process.env.OPENAI_API_KEY,
-      provider: "openai",
+      provider: "openai"
     });
     const response = await llm.embed("Hello world", { model: "text-embedding-3-small" });
 
@@ -29,7 +29,7 @@ describe("OpenAI Embedding Integration (VCR)", { timeout: 30000 }, () => {
   it("should generate batch embeddings", async ({ task }) => {
     polly = setupVCR(task.name, "openai");
 
-        const llm = createLLM({ provider: "openai" });
+    const llm = createLLM({ provider: "openai" });
     const response = await llm.embed(["Hello", "World"], { model: "text-embedding-3-small" });
 
     expect(response.vectors.length).toBe(2);

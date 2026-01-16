@@ -7,11 +7,11 @@ it("streams tokens and stores final assistant message", async () => {
   const stream = handler.create("Hi");
 
   let result = "";
- 
+
   for await (const chunk of stream) {
     result += chunk.content;
   }
- 
+
   expect(result).toBe("Hello world");
   expect(String(handler.history.at(-1)?.content)).toBe("Hello world");
 });

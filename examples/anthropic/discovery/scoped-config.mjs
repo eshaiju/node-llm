@@ -11,7 +11,7 @@ import { createLLM, NodeLLM, Tool, z } from "../../../packages/core/dist/index.j
 async function main() {
   const llm = createLLM({
     provider: "anthropic",
-    anthropicApiKey: process.env.ANTHROPIC_API_KEY,
+    anthropicApiKey: process.env.ANTHROPIC_API_KEY
   });
   console.log("=== Example: Scoped Provider Configuration ===\n");
 
@@ -41,7 +41,9 @@ async function main() {
       NodeLLM.withProvider("anthropic").chat("claude-3-5-haiku").ask(prompt),
       NodeLLM.withProvider("anthropic", {
         anthropicApiKey: process.env.ANTHROPIC_API_KEY
-      }).chat("claude-3-5-haiku").ask(prompt)
+      })
+        .chat("claude-3-5-haiku")
+        .ask(prompt)
     ]);
 
     console.log(`   Response 1: ${response1.content}`);

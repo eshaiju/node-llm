@@ -19,7 +19,9 @@ export function registerOpenRouterProvider() {
     const baseUrl = cfg.openrouterApiBase;
 
     if (!apiKey) {
-      throw new Error("openrouterApiKey is not set in config or OPENROUTER_API_KEY environment variable");
+      throw new Error(
+        "openrouterApiKey is not set in config or OPENROUTER_API_KEY environment variable"
+      );
     }
 
     return new OpenRouterProvider({ apiKey, baseUrl });

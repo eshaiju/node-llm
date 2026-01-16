@@ -22,7 +22,7 @@ export class FakeProvider implements Provider {
   async *stream(request: ChatRequest) {
     this.lastRequest = request;
     const reply = this.replies.shift() ?? "default reply";
-    
+
     if (typeof reply === "string") {
       const words = reply.split(" ");
       for (const word of words) {
@@ -35,12 +35,12 @@ export class FakeProvider implements Provider {
           yield { content: word + (word === words[words.length - 1] ? "" : " ") };
         }
       }
-      
+
       // Yield reasoning and tool_calls in the last chunk
-      yield { 
-        content: "", 
-        reasoning: reply.reasoning || undefined, 
-        tool_calls: reply.tool_calls 
+      yield {
+        content: "",
+        reasoning: reply.reasoning || undefined,
+        tool_calls: reply.tool_calls
       };
     }
   }

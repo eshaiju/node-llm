@@ -7,7 +7,7 @@ class Logger {
 
   debug(message: string, data?: any): void {
     if (this.isDebugEnabled()) {
-      const formattedData = data ? `\n${JSON.stringify(data, null, 2)}` : '';
+      const formattedData = data ? `\n${JSON.stringify(data, null, 2)}` : "";
       console.log(`[NodeLLM Debug] ${message}${formattedData}`);
     }
   }
@@ -41,7 +41,7 @@ class Logger {
   }
 
   error(message: string, error?: Error): void {
-    console.error(`[NodeLLM Error] ${message}`, error || '');
+    console.error(`[NodeLLM Error] ${message}`, error || "");
   }
 
   info(message: string): void {

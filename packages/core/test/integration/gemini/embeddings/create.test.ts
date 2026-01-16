@@ -15,9 +15,9 @@ describe("Gemini Embedding Integration (VCR)", { timeout: 30000 }, () => {
   it("should generate embeddings", async ({ task }) => {
     polly = setupVCR(task.name, "gemini");
 
-        const llm = createLLM({
+    const llm = createLLM({
       geminiApiKey: process.env.GEMINI_API_KEY,
-      provider: "gemini",
+      provider: "gemini"
     });
     const response = await llm.embed("Hello world", { model: "text-embedding-004" });
 
@@ -29,7 +29,7 @@ describe("Gemini Embedding Integration (VCR)", { timeout: 30000 }, () => {
   it("should generate batch embeddings", async ({ task }) => {
     polly = setupVCR(task.name, "gemini");
 
-        const llm = createLLM({ provider: "gemini" });
+    const llm = createLLM({ provider: "gemini" });
     const response = await llm.embed(["Hello", "World"], { model: "text-embedding-004" });
 
     expect(response.vectors.length).toBe(2);

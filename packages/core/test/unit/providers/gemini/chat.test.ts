@@ -29,10 +29,12 @@ describe("GeminiChat", () => {
     (GeminiChatUtils.convertMessages as any).mockResolvedValue(mockConvert);
 
     const mockResponse = {
-      candidates: [{ 
-        content: { role: "model", parts: [{ text: "Hi there!" }] },
-        finishReason: "STOP"
-      }],
+      candidates: [
+        {
+          content: { role: "model", parts: [{ text: "Hi there!" }] },
+          finishReason: "STOP"
+        }
+      ],
       usageMetadata: { promptTokenCount: 5, candidatesTokenCount: 3, totalTokenCount: 8 }
     };
 
@@ -43,10 +45,13 @@ describe("GeminiChat", () => {
 
     const result = await chat.execute(request);
 
-    expect(fetch).toHaveBeenCalledWith(expect.stringContaining("/models/gemini-1.5-flash:generateContent?key=test-key"), expect.objectContaining({
-      method: "POST",
-      body: expect.stringContaining('"contents":[{"role":"user","parts":[{"text":"Hello"}]}]')
-    }));
+    expect(fetch).toHaveBeenCalledWith(
+      expect.stringContaining("/models/gemini-1.5-flash:generateContent?key=test-key"),
+      expect.objectContaining({
+        method: "POST",
+        body: expect.stringContaining('"contents":[{"role":"user","parts":[{"text":"Hello"}]}]')
+      })
+    );
     expect(result.content).toBe("Hi there!");
     expect(result.usage?.total_tokens).toBe(8);
   });
@@ -58,7 +63,10 @@ describe("GeminiChat", () => {
       response_format: { type: "json_object" }
     };
 
-    (GeminiChatUtils.convertMessages as any).mockResolvedValue({ contents: [], systemInstructionParts: [] });
+    (GeminiChatUtils.convertMessages as any).mockResolvedValue({
+      contents: [],
+      systemInstructionParts: []
+    });
     (fetch as any).mockResolvedValue({
       ok: true,
       json: () => Promise.resolve({ candidates: [] })
@@ -66,16 +74,19 @@ describe("GeminiChat", () => {
 
     await chat.execute(request);
 
-    expect(fetch).toHaveBeenCalledWith(expect.any(String), expect.objectContaining({
-      body: expect.stringContaining('"responseMimeType":"application/json"')
-    }));
+    expect(fetch).toHaveBeenCalledWith(
+      expect.any(String),
+      expect.objectContaining({
+        body: expect.stringContaining('"responseMimeType":"application/json"')
+      })
+    );
   });
 
   it("should sanitize schema in request", async () => {
     const request: ChatRequest = {
       model: "gemini-1.5-flash",
       messages: [{ role: "user", content: "Schema" }],
-      response_format: { 
+      response_format: {
         type: "json_schema",
         json_schema: {
           name: "test",
@@ -88,7 +99,10 @@ describe("GeminiChat", () => {
       }
     };
 
-    (GeminiChatUtils.convertMessages as any).mockResolvedValue({ contents: [], systemInstructionParts: [] });
+    (GeminiChatUtils.convertMessages as any).mockResolvedValue({
+      contents: [],
+      systemInstructionParts: []
+    });
     (fetch as any).mockResolvedValue({
       ok: true,
       json: () => Promise.resolve({ candidates: [] })

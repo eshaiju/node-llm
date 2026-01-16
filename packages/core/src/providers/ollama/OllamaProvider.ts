@@ -18,19 +18,21 @@ export class OllamaProvider extends OpenAIProvider {
     // Override handlers with Ollama-specific ones
     this.modelsHandler = new OllamaModels(this.baseUrl, this.options.apiKey);
     this.embeddingHandler = new OllamaEmbedding(this.baseUrl, this.options.apiKey);
-    
+
     // Override capabilities to use OllamaCapabilities
     this.capabilities = {
       supportsVision: (modelId: string) => OllamaCapabilities.supportsVision(modelId),
       supportsTools: (modelId: string) => OllamaCapabilities.supportsTools(modelId),
-      supportsStructuredOutput: (modelId: string) => OllamaCapabilities.supportsStructuredOutput(modelId),
+      supportsStructuredOutput: (modelId: string) =>
+        OllamaCapabilities.supportsStructuredOutput(modelId),
       supportsEmbeddings: (modelId: string) => OllamaCapabilities.supportsEmbeddings(modelId),
-      supportsImageGeneration: (modelId: string) => OllamaCapabilities.supportsImageGeneration(modelId),
+      supportsImageGeneration: (modelId: string) =>
+        OllamaCapabilities.supportsImageGeneration(modelId),
       supportsTranscription: (modelId: string) => OllamaCapabilities.supportsTranscription(modelId),
       supportsModeration: (modelId: string) => OllamaCapabilities.supportsModeration(modelId),
       supportsReasoning: (modelId: string) => OllamaCapabilities.supportsReasoning(modelId),
       supportsDeveloperRole: (_modelId: string) => false,
-      getContextWindow: (modelId: string) => OllamaCapabilities.getContextWindow(modelId),
+      getContextWindow: (modelId: string) => OllamaCapabilities.getContextWindow(modelId)
     };
   }
 

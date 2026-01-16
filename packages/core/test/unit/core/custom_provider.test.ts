@@ -7,10 +7,18 @@ class CustomTestProvider extends BaseProvider {
     super();
   }
 
-  protected providerName() { return "custom-test"; }
-  public apiBase() { return "https://api.test"; }
-  public headers() { return { Authorization: `Bearer ${this.config.apiKey}` }; }
-  public defaultModel() { return "test-model"; }
+  protected providerName() {
+    return "custom-test";
+  }
+  public apiBase() {
+    return "https://api.test";
+  }
+  public headers() {
+    return { Authorization: `Bearer ${this.config.apiKey}` };
+  }
+  public defaultModel() {
+    return "test-model";
+  }
 
   public capabilities = {
     supportsVision: () => false,
@@ -67,7 +75,7 @@ describe("Custom Provider Registration", () => {
   it("BaseProvider throws UnsupportedFeatureError for unimplemented methods", async () => {
     const name = "unsupported-provider";
     NodeLLM.registerProvider(name, () => new CustomTestProvider({ apiKey: "key" }));
-    
+
     // Create new instance
     const llm = createLLM({ provider: name });
 

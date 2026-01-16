@@ -16,12 +16,12 @@ describe("Request Timeout Configuration", () => {
   });
 
   it("should allow per-chat timeout configuration", () => {
-    const llm = createLLM({ 
+    const llm = createLLM({
       provider: "openai",
       openaiApiKey: "test-key"
     });
     const chat = llm.chat("gpt-4o", { requestTimeout: 45000 });
-    
+
     // The timeout should be stored in chat options
     expect((chat as any).options.requestTimeout).toBe(45000);
   });

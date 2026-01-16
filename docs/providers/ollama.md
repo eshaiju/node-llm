@@ -7,16 +7,18 @@ description: Run Large Language Models locally on your machine with full support
 ---
 
 # {{ page.title }}
+
 {: .no_toc }
 
 {{ page.description }}
 {: .fs-6 .fw-300 }
 
 ## Table of contents
+
 {: .no_toc .text-delta }
 
 1. TOC
-{:toc}
+   {:toc}
 
 ---
 
@@ -46,12 +48,11 @@ const llm = createLLM({ provider: "ollama", ollamaApiBase: "http://192.168.1.10:
 You can pass Ollama/OpenAI-compatible parameters using `.withParams()`.
 
 ```javascript
-const chat = llm.chat("llama3")
-  .withParams({ 
-    temperature: 0.7,
-    seed: 42,
-    num_ctx: 8192, // Ollama specific context size
-  });
+const chat = llm.chat("llama3").withParams({
+  temperature: 0.7,
+  seed: 42,
+  num_ctx: 8192 // Ollama specific context size
+});
 ```
 
 ## Features
@@ -83,9 +84,8 @@ console.table(models);
 
 The following features are **not** supported natively by Ollama's OpenAI-compatible API:
 
-*   **Transcription** (Whisper): Not available via the `/v1/audio` endpoint.
-*   **Image Generation**: Not available via the `/v1/images` endpoint.
-*   **Moderation**: Not supported.
+- **Transcription** (Whisper): Not available via the `/v1/audio` endpoint.
+- **Image Generation**: Not available via the `/v1/images` endpoint.
+- **Moderation**: Not supported.
 
 For full feature parity locally, consider using [LocalAI](https://localai.io/) and connecting via the [OpenAI Provider](/providers/openai.html) with a custom `openaiApiBase`.
-

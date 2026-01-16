@@ -8,16 +8,18 @@ description: High-level overview of NodeLLM components, design principles, and h
 ---
 
 # {{ page.title }}
+
 {: .no_toc }
 
 {{ page.description }}
 {: .fs-6 .fw-300 }
 
 ## Table of contents
+
 {: .no_toc .text-delta }
 
 1. TOC
-{:toc}
+   {:toc}
 
 ---
 
@@ -28,6 +30,7 @@ description: High-level overview of NodeLLM components, design principles, and h
 Understanding these components will help you use the framework effectively.
 
 ### 1. Chat
+
 The primary interface for conversational AI. `NodeLLM.chat()` creates a stateful object that manages conversation history.
 
 ```ts
@@ -35,12 +38,15 @@ const chat = llm.chat("gpt-4o");
 ```
 
 ### 2. Providers
+
 Adapters that translate the unified `NodeLLM` format into provider-specific API calls (OpenAI, Anthropic, Gemini). You rarely interact with them directly; the library handles this based on the model ID you choose.
 
 ### 3. Tools
+
 Functions that the AI can execute. You define the schema and the handler, and `NodeLLM` manages the execution loop automatically.
 
 ### 4. Configuration
+
 Global settings for API keys and defaults.
 
 ```ts
@@ -53,12 +59,15 @@ const llm = createLLM({
 ## Design Principles
 
 ### Unified Interface
+
 Every provider works differently. `NodeLLM` normalizes inputs (messages, images) and outputs (content, usage stats) so your code doesn't change when you switch models.
 
 ### Streaming First
+
 AI responses are slow. `NodeLLM` is built around `AsyncIterator` to make streaming text to the user as easy as a `for await` loop.
 
 ### Progressive Disclosure
+
 Start simple with `NodeLLM.chat().ask("Hello")`. As your needs grow, you can access advanced features like raw API responses, custom headers, and token usage tracking without breaking your initial code.
 
 ## How it Works

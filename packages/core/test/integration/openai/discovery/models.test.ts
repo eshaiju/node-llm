@@ -14,14 +14,14 @@ describe("OpenAI Discovery Integration (VCR)", { timeout: 30000 }, () => {
 
   it("should list available models", async ({ task }) => {
     polly = setupVCR(task.name, "openai");
-        const llm = createLLM({
+    const llm = createLLM({
       openaiApiKey: process.env.OPENAI_API_KEY,
-      provider: "openai",
+      provider: "openai"
     });
     const models = await llm.listModels();
 
     expect(models.length).toBeGreaterThan(0);
-    const gpt4 = models.find(m => m.id.includes("gpt-4"));
+    const gpt4 = models.find((m) => m.id.includes("gpt-4"));
     expect(gpt4).toBeDefined();
     expect(gpt4?.provider).toBe("openai");
   });

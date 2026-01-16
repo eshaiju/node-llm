@@ -22,7 +22,7 @@ async function main() {
   // 2. Advanced Risk Assessment (Custom Logic)
   console.log("\n--- Custom Risk Assessment ---");
   const scores = Object.values(result.categoryScores);
-  const highRisk = scores.some(score => score > 0.8);
+  const highRisk = scores.some((score) => score > 0.8);
 
   if (highRisk) {
     console.log("🚨 HIGH RISK DETECTED: Blocking content immediately.");

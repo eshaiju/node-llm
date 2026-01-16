@@ -15,9 +15,9 @@ describe("Anthropic Structured Output (VCR)", { timeout: 30000 }, () => {
 
   it("should support structured output with Zod schema", async ({ task }) => {
     polly = setupVCR(task.name, "anthropic");
-        const llm = createLLM({
+    const llm = createLLM({
       anthropicApiKey: process.env.ANTHROPIC_API_KEY,
-      provider: "anthropic",
+      provider: "anthropic"
     });
     const chat = llm.chat("claude-3-haiku-20240307");
 
@@ -33,7 +33,7 @@ describe("Anthropic Structured Output (VCR)", { timeout: 30000 }, () => {
 
     // The raw content should be JSON
     expect(String(response)).toContain("{");
-    
+
     // The parsed content should allow access to properties
     const person = response.parsed;
     expect(person.name).toBe("Alice");

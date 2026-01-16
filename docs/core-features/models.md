@@ -7,16 +7,18 @@ description: Programmatically discover available models, their capabilities, and
 ---
 
 # {{ page.title }}
+
 {: .no_toc }
 
 {{ page.description }}
 {: .fs-6 .fw-300 }
 
 ## Table of contents
+
 {: .no_toc .text-delta }
 
 1. TOC
-{:toc}
+   {:toc}
 
 ---
 
@@ -44,42 +46,41 @@ if (model) {
 You can filter the registry to find models that match your requirements.
 
 ### Finding Vision Models
+
 ```ts
-const visionModels = NodeLLM.models.list().filter(m => 
-  m.capabilities.includes("vision")
-);
+const visionModels = NodeLLM.models.list().filter((m) => m.capabilities.includes("vision"));
 
 console.log(`Found ${visionModels.length} vision-capable models.`);
-visionModels.forEach(m => console.log(m.id));
+visionModels.forEach((m) => console.log(m.id));
 ```
 
 ### Finding Tool-Use Models
+
 ```ts
-const toolModels = NodeLLM.models.list().filter(m => 
-  m.capabilities.includes("tools")
-);
+const toolModels = NodeLLM.models.list().filter((m) => m.capabilities.includes("tools"));
 ```
 
 ### Finding Audio Models
+
 ```ts
-const audioModels = NodeLLM.models.list().filter(m => 
-  m.capabilities.includes("audio_input")
-);
+const audioModels = NodeLLM.models.list().filter((m) => m.capabilities.includes("audio_input"));
 ```
 
 ## Supported Providers
 
 The registry includes models from:
-*   **OpenAI** (GPT-4o, GPT-3.5, DALL-E)
-*   **Anthropic** (Claude 3.5 Sonnet, Haiku, Opus)
-*   **Google Gemini** (Gemini 1.5 Pro, Flash)
-*   **Vertex AI** (via Gemini)
+
+- **OpenAI** (GPT-4o, GPT-3.5, DALL-E)
+- **Anthropic** (Claude 3.5 Sonnet, Haiku, Opus)
+- **Google Gemini** (Gemini 1.5 Pro, Flash)
+- **Vertex AI** (via Gemini)
 
 ## Custom Models & Endpoints
 
 Sometimes you need to use models not in the registry, such as **Azure OpenAI** deployments, **Local Models** (Ollama/LM Studio), or brand new releases.
 
 ### Using `assumeModelExists`
+
 This flag tells `NodeLLM` to bypass the registry check.
 
 **Important**: You MUST specify the `provider` when using this flag, as the system cannot infer it from the ID.
@@ -94,6 +95,7 @@ await chat.ask("Hello");
 ```
 
 ### Custom Endpoints (e.g. Azure/Local)
+
 To point to a custom URL (like an Azure endpoint or local proxy), configure the base URL globally.
 
 ```ts

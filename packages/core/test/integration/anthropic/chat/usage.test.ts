@@ -15,9 +15,9 @@ describe("Anthropic Usage Integration (VCR)", { timeout: 30000 }, () => {
   it("should return token usage statistics", async ({ task }) => {
     polly = setupVCR(task.name, "anthropic");
 
-        const llm = createLLM({
+    const llm = createLLM({
       anthropicApiKey: process.env.ANTHROPIC_API_KEY,
-      provider: "anthropic",
+      provider: "anthropic"
     });
     const chat = llm.chat("claude-3-haiku-20240307");
 

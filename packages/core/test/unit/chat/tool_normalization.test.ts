@@ -27,7 +27,7 @@ describe("Tool Normalization Regression Tests", () => {
 
     const tools = (chat as any).options.tools;
     expect(tools).toHaveLength(1);
-    
+
     // It should NOT be the class or a raw instance anymore
     // It should be the normalized ToolDefinition
     expect(tools[0].type).toBe("function");
@@ -60,7 +60,9 @@ describe("Tool Normalization Regression Tests", () => {
       name = "second_tool";
       description = "description";
       schema = { type: "object", properties: {} };
-      async execute() { return "ok"; }
+      async execute() {
+        return "ok";
+      }
     }
 
     chat.withTools([SecondTool]);
@@ -69,7 +71,7 @@ describe("Tool Normalization Regression Tests", () => {
     expect(tools).toHaveLength(2);
     expect(tools[0].function.name).toBe("complex_tool");
     expect(tools[1].function.name).toBe("second_tool");
-    
+
     // Both should be normalized
     expect(tools[0].type).toBe("function");
     expect(tools[1].type).toBe("function");
@@ -102,9 +104,12 @@ describe("Tool Normalization Regression Tests", () => {
         execute: async () => "executed"
       };
 
-      expect(() => new Chat(provider, "test-model", {
-        tools: [toolWithExecute as any]
-      })).toThrow(/must have a 'handler' function/);
+      expect(
+        () =>
+          new Chat(provider, "test-model", {
+            tools: [toolWithExecute as any]
+          })
+      ).toThrow(/must have a 'handler' function/);
     });
 
     it("should throw ConfigurationError if function.name is missing", () => {
@@ -114,9 +119,12 @@ describe("Tool Normalization Regression Tests", () => {
         handler: async () => "ok"
       };
 
-      expect(() => new Chat(provider, "test-model", {
-        tools: [badTool as any]
-      })).toThrow(/function.name/);
+      expect(
+        () =>
+          new Chat(provider, "test-model", {
+            tools: [badTool as any]
+          })
+      ).toThrow(/function.name/);
     });
 
     it("should throw ConfigurationError if handler is missing and cannot be auto-mapped", () => {
@@ -126,9 +134,12 @@ describe("Tool Normalization Regression Tests", () => {
         // neither handler nor execute
       };
 
-      expect(() => new Chat(provider, "test-model", {
-        tools: [badTool as any]
-      })).toThrow(/must have a 'handler' function/);
+      expect(
+        () =>
+          new Chat(provider, "test-model", {
+            tools: [badTool as any]
+          })
+      ).toThrow(/must have a 'handler' function/);
     });
   });
 });

@@ -1,6 +1,1 @@
-export type Role =
-  | "system"
-  | "developer"
-  | "user"
-  | "assistant"
-  | "tool";
+export type Role = "system" | "developer" | "user" | "assistant" | "tool";

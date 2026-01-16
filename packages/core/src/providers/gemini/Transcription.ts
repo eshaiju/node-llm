@@ -5,9 +5,13 @@ import { GeminiGenerateContentRequest, GeminiGenerateContentResponse } from "./t
 import { logger } from "../../utils/logger.js";
 
 export class GeminiTranscription {
-  private static readonly DEFAULT_PROMPT = "Transcribe the provided audio and respond with only the transcript text.";
+  private static readonly DEFAULT_PROMPT =
+    "Transcribe the provided audio and respond with only the transcript text.";
 
-  constructor(private readonly baseUrl: string, private readonly apiKey: string) {}
+  constructor(
+    private readonly baseUrl: string,
+    private readonly apiKey: string
+  ) {}
 
   async execute(request: TranscriptionRequest): Promise<TranscriptionResponse> {
     const model = request.model || "gemini-2.0-flash";
@@ -36,15 +40,15 @@ export class GeminiTranscription {
             {
               inlineData: {
                 mimeType,
-                data: base64Data,
-              },
-            },
-          ],
-        },
+                data: base64Data
+              }
+            }
+          ]
+        }
       ],
       generationConfig: {
-        responseMimeType: "text/plain",
-      },
+        responseMimeType: "text/plain"
+      }
     };
 
     logger.logRequest("Gemini", "POST", url, payload);
@@ -52,9 +56,9 @@ export class GeminiTranscription {
     const response = await fetch(url, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json"
       },
-      body: JSON.stringify(payload),
+      body: JSON.stringify(payload)
     });
 
     if (!response.ok) {
@@ -63,12 +67,12 @@ export class GeminiTranscription {
 
     const json = (await response.json()) as GeminiGenerateContentResponse;
     logger.logResponse("Gemini", response.status, response.statusText, json);
-    const text = json.candidates?.[0]?.content?.parts?.map(p => p.text).join("") || "";
+    const text = json.candidates?.[0]?.content?.parts?.map((p) => p.text).join("") || "";
 
     return {
       text,
       model,
-      segments: [], // Gemini's generateContent doesn't return segments by default
+      segments: [] // Gemini's generateContent doesn't return segments by default
     };
   }
 }

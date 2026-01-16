@@ -14,7 +14,7 @@ export class Capabilities {
   static supportsVision(modelId: string): boolean {
     const model = ModelRegistry.find(modelId, "anthropic");
     if (model?.modalities?.input?.includes("image")) return true;
-    
+
     return /claude-3/.test(modelId);
   }
 
@@ -28,14 +28,14 @@ export class Capabilities {
   static supportsJsonMode(modelId: string): boolean {
     const model = ModelRegistry.find(modelId, "anthropic");
     if (model?.capabilities.includes("json_mode")) return true;
-    
+
     return this.supportsTools(modelId);
   }
 
   static supportsExtendedThinking(modelId: string): boolean {
     const model = ModelRegistry.find(modelId, "anthropic");
     if (model?.capabilities.includes("reasoning")) return true;
-    
+
     return /claude-3-7/.test(modelId) || /thinking/.test(modelId);
   }
 
@@ -44,15 +44,15 @@ export class Capabilities {
     const model = ModelRegistry.find(modelId, "anthropic");
 
     if (model) {
-        if (model.capabilities.includes("function_calling")) caps.push("function_calling");
-        if (model.capabilities.includes("reasoning")) caps.push("reasoning");
-        if (model.capabilities.includes("json_mode")) caps.push("json_mode");
-        model.capabilities.forEach(c => {
-            if (!caps.includes(c)) caps.push(c);
-        });
-        return caps;
+      if (model.capabilities.includes("function_calling")) caps.push("function_calling");
+      if (model.capabilities.includes("reasoning")) caps.push("reasoning");
+      if (model.capabilities.includes("json_mode")) caps.push("json_mode");
+      model.capabilities.forEach((c) => {
+        if (!caps.includes(c)) caps.push(c);
+      });
+      return caps;
     }
-    
+
     if (this.supportsTools(modelId)) caps.push("function_calling");
     if (this.supportsExtendedThinking(modelId)) caps.push("reasoning");
     if (this.supportsJsonMode(modelId)) caps.push("json_mode");
@@ -73,12 +73,16 @@ export class Capabilities {
         standard: {
           input_per_million: inputCpm,
           output_per_million: outputCpm,
-          ...(this.supportsExtendedThinking(modelId) ? { reasoning_output_per_million: outputCpm * 2.5 } : {})
+          ...(this.supportsExtendedThinking(modelId)
+            ? { reasoning_output_per_million: outputCpm * 2.5 }
+            : {})
         },
         batch: {
           input_per_million: inputCpm * 0.5,
           output_per_million: outputCpm * 0.5,
-          ...(this.supportsExtendedThinking(modelId) ? { reasoning_output_per_million: outputCpm * 1.25 } : {})
+          ...(this.supportsExtendedThinking(modelId)
+            ? { reasoning_output_per_million: outputCpm * 1.25 }
+            : {})
         }
       }
     };

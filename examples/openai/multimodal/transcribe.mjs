@@ -22,7 +22,6 @@ async function main() {
     console.log(`\nModel: ${result.model} | Duration: ${result.duration}s`);
     console.log("--- Content ---");
     console.log(result.text);
-
   } catch (e) {
     console.error("Transcription failed:", e.message);
   }

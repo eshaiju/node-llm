@@ -10,9 +10,9 @@ const pdfPath = path.resolve(__dirname, "../../documents/simple.pdf");
 async function main() {
   const llm = createLLM({
     provider: "anthropic",
-    anthropicApiKey: process.env.ANTHROPIC_API_KEY,
+    anthropicApiKey: process.env.ANTHROPIC_API_KEY
   });
-  
+
   // Check if file exists
   if (!fs.existsSync(pdfPath)) {
     console.error(`Error: File not found at ${pdfPath}`);
@@ -24,14 +24,14 @@ async function main() {
   console.log("Analyzing PDF...");
 
   try {
-      // We pass the file path. The FileLoader will load it.
-      const response = await chat.ask("Summarize this document", {
-          files: [pdfPath]
-      });
+    // We pass the file path. The FileLoader will load it.
+    const response = await chat.ask("Summarize this document", {
+      files: [pdfPath]
+    });
 
-      console.log("Response:", response.content);
+    console.log("Response:", response.content);
   } catch (e) {
-      console.error(e);
+    console.error(e);
   }
 }
 

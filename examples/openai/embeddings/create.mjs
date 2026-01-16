@@ -9,10 +9,7 @@ async function main() {
 
   console.log("\n--- Batch Embedding ---");
   // Some providers optimize batch requests
-  const batch = await NodeLLM.embed([
-    "JavaScript is awesome",
-    "OpenAI models are powerful"
-  ]);
+  const batch = await NodeLLM.embed(["JavaScript is awesome", "OpenAI models are powerful"]);
 
   console.log(`Batch count: ${batch.vectors.length}`);
   batch.vectors.forEach((vec, i) => console.log(`Vector ${i}: ${vec.length} dims`));

@@ -17,7 +17,7 @@ describe("Transcription Unit Tests", () => {
         segments: [{ id: 0, start: 0, end: 10, text: "Mock transcription" }]
       }),
       capabilities: {
-        supportsTranscription: vi.fn().mockReturnValue(true),
+        supportsTranscription: vi.fn().mockReturnValue(true)
       } as any
     } as any;
   });
@@ -31,7 +31,7 @@ describe("Transcription Unit Tests", () => {
       language: "en",
       prompt: "Test prompt",
       model: "",
-      requestTimeout: 30000,
+      requestTimeout: 30000
     });
   });
 
@@ -40,35 +40,41 @@ describe("Transcription Unit Tests", () => {
     const prompt = "Discussion about Ruby, Rails, PostgreSQL, and Redis.";
     await llm.transcribe("test.mp3", { prompt });
 
-    expect(mockProvider.transcribe).toHaveBeenCalledWith(expect.objectContaining({
-      prompt: prompt
-    }));
+    expect(mockProvider.transcribe).toHaveBeenCalledWith(
+      expect.objectContaining({
+        prompt: prompt
+      })
+    );
   });
 
   it("should use global default model if provided", async () => {
-    const llm = createLLM({ 
+    const llm = createLLM({
       provider: mockProvider,
       defaultTranscriptionModel: "gpt-4o-transcribe"
     });
 
     await llm.transcribe("test.mp3");
 
-    expect(mockProvider.transcribe).toHaveBeenCalledWith(expect.objectContaining({
-      model: "gpt-4o-transcribe"
-    }));
+    expect(mockProvider.transcribe).toHaveBeenCalledWith(
+      expect.objectContaining({
+        model: "gpt-4o-transcribe"
+      })
+    );
   });
 
   it("should override global default model with local option", async () => {
-    const llm = createLLM({ 
+    const llm = createLLM({
       provider: mockProvider,
       defaultTranscriptionModel: "gpt-4o-transcribe"
     });
 
     await llm.transcribe("test.mp3", { model: "whisper-1" });
 
-    expect(mockProvider.transcribe).toHaveBeenCalledWith(expect.objectContaining({
-      model: "whisper-1"
-    }));
+    expect(mockProvider.transcribe).toHaveBeenCalledWith(
+      expect.objectContaining({
+        model: "whisper-1"
+      })
+    );
   });
 
   it("should return a Transcription object with correct properties", async () => {
@@ -91,7 +97,9 @@ describe("Transcription Unit Tests", () => {
     } as any;
     const llm = createLLM({ provider: limitedProvider });
 
-    await expect(llm.transcribe("test.mp3")).rejects.toThrow("Provider does not support transcribe");
+    await expect(llm.transcribe("test.mp3")).rejects.toThrow(
+      "Provider does not support transcribe"
+    );
   });
 
   it("should handle segments with speaker labels", async () => {
@@ -120,15 +128,19 @@ describe("Transcription Unit Tests", () => {
       speakerReferences: ["alice.wav", "bob.wav"]
     });
 
-    expect(mockProvider.transcribe).toHaveBeenCalledWith(expect.objectContaining({
-      speakerNames: ["Alice", "Bob"],
-      speakerReferences: ["alice.wav", "bob.wav"]
-    }));
+    expect(mockProvider.transcribe).toHaveBeenCalledWith(
+      expect.objectContaining({
+        speakerNames: ["Alice", "Bob"],
+        speakerReferences: ["alice.wav", "bob.wav"]
+      })
+    );
   });
 
   it("should throw if model does not support transcription", async () => {
     (mockProvider.capabilities!.supportsTranscription as any).mockReturnValue(false);
     const llm = createLLM({ provider: mockProvider });
-    await expect(llm.transcribe("test.mp3", { model: "gpt-4" })).rejects.toThrow("does not support transcription");
+    await expect(llm.transcribe("test.mp3", { model: "gpt-4" })).rejects.toThrow(
+      "does not support transcription"
+    );
   });
 });

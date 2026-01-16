@@ -3,7 +3,7 @@ import { toJsonSchema } from "../schema/to-json-schema.js";
 
 export interface ToolCall {
   id: string;
-  type: 'function';
+  type: "function";
   function: {
     name: string;
     arguments: string;
@@ -11,7 +11,7 @@ export interface ToolCall {
 }
 
 export interface ToolDefinition {
-  type: 'function';
+  type: "function";
   function: {
     name: string;
     description?: string;
@@ -23,7 +23,7 @@ export interface ToolDefinition {
 /**
  * Anything that can be resolved into a ToolDefinition.
  */
-export type ToolResolvable = Tool | { new(): Tool } | ToolDefinition | any;
+export type ToolResolvable = Tool | { new (): Tool } | ToolDefinition | any;
 
 /**
  * Subclass this to create tools with auto-generated schemas and type safety.
@@ -40,13 +40,13 @@ export abstract class Tool<T = any> {
   public abstract description: string;
 
   /**
-   * Parameters the tool accepts. 
+   * Parameters the tool accepts.
    * Can be a Zod object (for auto-schema + type safety) or a raw JSON Schema.
    */
   public abstract schema: z.ZodObject<any> | Record<string, any>;
 
   /**
-   * The core logic for the tool. 
+   * The core logic for the tool.
    * 'args' will be parsed and validated based on 'schema'.
    */
   public abstract execute(args: T): Promise<any>;
@@ -67,22 +67,25 @@ export abstract class Tool<T = any> {
    */
   public toLLMTool(): ToolDefinition {
     const rawSchema = toJsonSchema(this.schema);
-    
+
     // We want the 'properties' and 'required' parts, not the full JSON Schema wrapper if present
-    const parameters = (rawSchema as any).type === "object" ? rawSchema : {
-      type: "object",
-      properties: (rawSchema as any).properties || {},
-      required: (rawSchema as any).required || []
-    };
+    const parameters =
+      (rawSchema as any).type === "object"
+        ? rawSchema
+        : {
+            type: "object",
+            properties: (rawSchema as any).properties || {},
+            required: (rawSchema as any).required || []
+          };
 
     return {
       type: "function",
       function: {
         name: this.name,
         description: this.description,
-        parameters: parameters as any,
+        parameters: parameters as any
       },
-      handler: this.handler.bind(this),
+      handler: this.handler.bind(this)
     };
   }
 }

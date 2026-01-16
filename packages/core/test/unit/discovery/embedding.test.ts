@@ -10,8 +10,8 @@ const mockProvider = {
   defaultModel: () => "test-model",
   embed: mockEmbed,
   capabilities: {
-    supportsEmbeddings: mockSupportsEmbeddings,
-  },
+    supportsEmbeddings: mockSupportsEmbeddings
+  }
 } as any;
 
 describe("NodeLLM Embeddings", () => {
@@ -19,7 +19,7 @@ describe("NodeLLM Embeddings", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    llm = createLLM({ 
+    llm = createLLM({
       provider: mockProvider as any,
       defaultEmbeddingModel: "text-embedding-3-small"
     });
@@ -30,7 +30,7 @@ describe("NodeLLM Embeddings", () => {
       vectors: [[0.1, 0.2]],
       model: "text-embedding-3-small",
       input_tokens: 10,
-      dimensions: 2,
+      dimensions: 2
     });
 
     const input = "test input";
@@ -40,7 +40,7 @@ describe("NodeLLM Embeddings", () => {
       input,
       model: "text-embedding-3-small", // Default
       dimensions: undefined,
-      requestTimeout: 30000,
+      requestTimeout: 30000
     });
 
     expect(response.vectors).toEqual([[0.1, 0.2]]);
@@ -54,15 +54,17 @@ describe("NodeLLM Embeddings", () => {
       vectors: [[0.1], [0.2]],
       model: "text-embedding-3-small",
       input_tokens: 20,
-      dimensions: 1,
+      dimensions: 1
     });
 
     const input = ["test1", "test2"];
     await llm.embed(input);
 
-    expect(mockEmbed).toHaveBeenCalledWith(expect.objectContaining({
-      input,
-    }));
+    expect(mockEmbed).toHaveBeenCalledWith(
+      expect.objectContaining({
+        input
+      })
+    );
   });
 
   it("should allow overriding model and dimensions", async () => {
@@ -74,14 +76,14 @@ describe("NodeLLM Embeddings", () => {
       input: "test",
       model: "custom-model",
       dimensions: 128,
-      requestTimeout: 30000,
+      requestTimeout: 30000
     });
   });
 
   it("should use defaultEmbeddingModel if configured", async () => {
     const customLlm = createLLM({
       provider: mockProvider as any,
-      defaultEmbeddingModel: "configured-default",
+      defaultEmbeddingModel: "configured-default"
     });
 
     mockEmbed.mockResolvedValue({});
@@ -91,7 +93,7 @@ describe("NodeLLM Embeddings", () => {
       input: "test",
       model: "configured-default",
       dimensions: undefined,
-      requestTimeout: 30000,
+      requestTimeout: 30000
     });
   });
 
@@ -107,7 +109,8 @@ describe("NodeLLM Embeddings", () => {
 
   it("should throw if model does not support embeddings", async () => {
     mockSupportsEmbeddings.mockReturnValueOnce(false);
-    await expect(llm.embed("test", { model: "chat-model" }))
-      .rejects.toThrow("Model chat-model does not support embeddings");
+    await expect(llm.embed("test", { model: "chat-model" })).rejects.toThrow(
+      "Model chat-model does not support embeddings"
+    );
   });
 });

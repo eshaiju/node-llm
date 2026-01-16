@@ -4,7 +4,7 @@ import "dotenv/config";
 async function main() {
   const llm = createLLM({
     provider: "openai",
-    openaiApiKey: process.env.OPENAI_API_KEY,
+    openaiApiKey: process.env.OPENAI_API_KEY
   });
 
   // Use the o3-mini or o1 model
@@ -14,7 +14,9 @@ async function main() {
   const chat = llm.chat(model);
 
   console.log(`--- Reasoning with ${model} ---`);
-  const response = await chat.ask("Explain the logic puzzle: if every A is a B, and some B are C, is every A a C?");
+  const response = await chat.ask(
+    "Explain the logic puzzle: if every A is a B, and some B are C, is every A a C?"
+  );
 
   console.log("\x1b[32m[ANSWER]\x1b[0m");
   console.log(response.content);
@@ -35,4 +37,9 @@ async function main() {
   console.log(`Estimated Cost: $${response.usage.cost}`);
 }
 
-main().then(() => process.exit(0)).catch((err) => { console.error(err); process.exit(1); });
+main()
+  .then(() => process.exit(0))
+  .catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });

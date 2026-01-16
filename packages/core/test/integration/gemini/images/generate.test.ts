@@ -15,12 +15,12 @@ describe("Gemini Image Generation Integration (VCR)", { timeout: 30000 }, () => 
   it("should generate an image and support image features (Paint)", async ({ task }) => {
     polly = setupVCR(task.name, "gemini");
 
-        const llm = createLLM({
+    const llm = createLLM({
       geminiApiKey: process.env.GEMINI_API_KEY,
-      provider: "gemini",
+      provider: "gemini"
     });
-    const image = await llm.paint("A sunset over the mountains", { 
-      model: "imagen-4.0-generate-001" 
+    const image = await llm.paint("A sunset over the mountains", {
+      model: "imagen-4.0-generate-001"
     });
 
     expect(image.data).toBeDefined();

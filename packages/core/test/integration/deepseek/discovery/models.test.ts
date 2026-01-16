@@ -15,9 +15,9 @@ describe("DeepSeek Discovery Integration (VCR)", { timeout: 30000 }, () => {
   it("should list models", async ({ task }) => {
     polly = setupVCR(task.name, "deepseek");
 
-        const llm = createLLM({
+    const llm = createLLM({
       deepseekApiKey: process.env.DEEPSEEK_API_KEY,
-      provider: "deepseek",
+      provider: "deepseek"
     });
     const models = await llm.listModels();
 
@@ -25,8 +25,8 @@ describe("DeepSeek Discovery Integration (VCR)", { timeout: 30000 }, () => {
     const modelIds = models.map((m) => m.id);
     expect(modelIds).toContain("deepseek-chat");
     expect(modelIds).toContain("deepseek-reasoner");
-    
-    const chatModel = models.find(m => m.id === "deepseek-chat");
+
+    const chatModel = models.find((m) => m.id === "deepseek-chat");
     expect(chatModel?.provider).toBe("deepseek");
     expect(chatModel?.context_window).toBe(128000);
   });

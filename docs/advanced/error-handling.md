@@ -7,16 +7,18 @@ description: Build resilient AI applications using our descriptive exception hie
 ---
 
 # {{ page.title }}
+
 {: .no_toc }
 
 {{ page.description }}
 {: .fs-6 .fw-300 }
 
 ## Table of contents
+
 {: .no_toc .text-delta }
 
 1. TOC
-{:toc}
+   {:toc}
 
 ---
 
@@ -84,13 +86,12 @@ try {
 const llm = createLLM({
   provider: "openai",
   retry: {
-    attempts: 3,      // Max retries (default: 3)
-    delayMs: 1000,    // Initial delay (default: 1000ms)
-    multiplier: 2     // Exponential factor
+    attempts: 3, // Max retries (default: 3)
+    delayMs: 1000, // Initial delay (default: 1000ms)
+    multiplier: 2 // Exponential factor
   }
 });
 ```
-
 
 The library will **not** retry non-transient errors like `BadRequestError` (400) or `AuthenticationError` (401).
 
@@ -99,17 +100,20 @@ The library will **not** retry non-transient errors like `BadRequestError` (400)
 When a tool fails inside a `Chat.ask()` or `Chat.stream()` loop, `NodeLLM` uses a strategy to stop infinite recursion.
 
 ### Automatic Logic
+
 The agent loop will **short-circuit and crash** immediately if:
+
 1.  An `AuthenticationError` (401/403) occurs.
 2.  A `ToolError` is thrown with `fatal: true`.
 
 ### Manual Control
+
 You can override this behavior using the `onToolCallError` hook in `ChatOptions`:
 
 ```ts
 const chat = llm.chat("gpt-4o", {
   onToolCallError: (toolCall, error) => {
-    if (isCritical(toolCall)) return "STOP";     // Crash immediately
+    if (isCritical(toolCall)) return "STOP"; // Crash immediately
     if (isOptional(toolCall)) return "CONTINUE"; // Swallow error and proceed
     // return void to let NodeLLM decide
   }

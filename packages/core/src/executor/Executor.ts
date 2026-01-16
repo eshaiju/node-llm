@@ -18,7 +18,7 @@ export class Executor {
 
         // If it's a fatal error (BadRequest, Authentication), don't retry
         const isRetryable = error instanceof RateLimitError || error instanceof ServerError;
-        
+
         if (!isRetryable || attempt >= this.retry.attempts) {
           throw error;
         }

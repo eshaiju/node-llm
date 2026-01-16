@@ -11,7 +11,7 @@ class WeatherTool extends Tool {
   async execute({ location }) {
     console.log(`⚡️ [Tool Executing] Fetching weather for: ${location}`);
     // Simulate network delay
-    await new Promise(r => setTimeout(r, 500));
+    await new Promise((r) => setTimeout(r, 500));
     return { location, temperature: 22, condition: "Sunny" };
   }
 }
@@ -19,7 +19,7 @@ class WeatherTool extends Tool {
 async function main() {
   const llm = createLLM({
     provider: "openai",
-    openaiApiKey: process.env.OPENAI_API_KEY,
+    openaiApiKey: process.env.OPENAI_API_KEY
   });
   const chat = llm.chat("gpt-4o-mini").withTool(WeatherTool);
 
@@ -31,4 +31,9 @@ async function main() {
   console.log("\nAssistant:", response.content);
 }
 
-main().then(() => process.exit(0)).catch((err) => { console.error(err); process.exit(1); });
+main()
+  .then(() => process.exit(0))
+  .catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });

@@ -31,7 +31,7 @@ const WeatherTool: Tool = {
       location,
       temperature: 22,
       unit: unit || "celsius",
-      conditions: "Sunny",
+      conditions: "Sunny"
     });
   }
 };
@@ -48,12 +48,11 @@ describe("Anthropic Tool Calling Integration (VCR)", { timeout: 30000 }, () => {
   it("should support tool calling", async ({ task }) => {
     polly = setupVCR(task.name, "anthropic");
 
-        const llm = createLLM({
+    const llm = createLLM({
       anthropicApiKey: process.env.ANTHROPIC_API_KEY,
-      provider: "anthropic",
+      provider: "anthropic"
     });
-    const chat = llm.chat("claude-3-haiku-20240307")
-        .withTool(WeatherTool);
+    const chat = llm.chat("claude-3-haiku-20240307").withTool(WeatherTool);
 
     const response = await chat.ask("What is the weather in Paris?");
 

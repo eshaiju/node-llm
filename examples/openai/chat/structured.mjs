@@ -4,17 +4,19 @@ import { createLLM, NodeLLM, Tool, z } from "../../../packages/core/dist/index.j
 async function main() {
   const llm = createLLM({
     provider: "openai",
-    openaiApiKey: process.env.OPENAI_API_KEY,
+    openaiApiKey: process.env.OPENAI_API_KEY
   });
   const chat = llm.chat("gpt-4o-mini");
 
   // --- Example 1: Using Zod (Recommended) ---
   const recipeSchema = z.object({
     name: z.string(),
-    ingredients: z.array(z.object({
-      item: z.string(),
-      amount: z.string()
-    })),
+    ingredients: z.array(
+      z.object({
+        item: z.string(),
+        amount: z.string()
+      })
+    ),
     steps: z.array(z.string()),
     prep_time_minutes: z.number()
   });
@@ -48,4 +50,9 @@ async function main() {
   console.log("JSON:", JSON.stringify(response2.parsed, null, 2));
 }
 
-main().then(() => process.exit(0)).catch((err) => { console.error(err); process.exit(1); });
+main()
+  .then(() => process.exit(0))
+  .catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });

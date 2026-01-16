@@ -38,7 +38,7 @@ async function main() {
       process.stdout.write(chunk.content || "");
     }
   } catch (error) {
-    if (error.name === 'AbortError') {
+    if (error.name === "AbortError") {
       console.log("\n[Stream aborted successfully]");
     } else {
       console.error("Error:", error.message);
@@ -64,8 +64,9 @@ async function main() {
 
   // Example 5: Streaming with system instructions
   console.log("=== Example 5: Streaming with System Instructions ===");
-  const chatWithSystem = NodeLLM.chat("gpt-4o-mini")
-    .withInstructions("You are a pirate. Always respond in pirate speak.");
+  const chatWithSystem = NodeLLM.chat("gpt-4o-mini").withInstructions(
+    "You are a pirate. Always respond in pirate speak."
+  );
 
   for await (const chunk of chatWithSystem.stream("Tell me about the ocean.")) {
     process.stdout.write(chunk.content || "");
@@ -107,11 +108,7 @@ async function main() {
 
   // Example 9: Multiple concurrent streams (advanced)
   console.log("=== Example 9: Sequential Streams ===");
-  const questions = [
-    "What is AI?",
-    "What is ML?",
-    "What is DL?"
-  ];
+  const questions = ["What is AI?", "What is ML?", "What is DL?"];
 
   for (const question of questions) {
     console.log(`\nQ: ${question}`);
@@ -125,7 +122,9 @@ async function main() {
   console.log("\n=== All streaming examples completed ===");
 }
 
-main().then(() => process.exit(0)).catch((err) => {
-  console.error(err);
-  process.exit(1);
-});
+main()
+  .then(() => process.exit(0))
+  .catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });

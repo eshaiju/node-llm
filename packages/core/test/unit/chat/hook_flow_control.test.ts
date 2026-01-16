@@ -14,7 +14,9 @@ class MockToolProvider implements Provider {
     if (!response) throw new Error("No responses");
     return response;
   }
-  defaultModel() { return "test-model"; }
+  defaultModel() {
+    return "test-model";
+  }
 }
 
 describe("Hook Flow Control", () => {
@@ -28,17 +30,19 @@ describe("Hook Flow Control", () => {
 
     const toolCallResponse: ChatResponse = {
       content: null,
-      tool_calls: [{ id: "c1", type: "function", function: { name: "standard_tool", arguments: "{}" } }]
+      tool_calls: [
+        { id: "c1", type: "function", function: { name: "standard_tool", arguments: "{}" } }
+      ]
     };
 
     const provider = new MockToolProvider([toolCallResponse]);
-    
+
     // Hook forced to stop
     const onToolCallError = vi.fn().mockReturnValue("STOP");
-    
-    const chat = new Chat(provider, "test-model", { 
+
+    const chat = new Chat(provider, "test-model", {
       tools: [standardTool as any],
-      onToolCallError 
+      onToolCallError
     });
 
     await expect(chat.ask("Call tool")).rejects.toThrow("Standard error");
@@ -55,20 +59,22 @@ describe("Hook Flow Control", () => {
 
     const toolCallResponse: ChatResponse = {
       content: null,
-      tool_calls: [{ id: "c1", type: "function", function: { name: "fatal_tool", arguments: "{}" } }]
+      tool_calls: [
+        { id: "c1", type: "function", function: { name: "fatal_tool", arguments: "{}" } }
+      ]
     };
 
     // Final response if we continue
     const finalResponse: ChatResponse = { content: "I ignored the error" };
-    
+
     const provider = new MockToolProvider([toolCallResponse, finalResponse]);
-    
+
     // Hook forced to continue
     const onToolCallError = vi.fn().mockReturnValue("CONTINUE");
-    
-    const chat = new Chat(provider, "test-model", { 
+
+    const chat = new Chat(provider, "test-model", {
       tools: [fatalTool as any],
-      onToolCallError 
+      onToolCallError
     });
 
     const response = await chat.ask("Call tool");
@@ -86,15 +92,17 @@ describe("Hook Flow Control", () => {
 
     const toolCallResponse: ChatResponse = {
       content: null,
-      tool_calls: [{ id: "c1", type: "function", function: { name: "fatal_tool", arguments: "{}" } }]
+      tool_calls: [
+        { id: "c1", type: "function", function: { name: "fatal_tool", arguments: "{}" } }
+      ]
     };
 
     const provider = new MockToolProvider([toolCallResponse]);
     const onToolCallError = vi.fn(); // returns void
-    
-    const chat = new Chat(provider, "test-model", { 
+
+    const chat = new Chat(provider, "test-model", {
       tools: [fatalTool as any],
-      onToolCallError 
+      onToolCallError
     });
 
     await expect(chat.ask("Call tool")).rejects.toThrow("Fatal");

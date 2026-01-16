@@ -4,13 +4,13 @@ import { createLLM, NodeLLM, Tool, z } from "../../../packages/core/dist/index.j
 async function main() {
   const llm = createLLM({
     provider: "deepseek",
-    deepseekApiKey: process.env.DEEPSEEK_API_KEY,
+    deepseekApiKey: process.env.DEEPSEEK_API_KEY
   });
   // 1. Behavior Tuning with System Prompts
   console.log("--- System Instructions ---");
-  const chat = llm.chat("deepseek-chat").withInstructions(
-    "You are a strictly professional assistant. Keep answers under 20 words."
-  );
+  const chat = llm
+    .chat("deepseek-chat")
+    .withInstructions("You are a strictly professional assistant. Keep answers under 20 words.");
 
   const response1 = await chat.ask("What is the meaning of life?");
   console.log(`Assistant: ${response1.content}`);

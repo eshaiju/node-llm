@@ -15,9 +15,9 @@ describe("DeepSeek Chat Integration (VCR)", { timeout: 30000 }, () => {
   it("should perform a basic chat completion", async ({ task }) => {
     polly = setupVCR(task.name, "deepseek");
 
-        const llm = createLLM({
+    const llm = createLLM({
       deepseekApiKey: process.env.DEEPSEEK_API_KEY,
-      provider: "deepseek",
+      provider: "deepseek"
     });
     const chat = llm.chat("deepseek-chat");
 
@@ -30,7 +30,7 @@ describe("DeepSeek Chat Integration (VCR)", { timeout: 30000 }, () => {
   it("should support streaming", async ({ task }) => {
     polly = setupVCR(task.name, "deepseek");
 
-        const llm = createLLM({ provider: "deepseek" });
+    const llm = createLLM({ provider: "deepseek" });
     const chat = llm.chat("deepseek-chat");
 
     let fullText = "";

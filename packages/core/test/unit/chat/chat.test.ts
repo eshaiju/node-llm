@@ -4,13 +4,10 @@ import { FakeProvider } from "../../fake-provider.js";
 
 describe("Chat", () => {
   it("accumulates messages and returns provider response", async () => {
-    const provider = new FakeProvider([
-      "Hello from assistant",
-      "Second reply",
-    ]);
+    const provider = new FakeProvider(["Hello from assistant", "Second reply"]);
 
     const chat = new Chat(provider, "test-model", {
-      systemPrompt: "You are a test assistant",
+      systemPrompt: "You are a test assistant"
     });
 
     const reply1 = await chat.ask("Hi");
@@ -37,7 +34,7 @@ describe("Chat", () => {
 
     chat.withModel("model-2");
     await chat.ask("Q2");
-    
+
     expect((chat.history[3].content as any).model_id).toBe("model-2");
   });
 });

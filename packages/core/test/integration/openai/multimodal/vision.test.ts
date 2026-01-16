@@ -15,14 +15,16 @@ describe("OpenAI Multi-modal Integration (VCR)", { timeout: 30000 }, () => {
   it("should analyze images (Vision)", async ({ task }) => {
     polly = setupVCR(task.name, "openai");
 
-        const llm = createLLM({
+    const llm = createLLM({
       openaiApiKey: process.env.OPENAI_API_KEY,
-      provider: "openai",
+      provider: "openai"
     });
     const chat = llm.chat("gpt-4o-mini");
 
     const response = await chat.ask("What's in this image?", {
-      files: ["https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Gfp-wisconsin-madison-the-nature-boardwalk.jpg/2560px-Gfp-wisconsin-madison-the-nature-boardwalk.jpg"]
+      files: [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Gfp-wisconsin-madison-the-nature-boardwalk.jpg/2560px-Gfp-wisconsin-madison-the-nature-boardwalk.jpg"
+      ]
     });
 
     expect(response.content.toLowerCase()).toMatch(/nature|boardwalk|grass|sky/);
@@ -33,17 +35,19 @@ describe("OpenAI Multi-modal Integration (VCR)", { timeout: 30000 }, () => {
   it("should analyze multiple images (Multi-Image Vision)", async ({ task }) => {
     polly = setupVCR(task.name, "openai");
 
-        const llm = createLLM({
+    const llm = createLLM({
       openaiApiKey: process.env.OPENAI_API_KEY,
-      provider: "openai",
+      provider: "openai"
     });
     const chat = llm.chat("gpt-4o-mini");
 
     // Two differing images (Base64 1x1 pixels to avoid download errors)
     // Red dot
-    const img1 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==";
+    const img1 =
+      "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==";
     // Blue dot
-    const img2 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==";
+    const img2 =
+      "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==";
 
     const response = await chat.ask("Compare these two images. One is red, one is blue.", {
       files: [img1, img2] // using 'files' as alias for images
@@ -57,13 +61,13 @@ describe("OpenAI Multi-modal Integration (VCR)", { timeout: 30000 }, () => {
 
   it("should transcribe audio", async ({ task }) => {
     polly = setupVCR(task.name, "openai");
-    
-    const llm = createLLM({ 
+
+    const llm = createLLM({
       openaiApiKey: process.env.OPENAI_API_KEY,
       provider: "openai",
-      defaultTranscriptionModel: "whisper-1",
+      defaultTranscriptionModel: "whisper-1"
     });
-    
+
     // Using absolute path resolved from test file location
     const path = await import("path");
     const { fileURLToPath } = await import("url");
@@ -71,7 +75,7 @@ describe("OpenAI Multi-modal Integration (VCR)", { timeout: 30000 }, () => {
     const audioPath = path.resolve(__dirname, "../../../../../../examples/audio/sample-0.mp3");
 
     const transcription = await llm.transcribe(audioPath);
-    
+
     expect(transcription.text).toBeDefined();
     expect(transcription.segments.length).toBeGreaterThan(0);
     expect(transcription.duration).toBeGreaterThan(0);
@@ -80,11 +84,11 @@ describe("OpenAI Multi-modal Integration (VCR)", { timeout: 30000 }, () => {
   it("should transcribe audio using gpt-4o-transcribe", async ({ task }) => {
     polly = setupVCR(task.name, "openai");
 
-        const llm = createLLM({
+    const llm = createLLM({
       openaiApiKey: process.env.OPENAI_API_KEY,
-      provider: "openai",
+      provider: "openai"
     });
-    
+
     const path = await import("path");
     const { fileURLToPath } = await import("url");
     const __dirname = path.dirname(fileURLToPath(import.meta.url));

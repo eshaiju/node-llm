@@ -8,7 +8,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 async function main() {
   const llm = createLLM({
     provider: "anthropic",
-    anthropicApiKey: process.env.ANTHROPIC_API_KEY,
+    anthropicApiKey: process.env.ANTHROPIC_API_KEY
   });
   const chat = llm.chat("claude-3-haiku-20240307");
 

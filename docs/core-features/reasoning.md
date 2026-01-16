@@ -7,16 +7,18 @@ description: Access the inner thoughts and chain-of-thought process of advanced 
 ---
 
 # {{ page.title }}
+
 {: .no_toc }
 
 {{ page.description }}
 {: .fs-6 .fw-300 }
 
 ## Table of contents
+
 {: .no_toc .text-delta }
 
 1. TOC
-{:toc}
+   {:toc}
 
 ---
 
@@ -74,7 +76,7 @@ console.log(`Total cost: $${response.cost}`);
 
 Currently, the following models have enhanced reasoning support in `NodeLLM`:
 
-| Model ID | Provider | Feature |
-| :--- | :--- | :--- |
-| `deepseek-reasoner` | DeepSeek | Full thinking text extraction |
-| `o1-preview`, `o1-mini`, `o3-mini` | OpenAI | Reasoning token & cost tracking |
+| Model ID                           | Provider | Feature                         |
+| :--------------------------------- | :------- | :------------------------------ |
+| `deepseek-reasoner`                | DeepSeek | Full thinking text extraction   |
+| `o1-preview`, `o1-mini`, `o3-mini` | OpenAI   | Reasoning token & cost tracking |

@@ -4,13 +4,13 @@ import { createLLM, NodeLLM, Tool, z } from "../../../packages/core/dist/index.j
 async function main() {
   const llm = createLLM({
     provider: "anthropic",
-    anthropicApiKey: process.env.ANTHROPIC_API_KEY,
+    anthropicApiKey: process.env.ANTHROPIC_API_KEY
   });
   console.log("Attempting to generate image with Anthropic...");
 
   try {
     await llm.paint({
-      prompt: "A beautiful sunset",
+      prompt: "A beautiful sunset"
     });
   } catch (error) {
     console.log("Caught expected error:", error.message);

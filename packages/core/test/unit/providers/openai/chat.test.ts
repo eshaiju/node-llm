@@ -30,10 +30,13 @@ describe("OpenAIChat", () => {
 
     const result = await chat.execute(request);
 
-    expect(fetch).toHaveBeenCalledWith(`${baseUrl}/chat/completions`, expect.objectContaining({
-      method: "POST",
-      headers: expect.objectContaining({ "Authorization": "Bearer test-key" })
-    }));
+    expect(fetch).toHaveBeenCalledWith(
+      `${baseUrl}/chat/completions`,
+      expect.objectContaining({
+        method: "POST",
+        headers: expect.objectContaining({ Authorization: "Bearer test-key" })
+      })
+    );
     expect(result.content).toBe("Hi!");
     expect(result.usage?.total_tokens).toBe(15);
   });
@@ -45,12 +48,16 @@ describe("OpenAIChat", () => {
     };
 
     const mockResponse = {
-      choices: [{ 
-        message: { 
-          content: null, 
-          tool_calls: [{ id: "call1", type: "function", function: { name: "get_weather", arguments: "{}" } }] 
-        } 
-      }]
+      choices: [
+        {
+          message: {
+            content: null,
+            tool_calls: [
+              { id: "call1", type: "function", function: { name: "get_weather", arguments: "{}" } }
+            ]
+          }
+        }
+      ]
     };
 
     (fetch as any).mockResolvedValue({

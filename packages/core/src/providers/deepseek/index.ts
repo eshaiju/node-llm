@@ -18,7 +18,9 @@ export function registerDeepSeekProvider() {
     const baseUrl = cfg.deepseekApiBase; // Optional override
 
     if (!apiKey) {
-      throw new Error("deepseek_api_key is not set in config or DEEPSEEK_API_KEY environment variable");
+      throw new Error(
+        "deepseek_api_key is not set in config or DEEPSEEK_API_KEY environment variable"
+      );
     }
 
     return new DeepSeekProvider({ apiKey, baseUrl });

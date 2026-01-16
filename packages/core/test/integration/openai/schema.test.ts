@@ -15,9 +15,9 @@ describe("OpenAI Structured Output (VCR)", { timeout: 30000 }, () => {
 
   it("should support structured output with Zod schema", async ({ task }) => {
     polly = setupVCR(task.name, "openai");
-        const llm = createLLM({
+    const llm = createLLM({
       openaiApiKey: process.env.OPENAI_API_KEY,
-      provider: "openai",
+      provider: "openai"
     });
     const chat = llm.chat("gpt-4o-mini");
 
@@ -33,7 +33,7 @@ describe("OpenAI Structured Output (VCR)", { timeout: 30000 }, () => {
 
     // The raw content should be JSON
     expect(String(response)).toContain("{");
-    
+
     // The parsed content should allow access to properties
     const person = response.parsed;
     expect(person.name).toBe("Alice");

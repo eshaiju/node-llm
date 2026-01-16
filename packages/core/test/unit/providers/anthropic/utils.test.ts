@@ -14,7 +14,13 @@ describe("Anthropic Utils", () => {
 
     it("should handle array of content parts in system message", () => {
       const messages: Message[] = [
-        { role: "system", content: [{ type: "text", text: "Part 1" }, { type: "text", text: "Part 2" }] } as any,
+        {
+          role: "system",
+          content: [
+            { type: "text", text: "Part 1" },
+            { type: "text", text: "Part 2" }
+          ]
+        } as any,
         { role: "user", content: "Hello" }
       ];
       expect(formatSystemPrompt(messages)).toBe("Part 1\nPart 2");
@@ -52,9 +58,7 @@ describe("Anthropic Utils", () => {
     });
 
     it("should handle tool responses", () => {
-      const messages: Message[] = [
-        { role: "tool", tool_call_id: "call1", content: "Result" }
-      ];
+      const messages: Message[] = [{ role: "tool", tool_call_id: "call1", content: "Result" }];
       const result = formatMessages(messages);
       expect(result).toHaveLength(1);
       expect(result[0].role).toBe("user");
@@ -65,10 +69,12 @@ describe("Anthropic Utils", () => {
 
     it("should handle assistant messages with tool calls", () => {
       const messages: Message[] = [
-        { 
-          role: "assistant", 
-          content: "Thinking...", 
-          tool_calls: [{ id: "call1", type: "function", function: { name: "test", arguments: "{}" } }] 
+        {
+          role: "assistant",
+          content: "Thinking...",
+          tool_calls: [
+            { id: "call1", type: "function", function: { name: "test", arguments: "{}" } }
+          ]
         } as any
       ];
       const result = formatMessages(messages);
@@ -81,12 +87,17 @@ describe("Anthropic Utils", () => {
 
     it("should handle multimodal content", () => {
       const messages: Message[] = [
-        { 
-          role: "user", 
+        {
+          role: "user",
           content: [
             { type: "text", text: "Look at this" },
-            { type: "image_url", image_url: { url: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==" } }
-          ] 
+            {
+              type: "image_url",
+              image_url: {
+                url: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg=="
+              }
+            }
+          ]
         } as any
       ];
       const result = formatMessages(messages);

@@ -1,4 +1,3 @@
-
 import { createLLM, NodeLLM, Tool, z } from "../../../packages/core/dist/index.js";
 
 // Tool Definition
@@ -19,30 +18,29 @@ const weatherTool = {
   handler: async ({ location, unit }) => {
     console.log(`[Tool] Fetching weather for ${location}...`);
     return JSON.stringify({
-        location,
-        temperature: "72",
-        unit: unit || "fahrenheit",
-        forecast: ["sunny", "windy"]
+      location,
+      temperature: "72",
+      unit: unit || "fahrenheit",
+      forecast: ["sunny", "windy"]
     });
   }
 };
 
 async function main() {
   const llm = createLLM({
-    provider: "ollama",
+    provider: "ollama"
   });
   console.log("🦙 Ollama Tools Example");
   console.log("Note: Requires a tool-capable model (e.g., 'llama3.1')");
   console.log("Run: ollama pull llama3.1\n");
-
 
   const chat = llm.chat("llama3.1");
 
   console.log("User: What is the weather in San Francisco?");
   try {
     const response = await chat
-        .withTools([weatherTool])
-        .ask("What is the weather in San Francisco?");
+      .withTools([weatherTool])
+      .ask("What is the weather in San Francisco?");
 
     console.log("AI:", response.content);
   } catch (error) {

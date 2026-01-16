@@ -14,9 +14,9 @@ describe("Gemini Chat Integration (VCR)", { timeout: 30000 }, () => {
 
   it("should perform a basic chat completion", async ({ task }) => {
     polly = setupVCR(task.name, "gemini");
-        const llm = createLLM({
+    const llm = createLLM({
       geminiApiKey: process.env.GEMINI_API_KEY,
-      provider: "gemini",
+      provider: "gemini"
     });
     const chat = llm.chat("gemini-2.0-flash");
 
@@ -29,7 +29,7 @@ describe("Gemini Chat Integration (VCR)", { timeout: 30000 }, () => {
   it("should support streaming", async ({ task }) => {
     polly = setupVCR(task.name, "gemini");
 
-        const llm = createLLM({ provider: "gemini" });
+    const llm = createLLM({ provider: "gemini" });
     const chat = llm.chat("gemini-2.0-flash");
 
     let fullText = "";

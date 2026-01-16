@@ -23,7 +23,8 @@ export function setupVCR(recordingName: string, subDir?: string) {
     if (!process.env.GEMINI_API_KEY) process.env.GEMINI_API_KEY = "dummy-key-for-vcr-replay";
     if (!process.env.ANTHROPIC_API_KEY) process.env.ANTHROPIC_API_KEY = "dummy-key-for-vcr-replay";
     if (!process.env.DEEPSEEK_API_KEY) process.env.DEEPSEEK_API_KEY = "dummy-key-for-vcr-replay";
-    if (!process.env.OPENROUTER_API_KEY) process.env.OPENROUTER_API_KEY = "dummy-key-for-vcr-replay";
+    if (!process.env.OPENROUTER_API_KEY)
+      process.env.OPENROUTER_API_KEY = "dummy-key-for-vcr-replay";
   }
 
   const polly = new Polly(recordingName, {
@@ -31,32 +32,44 @@ export function setupVCR(recordingName: string, subDir?: string) {
     persister: "fs",
     persisterOptions: {
       fs: {
-        recordingsDir: recordingsDir,
-      },
+        recordingsDir: recordingsDir
+      }
     },
     matchRequestsBy: {
       headers: {
-        exclude: ["authorization", "openai-organization", "openai-project", "user-agent", "x-api-key"],
+        exclude: [
+          "authorization",
+          "openai-organization",
+          "openai-project",
+          "user-agent",
+          "x-api-key"
+        ]
       },
       url: {
         query: (query: any) => {
           const { key, ...rest } = query;
           return rest;
-        },
+        }
       },
-      body: false,
+      body: false
     },
     mode: mode,
     recordIfMissing: process.env.VCR_MODE === "record",
-    flushRequestsOnStop: true,
+    flushRequestsOnStop: true
   });
 
   const { server } = polly;
 
-  server.any().on('beforePersist', (req: any, recording: any) => {
+  server.any().on("beforePersist", (req: any, recording: any) => {
     // Scrub sensitive headers from requests
-    const sensitiveHeaders = ['authorization', 'openai-organization', 'openai-project', 'api-key', 'x-api-key'];
-    
+    const sensitiveHeaders = [
+      "authorization",
+      "openai-organization",
+      "openai-project",
+      "api-key",
+      "x-api-key"
+    ];
+
     if (recording.request.headers) {
       recording.request.headers.forEach((header: any) => {
         if (sensitiveHeaders.includes(header.name.toLowerCase())) {
@@ -67,14 +80,14 @@ export function setupVCR(recordingName: string, subDir?: string) {
 
     // Scrub key from URL
     if (recording.request.url) {
-      recording.request.url = recording.request.url.replace(/key=[^&]+/, 'key=[REDACTED]');
+      recording.request.url = recording.request.url.replace(/key=[^&]+/, "key=[REDACTED]");
     }
 
     // Scrub key from Query String
     if (recording.request.queryString) {
       recording.request.queryString.forEach((param: any) => {
-        if (param.name === 'key') {
-          param.value = '[REDACTED]';
+        if (param.name === "key") {
+          param.value = "[REDACTED]";
         }
       });
     }

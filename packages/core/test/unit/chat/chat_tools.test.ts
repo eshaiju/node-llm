@@ -4,18 +4,20 @@ import { Tool } from "../../../src/chat/Tool.js";
 import { FakeProvider } from "../../fake-provider.js";
 
 class MockToolClass {
-  type = 'function' as const;
+  type = "function" as const;
   function = {
-    name: 'mock_class_tool',
+    name: "mock_class_tool",
     parameters: {}
   };
-  async handler() { return "class result"; }
+  async handler() {
+    return "class result";
+  }
 }
 
 const mockToolInstance: Tool = {
-  type: 'function',
+  type: "function",
   function: {
-    name: 'mock_instance_tool',
+    name: "mock_instance_tool",
     parameters: {}
   },
   handler: async () => "instance result"
@@ -37,7 +39,10 @@ describe("Chat Tool Management", () => {
   it("should add multiple tools instances via withTools", () => {
     const provider = new FakeProvider([]);
     const chat = new Chat(provider, "test-model");
-    const anotherTool = { ...mockToolInstance, function: { ...mockToolInstance.function, name: "another" } };
+    const anotherTool = {
+      ...mockToolInstance,
+      function: { ...mockToolInstance.function, name: "another" }
+    };
 
     chat.withTools([mockToolInstance, anotherTool]);
 

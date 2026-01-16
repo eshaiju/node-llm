@@ -14,9 +14,9 @@ describe("Anthropic Chat Integration (VCR)", { timeout: 30000 }, () => {
 
   it("should perform a basic chat completion with Claude 3 Haiku", async ({ task }) => {
     polly = setupVCR(task.name, "anthropic");
-        const llm = createLLM({
+    const llm = createLLM({
       anthropicApiKey: process.env.ANTHROPIC_API_KEY,
-      provider: "anthropic",
+      provider: "anthropic"
     });
     const chat = llm.chat("claude-3-haiku-20240307");
 
@@ -30,9 +30,9 @@ describe("Anthropic Chat Integration (VCR)", { timeout: 30000 }, () => {
   it("should stream chat completion with Claude 3 Haiku", async ({ task }) => {
     polly = setupVCR(task.name, "anthropic");
 
-        const llm = createLLM({
+    const llm = createLLM({
       anthropicApiKey: process.env.ANTHROPIC_API_KEY,
-      provider: "anthropic",
+      provider: "anthropic"
     });
     const chat = llm.chat("claude-3-haiku-20240307");
 
@@ -40,9 +40,9 @@ describe("Anthropic Chat Integration (VCR)", { timeout: 30000 }, () => {
     const stream = chat.stream("What is the capital of France? Answer in one word.");
 
     for await (const chunk of stream) {
-        if (chunk.content) {
-            fullResponse += chunk.content;
-        }
+      if (chunk.content) {
+        fullResponse += chunk.content;
+      }
     }
 
     expect(fullResponse).toMatch(/Paris/i);

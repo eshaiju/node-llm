@@ -9,7 +9,9 @@ const textFilePath = path.resolve(__dirname, "../../../package.json");
 
 class MockLimitedProvider implements Provider {
   public id = "mock-limited";
-  public defaultModel(type?: string) { return "limited-model"; }
+  public defaultModel(type?: string) {
+    return "limited-model";
+  }
   public capabilities = {
     supportsVision: () => false,
     supportsTools: () => false,
@@ -20,7 +22,7 @@ class MockLimitedProvider implements Provider {
     supportsModeration: () => false,
     supportsReasoning: () => false,
     supportsDeveloperRole: () => false,
-    getContextWindow: () => 4096,
+    getContextWindow: () => 4096
   };
 
   async chat(request: ChatRequest): Promise<ChatResponse> {
@@ -30,19 +32,24 @@ class MockLimitedProvider implements Provider {
 
 describe("Chat Capabilities Validation", () => {
   beforeEach(() => {
-    vi.stubGlobal("fetch", vi.fn(async () => ({
-      ok: true,
-      arrayBuffer: async () => new ArrayBuffer(8),
-      headers: { get: () => "image/jpeg" }
-    })));
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => ({
+        ok: true,
+        arrayBuffer: async () => new ArrayBuffer(8),
+        headers: { get: () => "image/jpeg" }
+      }))
+    );
   });
   it("should throw error if vision is used on a model that doesn't support it", async () => {
     const provider = new MockLimitedProvider();
     const chat = new Chat(provider, "limited-model");
 
-    await expect(chat.ask("Look at this", {
-      images: ["https://example.com/img.jpg"]
-    })).rejects.toThrow("Model limited-model does not support vision/binary files.");
+    await expect(
+      chat.ask("Look at this", {
+        images: ["https://example.com/img.jpg"]
+      })
+    ).rejects.toThrow("Model limited-model does not support vision/binary files.");
   });
 
   it("should throw error if tools are used on a model that doesn't support them", async () => {
@@ -55,7 +62,9 @@ describe("Chat Capabilities Validation", () => {
       handler: async () => "ok"
     };
 
-    await expect(chat.withTool(tool).ask("Use tool")).rejects.toThrow("Model limited-model does not support tool calling.");
+    await expect(chat.withTool(tool).ask("Use tool")).rejects.toThrow(
+      "Model limited-model does not support tool calling."
+    );
   });
 
   it("should NOT throw error for text files even if vision is not supported", async () => {

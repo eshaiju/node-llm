@@ -32,8 +32,8 @@ describe("Tool DSL", () => {
   it("should execute the logic via the handler", async () => {
     const tool = new TestTool();
     const llmTool = tool.toLLMTool();
-    
-    // @ts-ignore
+
+    // @ts-expect-error
     const result = await llmTool.handler({ input: "hello" });
     expect(result).toBe("Output: hello");
   });
@@ -63,7 +63,7 @@ describe("Tool DSL", () => {
 
     const tool = new ObjectTool();
     const llmTool = tool.toLLMTool();
-    // @ts-ignore
+    // @ts-expect-error
     const result = await llmTool.handler({});
     expect(result).toBe('{"success":true}');
   });

@@ -14,9 +14,9 @@ describe("OpenAI Safety Integration (VCR)", { timeout: 30000 }, () => {
 
   it("should moderate content", async ({ task }) => {
     polly = setupVCR(task.name, "openai");
-        const llm = createLLM({
+    const llm = createLLM({
       openaiApiKey: process.env.OPENAI_API_KEY,
-      provider: "openai",
+      provider: "openai"
     });
     const result = await llm.moderate("This is a safe message about coding.");
 

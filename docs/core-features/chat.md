@@ -7,16 +7,18 @@ description: A unified interface for stateful conversations across all providers
 ---
 
 # {{ page.title }}
+
 {: .no_toc }
 
 {{ page.description }}
 {: .fs-6 .fw-300 }
 
 ## Table of contents
+
 {: .no_toc .text-delta }
 
 1. TOC
-{:toc}
+   {:toc}
 
 ---
 
@@ -39,7 +41,6 @@ const response = await chat.ask("What is the capital of France?");
 
 console.log(response.content); // "The capital of France is Paris."
 ```
-
 
 ### Continuing the Conversation
 
@@ -76,12 +77,11 @@ Some providers offer beta features or require specific headers (like for observa
 
 ```ts
 // Enable Anthropic's beta features
-const chat = llm.chat("claude-3-5-sonnet")
-  .withRequestOptions({
-    headers: {
-      "anthropic-beta": "max-tokens-3-5-sonnet-2024-07-15"
-    }
-  });
+const chat = llm.chat("claude-3-5-sonnet").withRequestOptions({
+  headers: {
+    "anthropic-beta": "max-tokens-3-5-sonnet-2024-07-15"
+  }
+});
 
 await chat.ask("Tell me about the weather");
 ```
@@ -128,21 +128,18 @@ Use `withProvider()` to create isolated instances with their own configuration. 
 
 ```ts
 // ✅ SAFE: Each instance is isolated
-const tenant1 = NodeLLM.withProvider("openai", { 
+const tenant1 = NodeLLM.withProvider("openai", {
   openaiApiKey: tenant1Key,
-  requestTimeout: 30000 
+  requestTimeout: 30000
 });
 
-const tenant2 = NodeLLM.withProvider("openai", { 
+const tenant2 = NodeLLM.withProvider("openai", {
   openaiApiKey: tenant2Key,
-  requestTimeout: 60000 
+  requestTimeout: 60000
 });
 
 // No interference - each has its own config
-await Promise.all([
-  tenant1.chat("gpt-4o").ask(prompt),
-  tenant2.chat("gpt-4o").ask(prompt),
-]);
+await Promise.all([tenant1.chat("gpt-4o").ask(prompt), tenant2.chat("gpt-4o").ask(prompt)]);
 ```
 
 **Multi-provider parallelism:**
@@ -151,21 +148,21 @@ await Promise.all([
 const [gpt, claude, gemini] = await Promise.all([
   NodeLLM.withProvider("openai").chat("gpt-4o").ask(prompt),
   NodeLLM.withProvider("anthropic").chat("claude-3-5-sonnet").ask(prompt),
-  NodeLLM.withProvider("gemini").chat("gemini-2.0-flash").ask(prompt),
+  NodeLLM.withProvider("gemini").chat("gemini-2.0-flash").ask(prompt)
 ]);
 ```
 
 **Per-request isolation in Express/Fastify:**
 
 ```ts
-app.post('/chat', async (req, res) => {
+app.post("/chat", async (req, res) => {
   const userApiKey = req.user.openaiApiKey; // From database
-  
+
   // Create isolated instance per request
-  const llm = NodeLLM.withProvider("openai", { 
-    openaiApiKey: userApiKey 
+  const llm = NodeLLM.withProvider("openai", {
+    openaiApiKey: userApiKey
   });
-  
+
   const response = await llm.chat("gpt-4o").ask(req.body.message);
   res.json(response);
 });
@@ -192,7 +189,9 @@ chat
   .onNewMessage(() => console.log("AI started typing..."))
   .onToolCallStart((call) => console.log(`Starting tool: ${call.function.name}`))
   .onToolCallEnd((call, res) => console.log(`Tool ${call.id} finished with: ${res}`))
-  .onToolCallError((call, err) => console.error(`Tool ${call.function.name} failed: ${err.message}`))
+  .onToolCallError((call, err) =>
+    console.error(`Tool ${call.function.name} failed: ${err.message}`)
+  )
   .onEndMessage((response) => {
     console.log(`Finished. Total tokens: ${response.total_tokens}`);
   });
@@ -211,7 +210,7 @@ NodeLLM allows you to plug in custom security and compliance logic through async
 chat
   .beforeRequest(async (messages) => {
     // Redact SSNs from user input
-    return messages.map(m => ({
+    return messages.map((m) => ({
       ...m,
       content: m.content.replace(/\d{3}-\d{2}-\d{4}/g, "[REDACTED]")
     }));
@@ -219,7 +218,7 @@ chat
   .afterResponse(async (response) => {
     // Block responses containing prohibited words
     if (response.content.includes("Prohibited")) {
-       throw new Error("Compliance Violation");
+      throw new Error("Compliance Violation");
     }
   });
 ```
@@ -228,16 +227,16 @@ chat
 
 By default, `NodeLLM` handles network instabilities or temporary provider errors (like 500s or 429 Rate Limits) by retrying the request.
 
-*   **Default Retries**: 2 retries (3 total attempts).
-*   **Request Timeout**: 30 seconds (prevents hanging requests).
-*   **Loop Guard**: Tool calling is limited to 5 turns to prevent infinite loops.
+- **Default Retries**: 2 retries (3 total attempts).
+- **Request Timeout**: 30 seconds (prevents hanging requests).
+- **Loop Guard**: Tool calling is limited to 5 turns to prevent infinite loops.
 
 You can configure these limits globally:
 
 ```ts
 const llm = createLLM({
-  maxRetries: 3,        // Increase retries for unstable connections
-  maxToolCalls: 10,     // Allow deeper tool calling sequences
+  maxRetries: 3, // Increase retries for unstable connections
+  maxToolCalls: 10, // Allow deeper tool calling sequences
   requestTimeout: 60000 // 60 second timeout for long-running requests
 });
 ```
@@ -246,8 +245,8 @@ Or override per-request:
 
 ```ts
 // Long-running task with extended timeout
-await chat.ask("Analyze this large dataset", { 
-  requestTimeout: 120000  // 2 minutes
+await chat.ask("Analyze this large dataset", {
+  requestTimeout: 120000 // 2 minutes
 });
 ```
 
@@ -266,8 +265,8 @@ try {
     signal: controller.signal
   });
 } catch (error) {
-  if (error.name === 'AbortError') {
-    console.log('Request was cancelled');
+  if (error.name === "AbortError") {
+    console.log("Request was cancelled");
   }
 }
 ```
@@ -275,20 +274,21 @@ try {
 The signal is propagated through all tool-calling turns, so even multi-step agentic workflows can be cancelled cleanly.
 
 See the [Configuration Guide](/getting-started/configuration) for more details.
- 
+
 ## 🧱 Smart Context Isolation
- 
-NodeLLM provides **Zero-Config Context Isolation** to ensure maximum instruction following and security. 
- 
+
+NodeLLM provides **Zero-Config Context Isolation** to ensure maximum instruction following and security.
+
 Inspired by modern LLM architectures (like OpenAI's Developer Role), NodeLLM internally separates your system instructions from the conversation history. This prevents "instruction drift" as the conversation grows and provides a strong layer of protection against prompt injection.
- 
+
 ### How it works:
+
 - **Implicit Untangling**: If you pass a mixed array of messages to the Chat constructor, NodeLLM automatically identifies and isolates system-level instructions.
 - **Dynamic Role Mapping**: On the official OpenAI API, instructions for modern models (`gpt-4o`, `o1`, `o3`) are automatically promoted to the high-privilege `developer` role.
 - **Safe Fallbacks**: For older models or local providers (like Ollama or DeepSeek), NodeLLM safely maps instructions back to the standard `system` role to ensure perfect compatibility.
- 
+
 This behavior is **enabled by default** for all chats.
- 
+
 ## Next Steps
 
 - [Multi-modal Capabilities](/core-features/multimodal.html) (Images, Audio, Files)

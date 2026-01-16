@@ -3,7 +3,7 @@ import { createLLM, NodeLLM } from "../../../packages/core/dist/index.js";
 
 /**
  * This example demonstrates the IMMUTABLE configuration system in NodeLLM v1.5.0+.
- * 
+ *
  * In this architecture:
  * 1. Global NodeLLM is frozen at startup (Singleton).
  * 2. Runtime switching happens via Context Branching (.withProvider).
@@ -36,7 +36,7 @@ async function main() {
   console.log();
 
   // Pattern 3: Explicit Instances with createLLM()
-  // This is RECOMMENDED for multi-tenant apps (e.g. SaaS) where each 
+  // This is RECOMMENDED for multi-tenant apps (e.g. SaaS) where each
   // request might need a different API key.
   console.log("3. Explicit Instances via createLLM()");
   const userLLM = createLLM({

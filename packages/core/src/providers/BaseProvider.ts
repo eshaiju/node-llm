@@ -42,6 +42,7 @@ export abstract class BaseProvider implements Provider {
 
   async *stream?(request: ChatRequest): AsyncIterable<ChatChunk> {
     this.throwUnsupportedError("stream");
+    yield* [];
   }
 
   async listModels?(): Promise<ModelInfo[]> {

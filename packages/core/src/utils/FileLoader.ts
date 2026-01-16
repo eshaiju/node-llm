@@ -35,12 +35,33 @@ const MIME_TYPES: Record<string, string> = {
   ".rs": "text/x-rust",
   ".swift": "text/x-swift",
   ".kt": "text/x-kotlin",
-  ".pdf": "application/pdf",
+  ".pdf": "application/pdf"
 };
 
 const TEXT_EXTENSIONS = new Set([
-  ".json", ".js", ".mjs", ".cjs", ".ts", ".rb", ".py", ".txt", ".md", ".html", ".css", ".xml", ".yml", ".yaml", ".env",
-  ".csv", ".go", ".java", ".c", ".cpp", ".rs", ".swift", ".kt"
+  ".json",
+  ".js",
+  ".mjs",
+  ".cjs",
+  ".ts",
+  ".rb",
+  ".py",
+  ".txt",
+  ".md",
+  ".html",
+  ".css",
+  ".xml",
+  ".yml",
+  ".yaml",
+  ".env",
+  ".csv",
+  ".go",
+  ".java",
+  ".c",
+  ".cpp",
+  ".rs",
+  ".swift",
+  ".kt"
 ]);
 
 export class FileLoader {
@@ -49,25 +70,25 @@ export class FileLoader {
       try {
         const response = await fetch(filePath);
         if (!response.ok) throw new Error(`Failed to fetch file: ${response.statusText}`);
-        
+
         const buffer = await response.arrayBuffer();
         const contentTypeFull = response.headers.get("content-type") || "image/jpeg";
         const contentType = (contentTypeFull.split(";")[0] ?? "image/jpeg").trim();
         const base64 = Buffer.from(buffer).toString("base64");
         const dataUri = `data:${contentType};base64,${base64}`;
-        
+
         if (contentType.startsWith("image/")) {
           return { type: "image_url", image_url: { url: dataUri } };
         }
 
         if (contentType.startsWith("audio/")) {
           const format = contentType.split("/")[1];
-          return { 
-            type: "input_audio", 
-            input_audio: { 
-              data: base64, 
+          return {
+            type: "input_audio",
+            input_audio: {
+              data: base64,
               format: (format === "mpeg" ? "mp3" : format) ?? "wav"
-            } 
+            }
           };
         }
 
@@ -92,9 +113,9 @@ export class FileLoader {
 
     if (TEXT_EXTENSIONS.has(ext)) {
       const content = await fs.readFile(filePath, "utf-8");
-      return { 
-        type: "text", 
-        text: `\n\n--- File: ${path.basename(filePath)} ---\n${content}\n--- End of File ---\n` 
+      return {
+        type: "text",
+        text: `\n\n--- File: ${path.basename(filePath)} ---\n${content}\n--- End of File ---\n`
       };
     }
 
@@ -109,13 +130,13 @@ export class FileLoader {
 
     if (mime.startsWith("audio/")) {
       // OpenAI expects 'wav' or 'mp3' as format, not full mime
-      const format = mime.split("/")[1]; 
-      return { 
-        type: "input_audio", 
-        input_audio: { 
-          data: base64, 
+      const format = mime.split("/")[1];
+      return {
+        type: "input_audio",
+        input_audio: {
+          data: base64,
           format: (format === "mpeg" ? "mp3" : format) ?? "wav"
-        } 
+        }
       };
     }
 

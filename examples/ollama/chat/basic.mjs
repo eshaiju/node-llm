@@ -24,10 +24,10 @@ async function main() {
     console.log("AI:", response.content);
   } catch (error) {
     if (error.cause?.code === "ECONNREFUSED") {
-        console.error("❌ Link Error: Could not connect to Ollama at http://localhost:11434");
+      console.error("❌ Link Error: Could not connect to Ollama at http://localhost:11434");
     } else {
-        console.error("❌ Error:", error.message);
-        console.error("Hint: Did you run 'ollama pull llama3'?");
+      console.error("❌ Error:", error.message);
+      console.error("Hint: Did you run 'ollama pull llama3'?");
     }
   }
 }

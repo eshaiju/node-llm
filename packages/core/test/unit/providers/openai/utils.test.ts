@@ -18,16 +18,17 @@ describe("OpenAI Utils", () => {
     it("inserts endpoint before query parameters (Azure style)", () => {
       const baseUrl = "https://resource.azure.com/openai/deployments/gpt-4?api-version=2024-02-15";
       const endpoint = "/chat/completions";
-      
-      const expected = "https://resource.azure.com/openai/deployments/gpt-4/chat/completions?api-version=2024-02-15";
+
+      const expected =
+        "https://resource.azure.com/openai/deployments/gpt-4/chat/completions?api-version=2024-02-15";
       expect(buildUrl(baseUrl, endpoint)).toBe(expected);
     });
 
     it("handles complex query parameters", () => {
-        const baseUrl = "https://example.com/api?foo=bar&baz=qux";
-        const endpoint = "/v1/chat";
-        const expected = "https://example.com/api/v1/chat?foo=bar&baz=qux";
-        expect(buildUrl(baseUrl, endpoint)).toBe(expected);
+      const baseUrl = "https://example.com/api?foo=bar&baz=qux";
+      const endpoint = "/v1/chat";
+      const expected = "https://example.com/api/v1/chat?foo=bar&baz=qux";
+      expect(buildUrl(baseUrl, endpoint)).toBe(expected);
     });
   });
 });

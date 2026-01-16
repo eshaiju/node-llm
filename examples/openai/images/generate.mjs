@@ -5,7 +5,7 @@ import fs from "fs/promises";
 async function main() {
   const llm = createLLM({
     provider: "openai",
-    openaiApiKey: process.env.OPENAI_API_KEY,
+    openaiApiKey: process.env.OPENAI_API_KEY
   });
   console.log("🎨 Generating image...");
   try {
@@ -28,7 +28,6 @@ async function main() {
     // Cleanup
     await fs.unlink(filename);
     console.log("🧹 Cleanup done.");
-
   } catch (error) {
     console.error("❌ Example failed:", error.message);
   }

@@ -9,20 +9,20 @@ import { createLLM, NodeLLM, Tool, z } from "../../../packages/core/dist/index.j
  */
 
 const weatherTool = {
-  type: 'function',
+  type: "function",
   function: {
-    name: 'get_weather',
-    description: 'Get the current weather for a location',
+    name: "get_weather",
+    description: "Get the current weather for a location",
     parameters: {
-      type: 'object',
+      type: "object",
       properties: {
-        location: { type: 'string', description: 'City name' },
-        unit: { type: 'string', enum: ['celsius', 'fahrenheit'] }
+        location: { type: "string", description: "City name" },
+        unit: { type: "string", enum: ["celsius", "fahrenheit"] }
       },
-      required: ['location']
+      required: ["location"]
     }
   },
-  handler: async ({ location, unit = 'celsius' }) => {
+  handler: async ({ location, unit = "celsius" }) => {
     console.log(`[Raw JSON Tool] get_weather(${location}, ${unit})`);
     return JSON.stringify({ location, temperature: 22, unit });
   }
@@ -31,7 +31,7 @@ const weatherTool = {
 async function main() {
   const llm = createLLM({
     provider: "openai",
-    openaiApiKey: process.env.OPENAI_API_KEY,
+    openaiApiKey: process.env.OPENAI_API_KEY
   });
   const chat = llm.chat("gpt-4o-mini").withTool(weatherTool);
 
@@ -40,4 +40,9 @@ async function main() {
   console.log("\nResponse:", response.content);
 }
 
-main().then(() => process.exit(0)).catch((err) => { console.error(err); process.exit(1); });
+main()
+  .then(() => process.exit(0))
+  .catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });

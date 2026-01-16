@@ -4,13 +4,13 @@ import { createLLM, NodeLLM, Tool, z } from "../../../packages/core/dist/index.j
 async function main() {
   const llm = createLLM({
     provider: "openai",
-    openaiApiKey: process.env.OPENAI_API_KEY,
+    openaiApiKey: process.env.OPENAI_API_KEY
   });
   // 1. Behavior Tuning with System Prompts
   console.log("--- System Instructions ---");
-  const chat = llm.chat("gpt-4o-mini").withInstructions(
-    "You are a strictly professional assistant. Keep answers under 20 words."
-  );
+  const chat = llm
+    .chat("gpt-4o-mini")
+    .withInstructions("You are a strictly professional assistant. Keep answers under 20 words.");
 
   const response1 = await chat.ask("What is the meaning of life?");
   console.log(`Assistant: ${response1.content}`);
@@ -28,4 +28,9 @@ async function main() {
   console.log((await creative.ask("Suggest a Name for a new Coffee Shop.")).content);
 }
 
-main().then(() => process.exit(0)).catch((err) => { console.error(err); process.exit(1); });
+main()
+  .then(() => process.exit(0))
+  .catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });

@@ -28,23 +28,22 @@ export class ToolHandler {
     const tool = tools?.find((t) => t.function.name === toolCall.function.name);
 
     if (tool?.handler) {
-      try {
-        const args = JSON.parse(toolCall.function.arguments);
-        const result = await tool.handler(args);
-        const safeResult = typeof result === 'string' ? result : JSON.stringify(result);
-        
-        if (onEnd) onEnd(toolCall, result);
+      const args = JSON.parse(toolCall.function.arguments);
+      const result = await tool.handler(args);
+      const safeResult = typeof result === "string" ? result : JSON.stringify(result);
 
-        return {
-          role: "tool",
-          tool_call_id: toolCall.id,
-          content: safeResult,
-        };
-      } catch (error: any) {
-        throw error;
-      }
+      if (onEnd) onEnd(toolCall, result);
+
+      return {
+        role: "tool",
+        tool_call_id: toolCall.id,
+        content: safeResult
+      };
     } else {
-      throw new ToolError("Tool not found or no handler provided", toolCall.function?.name ?? "unknown");
+      throw new ToolError(
+        "Tool not found or no handler provided",
+        toolCall.function?.name ?? "unknown"
+      );
     }
   }
 }

@@ -4,13 +4,15 @@ import { createLLM, NodeLLM, Tool, z } from "../../../packages/core/dist/index.j
 async function main() {
   const llm = createLLM({
     provider: "openrouter",
-    openrouterApiKey: process.env.OPENROUTER_API_KEY,
+    openrouterApiKey: process.env.OPENROUTER_API_KEY
   });
   const chat = llm.chat("openai/gpt-4o-mini");
 
   console.log("--- Vision Request ---");
   const response = await chat.ask("What's in this image?", {
-    files: ["https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Gfp-wisconsin-madison-the-nature-boardwalk.jpg/2560px-Gfp-wisconsin-madison-the-nature-boardwalk.jpg"]
+    files: [
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Gfp-wisconsin-madison-the-nature-boardwalk.jpg/2560px-Gfp-wisconsin-madison-the-nature-boardwalk.jpg"
+    ]
   });
 
   console.log(response.content);

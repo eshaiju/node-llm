@@ -7,7 +7,9 @@ export function registerAnthropicProvider() {
     const cfg = config || globalConfig;
     const apiKey = cfg.anthropicApiKey;
     if (!apiKey) {
-      throw new Error("anthropicApiKey is not set in config or ANTHROPIC_API_KEY environment variable");
+      throw new Error(
+        "anthropicApiKey is not set in config or ANTHROPIC_API_KEY environment variable"
+      );
     }
     return new AnthropicProvider({ apiKey: apiKey.trim() });
   });

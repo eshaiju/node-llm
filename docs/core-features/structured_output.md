@@ -7,25 +7,28 @@ description: Force models to return strictly validated JSON data using Zod schem
 ---
 
 # {{ page.title }}
+
 {: .no_toc }
 
 {{ page.description }}
 {: .fs-6 .fw-300 }
 
 ## Table of contents
+
 {: .no_toc .text-delta }
 
 1. TOC
-{:toc}
+   {:toc}
 
 ---
 
 Ensure the AI returns data exactly matching a specific structure. \`NodeLLM\` supports strict schema validation using **Zod** (recommended) or manual JSON schemas.
 
 This feature abstracts the provider-specific implementations (like OpenAI's `json_schema`, Gemini's `responseSchema`, or Anthropic's tool-use workarounds) into a single, unified API.
- 
- {: .highlight }
- > **See it in action:** The [Brand Perception Checker](../../examples/brand-perception-checker/) demonstrates utilizing rigorous Zod schemas to extract consistent semantic profiles across multiple providers simultaneously.
+
+{: .highlight }
+
+> **See it in action:** The [Brand Perception Checker](../../examples/brand-perception-checker/) demonstrates utilizing rigorous Zod schemas to extract consistent semantic profiles across multiple providers simultaneously.
 
 ## Using Zod (Recommended)
 
@@ -55,7 +58,7 @@ const response = await chat
 const person = response.parsed;
 
 console.log(person.name); // "Alice"
-console.log(person.age);  // e.g. 25
+console.log(person.age); // e.g. 25
 console.log(person.hobbies); // ["hiking", "coding"]
 ```
 
@@ -76,9 +79,7 @@ const schema = {
   additionalProperties: false // Required for strict mode in OpenAI
 };
 
-const response = await chat
-  .withSchema(schema)
-  .ask("Generate a person");
+const response = await chat.withSchema(schema).ask("Generate a person");
 
 console.log(response.parsed); // { name: "...", age: ... }
 ```
@@ -98,11 +99,11 @@ console.log(response.parsed); // { greeting: "..." } or whatever keys it chose
 
 ## Provider Support
 
-| Provider | Method Used | Notes |
-| :--- | :--- | :--- |
-| **OpenAI** | `response_format: { type: "json_schema" }` | Fully supported with strict adherence. |
-| **Gemini** | `responseSchema` | Supported natively. |
-| **Anthropic** | Tool Use (Mock) | `NodeLLM` automatically creates a tool definition and forces the model to use it to simulate structured output. |
+| Provider      | Method Used                                | Notes                                                                                                           |
+| :------------ | :----------------------------------------- | :-------------------------------------------------------------------------------------------------------------- |
+| **OpenAI**    | `response_format: { type: "json_schema" }` | Fully supported with strict adherence.                                                                          |
+| **Gemini**    | `responseSchema`                           | Supported natively.                                                                                             |
+| **Anthropic** | Tool Use (Mock)                            | `NodeLLM` automatically creates a tool definition and forces the model to use it to simulate structured output. |
 
 ## Nested Schemas
 
@@ -111,18 +112,18 @@ Complex nested schemas are fully supported via Zod.
 ```ts
 const companySchema = z.object({
   name: z.string(),
-  employees: z.array(z.object({
-    name: z.string(),
-    role: z.enum(["developer", "designer", "manager"]),
-    skills: z.array(z.string())
-  })),
+  employees: z.array(
+    z.object({
+      name: z.string(),
+      role: z.enum(["developer", "designer", "manager"]),
+      skills: z.array(z.string())
+    })
+  ),
   metadata: z.object({
     founded: z.number(),
     industry: z.string()
   })
 });
 
-const response = await chat
-  .withSchema(companySchema)
-  .ask("Generate a small tech startup");
+const response = await chat.withSchema(companySchema).ask("Generate a small tech startup");
 ```

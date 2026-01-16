@@ -16,15 +16,19 @@ describe("AnthropicModels", () => {
       ok: true,
       json: async () => ({
         data: [
-          { id: "claude-3-5-sonnet-20240620", display_name: "Claude 3.5 Sonnet", created_at: "2024-06-20T00:00:00Z" }
+          {
+            id: "claude-3-5-sonnet-20240620",
+            display_name: "Claude 3.5 Sonnet",
+            created_at: "2024-06-20T00:00:00Z"
+          }
         ]
       })
     } as Response);
 
     const result = await models.execute();
     expect(result.length).toBe(1);
-    
-    const claude = result.find(m => m.id.includes("claude"));
+
+    const claude = result.find((m) => m.id.includes("claude"));
     expect(claude).toBeDefined();
     expect(claude?.provider).toBe("anthropic");
   });

@@ -8,7 +8,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 async function main() {
   const llm = createLLM({
     provider: "gemini",
-    geminiApiKey: process.env.GEMINI_API_KEY,
+    geminiApiKey: process.env.GEMINI_API_KEY
   });
   const chat = llm.chat("gemini-2.0-flash");
 

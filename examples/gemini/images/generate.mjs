@@ -5,12 +5,12 @@ import fs from "fs/promises";
 async function main() {
   const llm = createLLM({
     provider: "gemini",
-    geminiApiKey: process.env.GEMINI_API_KEY,
+    geminiApiKey: process.env.GEMINI_API_KEY
   });
   try {
     console.log("🎨 Generatig with Imagen...");
     const image = await llm.paint("a futuristic space station", {
-      model: "imagen-3.0-generate-001",
+      model: "imagen-3.0-generate-001"
     });
 
     console.log(`✅ Image generated! MIME: ${image.mimeType}`);
@@ -24,7 +24,6 @@ async function main() {
 
     await fs.unlink(filename);
     console.log("🧹 Cleanup done.");
-
   } catch (error) {
     console.error("❌ Example failed:", error.message);
   }

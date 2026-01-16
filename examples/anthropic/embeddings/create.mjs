@@ -4,13 +4,13 @@ import { createLLM, NodeLLM, Tool, z } from "../../../packages/core/dist/index.j
 async function main() {
   const llm = createLLM({
     provider: "anthropic",
-    anthropicApiKey: process.env.ANTHROPIC_API_KEY,
+    anthropicApiKey: process.env.ANTHROPIC_API_KEY
   });
   console.log("Attempting to create embeddings with Anthropic...");
 
   try {
     await llm.embed({
-      input: "Hello, world!",
+      input: "Hello, world!"
     });
   } catch (error) {
     console.log("Caught expected error:", error.message);

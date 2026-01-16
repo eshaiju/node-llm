@@ -14,13 +14,13 @@ describe("OpenRouter Embeddings Integration (VCR)", { timeout: 30000 }, () => {
 
   it("should create embeddings", async ({ task }) => {
     polly = setupVCR(task.name, "openrouter");
-        const llm = createLLM({
+    const llm = createLLM({
       openrouterApiKey: process.env.OPENROUTER_API_KEY,
-      provider: "openrouter",
+      provider: "openrouter"
     });
 
     const response = await llm.embed("Hello, world!", {
-      model: "text-embedding-3-small", // Common embedding model on OpenRouter
+      model: "text-embedding-3-small" // Common embedding model on OpenRouter
     });
 
     expect(response.vectors).toBeDefined();
@@ -31,13 +31,13 @@ describe("OpenRouter Embeddings Integration (VCR)", { timeout: 30000 }, () => {
 
   it("should create multiple embeddings", async ({ task }) => {
     polly = setupVCR(task.name, "openrouter");
-        const llm = createLLM({
+    const llm = createLLM({
       openrouterApiKey: process.env.OPENROUTER_API_KEY,
-      provider: "openrouter",
+      provider: "openrouter"
     });
 
     const response = await llm.embed(["Hello", "World"], {
-      model: "text-embedding-3-small",
+      model: "text-embedding-3-small"
     });
 
     expect(response.vectors.length).toBe(2);

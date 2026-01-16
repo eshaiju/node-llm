@@ -7,16 +7,18 @@ description: Protect your users and your brand by checking text content against 
 ---
 
 # {{ page.title }}
+
 {: .no_toc }
 
 {{ page.description }}
 {: .fs-6 .fw-300 }
 
 ## Table of contents
+
 {: .no_toc .text-delta }
 
 1. TOC
-{:toc}
+   {:toc}
 
 ---
 
@@ -40,9 +42,9 @@ if (result.flagged) {
 
 The moderation result object provides detailed signals:
 
-*   `flagged`: (boolean) Overall safety check. if true, content violates provider policies.
-*   `categories`: (object) Boolean flags for specific buckets (e.g., `sexual: false`, `violence: true`).
-*   `category_scores`: (object) Confidence scores (0.0 - 1.0) for each category.
+- `flagged`: (boolean) Overall safety check. if true, content violates provider policies.
+- `categories`: (object) Boolean flags for specific buckets (e.g., `sexual: false`, `violence: true`).
+- `category_scores`: (object) Confidence scores (0.0 - 1.0) for each category.
 
 ```ts
 const result = await NodeLLM.moderate("Some controversial text");
@@ -57,6 +59,7 @@ console.log(`Violence Score: ${result.category_scores.violence}`);
 ```
 
 ### Common Categories
+
 - **Sexual**: Sexual content.
 - **Hate**: Content promoting hate based on identity.
 - **Harassment**: Threatening or bullying content.
@@ -67,14 +70,14 @@ console.log(`Violence Score: ${result.category_scores.violence}`);
 
 ### Pre-Chat Moderation
 
-We recommend validating user input *before* sending it to a Chat model to save costs and prevent jailbreaks.
+We recommend validating user input _before_ sending it to a Chat model to save costs and prevent jailbreaks.
 
 ```ts
 async function safeChat(input: string) {
   const mod = await NodeLLM.moderate(input);
 
   if (mod.flagged) {
-    throw new Error(`Content Unsafe: ${mod.flaggedCategories.join(', ')}`);
+    throw new Error(`Content Unsafe: ${mod.flaggedCategories.join(", ")}`);
   }
 
   // Only proceed if safe
@@ -90,8 +93,7 @@ Providers have their own thresholds for "flagging". You can implement stricter (
 const result = await NodeLLM.moderate(userInput);
 
 // Custom strict policy: Flag anything with > 0.1 confidence
-const isRisky = Object.entries(result.category_scores)
-  .some(([category, score]) => score > 0.1);
+const isRisky = Object.entries(result.category_scores).some(([category, score]) => score > 0.1);
 
 if (isRisky) {
   console.warn("Potential risk detected (custom strict mode)");

@@ -6,11 +6,13 @@ import { ToolExecutionMode } from "../../../src/constants.js";
 describe("Tool Execution Modes", () => {
   const toolCallResponse = {
     content: "I'll check the weather.",
-    tool_calls: [{
-      id: "call_1",
-      type: "function" as const,
-      function: { name: "get_weather", arguments: '{"location":"London"}' }
-    }]
+    tool_calls: [
+      {
+        id: "call_1",
+        type: "function" as const,
+        function: { name: "get_weather", arguments: '{"location":"London"}' }
+      }
+    ]
   };
 
   const weatherTool = {
@@ -22,7 +24,7 @@ describe("Tool Execution Modes", () => {
   it("auto mode executes tool automatically (default)", async () => {
     const provider = new FakeProvider([toolCallResponse, "Final answer"]);
     const chat = new Chat(provider, "test");
-    
+
     await chat.withTool(weatherTool).ask("Weather?");
 
     expect(chat.history.length).toBe(4); // User, Assistant (Plan), Tool Result, Assistant (Final)
@@ -33,7 +35,7 @@ describe("Tool Execution Modes", () => {
   it("dry-run mode does not execute tools", async () => {
     const provider = new FakeProvider([toolCallResponse, "Final answer"]);
     const chat = new Chat(provider, "test");
-    
+
     const response = await chat
       .withTool(weatherTool)
       .withToolExecution(ToolExecutionMode.DRY_RUN)
@@ -43,15 +45,15 @@ describe("Tool Execution Modes", () => {
     expect(response.tool_calls).toHaveLength(1);
     expect(response.tool_calls![0].function.name).toBe("get_weather");
     // Verify no tool result in history
-    expect(chat.history.some(m => m.role === "tool")).toBe(false);
+    expect(chat.history.some((m) => m.role === "tool")).toBe(false);
   });
 
   it("confirm mode executes tool on approval", async () => {
     const provider = new FakeProvider([toolCallResponse, "Final answer"]);
     const chat = new Chat(provider, "test");
-    
+
     const onConfirm = vi.fn().mockResolvedValue(true);
-    
+
     await chat
       .withTool(weatherTool)
       .withToolExecution(ToolExecutionMode.CONFIRM)
@@ -59,15 +61,15 @@ describe("Tool Execution Modes", () => {
       .ask("Weather?");
 
     expect(onConfirm).toHaveBeenCalledTimes(1);
-    expect(chat.history.some(m => m.role === "tool" && m.content === "Sunny")).toBe(true);
+    expect(chat.history.some((m) => m.role === "tool" && m.content === "Sunny")).toBe(true);
   });
 
   it("confirm mode skips tool on rejection", async () => {
     const provider = new FakeProvider([toolCallResponse, "Final answer"]);
     const chat = new Chat(provider, "test");
-    
+
     const onConfirm = vi.fn().mockResolvedValue(false); // REJECT
-    
+
     await chat
       .withTool(weatherTool)
       .withToolExecution(ToolExecutionMode.CONFIRM)
@@ -76,14 +78,16 @@ describe("Tool Execution Modes", () => {
 
     expect(onConfirm).toHaveBeenCalledTimes(1);
     // Should have a cancellation message in history
-    expect(chat.history.some(m => m.role === "tool" && m.content === "Action cancelled by user.")).toBe(true);
+    expect(
+      chat.history.some((m) => m.role === "tool" && m.content === "Action cancelled by user.")
+    ).toBe(true);
   });
 
   describe("Streaming", () => {
     it("dry-run mode does not execute tools in stream", async () => {
       const provider = new FakeProvider([toolCallResponse, "Final answer"]);
       const chat = new Chat(provider, "test");
-      
+
       const streamer = chat
         .withTool(weatherTool)
         .withToolExecution(ToolExecutionMode.DRY_RUN)
@@ -95,15 +99,15 @@ describe("Tool Execution Modes", () => {
 
       // Should stop after User and Assistant (Plan)
       expect(chat.history.length).toBe(2);
-      expect(chat.history.some(m => m.role === "tool")).toBe(false);
+      expect(chat.history.some((m) => m.role === "tool")).toBe(false);
     });
 
     it("confirm mode works in stream", async () => {
       const provider = new FakeProvider([toolCallResponse, "Final answer"]);
       const chat = new Chat(provider, "test");
-      
+
       const onConfirm = vi.fn().mockResolvedValue(true);
-      
+
       const streamer = chat
         .withTool(weatherTool)
         .withToolExecution(ToolExecutionMode.CONFIRM)
@@ -115,7 +119,7 @@ describe("Tool Execution Modes", () => {
       }
 
       expect(onConfirm).toHaveBeenCalledTimes(1);
-      expect(chat.history.some(m => m.role === "tool" && m.content === "Sunny")).toBe(true);
+      expect(chat.history.some((m) => m.role === "tool" && m.content === "Sunny")).toBe(true);
     });
   });
 });

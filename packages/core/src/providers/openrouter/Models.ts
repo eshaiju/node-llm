@@ -31,9 +31,9 @@ export class OpenRouterModels {
   async execute(): Promise<ModelInfo[]> {
     const response = await fetch(`${this.baseUrl}/models`, {
       headers: {
-        "Authorization": `Bearer ${this.apiKey}`,
-        "Content-Type": "application/json",
-      },
+        Authorization: `Bearer ${this.apiKey}`,
+        "Content-Type": "application/json"
+      }
     });
 
     if (!response.ok) {
@@ -41,13 +41,13 @@ export class OpenRouterModels {
     }
 
     const data = await response.json();
-    
+
     return data.data.map((model: OpenRouterModelData) => this.parseModel(model));
   }
 
   private parseModel(model: OpenRouterModelData): ModelInfo {
-    const family = model.id.split('/')[0] || "";
-    
+    const family = model.id.split("/")[0] || "";
+
     return {
       id: model.id,
       name: model.name,
@@ -76,27 +76,32 @@ export class OpenRouterModels {
     const params = model.supported_parameters || [];
     const inputModalities = model.architecture?.input_modalities || [];
 
-    if (params.includes('tools') || params.includes('function_calling')) {
-      caps.push('tools');
+    if (params.includes("tools") || params.includes("function_calling")) {
+      caps.push("tools");
     }
 
-    if (inputModalities.includes('image')) {
-      caps.push('vision');
+    if (inputModalities.includes("image")) {
+      caps.push("vision");
     }
 
-    if (model.id.includes('embedding') || model.id.includes('text-sdk')) {
-      caps.push('embeddings');
+    if (model.id.includes("embedding") || model.id.includes("text-sdk")) {
+      caps.push("embeddings");
     }
 
     // Heuristics for reasoning
-    if (model.id.includes('o1') || model.id.includes('o3') || model.id.includes('deepseek-r1') || model.id.includes('qwq')) {
-      caps.push('reasoning');
+    if (
+      model.id.includes("o1") ||
+      model.id.includes("o3") ||
+      model.id.includes("deepseek-r1") ||
+      model.id.includes("qwq")
+    ) {
+      caps.push("reasoning");
     }
 
     return caps;
   }
 
-  private parsePricing(pricing: OpenRouterModelData['pricing']) {
+  private parsePricing(pricing: OpenRouterModelData["pricing"]) {
     const result: any = {
       text_tokens: {
         standard: {}

@@ -15,10 +15,10 @@ describe("Gemini Structured Output (VCR)", { timeout: 30000 }, () => {
 
   it("should support structured output with Zod schema", async ({ task }) => {
     polly = setupVCR(task.name, "gemini");
-    
-        const llm = createLLM({
+
+    const llm = createLLM({
       geminiApiKey: process.env.GEMINI_API_KEY,
-      provider: "gemini",
+      provider: "gemini"
     });
     const chat = llm.chat("gemini-2.0-flash");
 
@@ -34,7 +34,7 @@ describe("Gemini Structured Output (VCR)", { timeout: 30000 }, () => {
 
     // The raw content should be JSON
     expect(String(response)).toContain("{");
-    
+
     // The parsed content should allow access to properties
     const person = response.parsed;
     expect(person.name).toBe("Alice");

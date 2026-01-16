@@ -1,4 +1,16 @@
-import { Provider, ChatRequest, ChatResponse, ModelInfo, ChatChunk, ImageRequest, ImageResponse, ModerationRequest, ModerationResponse, EmbeddingRequest, EmbeddingResponse } from "../Provider.js";
+import {
+  Provider,
+  ChatRequest,
+  ChatResponse,
+  ModelInfo,
+  ChatChunk,
+  ImageRequest,
+  ImageResponse,
+  ModerationRequest,
+  ModerationResponse,
+  EmbeddingRequest,
+  EmbeddingResponse
+} from "../Provider.js";
 import { BaseProvider } from "../BaseProvider.js";
 import { Capabilities } from "./Capabilities.js";
 import { OpenAIChat } from "./Chat.js";
@@ -34,8 +46,9 @@ export class OpenAIProvider extends BaseProvider implements Provider {
     supportsTranscription: (model: string) => Capabilities.supportsTranscription(model),
     supportsModeration: (model: string) => Capabilities.supportsModeration(model),
     supportsReasoning: (model: string) => Capabilities.supportsReasoning(model),
-    supportsDeveloperRole: (modelId: string) => this.baseUrl.includes("api.openai.com") && Capabilities.supportsDeveloperRole(modelId),
-    getContextWindow: (model: string) => Capabilities.getContextWindow(model) || null,
+    supportsDeveloperRole: (modelId: string) =>
+      this.baseUrl.includes("api.openai.com") && Capabilities.supportsDeveloperRole(modelId),
+    getContextWindow: (model: string) => Capabilities.getContextWindow(model) || null
   };
 
   constructor(protected readonly options: OpenAIProviderOptions) {
@@ -56,8 +69,8 @@ export class OpenAIProvider extends BaseProvider implements Provider {
 
   public headers(): Record<string, string> {
     return {
-      "Authorization": `Bearer ${this.options.apiKey}`,
-      "Content-Type": "application/json",
+      Authorization: `Bearer ${this.options.apiKey}`,
+      "Content-Type": "application/json"
     };
   }
 

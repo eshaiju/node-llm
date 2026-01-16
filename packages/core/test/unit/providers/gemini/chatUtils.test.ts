@@ -17,7 +17,7 @@ describe("GeminiChatUtils", () => {
 
     expect(systemInstructionParts).toHaveLength(1);
     expect(systemInstructionParts[0].text).toBe("Instruction");
-    
+
     expect(contents).toHaveLength(2);
     expect(contents[0].role).toBe("user");
     expect(contents[0].parts[0].text).toBe("Hello");
@@ -40,10 +40,16 @@ describe("GeminiChatUtils", () => {
 
   it("should handle assistant tool calls", async () => {
     const messages: Message[] = [
-      { 
-        role: "assistant", 
-        content: null as any, 
-        tool_calls: [{ id: "call1", type: "function", function: { name: "get_weather", arguments: '{"city":"London"}' } }] 
+      {
+        role: "assistant",
+        content: null as any,
+        tool_calls: [
+          {
+            id: "call1",
+            type: "function",
+            function: { name: "get_weather", arguments: '{"city":"London"}' }
+          }
+        ]
       }
     ];
 
@@ -59,12 +65,12 @@ describe("GeminiChatUtils", () => {
     (BinaryUtils.toBase64 as any).mockResolvedValue({ mimeType: "image/png", data: "base64data" });
 
     const messages: Message[] = [
-      { 
-        role: "user", 
+      {
+        role: "user",
         content: [
           { type: "text", text: "Look" },
           { type: "image_url", image_url: { url: "data:image/png;base64,..." } }
-        ] 
+        ]
       } as any
     ];
 

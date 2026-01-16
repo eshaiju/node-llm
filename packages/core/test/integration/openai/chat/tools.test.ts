@@ -15,9 +15,9 @@ describe("OpenAI Tool Calling Integration (VCR)", { timeout: 30000 }, () => {
   it("should handle tool calling", async ({ task }) => {
     polly = setupVCR(task.name, "openai");
 
-        const llm = createLLM({
+    const llm = createLLM({
       openaiApiKey: process.env.OPENAI_API_KEY,
-      provider: "openai",
+      provider: "openai"
     });
 
     class WeatherTool extends Tool {
@@ -40,7 +40,7 @@ describe("OpenAI Tool Calling Integration (VCR)", { timeout: 30000 }, () => {
   it("should handle parallel tool calling", async ({ task }) => {
     polly = setupVCR(task.name, "openai");
 
-        const llm = createLLM({ provider: "openai" });
+    const llm = createLLM({ provider: "openai" });
 
     class WeatherTool extends Tool {
       name = "get_weather";
@@ -60,7 +60,7 @@ describe("OpenAI Tool Calling Integration (VCR)", { timeout: 30000 }, () => {
     // Expect both locations to be mentioned in the final response
     expect(Paris && London).toBe(true);
     // Verify that tool calls happened (we can inspect history for more granular checks if needed)
-    const toolCalls = chat.history.filter(m => m.role === "tool");
+    const toolCalls = chat.history.filter((m) => m.role === "tool");
     expect(toolCalls.length).toBeGreaterThanOrEqual(2);
   });
 });

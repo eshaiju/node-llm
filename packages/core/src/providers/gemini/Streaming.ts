@@ -7,21 +7,23 @@ import { logger } from "../../utils/logger.js";
 import { fetchWithTimeout } from "../../utils/fetch.js";
 
 export class GeminiStreaming {
-  constructor(private readonly baseUrl: string, private readonly apiKey: string) {}
+  constructor(
+    private readonly baseUrl: string,
+    private readonly apiKey: string
+  ) {}
 
-  async *execute(
-    request: ChatRequest,
-    controller?: AbortController
-  ): AsyncGenerator<ChatChunk> {
+  async *execute(request: ChatRequest, controller?: AbortController): AsyncGenerator<ChatChunk> {
     const abortController = controller || new AbortController();
     const temperature = Capabilities.normalizeTemperature(request.temperature, request.model);
     const url = `${this.baseUrl}/models/${request.model}:streamGenerateContent?alt=sse&key=${this.apiKey}`;
 
-    const { contents, systemInstructionParts } = await GeminiChatUtils.convertMessages(request.messages);
+    const { contents, systemInstructionParts } = await GeminiChatUtils.convertMessages(
+      request.messages
+    );
 
     const generationConfig: any = {
       temperature: temperature ?? undefined,
-      maxOutputTokens: request.max_tokens,
+      maxOutputTokens: request.max_tokens
     };
 
     if (request.response_format?.type === "json_object") {
@@ -29,13 +31,15 @@ export class GeminiStreaming {
     } else if (request.response_format?.type === "json_schema") {
       generationConfig.responseMimeType = "application/json";
       if (request.response_format.json_schema?.schema) {
-        generationConfig.responseSchema = this.sanitizeSchema(request.response_format.json_schema.schema);
+        generationConfig.responseSchema = this.sanitizeSchema(
+          request.response_format.json_schema.schema
+        );
       }
     }
 
     const payload: any = {
       contents,
-      generationConfig,
+      generationConfig
     };
 
     if (systemInstructionParts.length > 0) {
@@ -48,9 +52,9 @@ export class GeminiStreaming {
           functionDeclarations: request.tools.map((t) => ({
             name: t.function.name,
             description: t.function.description,
-            parameters: t.function.parameters,
-          })),
-        },
+            parameters: t.function.parameters
+          }))
+        }
       ];
     }
 
@@ -60,20 +64,27 @@ export class GeminiStreaming {
     try {
       logger.logRequest("Gemini", "POST", url, payload);
 
-      const response = await fetchWithTimeout(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetchWithTimeout(
+        url,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(payload),
+          signal: abortController.signal
         },
-        body: JSON.stringify(payload),
-        signal: abortController.signal,
-      }, request.requestTimeout);
+        request.requestTimeout
+      );
 
       if (!response.ok) {
         await handleGeminiError(response, request.model);
       }
 
-      logger.debug("Gemini streaming started", { status: response.status, statusText: response.statusText });
+      logger.debug("Gemini streaming started", {
+        status: response.status,
+        statusText: response.statusText
+      });
 
       if (!response.body) {
         throw new Error("No response body for streaming");
@@ -101,7 +112,7 @@ export class GeminiStreaming {
           buffer = buffer.substring(lineEnd + 1);
 
           // Handle carriage returns
-          if (line.endsWith('\r')) {
+          if (line.endsWith("\r")) {
             line = line.substring(0, line.length - 1);
           }
 
@@ -137,7 +148,7 @@ export class GeminiStreaming {
       done = true;
     } catch (e) {
       // Graceful exit on abort
-      if (e instanceof Error && e.name === 'AbortError') {
+      if (e instanceof Error && e.name === "AbortError") {
         return;
       }
       throw e;
@@ -151,26 +162,26 @@ export class GeminiStreaming {
 
   private sanitizeSchema(schema: any): any {
     if (typeof schema !== "object" || schema === null) return schema;
-    
+
     const sanitized = { ...schema };
-    
+
     // Remove unsupported fields
     delete sanitized.additionalProperties;
     delete sanitized.$schema;
     delete sanitized.$id;
     delete sanitized.definitions;
-    
+
     // Recursively sanitize
     if (sanitized.properties) {
       for (const key in sanitized.properties) {
         sanitized.properties[key] = this.sanitizeSchema(sanitized.properties[key]);
       }
     }
-    
+
     if (sanitized.items) {
       sanitized.items = this.sanitizeSchema(sanitized.items);
     }
-    
+
     return sanitized;
   }
 }

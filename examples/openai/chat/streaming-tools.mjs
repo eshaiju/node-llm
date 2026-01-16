@@ -7,17 +7,17 @@ class WeatherTool extends Tool {
   description = "Get the current weather for a location";
   schema = z.object({
     location: z.string().describe("City name"),
-    unit: z.enum(['celsius', 'fahrenheit']).default('celsius')
+    unit: z.enum(["celsius", "fahrenheit"]).default("celsius")
   });
 
   async execute({ location, unit }) {
     console.log(`\n[Tool Executed] get_weather(${location}, ${unit})`);
-    const temp = unit === 'celsius' ? 22 : 72;
+    const temp = unit === "celsius" ? 22 : 72;
     return {
       location,
       temperature: temp,
       unit,
-      condition: 'sunny'
+      condition: "sunny"
     };
   }
 }
@@ -33,7 +33,7 @@ class TimeTool extends Tool {
     console.log(`\n[Tool Executed] get_time(${timezone})`);
     return {
       timezone,
-      time: new Date().toLocaleTimeString('en-US', { timeZone: timezone })
+      time: new Date().toLocaleTimeString("en-US", { timeZone: timezone })
     };
   }
 }
@@ -41,7 +41,7 @@ class TimeTool extends Tool {
 async function main() {
   const llm = createLLM({
     provider: "openai",
-    openaiApiKey: process.env.OPENAI_API_KEY,
+    openaiApiKey: process.env.OPENAI_API_KEY
   });
   // Example 1: Streaming with tool calling
   console.log("=== Example 1: Streaming with Tool Calling ===\n");
@@ -73,7 +73,8 @@ async function main() {
 
   // Example 3: Streaming with tool events
   console.log("\n=== Example 3: Streaming with Tool Event Handlers ===\n");
-  const chat3 = llm.chat("gpt-4o-mini")
+  const chat3 = llm
+    .chat("gpt-4o-mini")
     .withTool(WeatherTool)
     .onToolCall((toolCall) => {
       console.log(`\n[Event] Tool called: ${toolCall.function.name}`);
@@ -114,4 +115,9 @@ async function main() {
   console.log("\n=== All streaming + tools examples completed ===");
 }
 
-main().then(() => process.exit(0)).catch((err) => { console.error(err); process.exit(1); });
+main()
+  .then(() => process.exit(0))
+  .catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });

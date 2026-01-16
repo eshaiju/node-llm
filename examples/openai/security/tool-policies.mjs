@@ -28,9 +28,7 @@ async function runExample() {
   });
 
   console.log("--- 🕵️ Scenario 1: Dry-Run Mode (Pre-flight Check) ---");
-  const dryRunChat = llm.chat("gpt-4o-mini")
-    .withTool(AdminDBTool)
-    .withToolExecution("dry-run");
+  const dryRunChat = llm.chat("gpt-4o-mini").withTool(AdminDBTool).withToolExecution("dry-run");
 
   const plan = await dryRunChat.ask("Delete user #123 from the database");
   console.log("Model Intent:", plan.content);
@@ -38,7 +36,8 @@ async function runExample() {
   console.log("\n");
 
   console.log("--- 🚦 Scenario 2: Confirm Mode (Human-in-the-loop) ---");
-  const secureChat = llm.chat("gpt-4o-mini")
+  const secureChat = llm
+    .chat("gpt-4o-mini")
     .withTool(AdminDBTool)
     .withToolExecution("confirm")
     .onConfirmToolCall(async (call) => {
@@ -46,7 +45,9 @@ async function runExample() {
       console.log(`[APPROVAL REQUIRED] LLM wants to ${args.action} table '${args.table}'`);
 
       const isSafe = args.action === "query";
-      console.log(`Decision: ${isSafe ? "✅ Auto-approving query" : "❌ Rejecting deletion for security"}`);
+      console.log(
+        `Decision: ${isSafe ? "✅ Auto-approving query" : "❌ Rejecting deletion for security"}`
+      );
       return isSafe;
     })
     .onToolCallStart((call) => console.log(`[AUDIT] Starting: ${call.function.name}`))

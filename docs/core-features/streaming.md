@@ -7,16 +7,18 @@ description: Implement real-time user experiences with low-latency responses usi
 ---
 
 # {{ page.title }}
+
 {: .no_toc }
 
 {{ page.description }}
 {: .fs-6 .fw-300 }
 
 ## Table of contents
+
 {: .no_toc .text-delta }
 
 1. TOC
-{:toc}
+   {:toc}
 
 ---
 
@@ -78,7 +80,7 @@ class WeatherTool extends Tool {
   });
 
   async execute({ location }) {
-    return { location, temp: 22, condition: 'sunny' };
+    return { location, temp: 22, condition: "sunny" };
   }
 }
 
@@ -117,6 +119,7 @@ for await (const chunk of chat.stream("Weather in Tokyo?")) {
 **NEW:** `chat.stream()` now supports the same advanced features as `chat.ask()`.
 
 ### Multimodal Streaming
+
 Pass images, audio, or documents just like you would with a standard request.
 
 ```ts
@@ -130,6 +133,7 @@ for await (const chunk of chat.stream("What's in this image?", {
 ```
 
 ### Structured Streaming (Validated JSON)
+
 Get streaming JSON that is automatically validated against a Zod schema.
 
 ```ts
@@ -164,15 +168,15 @@ try {
 Streaming is essential for modern web apps. Here is a simple example using **Express**:
 
 ```ts
-import express from 'express';
-import { NodeLLM } from '@node-llm/core';
+import express from "express";
+import { NodeLLM } from "@node-llm/core";
 
 const app = express();
 
-app.get('/chat', async (req, res) => {
+app.get("/chat", async (req, res) => {
   // Set headers for streaming text
-  res.setHeader('Content-Type', 'text/plain; charset=utf-8');
-  res.setHeader('Transfer-Encoding', 'chunked');
+  res.setHeader("Content-Type", "text/plain; charset=utf-8");
+  res.setHeader("Transfer-Encoding", "chunked");
 
   const chat = NodeLLM.chat("gpt-4o-mini");
 

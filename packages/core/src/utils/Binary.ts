@@ -17,7 +17,7 @@ export class BinaryUtils {
       if (match && match[1] && match[2]) {
         return {
           mimeType: match[1],
-          data: match[2],
+          data: match[2]
         };
       }
     } else if (url.startsWith("http")) {
@@ -29,7 +29,7 @@ export class BinaryUtils {
         const mimeType = response.headers.get("content-type") || this.guessMimeType(url);
         return {
           mimeType,
-          data: base64,
+          data: base64
         };
       } catch (e) {
         logger.error("Error converting URL to base64:", e as Error);
@@ -43,7 +43,7 @@ export class BinaryUtils {
         const mimeType = this.guessMimeType(url);
         return {
           mimeType,
-          data: base64,
+          data: base64
         };
       } catch (e) {
         logger.error("Error reading local file for base64:", e as Error);
@@ -56,17 +56,27 @@ export class BinaryUtils {
   private static guessMimeType(filePath: string): string {
     const ext = path.extname(filePath).toLowerCase();
     switch (ext) {
-      case ".png": return "image/png";
+      case ".png":
+        return "image/png";
       case ".jpg":
-      case ".jpeg": return "image/jpeg";
-      case ".webp": return "image/webp";
-      case ".gif": return "image/gif";
-      case ".mp3": return "audio/mpeg";
-      case ".wav": return "audio/wav";
-      case ".ogg": return "audio/ogg";
-      case ".m4a": return "audio/mp4";
-      case ".pdf": return "application/pdf";
-      default: return "application/octet-stream";
+      case ".jpeg":
+        return "image/jpeg";
+      case ".webp":
+        return "image/webp";
+      case ".gif":
+        return "image/gif";
+      case ".mp3":
+        return "audio/mpeg";
+      case ".wav":
+        return "audio/wav";
+      case ".ogg":
+        return "audio/ogg";
+      case ".m4a":
+        return "audio/mp4";
+      case ".pdf":
+        return "application/pdf";
+      default:
+        return "application/octet-stream";
     }
   }
 }

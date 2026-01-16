@@ -37,7 +37,7 @@ describe("LLM Default Model Resolution", () => {
 
   it("prioritizes global configuration default over provider default", () => {
     const provider = new FakeProvider();
-    const llm = createLLM({ 
+    const llm = createLLM({
       provider,
       defaultChatModel: "custom-global-default"
     });
@@ -48,7 +48,7 @@ describe("LLM Default Model Resolution", () => {
 
   it("prioritizes explicit argument over all defaults", () => {
     const provider = new FakeProvider();
-    const llm = createLLM({ 
+    const llm = createLLM({
       provider,
       defaultChatModel: "custom-global-default"
     });
@@ -72,10 +72,18 @@ class MockCapabilitiesProvider extends FakeProvider {
     getContextWindow: (_m: string) => 0
   } as any;
 
-  async paint(_req: any): Promise<any> { return { url: "ok" }; }
-  async transcribe(_req: any): Promise<any> { return { text: "ok" }; }
-  async embed(_req: any): Promise<any> { return { vectors: [[0.1]], model: "test", dimensions: 1 }; }
-  async moderate(_req: any): Promise<any> { return { flagged: false }; }
+  async paint(_req: any): Promise<any> {
+    return { url: "ok" };
+  }
+  async transcribe(_req: any): Promise<any> {
+    return { text: "ok" };
+  }
+  async embed(_req: any): Promise<any> {
+    return { vectors: [[0.1]], model: "test", dimensions: 1 };
+  }
+  async moderate(_req: any): Promise<any> {
+    return { flagged: false };
+  }
 }
 
 describe("NodeLLM assumeModelExists", () => {
@@ -85,34 +93,42 @@ describe("NodeLLM assumeModelExists", () => {
 
     // 1. Image Generation (paint)
     // Should fail without flag
-    await expect(llm.paint("test", { model: "unsupported-model" }))
-      .rejects.toThrow("does not support image generation");
+    await expect(llm.paint("test", { model: "unsupported-model" })).rejects.toThrow(
+      "does not support image generation"
+    );
 
     // Should succeed with flag
-    await expect(llm.paint("test", { model: "unsupported-model", assumeModelExists: true }))
-      .resolves.toBeDefined();
+    await expect(
+      llm.paint("test", { model: "unsupported-model", assumeModelExists: true })
+    ).resolves.toBeDefined();
 
     // 2. Transcription
     // Should fail without flag
-    await expect(llm.transcribe("audio.mp3", { model: "unsupported-model" }))
-      .rejects.toThrow("does not support transcription");
-      
+    await expect(llm.transcribe("audio.mp3", { model: "unsupported-model" })).rejects.toThrow(
+      "does not support transcription"
+    );
+
     // Should succeed with flag
-    await expect(llm.transcribe("audio.mp3", { model: "unsupported-model", assumeModelExists: true }))
-      .resolves.toBeDefined();
+    await expect(
+      llm.transcribe("audio.mp3", { model: "unsupported-model", assumeModelExists: true })
+    ).resolves.toBeDefined();
 
     // 3. Embeddings
-    await expect(llm.embed("text", { model: "unsupported-model" }))
-      .rejects.toThrow("does not support embeddings");
+    await expect(llm.embed("text", { model: "unsupported-model" })).rejects.toThrow(
+      "does not support embeddings"
+    );
 
-    await expect(llm.embed("text", { model: "unsupported-model", assumeModelExists: true }))
-      .resolves.toBeDefined();
-      
+    await expect(
+      llm.embed("text", { model: "unsupported-model", assumeModelExists: true })
+    ).resolves.toBeDefined();
+
     // 4. Moderation
-    await expect(llm.moderate("text", { model: "unsupported-model" }))
-      .rejects.toThrow("does not support moderation");
+    await expect(llm.moderate("text", { model: "unsupported-model" })).rejects.toThrow(
+      "does not support moderation"
+    );
 
-    await expect(llm.moderate("text", { model: "unsupported-model", assumeModelExists: true }))
-      .resolves.toBeDefined();
+    await expect(
+      llm.moderate("text", { model: "unsupported-model", assumeModelExists: true })
+    ).resolves.toBeDefined();
   });
 });

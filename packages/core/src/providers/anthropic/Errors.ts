@@ -1,8 +1,8 @@
-import { 
-  BadRequestError, 
-  AuthenticationError, 
-  RateLimitError, 
-  ServerError, 
+import {
+  BadRequestError,
+  AuthenticationError,
+  RateLimitError,
+  ServerError,
   ServiceUnavailableError,
   APIError
 } from "../../errors/index.js";

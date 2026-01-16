@@ -15,7 +15,7 @@ import { createLLM, NodeLLM, Tool, z } from "../../../packages/core/dist/index.j
 async function main() {
   const llm = createLLM({
     provider: "openai",
-    openaiApiKey: process.env.OPENAI_API_KEY,
+    openaiApiKey: process.env.OPENAI_API_KEY
   });
   const chat = llm.chat("gpt-4o-mini");
 
@@ -23,7 +23,7 @@ async function main() {
   chat.beforeRequest(async (messages) => {
     console.log("[Policy] Checking for PII in request...");
 
-    return messages.map(msg => {
+    return messages.map((msg) => {
       if (typeof msg.content === "string") {
         // Simple regex for SSN-like patterns (e.g., 000-00-0000)
         const redacted = msg.content.replace(/\b\d{3}-\d{2}-\d{4}\b/g, "[Redacted SSN]");
@@ -57,7 +57,9 @@ async function main() {
   console.log("Response:", res1.content);
 
   console.log("\n--- Scenario 2: AI mentions a secret project ---");
-  const res2 = await chat.ask("What is the name of the secret project we are working on? Mention Project X-Ray.");
+  const res2 = await chat.ask(
+    "What is the name of the secret project we are working on? Mention Project X-Ray."
+  );
   // The user will see: "... [INTERNAL-PROJECT]"
   console.log("Response:", res2.content);
 }

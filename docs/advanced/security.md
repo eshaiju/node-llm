@@ -7,20 +7,22 @@ description: Learn how NodeLLM acts as an architectural security layer with cont
 ---
 
 # {{ page.title }}
+
 {: .no_toc }
 
 {{ page.description }}
 {: .fs-6 .fw-300 }
 
 ## Table of contents
+
 {: .no_toc .text-delta }
 
 1. TOC
-{:toc}
+   {:toc}
 
 ---
 
-NodeLLM is built from the ground up to be an **architectural security layer**. In production AI applications, the LLM is often the most vulnerable component due to prompt injection, instruction drift, and potential PII leakage. 
+NodeLLM is built from the ground up to be an **architectural security layer**. In production AI applications, the LLM is often the most vulnerable component due to prompt injection, instruction drift, and potential PII leakage.
 
 NodeLLM provides several "Zero-Config" and pluggable security features to mitigate these risks.
 
@@ -43,6 +45,7 @@ NodeLLM solves this by maintaining a strict architectural boundary between **Sys
 NodeLLM allows you to inject security and compliance policies at the **edge** of the request/response cycle using asynchronous hooks.
 
 ### `beforeRequest` (Input Guardrail)
+
 Intercept messages before they reach the LLM. Use this for **PII Detection** and **Redaction**.
 
 ```ts
@@ -57,6 +60,7 @@ chat.beforeRequest(async (messages) => {
 ```
 
 ### `afterResponse` (Output Guardrail)
+
 Verify the LLM's output before it reaches your application logic. Use this for **Compliance Verification** or **Sensitive Data Masking**.
 
 ```ts
@@ -94,15 +98,14 @@ For sensitive operations (like database writes or financial transactions), NodeL
 - **`dry-run`**: Proposes the tool call structure but **never executes it**. Useful for UI previews or verification-only flows.
 
 ```ts
-chat
-  .withToolExecution("confirm")
-  .onConfirmToolCall(async (call) => {
-    // Return true to execute, false to cancel
-    return await userResponse.confirm(`Allow tool: ${call.function.name}?`);
-  });
+chat.withToolExecution("confirm").onConfirmToolCall(async (call) => {
+  // Return true to execute, false to cancel
+  return await userResponse.confirm(`Allow tool: ${call.function.name}?`);
+});
 ```
 
 Security value:
+
 - **Prevents Destructive Actions**: Stops the model from accidentally deleting data without oversight.
 - **Human-in-the-loop**: Increases trust by ensuring critical business logic remains under human control.
 
@@ -129,6 +132,7 @@ await chat.ask("Analyze this large dataset", {
 ```
 
 **Security Benefits:**
+
 - **DoS Protection**: Prevents malicious or buggy providers from hanging indefinitely
 - **Resource Control**: Limits memory, connection, and thread pool consumption
 - **Cost Control**: Prevents runaway requests from generating unexpected costs
@@ -148,6 +152,7 @@ await chat.ask("Deep research task", { maxToolCalls: 10 });
 ```
 
 **Security Benefits:**
+
 - **Cost Control**: Prevents infinite loops from generating unbounded API costs
 - **Resource Protection**: Stops runaway tool executions from exhausting system resources
 
@@ -162,6 +167,7 @@ const llm = createLLM({
 ```
 
 **Security Benefits:**
+
 - **Cascading Failure Prevention**: Stops retry storms during provider outages
 - **Resource Protection**: Prevents excessive retries from exhausting connection pools
 
@@ -171,16 +177,17 @@ Combine all limits for comprehensive protection:
 
 ```ts
 const llm = createLLM({
-  requestTimeout: 30000,  // 30 second timeout
-  maxRetries: 2,          // Retry failed requests twice
-  maxToolCalls: 5,        // Limit tool execution loops
-  maxTokens: 4096,        // Limit output to 4K tokens
+  requestTimeout: 30000, // 30 second timeout
+  maxRetries: 2, // Retry failed requests twice
+  maxToolCalls: 5, // Limit tool execution loops
+  maxTokens: 4096 // Limit output to 4K tokens
 });
 ```
 
 This creates a **defense-in-depth** strategy where multiple layers of protection work together to prevent resource exhaustion, cost overruns, and service disruptions.
 
 **Security Summary:**
+
 - **`requestTimeout`**: DoS protection, resource control, predictable SLAs
 - **`maxRetries`**: Prevents cascading failures and retry storms
 - **`maxToolCalls`**: Prevents infinite loops and runaway costs

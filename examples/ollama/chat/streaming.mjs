@@ -1,9 +1,8 @@
-
 import { createLLM, NodeLLM, Tool, z } from "../../../packages/core/dist/index.js";
 
 async function main() {
   const llm = createLLM({
-    provider: "ollama",
+    provider: "ollama"
   });
   console.log("🦙 Ollama Streaming Chat Example");
 

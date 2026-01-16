@@ -37,7 +37,8 @@ process.env.OPENAI_API_KEY = "new-key";
 NodeLLM.chat("gpt-4"); // Still uses OLD key (or none if not set initially)
 ```
 
-**Implication**: 
+**Implication**:
+
 - Configuration is captured at construction
 - No runtime env re-reading
 - Predictable, testable behavior
@@ -50,18 +51,18 @@ NodeLLM.chat("gpt-4"); // Still uses OLD key (or none if not set initially)
 
 ```typescript
 // Pattern 1: Scoped instance
-const openai = NodeLLM.withProvider("openai", { 
-  openaiApiKey: "..." 
+const openai = NodeLLM.withProvider("openai", {
+  openaiApiKey: "..."
 });
 
 // Pattern 2: Fresh instance
-const anthropic = createLLM({ 
+const anthropic = createLLM({
   provider: "anthropic",
   anthropicApiKey: "..."
 });
 
 // ✅ Each instance is isolated
-openai.chat("gpt-4");      // Uses OpenAI
+openai.chat("gpt-4"); // Uses OpenAI
 anthropic.chat("claude-3"); // Uses Anthropic
 ```
 
@@ -75,7 +76,7 @@ anthropic.chat("claude-3"); // Uses Anthropic
 
 ```typescript
 // ❌ This does NOT auto-switch to Anthropic:
-NodeLLM.chat("claude-3-5-sonnet"); 
+NodeLLM.chat("claude-3-5-sonnet");
 // Throws: ProviderNotConfiguredError (if no provider set)
 
 // ✅ Explicit provider required:
@@ -83,7 +84,8 @@ const llm = NodeLLM.withProvider("anthropic", { ... });
 llm.chat("claude-3-5-sonnet"); // Works
 ```
 
-**Rationale**: 
+**Rationale**:
+
 - Prevents "magic" behavior
 - Makes provider selection explicit
 - Avoids ambiguity (e.g., "gpt-4" via OpenAI vs OpenRouter)
@@ -114,12 +116,12 @@ These APIs are **locked** and will not change without a major version:
 ### Core Exports
 
 ```typescript
-import { 
-  NodeLLM,        // Default immutable instance
-  createLLM,      // Factory for custom instances
-  NodeLLMCore,    // Core class (for typing)
-  LegacyNodeLLM   // Deprecated shim
-} from '@node-llm/core';
+import {
+  NodeLLM, // Default immutable instance
+  createLLM, // Factory for custom instances
+  NodeLLMCore, // Core class (for typing)
+  LegacyNodeLLM // Deprecated shim
+} from "@node-llm/core";
 ```
 
 ### Instance Methods
@@ -156,16 +158,17 @@ These errors are **public and stable**:
 
 ```typescript
 import {
-  ProviderNotConfiguredError,  // No provider set
-  UnsupportedFeatureError,      // Provider lacks feature
-  ModelCapabilityError,         // Model lacks capability
-  ServerError,                  // Provider API error
-  RateLimitError,               // Rate limit hit
-  AuthenticationError           // Invalid API key
-} from '@node-llm/core';
+  ProviderNotConfiguredError, // No provider set
+  UnsupportedFeatureError, // Provider lacks feature
+  ModelCapabilityError, // Model lacks capability
+  ServerError, // Provider API error
+  RateLimitError, // Rate limit hit
+  AuthenticationError // Invalid API key
+} from "@node-llm/core";
 ```
 
-**Contract**: 
+**Contract**:
+
 - Error names and semantics are stable
 - New errors may be added (non-breaking)
 - Existing error meanings will not change
@@ -179,7 +182,7 @@ import {
 **Contract**: NodeLLM is an **extensible platform**.
 
 ```typescript
-import { BaseProvider, NodeLLM } from '@node-llm/core';
+import { BaseProvider, NodeLLM } from "@node-llm/core";
 
 class MyProvider extends BaseProvider {
   // Implement required methods
@@ -193,6 +196,7 @@ const llm = createLLM({ provider: "my-provider" });
 ```
 
 **Stability**:
+
 - `registerProvider()` is public and stable
 - `BaseProvider` interface is stable
 - `providerRegistry` is internal (use `registerProvider` instead)
@@ -255,5 +259,5 @@ Before declaring architecture locked:
 
 ---
 
-*Last updated: 2026-01-16*  
-*Contract version: 1.0*
+_Last updated: 2026-01-16_  
+_Contract version: 1.0_

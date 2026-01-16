@@ -4,7 +4,10 @@ import { ModelRegistry } from "../../models/ModelRegistry.js";
 import { handleAnthropicError } from "./Errors.js";
 
 export class AnthropicModels {
-  constructor(private readonly baseUrl: string, private readonly apiKey: string) {}
+  constructor(
+    private readonly baseUrl: string,
+    private readonly apiKey: string
+  ) {}
 
   async execute(): Promise<ModelInfo[]> {
     try {
@@ -13,24 +16,25 @@ export class AnthropicModels {
         headers: {
           "x-api-key": this.apiKey,
           "anthropic-version": "2023-06-01",
-          "content-type": "application/json",
-        },
+          "content-type": "application/json"
+        }
       });
 
       if (response.ok) {
-        const { data } = await response.json() as { data: any[] };
-        
-        return data.map(m => {
+        const { data } = (await response.json()) as { data: any[] };
+
+        return data.map((m) => {
           const modelId = m.id;
           const registryModel = ModelRegistry.find(modelId, "anthropic");
-          
+
           const info: ModelInfo = {
             id: modelId,
             name: registryModel?.name || m.display_name || modelId,
             provider: "anthropic",
             family: registryModel?.family || modelId,
             context_window: registryModel?.context_window || Capabilities.getContextWindow(modelId),
-            max_output_tokens: registryModel?.max_output_tokens || Capabilities.getMaxOutputTokens(modelId),
+            max_output_tokens:
+              registryModel?.max_output_tokens || Capabilities.getMaxOutputTokens(modelId),
             modalities: registryModel?.modalities || { input: ["text"], output: ["text"] },
             capabilities: Capabilities.getCapabilities(modelId),
             pricing: registryModel?.pricing || Capabilities.getPricing(modelId),
@@ -40,7 +44,7 @@ export class AnthropicModels {
               created_at: m.created_at
             }
           };
-          
+
           return info;
         });
       }
@@ -49,11 +53,11 @@ export class AnthropicModels {
     }
 
     return ModelRegistry.all()
-      .filter(m => m.provider === "anthropic")
-      .map(m => ({
-          ...m,
-          capabilities: Capabilities.getCapabilities(m.id)
-      })) as unknown as ModelInfo[]; 
+      .filter((m) => m.provider === "anthropic")
+      .map((m) => ({
+        ...m,
+        capabilities: Capabilities.getCapabilities(m.id)
+      })) as unknown as ModelInfo[];
   }
 
   find(modelId: string) {

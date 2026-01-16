@@ -22,30 +22,33 @@ async function main() {
     const models = await llm.listModels();
 
     if (models.length === 0) {
-        console.log("⚠️ No models found in your Ollama library.");
-        console.log("Run `ollama pull llama3` to get started.");
-        return;
+      console.log("⚠️ No models found in your Ollama library.");
+      console.log("Run `ollama pull llama3` to get started.");
+      return;
     }
 
     console.log(`✅ Found ${models.length} models:\n`);
 
     // Display as a table
-    console.table(models.map(m => ({
+    console.table(
+      models.map((m) => ({
         ID: m.id,
         Name: m.name,
         Family: m.family,
-        "Context Window": m.context_window ? `${m.context_window.toLocaleString()} tokens` : "Unknown",
+        "Context Window": m.context_window
+          ? `${m.context_window.toLocaleString()} tokens`
+          : "Unknown",
         Capabilities: m.capabilities.join(", ")
-    })));
+      }))
+    );
 
     console.log("\n💡 Tip: Use `llm.chat(modelId)` with any of the IDs above.");
-
   } catch (error) {
     if (error.message && error.message.includes("ECONNREFUSED")) {
-        console.error("❌ Error: Could not connect to Ollama.");
-        console.error("Make sure Ollama is running (`ollama serve`).");
+      console.error("❌ Error: Could not connect to Ollama.");
+      console.error("Make sure Ollama is running (`ollama serve`).");
     } else {
-        console.error("❌ Error:", error.message);
+      console.error("❌ Error:", error.message);
     }
   }
 }

@@ -14,17 +14,17 @@ describe("Gemini Tool Calling Integration (VCR)", { timeout: 30000 }, () => {
 
   it("should handle tool calling", async ({ task }) => {
     polly = setupVCR(task.name, "gemini");
-        const llm = createLLM({
+    const llm = createLLM({
       geminiApiKey: process.env.GEMINI_API_KEY,
-      provider: "gemini",
+      provider: "gemini"
     });
 
     const weatherTool = {
-      type: 'function',
+      type: "function",
       function: {
-        name: 'get_weather',
-        description: 'Get weather',
-        parameters: { type: 'object', properties: { location: { type: 'string' } } }
+        name: "get_weather",
+        description: "Get weather",
+        parameters: { type: "object", properties: { location: { type: "string" } } }
       },
       handler: async ({ location }: { location: string }) => {
         return JSON.stringify({ location, temperature: 18, condition: "Cloudy" });

@@ -4,13 +4,13 @@ import { createLLM, NodeLLM, Tool, z } from "../../../packages/core/dist/index.j
 async function main() {
   const llm = createLLM({
     provider: "gemini",
-    geminiApiKey: process.env.GEMINI_API_KEY,
+    geminiApiKey: process.env.GEMINI_API_KEY
   });
   // 1. Behavior Tuning with System Prompts
   console.log("--- System Instructions ---");
-  const chat = llm.chat("gemini-2.0-flash").withInstructions(
-    "You are a poetic assistant. Reply in rhymes."
-  );
+  const chat = llm
+    .chat("gemini-2.0-flash")
+    .withInstructions("You are a poetic assistant. Reply in rhymes.");
 
   const response1 = await chat.ask("Hello!");
   console.log(`Assistant: ${response1.content}`);

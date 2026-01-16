@@ -4,7 +4,7 @@ import { createLLM, NodeLLM, Tool, z } from "../../../packages/core/dist/index.j
 async function main() {
   const llm = createLLM({
     provider: "openai",
-    openaiApiKey: process.env.OPENAI_API_KEY,
+    openaiApiKey: process.env.OPENAI_API_KEY
   });
   const chat = llm.chat("gpt-4o-mini");
 
@@ -16,13 +16,18 @@ async function main() {
 
   const response = await chat
     .withParams({
-        seed: 42,
-        user: "test-user-123",
-        presence_penalty: 0.5
+      seed: 42,
+      user: "test-user-123",
+      presence_penalty: 0.5
     })
     .ask("Generate a random number.");
 
   console.log("Response:", response.content);
 }
 
-main().then(() => process.exit(0)).catch((err) => { console.error(err); process.exit(1); });
+main()
+  .then(() => process.exit(0))
+  .catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });

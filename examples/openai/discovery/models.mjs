@@ -4,13 +4,13 @@ import { createLLM, NodeLLM, Tool, z } from "../../../packages/core/dist/index.j
 async function main() {
   const llm = createLLM({
     provider: "openai",
-    openaiApiKey: process.env.OPENAI_API_KEY,
+    openaiApiKey: process.env.OPENAI_API_KEY
   });
   // 1. List Available Models
   console.log("--- Listing Models ---");
   const models = await llm.listModels();
   console.log(`Found ${models.length} models. Top 5:`);
-  console.table(models.slice(0, 5).map(m => ({ ID: m.id, Context: m.context_window })));
+  console.table(models.slice(0, 5).map((m) => ({ ID: m.id, Context: m.context_window })));
 
   // 2. Inspect Specific Model Capabilities
   console.log("\n--- Checking 'gpt-4o' ---");

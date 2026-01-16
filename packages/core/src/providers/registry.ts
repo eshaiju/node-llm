@@ -54,15 +54,15 @@ class ProviderRegistry {
 
 /**
  * Global provider registry.
- * 
+ *
  * @internal
- * This is an internal implementation detail. Use `NodeLLM.registerProvider()` 
+ * This is an internal implementation detail. Use `NodeLLM.registerProvider()`
  * or `createLLM()` instead of accessing this directly.
- * 
+ *
  * **For custom providers**, use the public API:
  * ```typescript
  * import { NodeLLM, BaseProvider } from '@node-llm/core';
- * 
+ *
  * class MyProvider extends BaseProvider { ... }
  * NodeLLM.registerProvider("my-provider", () => new MyProvider());
  * ```
@@ -70,7 +70,7 @@ class ProviderRegistry {
 export const providerRegistry = new ProviderRegistry();
 
 // Exported registration functions (delegates to provider-specific index files)
-export { 
+export {
   registerOpenAIProvider as ensureOpenAIRegistered,
   registerOpenAIProvider,
   registerAnthropicProvider,

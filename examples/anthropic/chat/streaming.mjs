@@ -7,7 +7,7 @@ import { createLLM, NodeLLM, Tool, z } from "../../../packages/core/dist/index.j
 async function main() {
   const llm = createLLM({
     provider: "anthropic",
-    anthropicApiKey: process.env.ANTHROPIC_API_KEY,
+    anthropicApiKey: process.env.ANTHROPIC_API_KEY
   });
   console.log("Creating chat with Streaming...");
   const chat = llm.chat("claude-3-haiku-20240307");
@@ -19,7 +19,7 @@ async function main() {
 
   for await (const chunk of stream) {
     if (chunk.content) {
-        process.stdout.write(chunk.content);
+      process.stdout.write(chunk.content);
     }
   }
 

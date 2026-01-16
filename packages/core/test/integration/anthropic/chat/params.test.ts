@@ -15,9 +15,9 @@ describe("Anthropic Parameters Integration (VCR)", { timeout: 30000 }, () => {
   it("should respect max_tokens parameter", async ({ task }) => {
     polly = setupVCR(task.name, "anthropic");
 
-        const llm = createLLM({
+    const llm = createLLM({
       anthropicApiKey: process.env.ANTHROPIC_API_KEY,
-      provider: "anthropic",
+      provider: "anthropic"
     });
     const chat = llm.chat("claude-3-haiku-20240307");
 

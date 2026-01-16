@@ -1,9 +1,8 @@
-
 import { createLLM, NodeLLM, Tool, z } from "../../../packages/core/dist/index.js";
 
 async function main() {
   const llm = createLLM({
-    provider: "ollama",
+    provider: "ollama"
   });
   console.log("🦙 Ollama Embeddings Example");
 
@@ -18,34 +17,33 @@ async function main() {
   const text3 = "The planet Jupiter is a gas giant.";
 
   try {
-      const emb1 = await llm.embed(text1, { model });
-      const emb2 = await llm.embed(text2, { model });
-      const emb3 = await llm.embed(text3, { model });
+    const emb1 = await llm.embed(text1, { model });
+    const emb2 = await llm.embed(text2, { model });
+    const emb3 = await llm.embed(text3, { model });
 
-      console.log("Embedding vector length:", emb1.vector.length);
+    console.log("Embedding vector length:", emb1.vector.length);
 
-      const score1 = cosineSimilarity(emb1.vector, emb2.vector);
-      console.log(`Similarity (Cat vs Feline): ${score1.toFixed(4)}`);
+    const score1 = cosineSimilarity(emb1.vector, emb2.vector);
+    console.log(`Similarity (Cat vs Feline): ${score1.toFixed(4)}`);
 
-      const score2 = cosineSimilarity(emb1.vector, emb3.vector);
-      console.log(`Similarity (Cat vs Jupiter): ${score2.toFixed(4)}`);
-
+    const score2 = cosineSimilarity(emb1.vector, emb3.vector);
+    console.log(`Similarity (Cat vs Jupiter): ${score2.toFixed(4)}`);
   } catch (error) {
-      console.error("Error:", error.message);
-      console.info("Hint: Ensure you have the model pulled.");
+    console.error("Error:", error.message);
+    console.info("Hint: Ensure you have the model pulled.");
   }
 }
 
 function cosineSimilarity(vecA, vecB) {
-    let dotProduct = 0.0;
-    let normA = 0.0;
-    let normB = 0.0;
-    for (let i = 0; i < vecA.length; i++) {
-        dotProduct += vecA[i] * vecB[i];
-        normA += vecA[i] * vecA[i];
-        normB += vecB[i] * vecB[i];
-    }
-    return dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
+  let dotProduct = 0.0;
+  let normA = 0.0;
+  let normB = 0.0;
+  for (let i = 0; i < vecA.length; i++) {
+    dotProduct += vecA[i] * vecB[i];
+    normA += vecA[i] * vecA[i];
+    normB += vecB[i] * vecB[i];
+  }
+  return dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
 }
 
 main();

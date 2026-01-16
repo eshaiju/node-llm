@@ -7,16 +7,18 @@ description: Connect NodeLLM to Azure OpenAI, LiteLLM, Ollama, or any OpenAI-com
 ---
 
 # {{ page.title }}
+
 {: .no_toc }
 
 {{ page.description }}
 {: .fs-6 .fw-300 }
 
 ## Table of contents
+
 {: .no_toc .text-delta }
 
 1. TOC
-{:toc}
+   {:toc}
 
 ---
 
@@ -57,11 +59,11 @@ import { createLLM } from "@node-llm/core";
 
 const llm = createLLM({ provider: "openai" });
 
-const chat = llm.chat('gpt-4').withRequestOptions({
-  headers: { 'api-key': process.env.OPENAI_API_KEY }
+const chat = llm.chat("gpt-4").withRequestOptions({
+  headers: { "api-key": process.env.OPENAI_API_KEY }
 });
 
-const response = await chat.ask('Hello Azure!');
+const response = await chat.ask("Hello Azure!");
 ```
 
 ## Using Custom Models (`assumeModelExists`)
@@ -69,10 +71,10 @@ const response = await chat.ask('Hello Azure!');
 If you use a model ID not in the built-in registry (e.g., custom Azure names or new models), use `assumeModelExists: true` to bypass validation.
 
 ```typescript
-const chat = llm.chat('my-company-gpt-4', {
+const chat = llm.chat("my-company-gpt-4", {
   assumeModelExists: true,
   // Provider is typically required if not already configured globally
-  provider: 'openai' 
+  provider: "openai"
 });
 
 await chat.ask("Hello");
@@ -82,14 +84,14 @@ This flag is available on all major methods:
 
 ```typescript
 // Embeddings
-await NodeLLM.embed('text', {
-  model: 'custom-embedder',
+await NodeLLM.embed("text", {
+  model: "custom-embedder",
   assumeModelExists: true
 });
 
 // Image Generation
-await NodeLLM.paint('prompt', {
-  model: 'custom-dalle',
+await NodeLLM.paint("prompt", {
+  model: "custom-dalle",
   assumeModelExists: true
 });
 ```

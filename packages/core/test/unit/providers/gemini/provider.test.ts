@@ -23,7 +23,10 @@ describe("GeminiProvider", () => {
   });
 
   it("should initialize with default baseUrl if not provided", () => {
-    expect(GeminiChat).toHaveBeenCalledWith("https://generativelanguage.googleapis.com/v1beta", "test-key");
+    expect(GeminiChat).toHaveBeenCalledWith(
+      "https://generativelanguage.googleapis.com/v1beta",
+      "test-key"
+    );
   });
 
   it("should delegate chat to chatHandler", async () => {

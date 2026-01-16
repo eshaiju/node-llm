@@ -3,25 +3,30 @@ import { handleGeminiError } from "./Errors.js";
 import { logger } from "../../utils/logger.js";
 
 export class GeminiImage {
-  constructor(private readonly baseUrl: string, private readonly apiKey: string) {}
+  constructor(
+    private readonly baseUrl: string,
+    private readonly apiKey: string
+  ) {}
 
   async execute(request: ImageRequest): Promise<ImageResponse> {
     const modelId = request.model || "imagen-4.0-generate-001";
     const url = `${this.baseUrl}/models/${modelId}:predict?key=${this.apiKey}`;
 
     if (request.size) {
-      logger.warn(`[Gemini] Ignoring size ${request.size}. Gemini does not support image size customization.`);
+      logger.warn(
+        `[Gemini] Ignoring size ${request.size}. Gemini does not support image size customization.`
+      );
     }
 
     const body: any = {
       instances: [
         {
-          prompt: request.prompt,
-        },
+          prompt: request.prompt
+        }
       ],
       parameters: {
-        sampleCount: 1,
-      },
+        sampleCount: 1
+      }
     };
 
     logger.logRequest("Gemini", "POST", url, body);
@@ -29,9 +34,9 @@ export class GeminiImage {
     const response = await fetch(url, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json"
       },
-      body: JSON.stringify(body),
+      body: JSON.stringify(body)
     });
 
     if (!response.ok) {
@@ -51,7 +56,7 @@ export class GeminiImage {
 
     return {
       data: base64Data,
-      mime_type: mimeType,
+      mime_type: mimeType
     };
   }
 }

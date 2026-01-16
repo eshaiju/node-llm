@@ -4,14 +4,14 @@ import { createLLM, NodeLLM, Tool, z } from "../../../packages/core/dist/index.j
 async function main() {
   const llm = createLLM({
     provider: "openrouter",
-    openrouterApiKey: process.env.OPENROUTER_API_KEY,
+    openrouterApiKey: process.env.OPENROUTER_API_KEY
   });
   const weatherTool = {
-    type: 'function',
+    type: "function",
     function: {
-      name: 'get_weather',
-      description: 'Get weather',
-      parameters: { type: 'object', properties: { location: { type: 'string' } } }
+      name: "get_weather",
+      description: "Get weather",
+      parameters: { type: "object", properties: { location: { type: "string" } } }
     },
     handler: async ({ location }) => {
       return JSON.stringify({ location, temperature: 22, condition: "Sunny" });

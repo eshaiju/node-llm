@@ -45,36 +45,36 @@ export interface Model {
   metadata?: Record<string, any>;
 }
 
-export type ProviderName = 'openai' | 'anthropic' | 'gemini' | 'deepseek' | 'openrouter' | 'ollama';
+export type ProviderName = "openai" | "anthropic" | "gemini" | "deepseek" | "openrouter" | "ollama";
 
-export type ModelCapability = 
-  | 'streaming'
-  | 'function_calling'
-  | 'structured_output'
-  | 'predicted_outputs'
-  | 'distillation'
-  | 'fine_tuning'
-  | 'batch'
-  | 'realtime'
-  | 'image_generation'
-  | 'speech_generation'
-  | 'transcription'
-  | 'translation'
-  | 'citations'
-  | 'reasoning'
-  | 'caching'
-  | 'moderation'
-  | 'json_mode'
-  | 'vision'
-  | 'chat'
-  | 'tools';
+export type ModelCapability =
+  | "streaming"
+  | "function_calling"
+  | "structured_output"
+  | "predicted_outputs"
+  | "distillation"
+  | "fine_tuning"
+  | "batch"
+  | "realtime"
+  | "image_generation"
+  | "speech_generation"
+  | "transcription"
+  | "translation"
+  | "citations"
+  | "reasoning"
+  | "caching"
+  | "moderation"
+  | "json_mode"
+  | "vision"
+  | "chat"
+  | "tools";
 
-export type ModelModality = 
-  | 'text'
-  | 'image'
-  | 'audio'
-  | 'pdf'
-  | 'video'
-  | 'file'
-  | 'embeddings'
-  | 'moderation';
+export type ModelModality =
+  | "text"
+  | "image"
+  | "audio"
+  | "pdf"
+  | "video"
+  | "file"
+  | "embeddings"
+  | "moderation";

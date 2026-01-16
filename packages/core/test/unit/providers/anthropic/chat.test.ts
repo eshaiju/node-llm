@@ -30,10 +30,13 @@ describe("AnthropicChat", () => {
 
     const result = await chat.execute(request);
 
-    expect(fetch).toHaveBeenCalledWith(`${baseUrl}/messages`, expect.objectContaining({
-      method: "POST",
-      body: expect.stringContaining('"messages":[{"role":"user","content":"Hello"}]')
-    }));
+    expect(fetch).toHaveBeenCalledWith(
+      `${baseUrl}/messages`,
+      expect.objectContaining({
+        method: "POST",
+        body: expect.stringContaining('"messages":[{"role":"user","content":"Hello"}]')
+      })
+    );
     expect(result.content).toBe("Hi!");
     expect(result.usage?.total_tokens).toBe(15);
   });
@@ -83,10 +86,14 @@ describe("AnthropicChat", () => {
   it("should add PDF beta header if document present", async () => {
     const request: ChatRequest = {
       model: "claude-3-5-sonnet-20240620",
-      messages: [{ 
-        role: "user", 
-        content: [{ type: "image_url", image_url: { url: "data:application/pdf;base64,JVBERi0xLjEK" } }] 
-      } as any]
+      messages: [
+        {
+          role: "user",
+          content: [
+            { type: "image_url", image_url: { url: "data:application/pdf;base64,JVBERi0xLjEK" } }
+          ]
+        } as any
+      ]
     };
 
     (fetch as any).mockResolvedValue({
@@ -96,10 +103,13 @@ describe("AnthropicChat", () => {
 
     await chat.execute(request);
 
-    expect(fetch).toHaveBeenCalledWith(expect.any(String), expect.objectContaining({
-      headers: expect.objectContaining({
-        "anthropic-beta": "pdfs-2024-09-25"
+    expect(fetch).toHaveBeenCalledWith(
+      expect.any(String),
+      expect.objectContaining({
+        headers: expect.objectContaining({
+          "anthropic-beta": "pdfs-2024-09-25"
+        })
       })
-    }));
+    );
   });
 });

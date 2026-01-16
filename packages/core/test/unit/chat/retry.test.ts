@@ -12,12 +12,12 @@ it("retries provider failures", async () => {
         throw new ServerError("Temporary failure", 500, {});
       }
       return { content: "ok" };
-    },
+    }
   };
 
   const llm = createLLM({
     provider: provider as any,
-    retry: { attempts: 3 },
+    retry: { attempts: 3 }
   });
 
   const chat = llm.chat("test");

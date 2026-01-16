@@ -15,7 +15,7 @@ describe("OpenAI Chat Integration (VCR)", { timeout: 30000 }, () => {
   it("should perform a basic chat completion", async ({ task }) => {
     polly = setupVCR(task.name, "openai");
     const llm = NodeLLM.withProvider("openai", {
-      openaiApiKey: process.env.OPENAI_API_KEY,
+      openaiApiKey: process.env.OPENAI_API_KEY
     });
     const chat = llm.chat("gpt-4o-mini");
 
@@ -29,7 +29,7 @@ describe("OpenAI Chat Integration (VCR)", { timeout: 30000 }, () => {
     polly = setupVCR(task.name, "openai");
 
     const llm = NodeLLM.withProvider("openai", {
-      openaiApiKey: process.env.OPENAI_API_KEY,
+      openaiApiKey: process.env.OPENAI_API_KEY
     });
     const chat = llm.chat("gpt-4o-mini");
 

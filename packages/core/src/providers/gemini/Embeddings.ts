@@ -4,7 +4,10 @@ import { handleGeminiError } from "./Errors.js";
 import { logger } from "../../utils/logger.js";
 
 export class GeminiEmbeddings {
-  constructor(private readonly baseUrl: string, private readonly apiKey: string) {}
+  constructor(
+    private readonly baseUrl: string,
+    private readonly apiKey: string
+  ) {}
 
   async execute(request: EmbeddingRequest): Promise<EmbeddingResponse> {
     const modelId = request.model || "text-embedding-004";
@@ -12,7 +15,7 @@ export class GeminiEmbeddings {
     const inputs = Array.isArray(request.input) ? request.input : [request.input];
 
     const payload: GeminiBatchEmbedRequest = {
-      requests: inputs.map(text => {
+      requests: inputs.map((text) => {
         const item: any = {
           model: `models/${modelId}`,
           content: {
@@ -40,7 +43,7 @@ export class GeminiEmbeddings {
 
     const json = (await response.json()) as GeminiBatchEmbedResponse;
     logger.logResponse("Gemini", response.status, response.statusText, json);
-    const vectors = json.embeddings?.map(e => e.values) || [];
+    const vectors = json.embeddings?.map((e) => e.values) || [];
 
     return {
       model: modelId,

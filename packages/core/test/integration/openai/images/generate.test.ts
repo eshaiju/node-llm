@@ -14,9 +14,9 @@ describe("OpenAI Image Generation Integration (VCR)", { timeout: 30000 }, () => 
 
   it("should generate images (Paint)", async ({ task }) => {
     polly = setupVCR(task.name, "openai");
-        const llm = createLLM({
+    const llm = createLLM({
       openaiApiKey: process.env.OPENAI_API_KEY,
-      provider: "openai",
+      provider: "openai"
     });
     const image = await llm.paint("a cute robot", { model: "dall-e-3" });
 

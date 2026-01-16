@@ -7,17 +7,17 @@ class WeatherTool extends Tool {
   description = "Get the current weather for a location";
   schema = z.object({
     location: z.string().describe("City name"),
-    unit: z.enum(['celsius', 'fahrenheit']).default('celsius').describe("Temperature unit")
+    unit: z.enum(["celsius", "fahrenheit"]).default("celsius").describe("Temperature unit")
   });
 
   async execute({ location, unit }) {
     console.log(`[Tool Called] get_weather(${location}, ${unit})`);
-    const temp = unit === 'celsius' ? 22 : 72;
+    const temp = unit === "celsius" ? 22 : 72;
     return {
       location,
       temperature: temp,
       unit,
-      condition: 'sunny'
+      condition: "sunny"
     };
   }
 }
@@ -34,8 +34,8 @@ class TimeTool extends Tool {
     const now = new Date();
     return {
       timezone,
-      time: now.toLocaleTimeString('en-US', { timeZone: timezone }),
-      date: now.toLocaleDateString('en-US', { timeZone: timezone })
+      time: now.toLocaleTimeString("en-US", { timeZone: timezone }),
+      date: now.toLocaleDateString("en-US", { timeZone: timezone })
     };
   }
 }
@@ -62,7 +62,7 @@ class CalculatorTool extends Tool {
 async function main() {
   const llm = createLLM({
     provider: "openai",
-    openaiApiKey: process.env.OPENAI_API_KEY,
+    openaiApiKey: process.env.OPENAI_API_KEY
   });
   // Example 1: Single tool
   console.log("=== Example 1: Single Tool ===");
@@ -88,7 +88,9 @@ async function main() {
   // Example 4: Sequential Tool Calls
   console.log("=== Example 4: Sequential Tool Calls ===");
   const chat4 = llm.chat("gpt-4o-mini").withTools([WeatherTool, TimeTool]);
-  const response4 = await chat4.ask("Compare the weather in London and Berlin, and tell me the time in both cities.");
+  const response4 = await chat4.ask(
+    "Compare the weather in London and Berlin, and tell me the time in both cities."
+  );
   console.log("\nFinal Answer:", response4.content);
   console.log("\n");
 
@@ -111,4 +113,9 @@ async function main() {
   console.log("=== All tool examples completed ===");
 }
 
-main().then(() => process.exit(0)).catch((err) => { console.error(err); process.exit(1); });
+main()
+  .then(() => process.exit(0))
+  .catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });

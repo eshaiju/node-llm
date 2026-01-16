@@ -4,10 +4,9 @@ import { createLLM, NodeLLM, Tool, z } from "../../../packages/core/dist/index.j
 async function main() {
   const llm = createLLM({
     provider: "anthropic",
-    anthropicApiKey: process.env.ANTHROPIC_API_KEY,
+    anthropicApiKey: process.env.ANTHROPIC_API_KEY
   });
   console.log("=== Model Alias Resolution Logging ===\n");
-
 
   console.log("1. Using alias 'claude-3-5-haiku':");
   const chat1 = llm.chat("claude-3-5-haiku");

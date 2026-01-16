@@ -8,13 +8,13 @@ describe("Debug Configuration", () => {
   });
 
   it("should support debug in scoped provider config", () => {
-    const base = createLLM({ 
-      debug: false, 
-      anthropicApiKey: "test-key" 
+    const base = createLLM({
+      debug: false,
+      anthropicApiKey: "test-key"
     });
-    
+
     const scoped = base.withProvider("anthropic", { debug: true });
-    
+
     expect(scoped.config.debug).toBe(true);
     expect(base.config.debug).toBe(false);
   });

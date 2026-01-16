@@ -79,7 +79,13 @@ describe("Moderation Unit Tests", () => {
     (mockProvider.moderate as any).mockResolvedValueOnce({
       id: "mod-789",
       model: "text-moderation-latest",
-      results: [{ flagged: true, categories: { "hate/threatening": true }, category_scores: { "hate/threatening": 0.8 } }]
+      results: [
+        {
+          flagged: true,
+          categories: { "hate/threatening": true },
+          category_scores: { "hate/threatening": 0.8 }
+        }
+      ]
     });
 
     const llm = createLLM({ provider: mockProvider });

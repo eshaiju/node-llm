@@ -5,7 +5,7 @@ class WeatherTool extends Tool {
   name = "get_weather";
   description = "Get the current weather in a given location";
   schema = z.object({
-    location: z.string().describe("The city and state, e.g. San Francisco, CA"),
+    location: z.string().describe("The city and state, e.g. San Francisco, CA")
   });
 
   async execute({ location }) {
@@ -17,10 +17,9 @@ class WeatherTool extends Tool {
 async function main() {
   const llm = createLLM({
     provider: "gemini",
-    geminiApiKey: process.env.GEMINI_API_KEY,
+    geminiApiKey: process.env.GEMINI_API_KEY
   });
-  const chat = llm.chat("gemini-2.0-flash")
-    .withTool(WeatherTool);
+  const chat = llm.chat("gemini-2.0-flash").withTool(WeatherTool);
 
   console.log("Asking Gemini about weather in two cities...");
 

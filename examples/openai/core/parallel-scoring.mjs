@@ -21,7 +21,7 @@ async function scoreAnswerParallel(question, answer) {
     // Each of these returns a scoped instance of NodeLLM
     NodeLLM.withProvider("openai").chat("gpt-4o-mini").ask(prompt),
     NodeLLM.withProvider("anthropic").chat("claude-3-5-haiku-20241022").ask(prompt),
-    NodeLLM.withProvider("gemini").chat("gemini-2.0-flash").ask(prompt),
+    NodeLLM.withProvider("gemini").chat("gemini-2.0-flash").ask(prompt)
   ]);
 
   return results;
@@ -44,7 +44,7 @@ async function main() {
 
     responses.forEach((resp, i) => {
       const providers = ["OpenAI", "Anthropic", "Gemini"];
-      console.log(`🤖 ${providers[i]}: ${resp.content.split('\n')[0]}`);
+      console.log(`🤖 ${providers[i]}: ${resp.content.split("\n")[0]}`);
     });
 
     console.log("\n✅ Parallel multi-provider execution successful!");

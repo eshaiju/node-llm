@@ -13,12 +13,12 @@ describe("Global MaxTokens Configuration", () => {
   });
 
   it("should allow per-chat maxTokens configuration", () => {
-    const llm = createLLM({ 
+    const llm = createLLM({
       provider: "openai",
       openaiApiKey: "test-key"
     });
     const chat = llm.chat("gpt-4o", { maxTokens: 16384 });
-    
+
     // The maxTokens should be stored in chat options
     expect((chat as any).options.maxTokens).toBe(16384);
   });
@@ -29,9 +29,9 @@ describe("Global MaxTokens Configuration", () => {
       provider: "openai",
       openaiApiKey: "test-key"
     });
-    
+
     const chat = llm.chat("gpt-4o");
-    
+
     // Chat should fall back to global config
     expect((chat as any).options.maxTokens).toBeUndefined();
     expect(llm.config.maxTokens).toBe(2048);

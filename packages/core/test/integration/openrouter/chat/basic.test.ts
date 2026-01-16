@@ -14,9 +14,9 @@ describe("OpenRouter Chat Integration (VCR)", { timeout: 30000 }, () => {
 
   it("should perform a basic chat completion", async ({ task }) => {
     polly = setupVCR(task.name, "openrouter");
-        const llm = createLLM({
+    const llm = createLLM({
       openrouterApiKey: process.env.OPENROUTER_API_KEY,
-      provider: "openrouter",
+      provider: "openrouter"
     });
     // Use a stable model
     const chat = llm.chat("openai/gpt-4o-mini");
@@ -30,7 +30,7 @@ describe("OpenRouter Chat Integration (VCR)", { timeout: 30000 }, () => {
   it("should support streaming", async ({ task }) => {
     polly = setupVCR(task.name, "openrouter");
 
-        const llm = createLLM({ provider: "openrouter" });
+    const llm = createLLM({ provider: "openrouter" });
     const chat = llm.chat("openai/gpt-4o-mini");
 
     let fullText = "";

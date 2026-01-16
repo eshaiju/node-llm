@@ -1,4 +1,3 @@
-
 import { describe, it, expect } from "vitest";
 import { registerOllamaProvider } from "../../../../src/providers/ollama/index.js";
 import { providerRegistry } from "../../../../src/providers/registry.js";

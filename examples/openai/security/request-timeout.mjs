@@ -14,7 +14,7 @@ async function main() {
   const llm = createLLM({
     provider: "openai",
     openaiApiKey: process.env.OPENAI_API_KEY,
-    requestTimeout: 45000, // 45 seconds for all requests
+    requestTimeout: 45000 // 45 seconds for all requests
   });
 
   const chat = llm.chat("gpt-4o-mini");
@@ -35,7 +35,7 @@ async function main() {
 
   // Override timeout for a specific chat instance
   const longRunningChat = llm.chat("gpt-4o-mini", {
-    requestTimeout: 120000, // 2 minutes for this chat
+    requestTimeout: 120000 // 2 minutes for this chat
   });
 
   console.log("\nExample 2: Per-chat timeout (2 minutes)");
@@ -50,7 +50,7 @@ async function main() {
   console.log("\nExample 3: Per-request timeout (10 seconds)");
   try {
     const response3 = await chat.ask("Quick question: What is 2+2?", {
-      requestTimeout: 10000, // 10 seconds for this specific request
+      requestTimeout: 10000 // 10 seconds for this specific request
     });
     console.log("Response:", response3.content);
   } catch (error) {

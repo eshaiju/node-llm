@@ -43,8 +43,12 @@ describe("AnthropicProvider", () => {
 
   it("should throw errors for unsupported methods", async () => {
     await expect(provider.paint({} as any)).rejects.toThrow("Anthropic does not support paint");
-    await expect(provider.transcribe({} as any)).rejects.toThrow("Anthropic does not support transcribe");
-    await expect(provider.moderate({} as any)).rejects.toThrow("Anthropic does not support moderate");
+    await expect(provider.transcribe({} as any)).rejects.toThrow(
+      "Anthropic does not support transcribe"
+    );
+    await expect(provider.moderate({} as any)).rejects.toThrow(
+      "Anthropic does not support moderate"
+    );
     await expect(provider.embed({} as any)).rejects.toThrow("Anthropic does not support embed");
   });
 
@@ -54,7 +58,7 @@ describe("AnthropicProvider", () => {
       expect(provider.capabilities.supportsImageGeneration("any")).toBe(false);
       expect(provider.capabilities.supportsTranscription("any")).toBe(false);
       expect(provider.capabilities.supportsModeration("any")).toBe(false);
-      
+
       // Vision/Tools/StructuredOutput should delegate to Capabilities
       // We don't need to deep test Capabilities here as it has its own unit test
       expect(typeof provider.capabilities.supportsVision("claude-3-opus")).toBe("boolean");

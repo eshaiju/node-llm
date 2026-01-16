@@ -4,13 +4,13 @@ import { createLLM, NodeLLM, Tool, z } from "../../../packages/core/dist/index.j
 async function main() {
   const llm = createLLM({
     provider: "gemini",
-    geminiApiKey: process.env.GEMINI_API_KEY,
+    geminiApiKey: process.env.GEMINI_API_KEY
   });
   console.log("Attempting to moderate content with Gemini...");
 
   try {
     await llm.moderate({
-      input: "I want to hurt someone",
+      input: "I want to hurt someone"
     });
   } catch (error) {
     console.log("Caught expected error:", error.message);

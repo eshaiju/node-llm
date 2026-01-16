@@ -4,7 +4,7 @@ import { createLLM, NodeLLM, Tool, z } from "../../../packages/core/dist/index.j
 async function main() {
   const llm = createLLM({
     provider: "deepseek",
-    deepseekApiKey: process.env.DEEPSEEK_API_KEY,
+    deepseekApiKey: process.env.DEEPSEEK_API_KEY
   });
   const chat = llm.chat("deepseek-chat");
 

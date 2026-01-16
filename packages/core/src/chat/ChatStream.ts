@@ -36,7 +36,7 @@ export class ChatStream {
       if (options.systemPrompt) {
         this.systemMessages.push({
           role: "system",
-          content: options.systemPrompt,
+          content: options.systemPrompt
         });
       }
 
@@ -62,7 +62,7 @@ export class ChatStream {
 
   create(content: string | ContentPart[], options: AskOptions = {}): Stream<ChatChunk> {
     const controller = new AbortController();
-    
+
     const sideEffectGenerator = async function* (
       self: ChatStream,
       provider: Provider,
@@ -74,12 +74,12 @@ export class ChatStream {
       content: string | ContentPart[],
       requestOptions: AskOptions
     ) {
-      const options = { 
-        ...baseOptions, 
+      const options = {
+        ...baseOptions,
         ...requestOptions,
         headers: { ...baseOptions.headers, ...requestOptions.headers }
       };
-      
+
       // Process Multimodal Content
       let messageContent: any = content;
       const files = [...(requestOptions.images ?? []), ...(requestOptions.files ?? [])];
@@ -106,7 +106,7 @@ export class ChatStream {
       let responseFormat: any = options.responseFormat;
       if (!responseFormat && options.schema) {
         ChatValidator.validateStructuredOutput(provider, model, true, options);
-        
+
         const jsonSchema = toJsonSchema(options.schema.definition.schema);
         responseFormat = {
           type: "json_schema",
@@ -114,7 +114,7 @@ export class ChatStream {
             name: options.schema.definition.name,
             description: options.schema.definition.description,
             strict: options.schema.definition.strict ?? true,
-            schema: jsonSchema,
+            schema: jsonSchema
           }
         };
       }
@@ -127,7 +127,7 @@ export class ChatStream {
       const maxToolCalls = options.maxToolCalls ?? 5;
       let stepCount = 0;
 
-      let totalUsage: Usage = { input_tokens: 0, output_tokens: 0, total_tokens: 0 };
+      const totalUsage: Usage = { input_tokens: 0, output_tokens: 0, total_tokens: 0 };
       const trackUsage = (u?: Usage) => {
         if (u) {
           totalUsage.input_tokens += u.input_tokens;
@@ -142,7 +142,9 @@ export class ChatStream {
       while (true) {
         stepCount++;
         if (stepCount > maxToolCalls) {
-          throw new Error(`[NodeLLM] Maximum tool execution calls (${maxToolCalls}) exceeded during streaming.`);
+          throw new Error(
+            `[NodeLLM] Maximum tool execution calls (${maxToolCalls}) exceeded during streaming.`
+          );
         }
 
         let fullContent = "";
@@ -169,7 +171,7 @@ export class ChatStream {
             headers: options.headers,
             requestTimeout: options.requestTimeout ?? config.requestTimeout,
             signal: abortController.signal,
-            ...options.params,
+            ...options.params
           })) {
             if (isFirst) {
               if (options.onNewMessage) options.onNewMessage();
@@ -180,7 +182,7 @@ export class ChatStream {
               fullContent += chunk.content;
               yield chunk;
             }
-            
+
             if (chunk.reasoning) {
               fullReasoning += chunk.reasoning;
               yield { content: "", reasoning: chunk.reasoning };
@@ -232,12 +234,15 @@ export class ChatStream {
 
           for (const toolCall of toolCalls) {
             if (options.toolExecution === ToolExecutionMode.CONFIRM) {
-              const approved = await ToolHandler.requestToolConfirmation(toolCall, options.onConfirmToolCall);
+              const approved = await ToolHandler.requestToolConfirmation(
+                toolCall,
+                options.onConfirmToolCall
+              );
               if (!approved) {
                 messages.push({
                   role: "tool",
                   tool_call_id: toolCall.id,
-                  content: "Action cancelled by user.",
+                  content: "Action cancelled by user."
                 });
                 continue;
               }
@@ -254,17 +259,17 @@ export class ChatStream {
             } catch (error: any) {
               const directive = await options.onToolCallError?.(toolCall, error);
 
-              if (directive === 'STOP') {
+              if (directive === "STOP") {
                 throw error;
               }
 
               messages.push({
                 role: "tool",
                 tool_call_id: toolCall.id,
-                content: `Fatal error executing tool '${toolCall.function.name}': ${error.message}`,
+                content: `Fatal error executing tool '${toolCall.function.name}': ${error.message}`
               });
 
-              if (directive === 'CONTINUE') {
+              if (directive === "CONTINUE") {
                 continue;
               }
 
@@ -273,11 +278,14 @@ export class ChatStream {
                 throw error;
               }
 
-              logger.error(`Tool execution failed for '${toolCall.function.name}':`, error as Error);
+              logger.error(
+                `Tool execution failed for '${toolCall.function.name}':`,
+                error as Error
+              );
             }
           }
         } catch (error) {
-          if (error instanceof Error && error.name === 'AbortError') {
+          if (error instanceof Error && error.name === "AbortError") {
             // Aborted
           }
           throw error;
@@ -286,7 +294,18 @@ export class ChatStream {
     };
 
     return new Stream(
-      () => sideEffectGenerator(this, this.provider, this.model, this.messages, this.systemMessages, this.options, controller, content, options),
+      () =>
+        sideEffectGenerator(
+          this,
+          this.provider,
+          this.model,
+          this.messages,
+          this.systemMessages,
+          this.options,
+          controller,
+          content,
+          options
+        ),
       controller
     );
   }

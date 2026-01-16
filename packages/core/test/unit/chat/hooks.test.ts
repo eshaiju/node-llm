@@ -10,7 +10,7 @@ describe("Content Policy Hooks", () => {
       const chat = new Chat(provider, "fake-model");
 
       chat.beforeRequest(async (messages) => {
-        return messages.map(m => ({
+        return messages.map((m) => ({
           ...m,
           content: (m.content as string).replace("SECRET", "REDACTED")
         }));
@@ -21,7 +21,7 @@ describe("Content Policy Hooks", () => {
       // Provider should receive the redacted version
       expect(provider.lastRequest?.messages).toHaveLength(1);
       expect(provider.lastRequest?.messages[0].content).toBe("Tell me about REDACTED info.");
-      
+
       // But the chat history should preserve the original user input (security layer vs audit layer)
       expect(chat.history[0].content).toBe("Tell me about SECRET info.");
     });
@@ -31,14 +31,16 @@ describe("Content Policy Hooks", () => {
       const chat = new Chat(provider, "fake-model");
 
       chat.beforeRequest(async (messages) => {
-        return messages.map(m => ({
+        return messages.map((m) => ({
           ...m,
           content: (m.content as string).replace("SSN", "XXX")
         }));
       });
 
       const stream = chat.stream("My SSN is 123");
-      for await (const _ of stream) { /* consume */ }
+      for await (const _ of stream) {
+        /* consume */
+      }
 
       expect(provider.lastRequest?.messages[0].content).toBe("My XXX is 123");
     });
@@ -54,7 +56,7 @@ describe("Content Policy Hooks", () => {
       });
 
       const res = await chat.ask("What is the secret?");
-      
+
       expect(res.content).toBe("The secret is [HIDDEN]");
       // History should also store the redacted version for future context turns
       expect(String(chat.history[chat.history.length - 1].content)).toBe("The secret is [HIDDEN]");
@@ -72,7 +74,9 @@ describe("Content Policy Hooks", () => {
       chat.onEndMessage(onEnd);
 
       const stream = chat.stream("any");
-      for await (const _ of stream) { /* consume */ }
+      for await (const _ of stream) {
+        /* consume */
+      }
 
       // Content in stream chunks is NOT modified (as they are direct from provider),
       // but the final response message in onEnd and history IS modified.

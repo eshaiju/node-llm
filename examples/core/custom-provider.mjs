@@ -73,7 +73,7 @@ class MyCustomMockProvider extends BaseProvider {
   async *stream(request) {
     const text = "Streaming from custom provider... ";
     for (const word of text.split(" ")) {
-      await new Promise(r => setTimeout(r, 50));
+      await new Promise((r) => setTimeout(r, 50));
       yield { content: word + " " };
     }
   }
@@ -91,7 +91,7 @@ async function main() {
   console.log("=== RECOMMENDED: Custom Provider via BaseProvider ===\n");
 
   const llm = createLLM({
-    provider: "my-mock",
+    provider: "my-mock"
   });
 
   // 3. Simple execution

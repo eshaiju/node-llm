@@ -4,12 +4,11 @@ import { createLLM, NodeLLM, Tool, z } from "../../../packages/core/dist/index.j
 async function main() {
   const llm = createLLM({
     provider: "anthropic",
-    anthropicApiKey: process.env.ANTHROPIC_API_KEY,
+    anthropicApiKey: process.env.ANTHROPIC_API_KEY
   });
   console.log("=== Debug Mode Configuration ===\n");
 
   console.log("1. Enable debug mode programmatically:");
-
 
   const chat = llm.chat("claude-3-5-haiku");
   console.log(`Created chat with model: ${chat.modelId}`);

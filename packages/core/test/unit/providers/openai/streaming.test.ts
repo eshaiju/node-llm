@@ -14,12 +14,12 @@ describe("OpenAI Streaming - Error Handling", () => {
       ok: false,
       status: 401,
       statusText: "Unauthorized",
-      json: async () => ({ error: { message: "Invalid API key" } }),
+      json: async () => ({ error: { message: "Invalid API key" } })
     });
 
     const request: ChatRequest = {
       model: "gpt-4",
-      messages: [{ role: "user", content: "test" }],
+      messages: [{ role: "user", content: "test" }]
     };
 
     await expect(async () => {
@@ -34,12 +34,12 @@ describe("OpenAI Streaming - Error Handling", () => {
       ok: false,
       status: 429,
       statusText: "Too Many Requests",
-      json: async () => ({ error: { message: "Rate limit exceeded" } }),
+      json: async () => ({ error: { message: "Rate limit exceeded" } })
     });
 
     const request: ChatRequest = {
       model: "gpt-4",
-      messages: [{ role: "user", content: "test" }],
+      messages: [{ role: "user", content: "test" }]
     };
 
     await expect(async () => {
@@ -52,12 +52,12 @@ describe("OpenAI Streaming - Error Handling", () => {
   it("should handle missing response body", async () => {
     global.fetch = vi.fn().mockResolvedValue({
       ok: true,
-      body: null,
+      body: null
     });
 
     const request: ChatRequest = {
       model: "gpt-4",
-      messages: [{ role: "user", content: "test" }],
+      messages: [{ role: "user", content: "test" }]
     };
 
     await expect(async () => {
@@ -77,22 +77,23 @@ describe("OpenAI Streaming - Edge Cases", () => {
 
   it("should handle empty stream (immediate [DONE])", async () => {
     const mockReader = {
-      read: vi.fn()
+      read: vi
+        .fn()
         .mockResolvedValueOnce({
           value: new TextEncoder().encode("data: [DONE]\n\n"),
-          done: false,
+          done: false
         })
-        .mockResolvedValueOnce({ done: true }),
+        .mockResolvedValueOnce({ done: true })
     };
 
     global.fetch = vi.fn().mockResolvedValue({
       ok: true,
-      body: { getReader: () => mockReader },
+      body: { getReader: () => mockReader }
     });
 
     const request: ChatRequest = {
       model: "gpt-4",
-      messages: [{ role: "user", content: "test" }],
+      messages: [{ role: "user", content: "test" }]
     };
 
     const chunks = [];
@@ -105,30 +106,31 @@ describe("OpenAI Streaming - Edge Cases", () => {
 
   it("should handle malformed JSON gracefully", async () => {
     const mockReader = {
-      read: vi.fn()
+      read: vi
+        .fn()
         .mockResolvedValueOnce({
           value: new TextEncoder().encode('data: {"invalid json\n\n'),
-          done: false,
+          done: false
         })
         .mockResolvedValueOnce({
           value: new TextEncoder().encode('data: {"choices":[{"delta":{"content":"valid"}}]}\n\n'),
-          done: false,
+          done: false
         })
         .mockResolvedValueOnce({
           value: new TextEncoder().encode("data: [DONE]\n\n"),
-          done: false,
+          done: false
         })
-        .mockResolvedValueOnce({ done: true }),
+        .mockResolvedValueOnce({ done: true })
     };
 
     global.fetch = vi.fn().mockResolvedValue({
       ok: true,
-      body: { getReader: () => mockReader },
+      body: { getReader: () => mockReader }
     });
 
     const request: ChatRequest = {
       model: "gpt-4",
-      messages: [{ role: "user", content: "test" }],
+      messages: [{ role: "user", content: "test" }]
     };
 
     const chunks = [];
@@ -143,26 +145,27 @@ describe("OpenAI Streaming - Edge Cases", () => {
 
   it("should handle stream with only whitespace", async () => {
     const mockReader = {
-      read: vi.fn()
+      read: vi
+        .fn()
         .mockResolvedValueOnce({
           value: new TextEncoder().encode("   \n\n"),
-          done: false,
+          done: false
         })
         .mockResolvedValueOnce({
           value: new TextEncoder().encode("data: [DONE]\n\n"),
-          done: false,
+          done: false
         })
-        .mockResolvedValueOnce({ done: true }),
+        .mockResolvedValueOnce({ done: true })
     };
 
     global.fetch = vi.fn().mockResolvedValue({
       ok: true,
-      body: { getReader: () => mockReader },
+      body: { getReader: () => mockReader }
     });
 
     const request: ChatRequest = {
       model: "gpt-4",
-      messages: [{ role: "user", content: "test" }],
+      messages: [{ role: "user", content: "test" }]
     };
 
     const chunks = [];
@@ -183,32 +186,33 @@ describe("OpenAI Streaming - Buffer Management", () => {
 
   it("should handle split SSE events across chunks", async () => {
     const mockReader = {
-      read: vi.fn()
+      read: vi
+        .fn()
         .mockResolvedValueOnce({
           // First chunk: incomplete event
           value: new TextEncoder().encode('data: {"choices":[{"delta":'),
-          done: false,
+          done: false
         })
         .mockResolvedValueOnce({
           // Second chunk: completes the event
           value: new TextEncoder().encode('{"content":"test"}}]}\n\n'),
-          done: false,
+          done: false
         })
         .mockResolvedValueOnce({
           value: new TextEncoder().encode("data: [DONE]\n\n"),
-          done: false,
+          done: false
         })
-        .mockResolvedValueOnce({ done: true }),
+        .mockResolvedValueOnce({ done: true })
     };
 
     global.fetch = vi.fn().mockResolvedValue({
       ok: true,
-      body: { getReader: () => mockReader },
+      body: { getReader: () => mockReader }
     });
 
     const request: ChatRequest = {
       model: "gpt-4",
-      messages: [{ role: "user", content: "test" }],
+      messages: [{ role: "user", content: "test" }]
     };
 
     const chunks = [];
@@ -222,29 +226,30 @@ describe("OpenAI Streaming - Buffer Management", () => {
 
   it("should handle multiple events in single chunk", async () => {
     const mockReader = {
-      read: vi.fn()
+      read: vi
+        .fn()
         .mockResolvedValueOnce({
           value: new TextEncoder().encode(
             'data: {"choices":[{"delta":{"content":"first"}}]}\n\n' +
-            'data: {"choices":[{"delta":{"content":"second"}}]}\n\n'
+              'data: {"choices":[{"delta":{"content":"second"}}]}\n\n'
           ),
-          done: false,
+          done: false
         })
         .mockResolvedValueOnce({
           value: new TextEncoder().encode("data: [DONE]\n\n"),
-          done: false,
+          done: false
         })
-        .mockResolvedValueOnce({ done: true }),
+        .mockResolvedValueOnce({ done: true })
     };
 
     global.fetch = vi.fn().mockResolvedValue({
       ok: true,
-      body: { getReader: () => mockReader },
+      body: { getReader: () => mockReader }
     });
 
     const request: ChatRequest = {
       model: "gpt-4",
-      messages: [{ role: "user", content: "test" }],
+      messages: [{ role: "user", content: "test" }]
     };
 
     const chunks = [];
@@ -259,30 +264,31 @@ describe("OpenAI Streaming - Buffer Management", () => {
 
   it("should handle split 'data:' prefix across chunks", async () => {
     const mockReader = {
-      read: vi.fn()
+      read: vi
+        .fn()
         .mockResolvedValueOnce({
           value: new TextEncoder().encode("da"),
-          done: false,
+          done: false
         })
         .mockResolvedValueOnce({
           value: new TextEncoder().encode('ta: {"choices":[{"delta":{"content":"test"}}]}\n\n'),
-          done: false,
+          done: false
         })
         .mockResolvedValueOnce({
           value: new TextEncoder().encode("data: [DONE]\n\n"),
-          done: false,
+          done: false
         })
-        .mockResolvedValueOnce({ done: true }),
+        .mockResolvedValueOnce({ done: true })
     };
 
     global.fetch = vi.fn().mockResolvedValue({
       ok: true,
-      body: { getReader: () => mockReader },
+      body: { getReader: () => mockReader }
     });
 
     const request: ChatRequest = {
       model: "gpt-4",
-      messages: [{ role: "user", content: "test" }],
+      messages: [{ role: "user", content: "test" }]
     };
 
     const chunks = [];
