@@ -66,9 +66,9 @@ describe("Anthropic Utils", () => {
       expect((result[0].content as Array<{ type: string; tool_use_id: string }>)[0].type).toBe(
         "tool_result"
       );
-      expect((result[0].content as Array<{ type: string; tool_use_id: string }>)[0].tool_use_id).toBe(
-        "call1"
-      );
+      expect(
+        (result[0].content as Array<{ type: string; tool_use_id: string }>)[0].tool_use_id
+      ).toBe("call1");
     });
 
     it("should handle assistant messages with tool calls", () => {

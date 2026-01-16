@@ -2,7 +2,13 @@ import { describe, it, expect, vi, beforeEach, Mock } from "vitest";
 import { AnthropicProvider } from "../../../../src/providers/anthropic/AnthropicProvider.js";
 import { AnthropicChat } from "../../../../src/providers/anthropic/Chat.js";
 import { AnthropicModels } from "../../../../src/providers/anthropic/Models.js";
-import { ImageRequest, TranscriptionRequest, ModerationRequest, EmbeddingRequest, ModelInfo } from "../../../../src/providers/Provider.js";
+import {
+  ImageRequest,
+  TranscriptionRequest,
+  ModerationRequest,
+  EmbeddingRequest,
+  ModelInfo
+} from "../../../../src/providers/Provider.js";
 
 vi.mock("../../../../src/providers/anthropic/Chat.js");
 vi.mock("../../../../src/providers/anthropic/Streaming.js");
@@ -42,14 +48,18 @@ describe("AnthropicProvider", () => {
   });
 
   it("should throw errors for unsupported methods", async () => {
-    await expect(provider.paint!(({} as unknown) as ImageRequest)).rejects.toThrow("Anthropic does not support paint");
-    await expect(provider.transcribe!(({} as unknown) as TranscriptionRequest)).rejects.toThrow(
+    await expect(provider.paint!({} as unknown as ImageRequest)).rejects.toThrow(
+      "Anthropic does not support paint"
+    );
+    await expect(provider.transcribe!({} as unknown as TranscriptionRequest)).rejects.toThrow(
       "Anthropic does not support transcribe"
     );
-    await expect(provider.moderate!(({} as unknown) as ModerationRequest)).rejects.toThrow(
+    await expect(provider.moderate!({} as unknown as ModerationRequest)).rejects.toThrow(
       "Anthropic does not support moderate"
     );
-    await expect(provider.embed!(({} as unknown) as EmbeddingRequest)).rejects.toThrow("Anthropic does not support embed");
+    await expect(provider.embed!({} as unknown as EmbeddingRequest)).rejects.toThrow(
+      "Anthropic does not support embed"
+    );
   });
 
   describe("capabilities", () => {

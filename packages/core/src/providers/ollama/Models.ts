@@ -1,7 +1,6 @@
 import { OpenAIModels } from "../openai/Models.js";
 import { OllamaCapabilities } from "./Capabilities.js";
 
-
 export class OllamaModels extends OpenAIModels {
   protected override getProviderName(): string {
     return "ollama";

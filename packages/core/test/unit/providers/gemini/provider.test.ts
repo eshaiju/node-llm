@@ -5,7 +5,12 @@ import { GeminiModels } from "../../../../src/providers/gemini/Models.js";
 import { GeminiImage } from "../../../../src/providers/gemini/Image.js";
 import { GeminiEmbeddings } from "../../../../src/providers/gemini/Embeddings.js";
 import { GeminiTranscription } from "../../../../src/providers/gemini/Transcription.js";
-import { ImageRequest, TranscriptionRequest, ModerationRequest, EmbeddingRequest } from "../../../../src/providers/Provider.js";
+import {
+  ImageRequest,
+  TranscriptionRequest,
+  ModerationRequest,
+  EmbeddingRequest
+} from "../../../../src/providers/Provider.js";
 
 vi.mock("../../../../src/providers/gemini/Chat.js");
 vi.mock("../../../../src/providers/gemini/Streaming.js");
@@ -68,6 +73,8 @@ describe("GeminiProvider", () => {
   });
 
   it("should throw error for moderation", async () => {
-    await expect(provider.moderate({} as unknown as ModerationRequest)).rejects.toThrow("Gemini does not support moderate");
+    await expect(provider.moderate({} as unknown as ModerationRequest)).rejects.toThrow(
+      "Gemini does not support moderate"
+    );
   });
 });

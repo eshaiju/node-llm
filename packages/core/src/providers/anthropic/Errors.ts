@@ -15,10 +15,10 @@ export async function handleAnthropicError(response: Response, modelId: string):
   try {
     body = await response.json();
     if (body && typeof body === "object" && "error" in body) {
-       const err = (body as { error: { message: string } }).error;
-       if (err && err.message) {
-         message = err.message;
-       }
+      const err = (body as { error: { message: string } }).error;
+      if (err && err.message) {
+        message = err.message;
+      }
     }
   } catch {
     body = await response.text().catch(() => "Unknown error");

@@ -62,7 +62,10 @@ describe("GeminiChatUtils", () => {
   });
 
   it("should handle multimodal content", async () => {
-    (BinaryUtils.toBase64 as unknown as Mock).mockResolvedValue({ mimeType: "image/png", data: "base64data" });
+    (BinaryUtils.toBase64 as unknown as Mock).mockResolvedValue({
+      mimeType: "image/png",
+      data: "base64data"
+    });
 
     const messages: Message[] = [
       {

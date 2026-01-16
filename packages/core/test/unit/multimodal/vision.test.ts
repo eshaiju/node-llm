@@ -14,7 +14,11 @@ class MockVisionProvider implements Provider {
     return { content: "I see a cat in the image." };
   }
 
-  formatToolResultMessage(toolCallId: string, content: string, options?: { isError?: boolean }): Message {
+  formatToolResultMessage(
+    toolCallId: string,
+    content: string,
+    options?: { isError?: boolean }
+  ): Message {
     return {
       role: "tool",
       tool_call_id: toolCallId,

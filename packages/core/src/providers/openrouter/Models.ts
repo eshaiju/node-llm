@@ -113,7 +113,10 @@ export class OpenRouterModels {
     const cachedInput = pricing.input_cache_read ? parseFloat(pricing.input_cache_read) : 0;
     const reasoning = pricing.internal_reasoning ? parseFloat(pricing.internal_reasoning) : 0;
 
-    const standard = (result.text_tokens as Record<string, unknown>).standard as Record<string, number>;
+    const standard = (result.text_tokens as Record<string, unknown>).standard as Record<
+      string,
+      number
+    >;
 
     if (prompt > 0) {
       standard.input_per_million = prompt * 1_000_000;

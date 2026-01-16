@@ -1,6 +1,10 @@
-
 import { Message } from "./Message.js";
-import { ContentPart, isBinaryContent, formatMultimodalContent, MessageContent } from "./Content.js";
+import {
+  ContentPart,
+  isBinaryContent,
+  formatMultimodalContent,
+  MessageContent
+} from "./Content.js";
 import { ChatOptions } from "./ChatOptions.js";
 import { Provider, ChatChunk, Usage } from "../providers/Provider.js";
 import { ChatResponseString } from "./ChatResponse.js";
@@ -241,7 +245,9 @@ export class ChatStream {
                 options.onConfirmToolCall
               );
               if (!approved) {
-                messages.push(provider.formatToolResultMessage(toolCall.id, "Action cancelled by user."));
+                messages.push(
+                  provider.formatToolResultMessage(toolCall.id, "Action cancelled by user.")
+                );
                 continue;
               }
             }
@@ -253,7 +259,9 @@ export class ChatStream {
                 options.onToolCallStart,
                 options.onToolCallEnd
               );
-              messages.push(provider.formatToolResultMessage(toolResult.tool_call_id, toolResult.content));
+              messages.push(
+                provider.formatToolResultMessage(toolResult.tool_call_id, toolResult.content)
+              );
             } catch (error: unknown) {
               const err = error as Error & { fatal?: boolean; status?: number };
               const directive = await options.onToolCallError?.(toolCall, err);
@@ -262,11 +270,13 @@ export class ChatStream {
                 throw error;
               }
 
-              messages.push(provider.formatToolResultMessage(
-                toolCall.id,
-                `Fatal error executing tool '${toolCall.function.name}': ${err.message}`,
-                { isError: true }
-              ));
+              messages.push(
+                provider.formatToolResultMessage(
+                  toolCall.id,
+                  `Fatal error executing tool '${toolCall.function.name}': ${err.message}`,
+                  { isError: true }
+                )
+              );
 
               if (directive === "CONTINUE") {
                 continue;

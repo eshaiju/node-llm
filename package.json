@@ -15,7 +15,16 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "check-format": "prettier --check .",
-    "release": "semantic-release"
+    "release": "semantic-release",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{ts,js,mjs,json,md}": [
+      "prettier --write"
+    ],
+    "*.{ts,js,mjs}": [
+      "eslint --fix"
+    ]
   },
   "keywords": [
     "llm",
@@ -58,15 +67,18 @@
     "@semantic-release/npm": "^13.1.3",
     "@semantic-release/release-notes-generator": "^14.1.0",
     "@types/node": "^25.0.3",
+    "@vitest/coverage-v8": "^4.0.17",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.5",
     "globals": "^17.0.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
     "prettier": "^3.8.0",
     "semantic-release": "^25.0.2",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.53.0",
-    "vitest": "^4.0.16"
+    "vitest": "^4.0.17"
   },
   "dependencies": {
     "dotenv": "^17.2.3"

@@ -62,7 +62,9 @@ export class OpenAIModels {
       });
 
       if (response.ok) {
-        const { data } = (await response.json()) as { data: { id: string; created: number; owned_by: string }[] };
+        const { data } = (await response.json()) as {
+          data: { id: string; created: number; owned_by: string }[];
+        };
 
         return data.map((m) => {
           const modelId = m.id;

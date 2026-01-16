@@ -15,10 +15,10 @@ export async function handleGeminiError(response: Response, model?: string): Pro
   try {
     body = await response.json();
     if (body && typeof body === "object" && "error" in body) {
-       const err = (body as { error: { message: string } }).error;
-       if (err && err.message) {
-         message = err.message;
-       }
+      const err = (body as { error: { message: string } }).error;
+      if (err && err.message) {
+        message = err.message;
+      }
     }
   } catch {
     // If not JSON, use the status text

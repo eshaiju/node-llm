@@ -2,7 +2,7 @@ import { ModelRegistry } from "./ModelRegistry.js";
 import { ModelPricing } from "./types.js";
 
 /**
- * Registry for LLM pricing information. 
+ * Registry for LLM pricing information.
  * Priority: Runtime Overrides > Library Default Patterns > ModelRegistry (models.ts)
  */
 export class PricingRegistry {
@@ -10,14 +10,26 @@ export class PricingRegistry {
   private static lastUpdated: Date | null = new Date();
 
   // Library-level fallbacks for common model families
-  private static DEFAULT_PATTERNS: Array<{ pattern: RegExp; provider: string; pricing: ModelPricing }> = [
+  private static DEFAULT_PATTERNS: Array<{
+    pattern: RegExp;
+    provider: string;
+    pricing: ModelPricing;
+  }> = [
     {
       provider: "anthropic",
       pattern: /claude-3-7/,
       pricing: {
         text_tokens: {
-          standard: { input_per_million: 3.0, output_per_million: 15.0, reasoning_output_per_million: 37.5 },
-          batch: { input_per_million: 1.5, output_per_million: 7.5, reasoning_output_per_million: 18.75 }
+          standard: {
+            input_per_million: 3.0,
+            output_per_million: 15.0,
+            reasoning_output_per_million: 37.5
+          },
+          batch: {
+            input_per_million: 1.5,
+            output_per_million: 7.5,
+            reasoning_output_per_million: 18.75
+          }
         }
       }
     },

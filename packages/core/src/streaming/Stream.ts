@@ -1,4 +1,3 @@
-
 /**
  * Stream wrapper class inspired by OpenAI SDK
  * Provides utilities for working with async iterables

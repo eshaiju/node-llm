@@ -30,19 +30,19 @@ export type ToolResolvable = Tool | { new (): Tool } | ToolDefinition;
  */
 export abstract class Tool<T = Record<string, unknown>> {
   /**
-    * The name of the tool (must match [a-zA-Z0-9_-]+).
-    */
+   * The name of the tool (must match [a-zA-Z0-9_-]+).
+   */
   public abstract name: string;
 
   /**
-    * A clear description of what the tool does, used by the LLM to decide when to call it.
-    */
+   * A clear description of what the tool does, used by the LLM to decide when to call it.
+   */
   public abstract description: string;
 
   /**
-    * Parameters the tool accepts.
-    * Can be a Zod object (for auto-schema + type safety) or a raw JSON Schema.
-    */
+   * Parameters the tool accepts.
+   * Can be a Zod object (for auto-schema + type safety) or a raw JSON Schema.
+   */
   public abstract schema: z.ZodObject<z.ZodRawShape> | Record<string, unknown>;
 
   /**

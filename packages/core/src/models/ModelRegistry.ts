@@ -6,7 +6,9 @@ export class ModelRegistry {
   private static models: Model[] = modelsData as unknown as Model[];
 
   static find(modelId: string, provider?: string): Model | undefined {
-    return this.models.find((m) => m.id.toLowerCase() === modelId.toLowerCase() && (!provider || m.provider === provider));
+    return this.models.find(
+      (m) => m.id.toLowerCase() === modelId.toLowerCase() && (!provider || m.provider === provider)
+    );
   }
 
   /**
@@ -80,12 +82,12 @@ export class ModelRegistry {
     const prices = pricing.text_tokens.standard;
     const inputPrice = prices.input_per_million || 0;
     const outputPrice = prices.output_per_million || 0;
-    
+
     // Fallback for reasoning: if not specified, default to 2.5x standard output price for specific reasoning models
     // or just standard output price for others.
-    const reasoningPrice = prices.reasoning_output_per_million ?? (
-      modelId.includes("reasoner") || modelId.includes("3-7") ? outputPrice * 2.5 : outputPrice
-    );
+    const reasoningPrice =
+      prices.reasoning_output_per_million ??
+      (modelId.includes("reasoner") || modelId.includes("3-7") ? outputPrice * 2.5 : outputPrice);
 
     const cachedPrice = prices.cached_input_per_million ?? inputPrice / 2;
 

@@ -92,7 +92,8 @@ export class OpenAIChat {
     const message = json.choices[0]?.message;
     const content = message?.content ?? null;
     const tool_calls = message?.tool_calls;
-    const reasoning = (message as unknown as { reasoning_content?: string })?.reasoning_content || null;
+    const reasoning =
+      (message as unknown as { reasoning_content?: string })?.reasoning_content || null;
 
     const usage = json.usage
       ? {

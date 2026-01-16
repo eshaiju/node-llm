@@ -20,7 +20,11 @@ class MockToolProvider implements Provider {
     return "test-model";
   }
 
-  formatToolResultMessage(toolCallId: string, content: string, options?: { isError?: boolean }): Message {
+  formatToolResultMessage(
+    toolCallId: string,
+    content: string,
+    options?: { isError?: boolean }
+  ): Message {
     return {
       role: "tool",
       tool_call_id: toolCallId,
@@ -48,7 +52,9 @@ describe("Fatal Tool Error Short-Circuiting", () => {
 
     const finalResponse: ChatResponse = { content: "Should not reach this" };
     const provider = new MockToolProvider([toolCallResponse, finalResponse]);
-    const chat = new Chat(provider, "test-model", { tools: [fatalTool as unknown as ToolDefinition] });
+    const chat = new Chat(provider, "test-model", {
+      tools: [fatalTool as unknown as ToolDefinition]
+    });
 
     // Expect the call to THROW instead of continuing to finalResponse
     await expect(chat.ask("Call fatal tool")).rejects.toThrow("API Key Expired");
@@ -68,7 +74,9 @@ describe("Fatal Tool Error Short-Circuiting", () => {
     };
 
     const provider = new MockToolProvider([toolCallResponse]);
-    const chat = new Chat(provider, "test-model", { tools: [authTool as unknown as ToolDefinition] });
+    const chat = new Chat(provider, "test-model", {
+      tools: [authTool as unknown as ToolDefinition]
+    });
 
     await expect(chat.ask("Call auth tool")).rejects.toThrow("Unauthorized");
   });
@@ -90,7 +98,9 @@ describe("Fatal Tool Error Short-Circuiting", () => {
 
     const finalResponse: ChatResponse = { content: "Handled error" };
     const provider = new MockToolProvider([toolCallResponse, finalResponse]);
-    const chat = new Chat(provider, "test-model", { tools: [standardTool as unknown as ToolDefinition] });
+    const chat = new Chat(provider, "test-model", {
+      tools: [standardTool as unknown as ToolDefinition]
+    });
 
     const response = await chat.ask("Call standard tool");
 

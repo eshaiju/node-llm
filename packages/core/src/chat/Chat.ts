@@ -1,6 +1,11 @@
 import { FileLoader } from "../utils/FileLoader.js";
 import { Message } from "./Message.js";
-import { ContentPart, isBinaryContent, formatMultimodalContent, MessageContent } from "./Content.js";
+import {
+  ContentPart,
+  isBinaryContent,
+  formatMultimodalContent,
+  MessageContent
+} from "./Content.js";
 import { ChatOptions } from "./ChatOptions.js";
 import { Provider, Usage, ChatChunk, ResponseFormat } from "../providers/Provider.js";
 import { Executor } from "../executor/Executor.js";
@@ -185,7 +190,10 @@ export class Chat {
    * Set custom headers for the chat session.
    * Merges with existing headers.
    */
-  withRequestOptions(options: { headers?: Record<string, string>; responseFormat?: unknown }): this {
+  withRequestOptions(options: {
+    headers?: Record<string, string>;
+    responseFormat?: unknown;
+  }): this {
     if (options.headers) {
       this.options.headers = { ...this.options.headers, ...options.headers };
     }
@@ -446,7 +454,9 @@ export class Chat {
             this.options.onConfirmToolCall
           );
           if (!approved) {
-            this.messages.push(this.provider.formatToolResultMessage(toolCall.id, "Action cancelled by user."));
+            this.messages.push(
+              this.provider.formatToolResultMessage(toolCall.id, "Action cancelled by user.")
+            );
             continue;
           }
         }
@@ -458,7 +468,9 @@ export class Chat {
             this.options.onToolCallStart,
             this.options.onToolCallEnd
           );
-          this.messages.push(this.provider.formatToolResultMessage(toolResult.tool_call_id, toolResult.content));
+          this.messages.push(
+            this.provider.formatToolResultMessage(toolResult.tool_call_id, toolResult.content)
+          );
         } catch (error: unknown) {
           let currentError: unknown = error;
           const directive = await this.options.onToolCallError?.(toolCall, currentError as Error);
@@ -475,7 +487,9 @@ export class Chat {
                 this.options.onToolCallStart,
                 this.options.onToolCallEnd
               );
-              this.messages.push(this.provider.formatToolResultMessage(toolResult.tool_call_id, toolResult.content));
+              this.messages.push(
+                this.provider.formatToolResultMessage(toolResult.tool_call_id, toolResult.content)
+              );
               continue;
             } catch (retryError: unknown) {
               // If retry also fails, fall through to default logic
@@ -483,11 +497,13 @@ export class Chat {
             }
           }
 
-          this.messages.push(this.provider.formatToolResultMessage(
-            toolCall.id,
-            `Fatal error executing tool '${toolCall.function.name}': ${(currentError as Error).message}`,
-            { isError: true }
-          ));
+          this.messages.push(
+            this.provider.formatToolResultMessage(
+              toolCall.id,
+              `Fatal error executing tool '${toolCall.function.name}': ${(currentError as Error).message}`,
+              { isError: true }
+            )
+          );
 
           if (directive === "CONTINUE") {
             continue;
@@ -495,13 +511,17 @@ export class Chat {
 
           // Default short-circuit logic
           const errorObj = currentError as { fatal?: boolean; status?: number; message?: string };
-          const isFatal = errorObj.fatal === true || errorObj.status === 401 || errorObj.status === 403;
+          const isFatal =
+            errorObj.fatal === true || errorObj.status === 401 || errorObj.status === 403;
 
           if (isFatal) {
             throw currentError;
           }
 
-          logger.error(`Tool execution failed for '${toolCall.function.name}':`, currentError as Error);
+          logger.error(
+            `Tool execution failed for '${toolCall.function.name}':`,
+            currentError as Error
+          );
         }
       }
 
@@ -585,7 +605,10 @@ export class Chat {
       try {
         toolInstance = new (tool as new () => unknown)();
       } catch (e: unknown) {
-        logger.error(`Failed to instantiate tool class: ${(tool as { name?: string }).name}`, e as Error);
+        logger.error(
+          `Failed to instantiate tool class: ${(tool as { name?: string }).name}`,
+          e as Error
+        );
         return null;
       }
     } else {

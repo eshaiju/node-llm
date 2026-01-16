@@ -30,7 +30,11 @@ class MockLimitedProvider implements Provider {
     return { content: "ok" };
   }
 
-  formatToolResultMessage(toolCallId: string, content: string, options?: { isError?: boolean }): Message {
+  formatToolResultMessage(
+    toolCallId: string,
+    content: string,
+    options?: { isError?: boolean }
+  ): Message {
     return {
       role: "tool",
       tool_call_id: toolCallId,

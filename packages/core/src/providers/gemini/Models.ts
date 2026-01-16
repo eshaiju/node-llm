@@ -1,9 +1,7 @@
-
 import { ModelInfo } from "../Provider.js";
 import { Capabilities } from "./Capabilities.js";
 import { ModelRegistry } from "../../models/ModelRegistry.js";
 import { GeminiListModelsResponse } from "./types.js";
-
 
 export class GeminiModels {
   constructor(

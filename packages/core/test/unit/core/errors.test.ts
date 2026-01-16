@@ -43,7 +43,10 @@ describe("Error System", () => {
         })
       };
 
-      const executor = new Executor(mockProvider as unknown as Provider, { attempts: 3, delayMs: 0 });
+      const executor = new Executor(mockProvider as unknown as Provider, {
+        attempts: 3,
+        delayMs: 0
+      });
       const result = await executor.executeChat({ model: "test", messages: [] });
 
       expect(result.content).toBe("Success");
@@ -60,7 +63,10 @@ describe("Error System", () => {
         })
       };
 
-      const executor = new Executor(mockProvider as unknown as Provider, { attempts: 3, delayMs: 0 });
+      const executor = new Executor(mockProvider as unknown as Provider, {
+        attempts: 3,
+        delayMs: 0
+      });
 
       await expect(executor.executeChat({ model: "test", messages: [] })).rejects.toThrow(
         AuthenticationError
@@ -78,7 +84,10 @@ describe("Error System", () => {
         })
       };
 
-      const executor = new Executor(mockProvider as unknown as Provider, { attempts: 3, delayMs: 0 });
+      const executor = new Executor(mockProvider as unknown as Provider, {
+        attempts: 3,
+        delayMs: 0
+      });
 
       await expect(executor.executeChat({ model: "test", messages: [] })).rejects.toThrow(
         BadRequestError

@@ -89,7 +89,10 @@ describe("DeepSeekChat", () => {
       json: async () => mockResponse
     });
 
-    const response = await chat.execute({ model: "deepseek-reasoner", messages: [] } as ChatRequest);
+    const response = await chat.execute({
+      model: "deepseek-reasoner",
+      messages: []
+    } as ChatRequest);
 
     expect(response.content).toBe("Answer");
     expect(response.reasoning).toBe("Thought process");
@@ -102,9 +105,9 @@ describe("DeepSeekChat", () => {
       text: async () => "Bad Request"
     });
 
-    await expect(chat.execute({ model: "deepseek-chat", messages: [] } as ChatRequest)).rejects.toThrow(
-      "DeepSeek API error: 400 - Bad Request"
-    );
+    await expect(
+      chat.execute({ model: "deepseek-chat", messages: [] } as ChatRequest)
+    ).rejects.toThrow("DeepSeek API error: 400 - Bad Request");
   });
 
   it("should handle structured output (json_schema conversion)", async () => {

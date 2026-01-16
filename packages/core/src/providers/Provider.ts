@@ -168,5 +168,9 @@ export interface Provider {
   embed?(request: EmbeddingRequest): Promise<EmbeddingResponse>;
   defaultModel(feature?: string): string;
   capabilities?: ProviderCapabilities;
-  formatToolResultMessage(toolCallId: string, content: string, options?: { isError?: boolean }): Message;
+  formatToolResultMessage(
+    toolCallId: string,
+    content: string,
+    options?: { isError?: boolean }
+  ): Message;
 }

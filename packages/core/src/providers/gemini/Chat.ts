@@ -53,7 +53,7 @@ export class GeminiChat {
       contents,
       generationConfig: {
         ...generationConfig,
-        ...(rest.generationConfig as Record<string, unknown> || {})
+        ...((rest.generationConfig as Record<string, unknown>) || {})
       },
       ...rest
     };

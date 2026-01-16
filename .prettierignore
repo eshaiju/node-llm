@@ -2,5 +2,6 @@ dist
 node_modules
 *.log
 packages/core/dist
-docs/_site
+docs
+examples
 .jekyll-cache

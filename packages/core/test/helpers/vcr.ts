@@ -50,7 +50,6 @@ export function setupVCR(recordingName: string, subDir?: string) {
       },
       url: {
         query: (query: Record<string, unknown>) => {
-           
           const { key: _key, ...rest } = query;
           return rest;
         }

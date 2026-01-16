@@ -6,7 +6,12 @@ import { OpenAIImage } from "../../../../src/providers/openai/Image.js";
 import { OpenAIEmbedding } from "../../../../src/providers/openai/Embedding.js";
 import { OpenAITranscription } from "../../../../src/providers/openai/Transcription.js";
 import { OpenAIModeration } from "../../../../src/providers/openai/Moderation.js";
-import { ImageRequest, TranscriptionRequest, ModerationRequest, EmbeddingRequest } from "../../../../src/providers/Provider.js";
+import {
+  ImageRequest,
+  TranscriptionRequest,
+  ModerationRequest,
+  EmbeddingRequest
+} from "../../../../src/providers/Provider.js";
 
 vi.mock("../../../../src/providers/openai/Chat.js");
 vi.mock("../../../../src/providers/openai/Streaming.js");
