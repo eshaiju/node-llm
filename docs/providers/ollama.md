@@ -7,12 +7,14 @@ description: Run Large Language Models locally on your machine with full support
 ---
 
 # {{ page.title }}
+
 {: .no_toc }
 
 {{ page.description }}
 {: .fs-6 .fw-300 }
 
 ## Table of contents
+
 {: .no_toc .text-delta }
 
 1. TOC
@@ -27,12 +29,10 @@ Allows you to run large language models locally using [Ollama](https://ollama.co
 Standard configuration for local inference (defaults to `http://localhost:11434/v1`):
 
 ```javascript
-import { NodeLLM } from "@node-llm/core";
+import { createLLM } from "@node-llm/core";
 
 // Defaults to http://localhost:11434/v1
-NodeLLM.configure({
-  provider: "ollama",
-});
+const llm = createLLM({ provider: "ollama" });
 ```
 
 ### Custom URL
@@ -40,10 +40,7 @@ NodeLLM.configure({
 If your Ollama instance is running on a different machine or port:
 
 ```javascript
-NodeLLM.configure({
-  provider: "ollama",
-  ollamaApiBase: "http://192.168.1.10:11434/v1", // Note the /v1 suffix
-});
+const llm = createLLM({ provider: "ollama", ollamaApiBase: "http://192.168.1.10:11434/v1", // Note the /v1 suffix });
 ```
 
 ## Specific Parameters
@@ -51,12 +48,11 @@ NodeLLM.configure({
 You can pass Ollama/OpenAI-compatible parameters using `.withParams()`.
 
 ```javascript
-const chat = NodeLLM.chat("llama3")
-  .withParams({ 
-    temperature: 0.7,
-    seed: 42,
-    num_ctx: 8192, // Ollama specific context size
-  });
+const chat = llm.chat("llama3").withParams({
+  temperature: 0.7,
+  seed: 42,
+  num_ctx: 8192 // Ollama specific context size
+});
 ```
 
 ## Features
@@ -88,9 +84,8 @@ console.table(models);
 
 The following features are **not** supported natively by Ollama's OpenAI-compatible API:
 
-*   **Transcription** (Whisper): Not available via the `/v1/audio` endpoint.
-*   **Image Generation**: Not available via the `/v1/images` endpoint.
-*   **Moderation**: Not supported.
+- **Transcription** (Whisper): Not available via the `/v1/audio` endpoint.
+- **Image Generation**: Not available via the `/v1/images` endpoint.
+- **Moderation**: Not supported.
 
 For full feature parity locally, consider using [LocalAI](https://localai.io/) and connecting via the [OpenAI Provider](/providers/openai.html) with a custom `openaiApiBase`.
-

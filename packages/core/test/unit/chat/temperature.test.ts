@@ -6,11 +6,11 @@ describe("Chat Temperature", () => {
   it("passes temperature to the provider", async () => {
     const mockChat = vi.fn().mockResolvedValue({ content: "Response" });
     const provider: Provider = {
-      chat: mockChat,
-    } as any;
+      chat: mockChat
+    } as unknown as Provider;
 
     const chat = new Chat(provider, "test-model");
-    
+
     // Set temperature
     chat.withTemperature(0.7);
 
@@ -24,11 +24,11 @@ describe("Chat Temperature", () => {
   it("can be overridden in ask options", async () => {
     const mockChat = vi.fn().mockResolvedValue({ content: "Response" });
     const provider: Provider = {
-      chat: mockChat,
-    } as any;
+      chat: mockChat
+    } as unknown as Provider;
 
     const chat = new Chat(provider, "test-model");
-    
+
     chat.withTemperature(0.5);
 
     // Override in ask
@@ -41,11 +41,11 @@ describe("Chat Temperature", () => {
   it("supports chaining", async () => {
     const mockChat = vi.fn().mockResolvedValue({ content: "Response" });
     const provider: Provider = {
-      chat: mockChat,
-    } as any;
+      chat: mockChat
+    } as unknown as Provider;
 
     const chat = new Chat(provider, "test-model");
-    
+
     // Chaining
     chat.withTemperature(0.9).withSystemPrompt("System");
 

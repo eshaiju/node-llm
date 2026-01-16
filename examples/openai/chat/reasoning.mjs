@@ -1,23 +1,23 @@
-import { NodeLLM } from "../../../packages/core/dist/index.js";
+import { createLLM, NodeLLM, Tool, z } from "../../../packages/core/dist/index.js";
 import "dotenv/config";
 
 async function main() {
-  // Configure OpenAI
-  NodeLLM.configure((config) => {
-    config.openaiApiKey = process.env.OPENAI_API_KEY;
+  const llm = createLLM({
+    provider: "openai",
+    openaiApiKey: process.env.OPENAI_API_KEY
   });
-  
-  NodeLLM.configure({ provider: "openai" });
 
   // Use the o3-mini or o1 model
-  // Note: OpenAI reasoning models (o1/o3) do not currently return the full thinking text 
+  // Note: OpenAI reasoning models (o1/o3) do not currently return the full thinking text
   // via the API. Instead, they provide "reasoning tokens" in the usage metadata.
-  const model = "o3-mini"; 
-  const chat = NodeLLM.chat(model);
+  const model = "o3-mini";
+  const chat = llm.chat(model);
 
   console.log(`--- Reasoning with ${model} ---`);
-  const response = await chat.ask("Explain the logic puzzle: if every A is a B, and some B are C, is every A a C?");
-  
+  const response = await chat.ask(
+    "Explain the logic puzzle: if every A is a B, and some B are C, is every A a C?"
+  );
+
   console.log("\x1b[32m[ANSWER]\x1b[0m");
   console.log(response.content);
   console.log("---------------------------------");
@@ -26,15 +26,20 @@ async function main() {
   console.log("\x1b[34m[USAGE METADATA]\x1b[0m");
   console.log(`Input Tokens: ${response.usage.input_tokens}`);
   console.log(`Output Tokens: ${response.usage.output_tokens}`);
-  
-  // Note: OpenAI includes reasoning tokens inside output_tokens, but some versions 
+
+  // Note: OpenAI includes reasoning tokens inside output_tokens, but some versions
   // might provide a specific reasoning_tokens field in the raw response.
   // NodeLLM tracks this if the provider reports it.
   if (response.usage.reasoning_tokens) {
     console.log(`Reasoning Tokens: ${response.usage.reasoning_tokens}`);
   }
-  
+
   console.log(`Estimated Cost: $${response.usage.cost}`);
 }
 
-main().then(() => process.exit(0)).catch((err) => { console.error(err); process.exit(1); });
+main()
+  .then(() => process.exit(0))
+  .catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });

@@ -1,67 +1,52 @@
 import "dotenv/config";
-import { NodeLLM } from "../../../packages/core/dist/index.js";
+import { createLLM, NodeLLM } from "../../../packages/core/dist/index.js";
 
 /**
- * This example demonstrates the configuration system.
- * You can configure API keys using either callback-style or object-style syntax.
+ * This example demonstrates the IMMUTABLE configuration system in NodeLLM v1.5.0+.
+ *
+ * In this architecture:
+ * 1. Global NodeLLM is frozen at startup (Singleton).
+ * 2. Runtime switching happens via Context Branching (.withProvider).
+ * 3. Custom instances are created via createLLM().
  */
 
-console.log("=== Configuration Examples ===\n");
+async function main() {
+  console.log("=== NodeLLM Configuration Examples ===\n");
 
-// Example 1: Callback-style configuration (Recommended for multiple providers)
-console.log("1. Callback-style configuration:");
-NodeLLM.configure((config) => {
-  config.openaiApiKey = process.env.OPENAI_API_KEY;
-  config.anthropicApiKey = process.env.ANTHROPIC_API_KEY;
-  config.geminiApiKey = process.env.GEMINI_API_KEY;
-  config.deepseekApiKey = process.env.DEEPSEEK_API_KEY;
-});
-console.log("✓ Configured all providers\n");
-
-// Example 2: Inspect current configuration
-console.log("2. Inspecting configuration:");
-console.log("OpenAI key set:", !!NodeLLM.config.openaiApiKey);
-console.log("Anthropic key set:", !!NodeLLM.config.anthropicApiKey);
-console.log("Gemini key set:", !!NodeLLM.config.geminiApiKey);
-console.log("DeepSeek key set:", !!NodeLLM.config.deepseekApiKey);
-console.log();
-
-// Example 3: Object-style configuration with provider selection
-console.log("3. Object-style configuration:");
-NodeLLM.configure({
-  provider: "openai",
-  openaiApiKey: process.env.OPENAI_API_KEY // Can override here too
-});
-console.log("✓ Configured OpenAI provider\n");
-
-// Example 4: Custom endpoint configuration (e.g., Azure OpenAI)
-console.log("4. Custom endpoint configuration:");
-if (process.env.AZURE_OPENAI_API_KEY && process.env.AZURE_OPENAI_API_BASE_ENDPOINT) {
-  NodeLLM.configure({
-    openaiApiKey: process.env.AZURE_OPENAI_API_KEY,
-    openaiApiBase: process.env.AZURE_OPENAI_API_BASE_ENDPOINT,
-    provider: "openai"
-  });
-  console.log("✓ Configured Azure OpenAI endpoint");
-} else {
-  console.log("⊘ Skipped (Azure credentials not set)");
-}
-console.log();
-
-// Example 5: Using the configured provider
-console.log("5. Using configured provider:");
-async function testChat() {
+  // Pattern 1: Using the Default Instance (Environment variables)
+  // This is safe for single-tenant apps or CLI tools.
+  // It reads process.env at load time and stores it.
+  console.log("1. Default Instance");
   try {
-    NodeLLM.configure({ provider: "openai" });
     const chat = NodeLLM.chat("gpt-4o-mini");
-    const response = await chat.ask("Say hello in one word");
-    console.log("Response:", response.content);
-    console.log("✓ Chat successful\n");
-  } catch (error) {
-    console.error("✗ Chat failed:", error.message);
+    console.log(`Using default instance: ${chat.modelId}`);
+    // await chat.ask("Hi"); // Only if OPENAI_API_KEY is set
+  } catch (e) {
+    console.log("Default instance not ready (expected if no global env set)");
   }
+  console.log();
+
+  // Pattern 2: Context Branching with .withProvider()
+  // This is RECOMMENDED for multi-provider apps. It creates a new isolated instance.
+  console.log("2. Branching with .withProvider()");
+  const anthropic = NodeLLM.withProvider("anthropic", {
+    anthropicApiKey: process.env.ANTHROPIC_API_KEY
+  });
+  console.log(`Branch created for: ${anthropic.provider?.id}`);
+  console.log();
+
+  // Pattern 3: Explicit Instances with createLLM()
+  // This is RECOMMENDED for multi-tenant apps (e.g. SaaS) where each
+  // request might need a different API key.
+  console.log("3. Explicit Instances via createLLM()");
+  const userLLM = createLLM({
+    provider: "openai",
+    openaiApiKey: "sk-tenant-specific-key-here"
+  });
+  console.log(`Explicit instance created for: ${userLLM.provider?.id}`);
+  console.log();
+
+  console.log("=== All patterns demonstrated ===");
 }
 
-await testChat();
-
-console.log("=== Configuration Examples Complete ===");
+main().catch(console.error);

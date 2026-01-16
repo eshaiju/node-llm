@@ -1,4 +1,6 @@
 import { ModelRegistry } from "../../models/ModelRegistry.js";
+import { PricingRegistry } from "../../models/PricingRegistry.js";
+import { ModelPricing } from "../../models/types.js";
 
 export class Capabilities {
   static getContextWindow(modelId: string): number | null {
@@ -6,7 +8,11 @@ export class Capabilities {
     if (val !== undefined && val !== null) return val;
 
     const id = this.normalizeModelId(modelId);
-    if (id.match(/gemini-2\.5-pro-exp-03-25|gemini-2\.0-flash|gemini-2\.0-flash-lite|gemini-1\.5-flash|gemini-1\.5-flash-8b/)) {
+    if (
+      id.match(
+        /gemini-2\.5-pro-exp-03-25|gemini-2\.0-flash|gemini-2\.0-flash-lite|gemini-1\.5-flash|gemini-1\.5-flash-8b/
+      )
+    ) {
       return 1_048_576;
     }
     if (id.match(/gemini-1\.5-pro/)) {
@@ -32,7 +38,11 @@ export class Capabilities {
     if (id.match(/gemini-2\.5-pro-exp-03-25/)) {
       return 64_000;
     }
-    if (id.match(/gemini-2\.0-flash|gemini-2\.0-flash-lite|gemini-1\.5-flash|gemini-1\.5-flash-8b|gemini-1\.5-pro/)) {
+    if (
+      id.match(
+        /gemini-2\.0-flash|gemini-2\.0-flash-lite|gemini-1\.5-flash|gemini-1\.5-flash-8b|gemini-1\.5-pro/
+      )
+    ) {
       return 8_192;
     }
     if (id.match(/text-embedding-004|embedding-001/)) {
@@ -77,12 +87,12 @@ export class Capabilities {
     return true;
   }
 
-  static supportsSystemInstructions(modelId: string): boolean {
+  static supportsSystemInstructions(_modelId: string): boolean {
     return true;
   }
 
   static supportsJsonMode(modelId: string): boolean {
-     return this.supportsStructuredOutput(modelId);
+    return this.supportsStructuredOutput(modelId);
   }
 
   static supportsEmbeddings(modelId: string): boolean {
@@ -95,25 +105,29 @@ export class Capabilities {
 
   static supportsImageGeneration(modelId: string): boolean {
     const model = ModelRegistry.find(modelId, "gemini");
-    if (model?.capabilities?.includes("image_generation") || model?.modalities?.output?.includes("image")) return true;
+    if (
+      model?.capabilities?.includes("image_generation") ||
+      model?.modalities?.output?.includes("image")
+    )
+      return true;
 
     const id = this.normalizeModelId(modelId);
     return !!id.match(/imagen/);
   }
-  
+
   static supportsTranscription(modelId: string): boolean {
-     const model = ModelRegistry.find(modelId, "gemini");
-     if (model?.modalities?.input?.includes("audio")) return true;
+    const model = ModelRegistry.find(modelId, "gemini");
+    if (model?.modalities?.input?.includes("audio")) return true;
 
     const id = this.normalizeModelId(modelId);
     return !!id.match(/gemini|flash|pro/);
   }
-  
-  static supportsModeration(modelId: string): boolean {
-     return false;
+
+  static supportsModeration(_modelId: string): boolean {
+    return false;
   }
 
-  static normalizeTemperature(temperature: number | undefined, model: string): number | undefined {
+  static normalizeTemperature(temperature: number | undefined, _model: string): number | undefined {
     return temperature;
   }
 
@@ -139,33 +153,8 @@ export class Capabilities {
     return caps;
   }
 
-  static getPricing(modelId: string) {
-    const model = ModelRegistry.find(modelId, "gemini");
-    if (model?.pricing) return model.pricing;
-
-    const id = this.normalizeModelId(modelId);
-    let input = 0;
-    let output = 0;
-
-    if (id.match(/gemini-1\.5-flash/)) {
-      input = 0.075;
-      output = 0.3;
-    } else if (id.match(/gemini-1\.5-pro/)) {
-      input = 3.5;
-      output = 10.5;
-    } else if (id.match(/gemini-2\.0-flash/)) {
-      input = 0.10;
-      output = 0.40;
-    }
-
-    return {
-      text_tokens: {
-        standard: {
-          input_per_million: input,
-          output_per_million: output
-        }
-      }
-    };
+  static getPricing(modelId: string): ModelPricing | undefined {
+    return PricingRegistry.getPricing(modelId, "gemini");
   }
 
   private static normalizeModelId(modelId: string): string {

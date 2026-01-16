@@ -1,4 +1,4 @@
-import { TranscriptionRequest, TranscriptionResponse } from "../Provider.js";
+import { TranscriptionRequest, TranscriptionResponse, TranscriptionSegment } from "../Provider.js";
 import { handleOpenAIError } from "./Errors.js";
 import { AudioUtils } from "../../utils/audio.js";
 import { DEFAULT_MODELS } from "../../constants.js";
@@ -7,7 +7,10 @@ import { logger } from "../../utils/logger.js";
 import { fetchWithTimeout } from "../../utils/fetch.js";
 
 export class OpenAITranscription {
-  constructor(private readonly baseUrl: string, private readonly apiKey: string) {}
+  constructor(
+    private readonly baseUrl: string,
+    private readonly apiKey: string
+  ) {}
 
   async execute(request: TranscriptionRequest): Promise<TranscriptionResponse> {
     const model = request.model || DEFAULT_MODELS.TRANSCRIPTION;
@@ -19,46 +22,60 @@ export class OpenAITranscription {
     return this.transcribeViaWhisper(request);
   }
 
-  private async transcribeViaWhisper(request: TranscriptionRequest): Promise<TranscriptionResponse> {
+  private async transcribeViaWhisper(
+    request: TranscriptionRequest
+  ): Promise<TranscriptionResponse> {
     const formData = new FormData();
     const { data, fileName, duration: estimatedDuration } = await AudioUtils.load(request.file);
-    
+
     const mimeType = fileName.endsWith(".wav") ? "audio/wav" : "audio/mpeg";
-    const file = new File([data] as any, fileName, { type: mimeType });
+    const file = new File([data as unknown as BlobPart], fileName, { type: mimeType });
     formData.append("file", file);
     formData.append("model", request.model || DEFAULT_MODELS.TRANSCRIPTION);
     formData.append("response_format", "verbose_json");
-    
+
     if (request.prompt) {
       formData.append("prompt", request.prompt);
     }
-    
+
     if (request.language) {
       formData.append("language", request.language);
     }
 
-    const url = buildUrl(this.baseUrl, '/audio/transcriptions');
-    logger.logRequest("OpenAI", "POST", url, { model: request.model || DEFAULT_MODELS.TRANSCRIPTION, file: fileName });
+    const url = buildUrl(this.baseUrl, "/audio/transcriptions");
+    logger.logRequest("OpenAI", "POST", url, {
+      model: request.model || DEFAULT_MODELS.TRANSCRIPTION,
+      file: fileName
+    });
 
-    const response = await fetchWithTimeout(url, {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${this.apiKey}`,
+    const response = await fetchWithTimeout(
+      url,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${this.apiKey}`
+        },
+        body: formData
       },
-      body: formData,
-    }, request.requestTimeout);
+      request.requestTimeout
+    );
 
     if (!response.ok) {
       await handleOpenAIError(response, request.model || DEFAULT_MODELS.TRANSCRIPTION);
     }
 
-    const json = (await response.json()) as { text: string; model: string; duration?: number; segments?: any[] };
+    const json = (await response.json()) as {
+      text: string;
+      model: string;
+      duration?: number;
+      segments?: TranscriptionSegment[];
+    };
     logger.logResponse("OpenAI", response.status, response.statusText, json);
-    return { 
+    return {
       text: json.text,
       model: json.model || request.model || DEFAULT_MODELS.TRANSCRIPTION,
       duration: json.duration || estimatedDuration,
-      segments: json.segments?.map(s => ({
+      segments: json.segments?.map((s) => ({
         id: s.id,
         start: s.start,
         end: s.end,
@@ -71,8 +88,8 @@ export class OpenAITranscription {
     const { data, fileName, duration: estimatedDuration } = await AudioUtils.load(request.file);
     const base64Audio = Buffer.from(data).toString("base64");
     const model = request.model || "gpt-4o";
-    
-    let actualModel = "gpt-4o-audio-preview";
+
+    const actualModel = "gpt-4o-audio-preview";
     let defaultPrompt = "Transcribe the audio exactly. Return only the transcription text.";
     let isDiarization = false;
 
@@ -89,12 +106,12 @@ export class OpenAITranscription {
       defaultPrompt += ` The audio is in ${request.language}.`;
     }
 
-    const messagesContent: any[] = [
-      { 
-        type: "text", 
-        text: request.prompt 
+    const messagesContent: Record<string, unknown>[] = [
+      {
+        type: "text",
+        text: request.prompt
           ? `${defaultPrompt}\n\nContext for transcription: ${request.prompt}`
-          : defaultPrompt 
+          : defaultPrompt
       }
     ];
 
@@ -102,11 +119,11 @@ export class OpenAITranscription {
       for (let i = 0; i < request.speakerReferences.length; i++) {
         const refFile = request.speakerReferences[i];
         if (!refFile) continue;
-        
+
         const name = request.speakerNames[i] || `Speaker ${i + 1}`;
         const { data: refData } = await AudioUtils.load(refFile);
         const refBase64 = Buffer.from(refData).toString("base64");
-        
+
         messagesContent.push({
           type: "text",
           text: `The following audio clip is the voice of ${name}:`
@@ -143,17 +160,21 @@ export class OpenAITranscription {
       ]
     };
 
-    const url = buildUrl(this.baseUrl, '/chat/completions');
+    const url = buildUrl(this.baseUrl, "/chat/completions");
     logger.logRequest("OpenAI", "POST", url, body);
 
-    const response = await fetchWithTimeout(url, {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${this.apiKey}`,
-        "Content-Type": "application/json",
+    const response = await fetchWithTimeout(
+      url,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${this.apiKey}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(body)
       },
-      body: JSON.stringify(body),
-    }, request.requestTimeout);
+      request.requestTimeout
+    );
 
     if (!response.ok) {
       await handleOpenAIError(response, actualModel);
@@ -162,9 +183,9 @@ export class OpenAITranscription {
     const json = await response.json();
     logger.logResponse("OpenAI", response.status, response.statusText, json);
     const content = json.choices[0]?.message?.content || "";
-    
+
     let text = content;
-    let segments: any[] = [];
+    let segments: TranscriptionSegment[] = [];
 
     if (isDiarization) {
       try {
@@ -177,9 +198,9 @@ export class OpenAITranscription {
             text: s.text || "",
             speaker: s.speaker
           }));
-          text = segments.map(s => `${s.speaker}: ${s.text}`).join("\n");
+          text = segments.map((s) => `${s.speaker}: ${s.text}`).join("\n");
         }
-      } catch (e) {
+      } catch {
         text = content;
       }
     }

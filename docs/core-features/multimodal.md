@@ -7,12 +7,14 @@ description: Go beyond text. Learn how to pass images, audio, video, and documen
 ---
 
 # {{ page.title }}
+
 {: .no_toc }
 
 {{ page.description }}
 {: .fs-6 .fw-300 }
 
 ## Table of contents
+
 {: .no_toc .text-delta }
 
 1. TOC
@@ -27,6 +29,7 @@ Modern LLMs can understand more than just text. `NodeLLM` provides a unified way
 You can pass local paths or URLs directly to the `ask` or `stream` method using the `files` (or `images`) option. `NodeLLM` automatically detects the file type and formats it correctly for the specific provider.
 
 **Supported File Types:**
+
 - **Images**: `.jpg`, `.jpeg`, `.png`, `.gif`, `.webp`
 - **Videos**: `.mp4`, `.mpeg`, `.mov`, `.avi`, `.webm`
 - **Audio**: `.wav`, `.mp3`, `.ogg`, `.flac`
@@ -74,7 +77,7 @@ await chat.ask("What was the tone of the speaker?", {
 });
 ```
 
-*Note: For pure transcription without chat, see [Audio Transcription](/core-features/audio-transcription.html).*
+_Note: For pure transcription without chat, see [Audio Transcription](/core-features/audio-transcription.html)._
 
 ## Working with Videos
 
@@ -93,6 +96,7 @@ await chat.ask("What happens in this video?", {
 You can provide full documents for analysis.
 
 ### Text & Code Files
+
 For text-based files, `NodeLLM` reads the content and passes it as text context to the model.
 
 ```ts
@@ -105,10 +109,12 @@ await chat.ask("Explain potential bugs in this code", {
 ```
 
 ### PDFs
+
 For PDFs, providers handled differently:
+
 - **Anthropic**: Supports native PDF blocks (up to 10MB). `NodeLLM` handles the base64 encoding.
 - **Gemini**: Supports PDF via File API.
-- **OpenAI**: Often requires text extraction first (unless using Assistants API, which `NodeLLM` core interacts with as Chat). *Note: Ensure your provider supports the PDF modality directly or use a text extractor.*
+- **OpenAI**: Often requires text extraction first (unless using Assistants API, which `NodeLLM` core interacts with as Chat). _Note: Ensure your provider supports the PDF modality directly or use a text extractor._
 
 ```ts
 await chat.ask("Summarize this contract", {
@@ -124,10 +130,10 @@ You don't need to specify the file type; `NodeLLM` infers it from the extension.
 // Mix and match types
 await chat.ask("Analyze these project resources", {
   files: [
-    "diagram.png",       // Image
-    "spec.pdf",          // Document
-    "meeting.mp3",       // Audio
-    "backend.ts"         // Code
+    "diagram.png", // Image
+    "spec.pdf", // Document
+    "meeting.mp3", // Audio
+    "backend.ts" // Code
   ]
 });
 ```

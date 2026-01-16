@@ -1,13 +1,14 @@
 import "dotenv/config";
-import { NodeLLM } from "../../../packages/core/dist/index.js";
+import { createLLM, NodeLLM, Tool, z } from "../../../packages/core/dist/index.js";
 import { fileURLToPath } from "url";
 import path from "path";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 async function main() {
-  NodeLLM.configure({ 
+  const llm = createLLM({
     provider: "gemini",
+    geminiApiKey: process.env.GEMINI_API_KEY,
     defaultTranscriptionModel: "gemini-2.0-flash"
   });
 
@@ -15,7 +16,7 @@ async function main() {
 
   try {
     console.log(`Transcribing ${audioFile} with Gemini...`);
-    const result = await NodeLLM.transcribe(audioFile);
+    const result = await llm.transcribe(audioFile);
     console.log(`\nContent: ${result.text}`);
   } catch (e) {
     console.error("Transcription failed:", e.message);

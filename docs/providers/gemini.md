@@ -7,12 +7,14 @@ description: Leverage Google's powerful multimodal capabilities with native supp
 ---
 
 # {{ page.title }}
+
 {: .no_toc }
 
 {{ page.description }}
 {: .fs-6 .fw-300 }
 
 ## Table of contents
+
 {: .no_toc .text-delta }
 
 1. TOC
@@ -25,12 +27,9 @@ Google's Gemini provider offers multimodal capabilities including native video a
 ## Configuration
 
 ```ts
-import { NodeLLM } from "@node-llm/core";
+import { createLLM } from "@node-llm/core";
 
-NodeLLM.configure({
-  provider: "gemini",
-  geminiApiKey: process.env.GEMINI_API_KEY, // Optional if set in env
-});
+const llm = createLLM({ provider: "gemini", geminiApiKey: process.env.GEMINI_API_KEY, // Optional if set in env });
 ```
 
 ## Specific Parameters
@@ -38,20 +37,19 @@ NodeLLM.configure({
 Gemini uses `generationConfig` and `safetySettings`.
 
 ```ts
-const chat = NodeLLM.chat("gemini-1.5-pro")
-  .withParams({
-    generationConfig: { 
-      topP: 0.8, 
-      topK: 40,
-      maxOutputTokens: 8192
-    },
-    safetySettings: [
-      { 
-        category: "HARM_CATEGORY_HARASSMENT", 
-        threshold: "BLOCK_LOW_AND_ABOVE" 
-      }
-    ]
-  });
+const chat = llm.chat("gemini-1.5-pro").withParams({
+  generationConfig: {
+    topP: 0.8,
+    topK: 40,
+    maxOutputTokens: 8192
+  },
+  safetySettings: [
+    {
+      category: "HARM_CATEGORY_HARASSMENT",
+      threshold: "BLOCK_LOW_AND_ABOVE"
+    }
+  ]
+});
 ```
 
 ## Features

@@ -3,7 +3,9 @@ import { GeminiContent, GeminiPart } from "./types.js";
 import { BinaryUtils } from "../../utils/Binary.js";
 
 export class GeminiChatUtils {
-  static async convertMessages(messages: Message[]): Promise<{ contents: GeminiContent[]; systemInstructionParts: GeminiPart[] }> {
+  static async convertMessages(
+    messages: Message[]
+  ): Promise<{ contents: GeminiContent[]; systemInstructionParts: GeminiPart[] }> {
     const contents: GeminiContent[] = [];
     const systemInstructionParts: GeminiPart[] = [];
 
@@ -19,13 +21,13 @@ export class GeminiChatUtils {
           parts.push({
             functionResponse: {
               name: msg.tool_call_id || "unknown",
-              response: { result: msg.content },
-            },
+              response: { result: msg.content }
+            }
           });
           contents.push({ role: "user", parts });
         } else {
           const role = msg.role === "assistant" ? "model" : "user";
-          
+
           if (msg.content && (typeof msg.content === "string" || msg.content instanceof String)) {
             parts.push({ text: String(msg.content) });
           } else if (Array.isArray(msg.content)) {
@@ -38,16 +40,16 @@ export class GeminiChatUtils {
                   parts.push({
                     inlineData: {
                       mimeType: binary.mimeType,
-                      data: binary.data,
-                    },
+                      data: binary.data
+                    }
                   });
                 }
               } else if (part.type === "input_audio") {
                 parts.push({
                   inlineData: {
                     mimeType: `audio/${part.input_audio.format}`,
-                    data: part.input_audio.data,
-                  },
+                    data: part.input_audio.data
+                  }
                 });
               } else if (part.type === "video_url") {
                 const binary = await BinaryUtils.toBase64(part.video_url.url);
@@ -55,8 +57,8 @@ export class GeminiChatUtils {
                   parts.push({
                     inlineData: {
                       mimeType: binary.mimeType,
-                      data: binary.data,
-                    },
+                      data: binary.data
+                    }
                   });
                 }
               }
@@ -68,8 +70,8 @@ export class GeminiChatUtils {
               parts.push({
                 functionCall: {
                   name: call.function.name,
-                  args: JSON.parse(call.function.arguments),
-                },
+                  args: JSON.parse(call.function.arguments)
+                }
               });
             }
           }

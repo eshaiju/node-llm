@@ -7,12 +7,14 @@ description: Peek under the hood and inspect raw API requests, responses, and mo
 ---
 
 # {{ page.title }}
+
 {: .no_toc }
 
 {{ page.description }}
 {: .fs-6 .fw-300 }
 
 ## Table of contents
+
 {: .no_toc .text-delta }
 
 1. TOC
@@ -29,9 +31,9 @@ You can enable detailed debug logging in two ways:
 ### 1. Programmatic Configuration (Recommended)
 
 ```ts
-import { NodeLLM } from "@node-llm/core";
+import { createLLM } from "@node-llm/core";
 
-NodeLLM.configure({ debug: true });
+const llm = createLLM({ debug: true });
 ```
 
 This will print the raw HTTP requests and responses for **all API calls** across **every feature and provider**.
@@ -71,6 +73,7 @@ const debugAnthropic = NodeLLM.withProvider("anthropic", { debug: true });
 ### Coverage
 
 Debug logging works for:
+
 - **Chat** (regular and streaming)
 - **Image Generation** (OpenAI, Gemini)
 - **Embeddings** (OpenAI, Gemini, Ollama)
@@ -80,6 +83,7 @@ Debug logging works for:
 - **All Providers** (OpenAI, Anthropic, Gemini, DeepSeek)
 
 The logs include:
+
 - HTTP method and full URL
 - Request body (JSON formatted)
 - Response status code and status text

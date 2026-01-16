@@ -1,16 +1,14 @@
 import "dotenv/config";
-import { NodeLLM } from "../../../packages/core/dist/index.js";
+import { createLLM, NodeLLM, Tool, z } from "../../../packages/core/dist/index.js";
 
 async function main() {
-  NodeLLM.configure((config) => {
-    config.deepseekApiKey = process.env.DEEPSEEK_API_KEY;
+  const llm = createLLM({
+    provider: "deepseek",
+    deepseekApiKey: process.env.DEEPSEEK_API_KEY
   });
-  
-  NodeLLM.configure({ provider: "deepseek" });
-  
   console.log("Attempting multimodal vision request with DeepSeek...");
   try {
-    const chat = NodeLLM.chat("deepseek-chat");
+    const chat = llm.chat("deepseek-chat");
     // Providing an image URL to a text-only model should raise an error
     await chat.ask("Describe this image", { images: ["https://example.com/image.jpg"] });
   } catch (error) {

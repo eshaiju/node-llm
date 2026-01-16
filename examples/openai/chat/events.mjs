@@ -1,14 +1,12 @@
 import "dotenv/config";
-import { NodeLLM } from "../../../packages/core/dist/index.js";
+import { createLLM, NodeLLM, Tool, z } from "../../../packages/core/dist/index.js";
 
 async function main() {
-  NodeLLM.configure((config) => {
-    config.openaiApiKey = process.env.OPENAI_API_KEY;
+  const llm = createLLM({
+    provider: "openai",
+    openaiApiKey: process.env.OPENAI_API_KEY
   });
-  
-  NodeLLM.configure({ provider: "openai" });
-
-  const chat = NodeLLM.chat("gpt-4o-mini");
+  const chat = llm.chat("gpt-4o-mini");
 
   // Register Lifecycle Hooks
   chat
@@ -29,4 +27,9 @@ async function main() {
   console.log("");
 }
 
-main().then(() => process.exit(0)).catch((err) => { console.error(err); process.exit(1); });
+main()
+  .then(() => process.exit(0))
+  .catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });

@@ -1,10 +1,10 @@
 import { describe, it, expect, afterEach } from "vitest";
-import { NodeLLM } from "../../../../src/index.js";
+import { createLLM } from "../../../../src/index.js";
 import { setupVCR } from "../../../helpers/vcr.js";
 import "dotenv/config";
 
 describe("Gemini Tool Calling Integration (VCR)", { timeout: 30000 }, () => {
-  let polly: any;
+  let polly: { stop: () => Promise<void> } | undefined;
 
   afterEach(async () => {
     if (polly) {
@@ -14,24 +14,24 @@ describe("Gemini Tool Calling Integration (VCR)", { timeout: 30000 }, () => {
 
   it("should handle tool calling", async ({ task }) => {
     polly = setupVCR(task.name, "gemini");
-    NodeLLM.configure({
+    const llm = createLLM({
       geminiApiKey: process.env.GEMINI_API_KEY,
-      provider: "gemini",
+      provider: "gemini"
     });
 
     const weatherTool = {
-      type: 'function',
+      type: "function",
       function: {
-        name: 'get_weather',
-        description: 'Get weather',
-        parameters: { type: 'object', properties: { location: { type: 'string' } } }
+        name: "get_weather",
+        description: "Get weather",
+        parameters: { type: "object", properties: { location: { type: "string" } } }
       },
       handler: async ({ location }: { location: string }) => {
         return JSON.stringify({ location, temperature: 18, condition: "Cloudy" });
       }
     };
 
-    const chat = NodeLLM.chat("gemini-2.0-flash").withTool(weatherTool);
+    const chat = llm.chat("gemini-2.0-flash").withTool(weatherTool);
     const response = await chat.ask("What is the weather in Berlin?");
 
     expect(String(response)).toContain("18");

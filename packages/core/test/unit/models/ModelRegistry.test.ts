@@ -5,14 +5,14 @@ describe("ModelRegistry - Filtered Sync Verification", () => {
   it("should have loaded the filtered modelsData", () => {
     const allModels = ModelRegistry.all();
     expect(allModels.length).toBeGreaterThan(200); // Filtered to supported providers only
-    
+
     // Check that we only have supported providers
-    const providers = new Set(allModels.map(m => m.provider));
-    const supported = ['openai', 'anthropic', 'gemini', 'deepseek', 'openrouter', 'ollama'];
-    
+    const providers = new Set(allModels.map((m) => m.provider));
+    const supported = ["openai", "anthropic", "gemini", "deepseek", "openrouter", "ollama"];
+
     // Convert Set to Array for easier comparison
     const providerArray = Array.from(providers);
-    providerArray.forEach(p => {
+    providerArray.forEach((p) => {
       expect(supported).toContain(p);
     });
   });
@@ -34,20 +34,19 @@ describe("ModelRegistry - Filtered Sync Verification", () => {
     // GPT-4o pricing: $2.50 / $10.00
     const usage = { input_tokens: 1_000_000, output_tokens: 1_000_000, total_tokens: 2_000_000 };
     const result = ModelRegistry.calculateCost(usage, "gpt-4o", "openai");
-    
+
     // calculateCost returns the usage object with added cost properties
-    expect('cost' in result).toBe(true);
-    if ('cost' in result) {
+    expect("cost" in result).toBe(true);
+    if ("cost" in result) {
       expect(result.cost).toBe(12.5); // 2.5 + 10
     }
   });
 
   // Note: Ollama models are not in models.dev as they're dynamically fetched from local server
   it("should have models from all major providers", () => {
-    const providers = new Set(ModelRegistry.all().map(m => m.provider));
-    expect(providers.has('openai')).toBe(true);
-    expect(providers.has('anthropic')).toBe(true);
-    expect(providers.has('gemini')).toBe(true);
+    const providers = new Set(ModelRegistry.all().map((m) => m.provider));
+    expect(providers.has("openai")).toBe(true);
+    expect(providers.has("anthropic")).toBe(true);
+    expect(providers.has("gemini")).toBe(true);
   });
 });
-

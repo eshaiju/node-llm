@@ -1,15 +1,18 @@
 import { ModelRegistry } from "../../models/ModelRegistry.js";
+import { PricingRegistry } from "../../models/PricingRegistry.js";
+import { ModelPricing } from "../../models/types.js";
+
 
 export class Capabilities {
   static getCapabilities(modelId: string): string[] {
     const caps = ["streaming"];
-    
+
     if (/deepseek-chat/.test(modelId)) {
       caps.push("function_calling");
     }
 
     if (/deepseek-reasoner/.test(modelId)) {
-        caps.push("reasoning");
+      caps.push("reasoning");
     }
 
     return caps;
@@ -18,21 +21,21 @@ export class Capabilities {
   static getContextWindow(modelId: string): number | null {
     const val = ModelRegistry.getContextWindow(modelId, "deepseek");
     if (val) return val;
-    
+
     if (/deepseek-(?:chat|reasoner)/.test(modelId)) {
-        return 128_000;
+      return 128_000;
     }
     return 32_768;
   }
 
   static getMaxOutputTokens(modelId: string): number | null {
-      if (/deepseek-(?:chat|reasoner)/.test(modelId)) {
-          return 8_192;
-      }
-      return 4_096;
+    if (/deepseek-(?:chat|reasoner)/.test(modelId)) {
+      return 8_192;
+    }
+    return 4_096;
   }
 
-  static supportsVision(modelId: string): boolean {
+  static supportsVision(_modelId: string): boolean {
     return false;
   }
 
@@ -44,23 +47,27 @@ export class Capabilities {
     return /deepseek-(?:chat|reasoner)/.test(modelId);
   }
 
-  static supportsEmbeddings(modelId: string): boolean {
+  static supportsEmbeddings(_modelId: string): boolean {
     return false;
   }
 
-  static supportsImageGeneration(modelId: string): boolean {
+  static supportsImageGeneration(_modelId: string): boolean {
     return false;
   }
 
-  static supportsTranscription(modelId: string): boolean {
+  static supportsTranscription(_modelId: string): boolean {
     return false;
   }
 
-  static supportsModeration(modelId: string): boolean {
+  static supportsModeration(_modelId: string): boolean {
     return false;
   }
 
   static supportsReasoning(modelId: string): boolean {
     return /deepseek-reasoner/.test(modelId);
+  }
+
+  static getPricing(modelId: string): ModelPricing | undefined {
+    return PricingRegistry.getPricing(modelId, "deepseek");
   }
 }

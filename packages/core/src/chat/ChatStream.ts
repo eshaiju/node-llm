@@ -1,5 +1,6 @@
+
 import { Message } from "./Message.js";
-import { ContentPart, isBinaryContent, formatMultimodalContent } from "./Content.js";
+import { ContentPart, isBinaryContent, formatMultimodalContent, MessageContent } from "./Content.js";
 import { ChatOptions } from "./ChatOptions.js";
 import { Provider, ChatChunk, Usage } from "../providers/Provider.js";
 import { ChatResponseString } from "./ChatResponse.js";
@@ -9,10 +10,11 @@ import { ToolExecutionMode } from "../constants.js";
 import { AskOptions } from "./Chat.js";
 import { FileLoader } from "../utils/FileLoader.js";
 import { toJsonSchema } from "../schema/to-json-schema.js";
-import { ToolDefinition } from "./Tool.js";
+import { ToolDefinition, ToolCall } from "./Tool.js";
 import { ChatValidator } from "./Validation.js";
 import { ToolHandler } from "./ToolHandler.js";
 import { logger } from "../utils/logger.js";
+import { ResponseFormat } from "../providers/Provider.js";
 
 /**
  * Internal handler for chat streaming logic.
@@ -36,7 +38,7 @@ export class ChatStream {
       if (options.systemPrompt) {
         this.systemMessages.push({
           role: "system",
-          content: options.systemPrompt,
+          content: options.systemPrompt
         });
       }
 
@@ -62,7 +64,7 @@ export class ChatStream {
 
   create(content: string | ContentPart[], options: AskOptions = {}): Stream<ChatChunk> {
     const controller = new AbortController();
-    
+
     const sideEffectGenerator = async function* (
       self: ChatStream,
       provider: Provider,
@@ -74,14 +76,14 @@ export class ChatStream {
       content: string | ContentPart[],
       requestOptions: AskOptions
     ) {
-      const options = { 
-        ...baseOptions, 
+      const options = {
+        ...baseOptions,
         ...requestOptions,
         headers: { ...baseOptions.headers, ...requestOptions.headers }
       };
-      
+
       // Process Multimodal Content
-      let messageContent: any = content;
+      let messageContent: MessageContent = content;
       const files = [...(requestOptions.images ?? []), ...(requestOptions.files ?? [])];
 
       if (files.length > 0) {
@@ -103,10 +105,10 @@ export class ChatStream {
       }
 
       // Process Schema/Structured Output
-      let responseFormat: any = options.responseFormat;
+      let responseFormat: ResponseFormat | undefined = options.responseFormat;
       if (!responseFormat && options.schema) {
         ChatValidator.validateStructuredOutput(provider, model, true, options);
-        
+
         const jsonSchema = toJsonSchema(options.schema.definition.schema);
         responseFormat = {
           type: "json_schema",
@@ -114,7 +116,7 @@ export class ChatStream {
             name: options.schema.definition.name,
             description: options.schema.definition.description,
             strict: options.schema.definition.strict ?? true,
-            schema: jsonSchema,
+            schema: jsonSchema
           }
         };
       }
@@ -127,7 +129,7 @@ export class ChatStream {
       const maxToolCalls = options.maxToolCalls ?? 5;
       let stepCount = 0;
 
-      let totalUsage: Usage = { input_tokens: 0, output_tokens: 0, total_tokens: 0 };
+      const totalUsage: Usage = { input_tokens: 0, output_tokens: 0, total_tokens: 0 };
       const trackUsage = (u?: Usage) => {
         if (u) {
           totalUsage.input_tokens += u.input_tokens;
@@ -142,12 +144,14 @@ export class ChatStream {
       while (true) {
         stepCount++;
         if (stepCount > maxToolCalls) {
-          throw new Error(`[NodeLLM] Maximum tool execution calls (${maxToolCalls}) exceeded during streaming.`);
+          throw new Error(
+            `[NodeLLM] Maximum tool execution calls (${maxToolCalls}) exceeded during streaming.`
+          );
         }
 
         let fullContent = "";
         let fullReasoning = "";
-        let toolCalls: any[] | undefined;
+        let toolCalls: ToolCall[] | undefined;
         let currentTurnUsage: Usage | undefined;
 
         try {
@@ -169,7 +173,7 @@ export class ChatStream {
             headers: options.headers,
             requestTimeout: options.requestTimeout ?? config.requestTimeout,
             signal: abortController.signal,
-            ...options.params,
+            ...options.params
           })) {
             if (isFirst) {
               if (options.onNewMessage) options.onNewMessage();
@@ -180,7 +184,7 @@ export class ChatStream {
               fullContent += chunk.content;
               yield chunk;
             }
-            
+
             if (chunk.reasoning) {
               fullReasoning += chunk.reasoning;
               yield { content: "", reasoning: chunk.reasoning };
@@ -190,8 +194,8 @@ export class ChatStream {
               toolCalls = chunk.tool_calls;
             }
 
-            if ((chunk as any).usage) {
-              currentTurnUsage = (chunk as any).usage;
+            if ((chunk as { usage?: Usage }).usage) {
+              currentTurnUsage = (chunk as { usage: Usage }).usage;
               trackUsage(currentTurnUsage);
             }
           }
@@ -232,13 +236,12 @@ export class ChatStream {
 
           for (const toolCall of toolCalls) {
             if (options.toolExecution === ToolExecutionMode.CONFIRM) {
-              const approved = await ToolHandler.requestToolConfirmation(toolCall, options.onConfirmToolCall);
+              const approved = await ToolHandler.requestToolConfirmation(
+                toolCall,
+                options.onConfirmToolCall
+              );
               if (!approved) {
-                messages.push({
-                  role: "tool",
-                  tool_call_id: toolCall.id,
-                  content: "Action cancelled by user.",
-                });
+                messages.push(provider.formatToolResultMessage(toolCall.id, "Action cancelled by user."));
                 continue;
               }
             }
@@ -246,38 +249,42 @@ export class ChatStream {
             try {
               const toolResult = await ToolHandler.execute(
                 toolCall,
-                options.tools,
+                options.tools as unknown as ToolDefinition[],
                 options.onToolCallStart,
                 options.onToolCallEnd
               );
-              messages.push(toolResult);
-            } catch (error: any) {
-              const directive = await options.onToolCallError?.(toolCall, error);
+              messages.push(provider.formatToolResultMessage(toolResult.tool_call_id, toolResult.content));
+            } catch (error: unknown) {
+              const err = error as Error & { fatal?: boolean; status?: number };
+              const directive = await options.onToolCallError?.(toolCall, err);
 
-              if (directive === 'STOP') {
+              if (directive === "STOP") {
                 throw error;
               }
 
-              messages.push({
-                role: "tool",
-                tool_call_id: toolCall.id,
-                content: `Fatal error executing tool '${toolCall.function.name}': ${error.message}`,
-              });
+              messages.push(provider.formatToolResultMessage(
+                toolCall.id,
+                `Fatal error executing tool '${toolCall.function.name}': ${err.message}`,
+                { isError: true }
+              ));
 
-              if (directive === 'CONTINUE') {
+              if (directive === "CONTINUE") {
                 continue;
               }
 
-              const isFatal = error.fatal === true || error.status === 401 || error.status === 403;
+              const isFatal = err.fatal === true || err.status === 401 || err.status === 403;
               if (isFatal) {
-                throw error;
+                throw err;
               }
 
-              logger.error(`Tool execution failed for '${toolCall.function.name}':`, error as Error);
+              logger.error(
+                `Tool execution failed for '${toolCall.function.name}':`,
+                error as Error
+              );
             }
           }
         } catch (error) {
-          if (error instanceof Error && error.name === 'AbortError') {
+          if (error instanceof Error && error.name === "AbortError") {
             // Aborted
           }
           throw error;
@@ -286,7 +293,18 @@ export class ChatStream {
     };
 
     return new Stream(
-      () => sideEffectGenerator(this, this.provider, this.model, this.messages, this.systemMessages, this.options, controller, content, options),
+      () =>
+        sideEffectGenerator(
+          this,
+          this.provider,
+          this.model,
+          this.messages,
+          this.systemMessages,
+          this.options,
+          controller,
+          content,
+          options
+        ),
       controller
     );
   }

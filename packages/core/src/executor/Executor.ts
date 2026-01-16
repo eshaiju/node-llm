@@ -8,7 +8,7 @@ export class Executor {
   ) {}
 
   async executeChat(request: ChatRequest): Promise<ChatResponse> {
-    let lastError: any;
+    let lastError: unknown;
 
     for (let attempt = 1; attempt <= this.retry.attempts; attempt++) {
       try {
@@ -18,7 +18,7 @@ export class Executor {
 
         // If it's a fatal error (BadRequest, Authentication), don't retry
         const isRetryable = error instanceof RateLimitError || error instanceof ServerError;
-        
+
         if (!isRetryable || attempt >= this.retry.attempts) {
           throw error;
         }

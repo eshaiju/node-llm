@@ -2,7 +2,16 @@ import aliases from "./aliases.js";
 
 import { logger } from "./utils/logger.js";
 
-export type ProviderName = "openai" | "anthropic" | "gemini" | "vertexai" | "openrouter" | "mistral" | "deepseek" | "bedrock" | string;
+export type ProviderName =
+  | "openai"
+  | "anthropic"
+  | "gemini"
+  | "vertexai"
+  | "openrouter"
+  | "mistral"
+  | "deepseek"
+  | "bedrock"
+  | string;
 
 export function resolveModelAlias(alias: string, provider?: ProviderName): string {
   if (!provider) {
@@ -10,7 +19,7 @@ export function resolveModelAlias(alias: string, provider?: ProviderName): strin
   }
 
   const aliasEntry = (aliases as Record<string, Record<string, string>>)[alias];
-  
+
   if (aliasEntry) {
     if (aliasEntry[provider.toLowerCase()]) {
       const resolved = aliasEntry[provider.toLowerCase()] as string;

@@ -1,20 +1,13 @@
 /**
  * Multi-Provider Parallel Execution
- * 
- * This demonstrates how to use `NodeLLM.withProvider()` to create 
- * scoped, independent contexts for parallel execution without 
+ *
+ * This demonstrates how to use `NodeLLM.withProvider()` to create
+ * scoped, independent contexts for parallel execution without
  * risk of race conditions or having to manually manage instances.
  */
 
 import "dotenv/config";
 import { NodeLLM } from "../../../packages/core/dist/index.js";
-
-// 1. Initial global configuration (sets keys)
-NodeLLM.configure((config) => {
-  config.openaiApiKey = process.env.OPENAI_API_KEY;
-  config.anthropicApiKey = process.env.ANTHROPIC_API_KEY;
-  config.geminiApiKey = process.env.GEMINI_API_KEY;
-});
 
 /**
  * Score an answer using multiple providers in TRUE parallel.
@@ -23,11 +16,12 @@ NodeLLM.configure((config) => {
 async function scoreAnswerParallel(question, answer) {
   console.log("⏳ Starting parallel scoring (isolated contexts)...\n");
 
+  const prompt = createPrompt(question, answer);
   const results = await Promise.all([
     // Each of these returns a scoped instance of NodeLLM
-    NodeLLM.withProvider("openai").chat("gpt-4o-mini").ask(createPrompt(question, answer)),
-    NodeLLM.withProvider("anthropic").chat("claude-3-5-haiku-20241022").ask(createPrompt(question, answer)),
-    NodeLLM.withProvider("gemini").chat("gemini-2.0-flash-exp").ask(createPrompt(question, answer)),
+    NodeLLM.withProvider("openai").chat("gpt-4o-mini").ask(prompt),
+    NodeLLM.withProvider("anthropic").chat("claude-3-5-haiku-20241022").ask(prompt),
+    NodeLLM.withProvider("gemini").chat("gemini-2.0-flash").ask(prompt)
   ]);
 
   return results;
@@ -50,7 +44,7 @@ async function main() {
 
     responses.forEach((resp, i) => {
       const providers = ["OpenAI", "Anthropic", "Gemini"];
-      console.log(`🤖 ${providers[i]}: ${resp.content.split('\n')[0]}`);
+      console.log(`🤖 ${providers[i]}: ${resp.content.split("\n")[0]}`);
     });
 
     console.log("\n✅ Parallel multi-provider execution successful!");

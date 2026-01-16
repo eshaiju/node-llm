@@ -27,9 +27,9 @@ export class OpenAIEmbedding {
 
     this.validateModel(model);
 
-    const body: any = {
+    const body: Record<string, unknown> = {
       input: request.input,
-      model,
+      model
     };
 
     if (request.dimensions) {
@@ -40,33 +40,41 @@ export class OpenAIEmbedding {
       body.user = request.user;
     }
 
-    const url = buildUrl(this.baseUrl, '/embeddings');
+    const url = buildUrl(this.baseUrl, "/embeddings");
     logger.logRequest("OpenAI", "POST", url, body);
 
-    const response = await fetchWithTimeout(url, {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${this.apiKey}`,
-        "Content-Type": "application/json",
+    const response = await fetchWithTimeout(
+      url,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${this.apiKey}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(body)
       },
-      body: JSON.stringify(body),
-    }, request.requestTimeout);
+      request.requestTimeout
+    );
 
     if (!response.ok) {
       await handleOpenAIError(response, request.model || DEFAULT_MODELS.EMBEDDING);
     }
 
     const { data, model: responseModel, usage } = await response.json();
-    logger.logResponse("OpenAI", response.status, response.statusText, { data, model: responseModel, usage });
+    logger.logResponse("OpenAI", response.status, response.statusText, {
+      data,
+      model: responseModel,
+      usage
+    });
 
     // Extract vectors from the response
-    const vectors = data.map((item: any) => item.embedding);
+    const vectors = data.map((item: { embedding: number[] }) => item.embedding);
 
     return {
       vectors,
       model: responseModel,
       input_tokens: usage.prompt_tokens,
-      dimensions: vectors[0]?.length || 0,
+      dimensions: vectors[0]?.length || 0
     };
   }
 }

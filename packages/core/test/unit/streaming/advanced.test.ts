@@ -24,10 +24,7 @@ describe("Advanced Stream Utility", () => {
     const stream = Stream.fromAsyncIterable(generator());
     const [left, right] = stream.tee();
 
-    const [leftArray, rightArray] = await Promise.all([
-      left.toArray(),
-      right.toArray()
-    ]);
+    const [leftArray, rightArray] = await Promise.all([left.toArray(), right.toArray()]);
 
     expect(leftArray).toEqual([1, 2, 3]);
     expect(rightArray).toEqual([1, 2, 3]);
@@ -56,9 +53,11 @@ describe("Advanced Stream Utility", () => {
   });
 
   it("should prevent double ingestion of the same stream", async () => {
-    async function* generator() { yield 1; }
+    async function* generator() {
+      yield 1;
+    }
     const stream = Stream.fromAsyncIterable(generator());
-    
+
     await stream.toArray();
     await expect(stream.toArray()).rejects.toThrow(/consumed/);
   });

@@ -7,12 +7,14 @@ description: Extend NodeLLM with support for proprietary models, internal APIs, 
 ---
 
 # {{ page.title }}
+
 {: .no_toc }
 
 {{ page.description }}
 {: .fs-6 .fw-300 }
 
 ## Table of contents
+
 {: .no_toc .text-delta }
 
 1. TOC
@@ -27,6 +29,7 @@ The **recommended** way to create a custom provider is by extending the `BasePro
 ## Why BaseProvider?
 
 Extending `BaseProvider` instead of implementing the raw `Provider` interface gives you several advantages:
+
 1.  **Safety**: It provides default implementations for features you might not support (like tools, embeddings, or vision), which will throw clean `UnsupportedFeatureError`s instead of failing with undefined errors.
 2.  **Consistency**: It ensures your provider follows the project's internal mapping and logging standards.
 3.  **Less Boilerplate**: You only need to implement the methods your service actually provides.
@@ -41,7 +44,7 @@ To create a new provider, extend `BaseProvider` and implement the abstract metho
 import { NodeLLM, BaseProvider, ChatRequest, ChatResponse } from "@node-llm/core";
 
 class MyCustomProvider extends BaseProvider {
-  constructor(config: { apiKey: string, region: string }) {
+  constructor(config: { apiKey: string; region: string }) {
     super();
     this.apiKey = config.apiKey;
     this.region = config.region;
@@ -60,7 +63,7 @@ class MyCustomProvider extends BaseProvider {
   // Required: Any headers needed for authentication
   public headers() {
     return {
-      "Authorization": `Bearer ${this.apiKey}`,
+      Authorization: `Bearer ${this.apiKey}`,
       "Content-Type": "application/json"
     };
   }
@@ -90,13 +93,13 @@ class MyCustomProvider extends BaseProvider {
 
   public capabilities = {
     ...this.defaultCapabilities(), // Start with defaults
-    
+
     // Enable support for OpenAI-style 'developer' roles
     supportsDeveloperRole: (modelId: string) => true,
-    
+
     // Declare vision support
     supportsVision: (modelId: string) => modelId.includes("vision"),
-    
+
     // Declare the context window size
     getContextWindow: (modelId: string) => 128000
   };
@@ -114,14 +117,15 @@ Register your provider with `NodeLLM` during your application's initialization.
 NodeLLM.registerProvider("my-service", () => new MyCustomProvider());
 
 // 2. Use it globally
-NodeLLM.configure({ provider: "my-service" });
+const llm = createLLM({ provider: "my-service" });
 
-const response = await NodeLLM.chat().ask("Hi!");
+const response = await llm.chat().ask("Hi!");
 ```
 
 ## Advanced Implementation
 
 ### Supporting Streaming
+
 If your provider supports streaming, override the `stream` generator:
 
 ```ts
@@ -135,25 +139,27 @@ async *stream(request: ChatRequest) {
 ```
 
 ### Handling Scoped Credentials
-It's best to pull configuration from environment variables or the `NodeLLM.configure` block within your factory function:
+
+It's best to pull configuration from environment variables or use the injected configuration when the provider factory is called:
 
 ```ts
-NodeLLM.registerProvider("internal-llm", () => {
+NodeLLM.registerProvider("internal-llm", (config) => {
   return new MyCustomProvider({
-    apiKey: process.env.INTERNAL_LLM_KEY,
+    apiKey: config?.["internalApiKey"] || process.env.INTERNAL_LLM_KEY,
     region: "us-east-1"
   });
 });
 ```
 
 ### 3. Handling Extra Fields
+
 End-users might want to pass provider-specific parameters that aren't part of the standard `NodeLLM` API. These can be sent using `.withParams()` and will be available in the `request` object passed to your `chat` method.
 
 ```ts
 async chat(request) {
   // Destructure to separate standard fields from custom ones
   const { model, messages, ...customParams } = request;
-  
+
   if (customParams.internal_routing_id) {
     // Handle custom logic...
   }
@@ -192,9 +198,28 @@ async chat(request: ChatRequest): Promise<ChatResponse> {
 ```
 
 **Note**: The `requestTimeout` parameter is available in all provider methods:
+
 - `chat(request)`, `stream(request)`, `paint(request)`, `transcribe(request)`, `moderate(request)`, `embed(request)`
 
+## Custom Pricing
 
+If your custom provider has associated costs, you can register them in the `PricingRegistry`. This allows `NodeLLM` to automatically calculate usage costs for your custom models.
+
+```ts
+import { PricingRegistry } from "@node-llm/core";
+
+// Register pricing for your custom service
+PricingRegistry.register("my-custom-service", "my-model-v1", {
+  text_tokens: {
+    standard: {
+      input_per_million: 1.5,
+      output_per_million: 4.5
+    }
+  }
+});
+```
+
+For more details on managing costs, see the [Model Pricing](./pricing.md) guide.
 
 ## Example Implementation
 

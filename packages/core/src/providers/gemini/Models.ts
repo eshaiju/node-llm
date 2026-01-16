@@ -1,34 +1,40 @@
+
 import { ModelInfo } from "../Provider.js";
 import { Capabilities } from "./Capabilities.js";
 import { ModelRegistry } from "../../models/ModelRegistry.js";
-import { handleGeminiError } from "./Errors.js";
+import { GeminiListModelsResponse } from "./types.js";
+
 
 export class GeminiModels {
-  constructor(private readonly baseUrl: string, private readonly apiKey: string) {}
+  constructor(
+    private readonly baseUrl: string,
+    private readonly apiKey: string
+  ) {}
 
   async execute(): Promise<ModelInfo[]> {
     try {
       const response = await fetch(`${this.baseUrl}/models?key=${this.apiKey}`, {
         method: "GET",
         headers: {
-          "Content-Type": "application/json",
-        },
+          "Content-Type": "application/json"
+        }
       });
 
       if (response.ok) {
-        const { models } = await response.json() as { models: any[] };
-        
-        return models.map(m => {
+        const { models } = (await response.json()) as GeminiListModelsResponse;
+
+        return models.map((m) => {
           const modelId = m.name.replace("models/", "");
           const registryModel = ModelRegistry.find(modelId, "gemini");
-          
+
           const info: ModelInfo = {
             id: modelId,
             name: registryModel?.name || m.displayName || modelId,
             provider: "gemini",
             family: registryModel?.family || modelId,
             context_window: registryModel?.context_window || Capabilities.getContextWindow(modelId),
-            max_output_tokens: registryModel?.max_output_tokens || Capabilities.getMaxOutputTokens(modelId),
+            max_output_tokens:
+              registryModel?.max_output_tokens || Capabilities.getMaxOutputTokens(modelId),
             modalities: registryModel?.modalities || Capabilities.getModalities(modelId),
             capabilities: Capabilities.getCapabilities(modelId),
             pricing: registryModel?.pricing || Capabilities.getPricing(modelId),
@@ -40,7 +46,7 @@ export class GeminiModels {
               supported_generation_methods: m.supportedGenerationMethods
             }
           };
-          
+
           return info;
         });
       }
@@ -49,11 +55,11 @@ export class GeminiModels {
     }
 
     return ModelRegistry.all()
-      .filter(m => m.provider === "gemini")
-      .map(m => ({
-          ...m,
-          capabilities: Capabilities.getCapabilities(m.id)
-      })) as unknown as ModelInfo[]; 
+      .filter((m) => m.provider === "gemini")
+      .map((m) => ({
+        ...m,
+        capabilities: Capabilities.getCapabilities(m.id)
+      })) as ModelInfo[];
   }
 
   find(modelId: string) {

@@ -9,6 +9,7 @@ cd ../..
 # Get API Key
 GEMINI_API_KEY=$(grep "^GEMINI_API_KEY=" .env | cut -d '=' -f2)
 export GEMINI_API_KEY
+export NODELLM_PROVIDER=gemini
 
 if [ -z "$GEMINI_API_KEY" ]; then
   echo "Error: GEMINI_API_KEY not found in .env"
@@ -27,7 +28,6 @@ EXAMPLES=(
   "chat/streaming-tools.mjs"
   "chat/events.mjs"
   "chat/usage.mjs"
-  "chat/reasoning.mjs"
   "chat/parallel-tools.mjs"
   "chat/max-tokens.mjs"
   "chat/structured.mjs"

@@ -27,9 +27,11 @@ describe("OpenAI Capabilities", () => {
     expect(Capabilities.formatDisplayName("gpt-4o")).toBe("GPT-4o");
     // DALL-E models may not be in the filtered registry, skip this test
     // expect(Capabilities.formatDisplayName("dall-e-3")).toBe("DALL·E 3");
-    // expect(Capabilities.formatDisplayName("text-embedding-3-small")).toBe("Text Embedding 3 Small"); 
+    // expect(Capabilities.formatDisplayName("text-embedding-3-small")).toBe("Text Embedding 3 Small");
     // Commenting out unknown specific format, verifying it returns non-empty string different from ID implies name usage
-    expect(Capabilities.formatDisplayName("text-embedding-3-small")).not.toBe("text-embedding-3-small");
+    expect(Capabilities.formatDisplayName("text-embedding-3-small")).not.toBe(
+      "text-embedding-3-small"
+    );
   });
 
   it("gets pricing", () => {

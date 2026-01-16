@@ -7,12 +7,14 @@ description: Experience the Claude family of models with native support for PDF 
 ---
 
 # {{ page.title }}
+
 {: .no_toc }
 
 {{ page.description }}
 {: .fs-6 .fw-300 }
 
 ## Table of contents
+
 {: .no_toc .text-delta }
 
 1. TOC
@@ -25,12 +27,9 @@ The Anthropic provider gives access to the Claude family of models, known for hi
 ## Configuration
 
 ```ts
-import { NodeLLM } from "@node-llm/core";
+import { createLLM } from "@node-llm/core";
 
-NodeLLM.configure({
-  provider: "anthropic",
-  anthropicApiKey: process.env.ANTHROPIC_API_KEY, // Optional if set in env
-});
+const llm = createLLM({ provider: "anthropic", anthropicApiKey: process.env.ANTHROPIC_API_KEY, // Optional if set in env });
 ```
 
 ## Specific Parameters
@@ -38,15 +37,14 @@ NodeLLM.configure({
 You can pass Anthropic-specific parameters or custom headers.
 
 ```ts
-const chat = NodeLLM.chat("claude-3-5-sonnet-20241022")
-  .withParams({ 
-    top_k: 50,
-    top_p: 0.9,
-    // Custom headers if needed
-    headers: {
-      "anthropic-beta": "max-tokens-3-5-sonnet-2024-07-15"
-    }
-  });
+const chat = llm.chat("claude-3-5-sonnet-20241022").withParams({
+  top_k: 50,
+  top_p: 0.9,
+  // Custom headers if needed
+  headers: {
+    "anthropic-beta": "max-tokens-3-5-sonnet-2024-07-15"
+  }
+});
 ```
 
 ## Features

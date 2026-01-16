@@ -26,7 +26,7 @@ export class DeepSeekProvider extends BaseProvider implements Provider {
     supportsModeration: (model: string) => Capabilities.supportsModeration(model),
     supportsReasoning: (model: string) => Capabilities.supportsReasoning(model),
     supportsDeveloperRole: (_model: string) => false,
-    getContextWindow: (model: string) => Capabilities.getContextWindow(model),
+    getContextWindow: (model: string) => Capabilities.getContextWindow(model)
   };
 
   constructor(private readonly options: DeepSeekProviderOptions) {
@@ -43,8 +43,8 @@ export class DeepSeekProvider extends BaseProvider implements Provider {
 
   public headers(): Record<string, string> {
     return {
-      "Authorization": `Bearer ${this.options.apiKey}`,
-      "Content-Type": "application/json",
+      Authorization: `Bearer ${this.options.apiKey}`,
+      "Content-Type": "application/json"
     };
   }
 
@@ -52,7 +52,7 @@ export class DeepSeekProvider extends BaseProvider implements Provider {
     return "DeepSeek";
   }
 
-  public override defaultModel(feature?: string): string {
+  public override defaultModel(_feature?: string): string {
     return "deepseek-chat";
   }
 

@@ -1,16 +1,16 @@
 import "dotenv/config";
-import { NodeLLM } from "../../../packages/core/dist/index.js";
+import { createLLM, NodeLLM, Tool, z } from "../../../packages/core/dist/index.js";
 
 async function main() {
-  NodeLLM.configure({
+  const llm = createLLM({
     provider: "anthropic",
+    anthropicApiKey: process.env.ANTHROPIC_API_KEY
   });
-
   console.log("Attempting to create embeddings with Anthropic...");
 
   try {
-    await NodeLLM.embed({
-      input: "Hello, world!",
+    await llm.embed({
+      input: "Hello, world!"
     });
   } catch (error) {
     console.log("Caught expected error:", error.message);

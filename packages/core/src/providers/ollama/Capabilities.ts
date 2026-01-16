@@ -21,9 +21,13 @@ export class OllamaCapabilities {
   static supportsVision(modelId: string): boolean {
     const model = this.findModel(modelId);
     if (model) {
-      return model.modalities?.input?.includes("image") || model.capabilities?.includes("vision") || false;
+      return (
+        model.modalities?.input?.includes("image") ||
+        model.capabilities?.includes("vision") ||
+        false
+      );
     }
-    
+
     // Fallback for custom models not in registry
     return /vision|llava|moondream|bakllava/.test(modelId.toLowerCase());
   }
@@ -40,7 +44,11 @@ export class OllamaCapabilities {
 
   static supportsEmbeddings(modelId: string): boolean {
     const model = this.findModel(modelId);
-    return model?.modalities?.output?.includes("embeddings") || model?.capabilities?.includes("embeddings") || false;
+    return (
+      model?.modalities?.output?.includes("embeddings") ||
+      model?.capabilities?.includes("embeddings") ||
+      false
+    );
   }
 
   static supportsReasoning(modelId: string): boolean {

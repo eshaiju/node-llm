@@ -1,11 +1,11 @@
 import { describe, it, expect, afterEach } from "vitest";
-import { NodeLLM } from "../../../src/index.js";
+import { createLLM } from "../../../src/index.js";
 import { setupVCR } from "../../helpers/vcr.js";
 import { z } from "zod";
 import "dotenv/config";
 
 describe("OpenAI Structured Output (VCR)", { timeout: 30000 }, () => {
-  let polly: any;
+  let polly: { stop: () => Promise<void> } | undefined;
 
   afterEach(async () => {
     if (polly) {
@@ -15,11 +15,11 @@ describe("OpenAI Structured Output (VCR)", { timeout: 30000 }, () => {
 
   it("should support structured output with Zod schema", async ({ task }) => {
     polly = setupVCR(task.name, "openai");
-    NodeLLM.configure({
+    const llm = createLLM({
       openaiApiKey: process.env.OPENAI_API_KEY,
-      provider: "openai",
+      provider: "openai"
     });
-    const chat = NodeLLM.chat("gpt-4o-mini");
+    const chat = llm.chat("gpt-4o-mini");
 
     const schema = z.object({
       name: z.string(),
@@ -33,9 +33,9 @@ describe("OpenAI Structured Output (VCR)", { timeout: 30000 }, () => {
 
     // The raw content should be JSON
     expect(String(response)).toContain("{");
-    
+
     // The parsed content should allow access to properties
-    const person = response.parsed;
+    const person = response.parsed as z.infer<typeof schema>;
     expect(person.name).toBe("Alice");
     expect(person.age).toBe(30);
     expect(person.hobbies).toContain("hiking");

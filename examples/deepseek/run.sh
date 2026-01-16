@@ -9,6 +9,7 @@ cd ../..
 # Get API Key
 DEEPSEEK_API_KEY=$(grep "^DEEPSEEK_API_KEY=" .env | cut -d '=' -f2)
 export DEEPSEEK_API_KEY
+export NODELLM_PROVIDER=deepseek
 
 if [ -z "$DEEPSEEK_API_KEY" ]; then
   echo "Error: DEEPSEEK_API_KEY not found in .env"

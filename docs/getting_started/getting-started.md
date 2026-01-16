@@ -8,12 +8,14 @@ description: A 5-minute guide to get started with NodeLLM. Install, configure, a
 ---
 
 # {{ page.title }}
+
 {: .no_toc }
 
 {{ page.description }}
 {: .fs-6 .fw-300 }
 
 ## Table of contents
+
 {: .no_toc .text-delta }
 
 1. TOC
@@ -33,45 +35,54 @@ pnpm add @node-llm/core
 
 ## Configuration
 
-Configure your providers once at the entry point of your app.
+The fastest way to start is using **Zero-Config**. NodeLLM automatically reads your API keys and the active provider from environment variables.
 
 ```ts
-import { NodeLLM } from "@node-llm/core";
 import "dotenv/config";
+import { NodeLLM } from "@node-llm/core";
 
-// 1. Ensure keys are in process.env (e.g. via dotenv)
-// process.env.OPENAI_API_KEY = "sk-..."
+// 1. Ensure NODELLM_PROVIDER=openai and OPENAI_API_KEY=... are in .env
+const llm = NodeLLM; // Exported singleton, ready to go!
+```
 
-// 2. Configure defaults
-NodeLLM.configure({
+Alternatively, use **Explicit Configuration** for multi-tenant or multi-provider apps:
+
+```ts
+import { createLLM } from "@node-llm/core";
+
+const llm = createLLM({
   provider: "openai",
-  defaultChatModel: "gpt-4o",
+  openaiApiKey: process.env.OPENAI_API_KEY
 });
 ```
 
 ## Quick Start Examples
 
 ### 1. Chat
+
 ```ts
-const chat = NodeLLM.chat(); // Uses default model
+const chat = llm.chat(); // Uses default model
 const response = await chat.ask("Explain quantum computing in 5 words.");
 console.log(response.content);
 // => "Computing using quantum mechanical phenomena."
 ```
 
 ### 2. Generate Images
+
 ```ts
-const image = await NodeLLM.paint("A cyberpunk city with neon rain");
+const image = await llm.paint("A cyberpunk city with neon rain");
 console.log(image.url);
 ```
 
 ### 3. Create Embeddings
+
 ```ts
-const embedding = await NodeLLM.embed("Semantic search is powerful.");
+const embedding = await llm.embed("Semantic search is powerful.");
 console.log(`Vector dimensions: ${embedding.dimensions}`);
 ```
 
 ### 4. Streaming
+
 Real-time responses are essential for good UX.
 
 ```ts
@@ -82,6 +93,7 @@ for await (const chunk of chat.stream("Write a poem")) {
 
 ## Next Steps
 
-*   [Chat Features](/core-features/chat.html): Learn about history, system prompts, and JSON mode.
-*   [Multimodal](/core-features/multimodal.html): Send images, audio, and documents.
-*   [Tool Calling](/core-features/tools.html): Give your AI ability to execute code.
+- [Chat Features](/core-features/chat.html): Learn about history, system prompts, and JSON mode.
+- [Multimodal](/core-features/multimodal.html): Send images, audio, and documents.
+- [Tool Calling](/core-features/tools.html): Give your AI ability to execute code.
+- [Migration Guide (v1.6)](/getting_started/migration-v1-6): Moving from legacy mutable versions.

@@ -1,22 +1,22 @@
 import "dotenv/config";
-import { NodeLLM, z } from "../../../packages/core/dist/index.js";
+import { createLLM, NodeLLM, Tool, z } from "../../../packages/core/dist/index.js";
 
 async function main() {
-  NodeLLM.configure((config) => {
-    config.deepseekApiKey = process.env.DEEPSEEK_API_KEY;
+  const llm = createLLM({
+    provider: "deepseek",
+    deepseekApiKey: process.env.DEEPSEEK_API_KEY
   });
-  
-  NodeLLM.configure({ provider: "deepseek" });
-
-  const chat = NodeLLM.chat("deepseek-chat");
+  const chat = llm.chat("deepseek-chat");
 
   // --- Example 1: Using Zod (Recommended) ---
   const recipeSchema = z.object({
     name: z.string(),
-    ingredients: z.array(z.object({
-      item: z.string(),
-      amount: z.string()
-    })),
+    ingredients: z.array(
+      z.object({
+        item: z.string(),
+        amount: z.string()
+      })
+    ),
     steps: z.array(z.string()),
     prep_time_minutes: z.number()
   });

@@ -14,6 +14,7 @@ back_to_top: false
 **Provider-agnostic by design.**
 
 Integrating multiple LLM providers often means juggling different SDKs, API styles, and update cycles. NodeLLM provides a single, unified, production-oriented API that stays consistent even when providers change.
+
 <div class="provider-icons">
   <div class="provider-logo">
     <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/openai.svg" alt="OpenAI" class="logo-medium">
@@ -43,8 +44,6 @@ Integrating multiple LLM providers often means juggling different SDKs, API styl
 <br/>
 <br/>
 
-
-
 [Get Started](/getting-started/overview){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 } [Read on Blog](https://eshaiju.com){: .btn .fs-5 .mb-4 .mb-md-0 .mr-2 } [View on GitHub](https://github.com/node-llm/node-llm){: .btn .fs-5 .mb-4 .mb-md-0 }
 
 <p class="text-small text-grey-dk-000 mt-4">
@@ -58,9 +57,10 @@ Integrating multiple LLM providers often means juggling different SDKs, API styl
 NodeLLM represents a clear architectural boundary between your system and LLM vendors.
 
 NodeLLM is **NOT**:
- - A wrapper around a single provider SDK (like `openai` or `@google/generative-ai`)
- - A prompt-engineering framework
- - An agent playground or experimental toy
+
+- A wrapper around a single provider SDK (like `openai` or `@google/generative-ai`)
+- A prompt-engineering framework
+- An agent playground or experimental toy
 
 ---
 
@@ -71,6 +71,7 @@ Direct integrations often become tightly coupled to specific providers, making i
 NodeLLM helps solve **architectural problems**, not just provide API access. It serves as the core integration layer for LLMs in the Node.js ecosystem.
 
 ### Strategic Principles
+
 - **Provider Isolation**: Decouple your services from vendor SDKs.
 - **Production-Ready**: Native support for streaming, retries, and unified error handling.
 - **Predictable API**: Consistent behavior for Tools, Vision, and Structured Outputs across all models.
@@ -82,11 +83,10 @@ NodeLLM helps solve **architectural problems**, not just provide API access. It 
 ```ts
 import { NodeLLM } from "@node-llm/core";
 
-// 1. Configure once
-NodeLLM.configure({ provider: "openai" });
+// 1. Zero-Config (Uses NODELLM_PROVIDER and API keys from environment)
+const chat = NodeLLM.chat("gpt-4o");
 
 // 2. Chat (High-level request/response)
-const chat = NodeLLM.chat("gpt-4o");
 const response = await chat.ask("Explain event-driven architecture");
 console.log(response.content);
 
@@ -96,7 +96,6 @@ for await (const chunk of chat.stream("Explain event-driven architecture")) {
 }
 ```
 
-
 ---
 
 ## 🔧 Strategic Configuration
@@ -105,19 +104,15 @@ NodeLLM provides a flexible configuration system designed for enterprise usage:
 
 ```ts
 // Recommended for multi-provider pipelines
-NodeLLM.configure((config) => {
-  config.openaiApiKey = process.env.OPENAI_API_KEY;
-  config.anthropicApiKey = process.env.ANTHROPIC_API_KEY;
-  config.ollamaApiBase = process.env.OLLAMA_API_BASE;
-});
+// Use createLLM() instead;
 
 // Switch providers at the framework level
-NodeLLM.configure({ provider: "anthropic" });
+const llm = createLLM({ provider: "anthropic" });
 
 // Support for Custom Endpoints (e.g., Azure or LocalAI)
-NodeLLM.configure({
+const llm = createLLM({
   openaiApiKey: process.env.AZURE_KEY,
-  openaiApiBase: "https://your-resource.openai.azure.com/openai/deployments/...",
+  openaiApiBase: "https://your-resource.openai.azure.com/openai/deployments/..."
 });
 ```
 
@@ -126,21 +121,29 @@ NodeLLM.configure({
 ## 🔮 Capabilities
 
 ### 💬 Unified Chat
+
 Stop rewriting code for every provider. `NodeLLM` normalizes inputs and outputs into a single, predictable mental model.
+
 ```ts
-const chat = NodeLLM.chat(); // Defaults to GPT-4o
+import { NodeLLM } from "@node-llm/core";
+
+// Uses NODELLM_PROVIDER from environment (defaults to GPT-4o)
+const chat = NodeLLM.chat();
 await chat.ask("Hello world");
 ```
 
 ### 👁️ Smart Vision & Files
+
 Pass images, PDFs, or audio files directly. We handle the heavy lifting: fetching remote URLs, base64 encoding, and MIME type mapping.
+
 ```ts
-await chat.ask("Analyze this interface", { 
-  files: ["./screenshot.png", "https://example.com/spec.pdf"] 
+await chat.ask("Analyze this interface", {
+  files: ["./screenshot.png", "https://example.com/spec.pdf"]
 });
 ```
 
 ### 🛠️ Auto-Executing Tools
+
 Define tools once using our clean **Class-Based DSL**; NodeLLM manages the recursive execution loop for you.
 
 ```ts
@@ -160,7 +163,9 @@ await chat.withTool(WeatherTool).ask("Weather in Tokyo?");
 ```
 
 ### ✨ Structured Output
+
 Get type-safe, validated JSON back using **Zod** schemas.
+
 ```ts
 import { z } from "@node-llm/core";
 const Product = z.object({ name: z.string(), price: z.number() });
@@ -170,35 +175,43 @@ console.log(res.parsed.name); // Full type-safety
 ```
 
 ### 🛡️ [Security & Compliance](/advanced/security.html)
+
 Implement custom security, PII detection, and compliance logic using pluggable asynchronous hooks (`beforeRequest` and `afterResponse`).
- 
+
 ### 🧱 [Smart Context Isolation](/advanced/security.html)
+
 Stop worrying about prompt injection or instruction drift. NodeLLM automatically separates system instructions from the conversation history, providing a higher level of protection and strictness while automatically mapping roles like OpenAI's `developer` role.
- 
+
 ### 🎨 Image Generation
+
 ```ts
 await NodeLLM.paint("A cyberpunk city in rain");
 ```
 
 ### 🎤 Audio Transcription
+
 ```ts
 await NodeLLM.transcribe("meeting-recording.wav");
 ```
 
 ### ⚡ Scoped Parallelism
+
 Run multiple providers in parallel safely without global configuration side effects using isolated contexts. You can also override credentials (API keys) for specific instances.
 
 ```ts
 const [gpt, claude] = await Promise.all([
   // Each call branch off into its own isolated context
   NodeLLM.withProvider("openai").chat("gpt-4o").ask(prompt),
-  NodeLLM.withProvider("anthropic", { anthropicApiKey: "..." }).chat("claude-3-5-sonnet").ask(prompt),
+  NodeLLM.withProvider("anthropic", { anthropicApiKey: "..." })
+    .chat("claude-3-5-sonnet")
+    .ask(prompt)
 ]);
 ```
 
-
 ### 🧠 Deep Reasoning
+
 Direct access to the thought process of models like **DeepSeek R1** or **OpenAI o1/o3** using the `.reasoning` field.
+
 ```ts
 const res = await NodeLLM.chat("deepseek-reasoner").ask("Solve this logical puzzle");
 console.log(res.reasoning); // Chain-of-thought
@@ -208,26 +221,26 @@ console.log(res.reasoning); // Chain-of-thought
 
 ## 🚀 Why use this over official SDKs?
 
-| Feature | NodeLLM | Official SDKs | Architectural Impact |
-| :--- | :--- | :--- | :--- |
-| **Provider Logic** | Transparently Handled | Exposed to your code | **Low Coupling** |
-| **Streaming** | Standard `AsyncIterator` | Vendor-specific Events | **Predictable Data Flow** |
-| **Tool Loops** | Automated Recursion | Manual implementation | **Reduced Boilerplate** |
-| **Files/Vision** | Intelligent Path/URL handling | Base64/Buffer management | **Cleaner Service Layer** |
-| **Configuration** | Centralized & Global | Per-instance initialization | **Easier Lifecycle Mgmt** |
+| Feature            | NodeLLM                       | Official SDKs               | Architectural Impact      |
+| :----------------- | :---------------------------- | :-------------------------- | :------------------------ |
+| **Provider Logic** | Transparently Handled         | Exposed to your code        | **Low Coupling**          |
+| **Streaming**      | Standard `AsyncIterator`      | Vendor-specific Events      | **Predictable Data Flow** |
+| **Tool Loops**     | Automated Recursion           | Manual implementation       | **Reduced Boilerplate**   |
+| **Files/Vision**   | Intelligent Path/URL handling | Base64/Buffer management    | **Cleaner Service Layer** |
+| **Configuration**  | Centralized & Global          | Per-instance initialization | **Easier Lifecycle Mgmt** |
 
 ---
 
 ## 📋 Supported Providers
 
-| Provider | Supported Features |
-| :--- | :--- |
-| <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/openai.svg" height="18"> **OpenAI** | Chat, Streaming, Tools, Vision, Audio, Images, Transcription, **Reasoning**, **Smart Developer Role** |
-| <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/gemini-color.svg" height="18"> **Gemini** | Chat, Streaming, Tools, Vision, Audio, Video, Embeddings |
-| <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/anthropic-text.svg" height="12"> **Anthropic** | Chat, Streaming, Tools, Vision, PDF, Structured Output |
-| <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/deepseek-color.svg" height="18"> **DeepSeek** | Chat (V3), **Reasoning (R1)**, Tools, Streaming |
-| <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/openrouter.svg" height="18"> **OpenRouter** | **Aggregator**, Chat, Streaming, Tools, Vision, Embeddings, **Reasoning** |
-| <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/ollama.svg" height="18"> **Ollama** | **Local Inference**, Chat, Streaming, Tools, Vision, Embeddings |
+| Provider                                                                                                                             | Supported Features                                                                                    |
+| :----------------------------------------------------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------- |
+| <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/openai.svg" height="18"> **OpenAI**            | Chat, Streaming, Tools, Vision, Audio, Images, Transcription, **Reasoning**, **Smart Developer Role** |
+| <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/gemini-color.svg" height="18"> **Gemini**      | Chat, Streaming, Tools, Vision, Audio, Video, Embeddings                                              |
+| <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/anthropic-text.svg" height="12"> **Anthropic** | Chat, Streaming, Tools, Vision, PDF, Structured Output                                                |
+| <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/deepseek-color.svg" height="18"> **DeepSeek**  | Chat (V3), **Reasoning (R1)**, Tools, Streaming                                                       |
+| <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/openrouter.svg" height="18"> **OpenRouter**    | **Aggregator**, Chat, Streaming, Tools, Vision, Embeddings, **Reasoning**                             |
+| <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/ollama.svg" height="18"> **Ollama**            | **Local Inference**, Chat, Streaming, Tools, Vision, Embeddings                                       |
 
 ---
 
@@ -255,3 +268,7 @@ We welcome contributions! Please see our [Contributing Guide](https://github.com
 ## 🫶 Credits
 
 Heavily inspired by the elegant design of [RubyLLM](https://rubyllm.com/).
+
+---
+
+**Upgrading to v1.6.0?** Read the [Migration Guide](/getting_started/migration-v1-6.html) to understand the new strict provider requirements and typed error hierarchy.

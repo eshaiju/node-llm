@@ -1,21 +1,24 @@
-import { 
-  BadRequestError, 
-  AuthenticationError, 
-  RateLimitError, 
-  ServerError, 
+import {
+  BadRequestError,
+  AuthenticationError,
+  RateLimitError,
+  ServerError,
   ServiceUnavailableError,
   APIError
 } from "../../errors/index.js";
 
 export async function handleAnthropicError(response: Response, modelId: string): Promise<never> {
   const status = response.status;
-  let body: any;
+  let body: unknown;
   let message = `Anthropic error (${status})`;
 
   try {
     body = await response.json();
-    if (body?.error?.message) {
-      message = body.error.message;
+    if (body && typeof body === "object" && "error" in body) {
+       const err = (body as { error: { message: string } }).error;
+       if (err && err.message) {
+         message = err.message;
+       }
     }
   } catch {
     body = await response.text().catch(() => "Unknown error");

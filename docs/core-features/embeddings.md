@@ -7,12 +7,14 @@ description: Generate high-dimensional vector representations for semantic searc
 ---
 
 # {{ page.title }}
+
 {: .no_toc }
 
 {{ page.description }}
 {: .fs-6 .fw-300 }
 
 ## Table of contents
+
 {: .no_toc .text-delta }
 
 1. TOC
@@ -25,29 +27,27 @@ Embeddings are vector representations of text used for semantic search, clusteri
 ## Basic Usage
 
 ### Single Text
+
 ```ts
-import { NodeLLM } from "@node-llm/core";
+import { createLLM } from "@node-llm/core";
 
 const embedding = await NodeLLM.embed("Ruby is a programmer's best friend");
 
-console.log(embedding.vector);       // Float32Array[] (e.g., 1536 dimensions)
-console.log(embedding.dimensions);   // 1536
-console.log(embedding.model);        // "text-embedding-3-small" (default)
+console.log(embedding.vector); // Float32Array[] (e.g., 1536 dimensions)
+console.log(embedding.dimensions); // 1536
+console.log(embedding.model); // "text-embedding-3-small" (default)
 console.log(embedding.usage.total_tokens); // Token count
 ```
 
 ### Batch Embeddings
+
 Always batch multiple texts in a single call when possible. This is much more efficient than calling `embed` in a loop.
 
 ```ts
-const embeddings = await NodeLLM.embed([
-  "First text",
-  "Second text",
-  "Third text"
-]);
+const embeddings = await NodeLLM.embed(["First text", "Second text", "Third text"]);
 
 console.log(embeddings.vectors.length); // 3
-console.log(embeddings.vectors[0]);     // Vector for "First text"
+console.log(embeddings.vectors[0]); // Vector for "First text"
 ```
 
 ## Configuring Models
@@ -55,13 +55,15 @@ console.log(embeddings.vectors[0]);     // Vector for "First text"
 By default, `NodeLLM` uses `text-embedding-3-small`. You can change this globally or per request.
 
 ### Global Configuration
+
 ```ts
-NodeLLM.configure({
+const llm = createLLM({
   defaultEmbeddingModel: "text-embedding-3-large"
 });
 ```
 
 ### Per-Request
+
 ```ts
 const embedding = await NodeLLM.embed("Text", {
   model: "text-embedding-004" // Google Gemini model
@@ -69,6 +71,7 @@ const embedding = await NodeLLM.embed("Text", {
 ```
 
 ### Custom Models
+
 For models not in the registry (e.g., Azure deployments or new releases), use `assumeModelExists`.
 
 ```ts

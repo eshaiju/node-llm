@@ -7,12 +7,14 @@ description: Give your models the ability to interact with the real world using 
 ---
 
 # {{ page.title }}
+
 {: .no_toc }
 
 {{ page.description }}
 {: .fs-6 .fw-300 }
 
 ## Table of contents
+
 {: .no_toc .text-delta }
 
 1. TOC
@@ -22,8 +24,9 @@ description: Give your models the ability to interact with the real world using 
 
 `NodeLLM` simplifies function calling (tool use) by handling the execution loop automatically. You define the tools, and the library invokes them when the model requests it.
 
- {: .highlight }
- > **Looking for a real-world example?** Check out the [Brand Perception Checker](../../examples/brand-perception-checker/), which uses the `SerpTool` to perform live Google searches and "read" the results to extract semantic signals.
+{: .highlight }
+
+> **Looking for a real-world example?** Check out the [Brand Perception Checker](../../examples/brand-perception-checker/), which uses the `SerpTool` to perform live Google searches and "read" the results to extract semantic signals.
 
 ## Class-Based Tools ✨
 
@@ -35,7 +38,7 @@ import { NodeLLM, Tool, z } from "@node-llm/core";
 class WeatherTool extends Tool {
   name = "get_weather";
   description = "Get the current weather for a location";
-  
+
   // Auto-generates JSON Schema
   schema = z.object({
     location: z.string().describe("The city and state, e.g. San Francisco, CA"),
@@ -50,31 +53,32 @@ class WeatherTool extends Tool {
 }
 
 // Register as a class (instantiated automatically) or instance
-const chat = NodeLLM.chat().withTool(WeatherTool);
+const chat = llm.chat().withTool(WeatherTool);
 await chat.ask("What is the weather in SF?");
 ```
 
 ### Benefits:
-*   **No Boilerplate**: No need to write manual JSON schemas.
-*   **Type Safety**: `execute()` arguments are automatically typed from your schema.
-*   **Self-Documenting**: The Zod `.describe()` calls are automatically pulled into the tool's description for the LLM.
+
+- **No Boilerplate**: No need to write manual JSON schemas.
+- **Type Safety**: `execute()` arguments are automatically typed from your schema.
+- **Self-Documenting**: The Zod `.describe()` calls are automatically pulled into the tool's description for the LLM.
 
 ### Defining Parameters with Zod
 
 `NodeLLM` uses `zod-to-json-schema` under the hood. Most standard Zod types work out of the box:
 
-| Zod Type | Description |
-| :--- | :--- |
-| **All Fields** | **Required by default**. |
-| `z.string()` | Basic text string. |
-| `z.number()` | Number (integer or float). |
-| `z.boolean()` | Boolean flag. |
-| `z.enum(["a", "b"])` | String restricted to specific values. |
-| `z.object({...})` | Nested object. |
-| `z.array(z.string())` | Array of items. |
-| `.describe("...")` | **Crucial**: Adds a description for the LLM. |
-| `.optional()` | Marks the field as not required. |
-| `.default(val)` | Sets a default value if the LLM doesn't provide it. |
+| Zod Type              | Description                                         |
+| :-------------------- | :-------------------------------------------------- |
+| **All Fields**        | **Required by default**.                            |
+| `z.string()`          | Basic text string.                                  |
+| `z.number()`          | Number (integer or float).                          |
+| `z.boolean()`         | Boolean flag.                                       |
+| `z.enum(["a", "b"])`  | String restricted to specific values.               |
+| `z.object({...})`     | Nested object.                                      |
+| `z.array(z.string())` | Array of items.                                     |
+| `.describe("...")`    | **Crucial**: Adds a description for the LLM.        |
+| `.optional()`         | Marks the field as not required.                    |
+| `.default(val)`       | Sets a default value if the LLM doesn't provide it. |
 
 ## Using Tools in Chat
 
@@ -82,8 +86,7 @@ Use the fluent `.withTool()` or `.withTools()` API to register tools for a chat 
 
 ```ts
 // Append tools
-const chat = NodeLLM.chat("gpt-4o")
-  .withTools([WeatherTool, CalculatorTool]);
+const chat = llm.chat("gpt-4o").withTools([WeatherTool, CalculatorTool]);
 
 // Replace all existing tools with a new list
 chat.withTools([SearchTool], { replace: true });
@@ -96,7 +99,7 @@ const reply = await chat.ask("What is the weather in London?");
 Tools now work seamlessly with streaming! The same tool execution happens automatically during streaming:
 
 ```ts
-const chat = NodeLLM.chat("gpt-4o").withTool(WeatherTool);
+const chat = llm.chat("gpt-4o").withTool(WeatherTool);
 
 // Tool is automatically executed during streaming
 for await (const chunk of chat.stream("What's the weather in Paris?")) {
@@ -116,7 +119,7 @@ See [examples/openai/chat/parallel-tools.mjs](https://github.com/node-llm/node-l
 
 To prevent infinite recursion and runaway costs (where a model keeps calling tools without reaching a conclusion), `NodeLLM` includes a built-in Loop Guard.
 
-By default, `NodeLLM` will throw an error if a model performs more than **5 sequential tool execution turns** in a single request. 
+By default, `NodeLLM` will throw an error if a model performs more than **5 sequential tool execution turns** in a single request.
 
 ### Customizing the limit
 
@@ -124,10 +127,10 @@ You can configure this limit globally or override it for a specific request:
 
 ```ts
 // 1. Global Change
-NodeLLM.configure({ maxToolCalls: 10 });
+const llm = createLLM({ maxToolCalls: 10 });
 
-await chat.ask("Perform a complex deep research task", { 
-  maxToolCalls: 15 
+await chat.ask("Perform a complex deep research task", {
+  maxToolCalls: 15
 });
 ```
 
@@ -140,17 +143,16 @@ For sensitive operations, you can control the "autonomy" of the tool execution l
 - **`dry-run`**: Proposes the tool call structure but **never executes it**. Useful for UI previews or verification-only flows.
 
 ```ts
-chat
-  .withToolExecution("confirm")
-  .onConfirmToolCall(async (call) => {
-    // Audit the call or ask the user
-    console.log(`LLM wants to call ${call.function.name}`);
-    return true; // Return true to execute, false to cancel
-  });
+chat.withToolExecution("confirm").onConfirmToolCall(async (call) => {
+  // Audit the call or ask the user
+  console.log(`LLM wants to call ${call.function.name}`);
+  return true; // Return true to execute, false to cancel
+});
 ```
 
 ### Inspected Proposals
-In `confirm` and `dry-run` modes, the `ChatResponseString` object returned by `.ask()` includes a `.tool_calls` property. This allows you to inspect exactly what the model *wanted* to do.
+
+In `confirm` and `dry-run` modes, the `ChatResponseString` object returned by `.ask()` includes a `.tool_calls` property. This allows you to inspect exactly what the model _wanted_ to do.
 
 ```ts
 const res = await chat.withToolExecution("dry-run").ask("Delete all users");
@@ -194,8 +196,9 @@ class HistoryTool extends Tool {
 By default, the agent loop will **immediately stop and throw** if it encounters an unrecoverable "fatal" error. This prevents wasting tokens on retries that are guaranteed to fail.
 
 Fatal errors include:
-*   **Authentication Errors**: HTTP 401 or 403 errors from LLM providers or external APIs.
-*   **Explicit Fatal Errors**: Any error thrown using the `ToolError` class with `fatal: true`.
+
+- **Authentication Errors**: HTTP 401 or 403 errors from LLM providers or external APIs.
+- **Explicit Fatal Errors**: Any error thrown using the `ToolError` class with `fatal: true`.
 
 ```ts
 import { Tool, ToolError } from "@node-llm/core";
@@ -215,11 +218,12 @@ class DatabaseTool extends Tool {
 For granular control, you can use the `onToolCallError` hook to override internal logic. This allows you to differentiate between tools that are "mission-critical" and those that are "optional."
 
 The hook can return one of two directives:
-*   **`"STOP"`**: Force the agent to crash and bubble the error up to your code.
-*   **`"CONTINUE"`**: Catch the error, log it, and tell the agent to ignore it and move to the next turn.
+
+- **`"STOP"`**: Force the agent to crash and bubble the error up to your code.
+- **`"CONTINUE"`**: Catch the error, log it, and tell the agent to ignore it and move to the next turn.
 
 ```ts
-const chat = NodeLLM.chat("gpt-4o", {
+const chat = llm.chat("gpt-4o", {
   onToolCallError: (toolCall, error) => {
     // 1. Critical Tool: Stop everything
     if (toolCall.function.name === "process_payment") {
@@ -229,7 +233,7 @@ const chat = NodeLLM.chat("gpt-4o", {
     // 2. Optional Tool: Just ignore if it fails
     if (toolCall.function.name === "fetch_avatar") {
       console.warn("Avatar fetch failed, but continuing...");
-      return "CONTINUE"; 
+      return "CONTINUE";
     }
 
     // 3. Default: Let NodeLLM decide (e.g. stop on 401/403)
@@ -281,20 +285,20 @@ For simply wrapping a function without a class, you can define a tool as a plain
 
 ```ts
 const weatherTool = {
-  type: 'function',
+  type: "function",
   function: {
-    name: 'get_weather',
-    description: 'Get the current weather for a location',
+    name: "get_weather",
+    description: "Get the current weather for a location",
     parameters: {
-      type: 'object',
-      properties: { 
-        location: { type: 'string', description: 'City and state' } 
+      type: "object",
+      properties: {
+        location: { type: "string", description: "City and state" }
       },
-      required: ['location']
+      required: ["location"]
     }
   },
   handler: async ({ location }) => {
-    return JSON.stringify({ location, temp: 22, unit: 'celsius' });
+    return JSON.stringify({ location, temp: 22, unit: "celsius" });
   }
 };
 
@@ -305,9 +309,9 @@ chat.withTool(weatherTool);
 
 Treat arguments passed to your `execute` method as **untrusted user input**.
 
-*   **Validate**: Always validate parameter types and ranges using libraries like `zod` inside the handler if critical.
-*   **Sanitize**: Sanitize strings before using them in database queries or shell commands.
-*   **Avoid Eval**: Never use `eval()` on inputs provided by the model.
+- **Validate**: Always validate parameter types and ranges using libraries like `zod` inside the handler if critical.
+- **Sanitize**: Sanitize strings before using them in database queries or shell commands.
+- **Avoid Eval**: Never use `eval()` on inputs provided by the model.
 
 ## Debugging Tools
 

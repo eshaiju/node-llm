@@ -1,10 +1,10 @@
 import { describe, it, expect, afterEach } from "vitest";
-import { NodeLLM } from "../../../../src/index.js";
+import { createLLM } from "../../../../src/index.js";
 import { setupVCR } from "../../../helpers/vcr.js";
 import "dotenv/config";
 
 describe("Gemini Usage Integration (VCR)", { timeout: 30000 }, () => {
-  let polly: any;
+  let polly: { stop: () => Promise<void> } | undefined;
 
   afterEach(async () => {
     if (polly) {
@@ -15,11 +15,11 @@ describe("Gemini Usage Integration (VCR)", { timeout: 30000 }, () => {
   it("should track total token usage", async ({ task }) => {
     polly = setupVCR(task.name, "gemini");
 
-    NodeLLM.configure({
+    const llm = createLLM({
       geminiApiKey: process.env.GEMINI_API_KEY,
-      provider: "gemini",
+      provider: "gemini"
     });
-    const chat = NodeLLM.chat("gemini-2.0-flash");
+    const chat = llm.chat("gemini-2.0-flash");
 
     await chat.ask("Hello");
     await chat.ask("How are you?");

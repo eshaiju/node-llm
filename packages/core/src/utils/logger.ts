@@ -5,9 +5,9 @@ class Logger {
     return config.debug === true;
   }
 
-  debug(message: string, data?: any): void {
+  debug(message: string, data?: unknown): void {
     if (this.isDebugEnabled()) {
-      const formattedData = data ? `\n${JSON.stringify(data, null, 2)}` : '';
+      const formattedData = data ? `\n${JSON.stringify(data, null, 2)}` : "";
       console.log(`[NodeLLM Debug] ${message}${formattedData}`);
     }
   }
@@ -15,7 +15,7 @@ class Logger {
   /**
    * Log HTTP request details for debugging
    */
-  logRequest(provider: string, method: string, url: string, body?: any): void {
+  logRequest(provider: string, method: string, url: string, body?: unknown): void {
     if (this.isDebugEnabled()) {
       console.log(`[NodeLLM] [${provider}] Request: ${method} ${url}`);
       if (body) {
@@ -27,7 +27,7 @@ class Logger {
   /**
    * Log HTTP response details for debugging
    */
-  logResponse(provider: string, status: number, statusText: string, body?: any): void {
+  logResponse(provider: string, status: number, statusText: string, body?: unknown): void {
     if (this.isDebugEnabled()) {
       console.log(`[NodeLLM] [${provider}] Response: ${status} ${statusText}`);
       if (body) {
@@ -41,7 +41,7 @@ class Logger {
   }
 
   error(message: string, error?: Error): void {
-    console.error(`[NodeLLM Error] ${message}`, error || '');
+    console.error(`[NodeLLM Error] ${message}`, error || "");
   }
 
   info(message: string): void {

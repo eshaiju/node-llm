@@ -1,12 +1,12 @@
 import { FileLoader } from "../utils/FileLoader.js";
 import { Message } from "./Message.js";
-import { ContentPart, isBinaryContent, formatMultimodalContent } from "./Content.js";
+import { ContentPart, isBinaryContent, formatMultimodalContent, MessageContent } from "./Content.js";
 import { ChatOptions } from "./ChatOptions.js";
-import { Provider, Usage, ChatChunk } from "../providers/Provider.js";
+import { Provider, Usage, ChatChunk, ResponseFormat } from "../providers/Provider.js";
 import { Executor } from "../executor/Executor.js";
 import { ChatStream } from "./ChatStream.js";
 import { Stream } from "../streaming/Stream.js";
-import { Tool, ToolDefinition, ToolResolvable } from "./Tool.js";
+import { ToolDefinition, ToolResolvable } from "./Tool.js";
 import { Schema } from "../schema/Schema.js";
 import { toJsonSchema } from "../schema/to-json-schema.js";
 import { z } from "zod";
@@ -41,10 +41,7 @@ export class Chat {
     private readonly options: ChatOptions = {},
     retryConfig: { attempts: number; delayMs: number } = { attempts: 1, delayMs: 0 }
   ) {
-    this.executor = new Executor(
-      provider,
-      retryConfig
-    );
+    this.executor = new Executor(provider, retryConfig);
 
     if (options.systemPrompt) {
       this.withInstructions(options.systemPrompt);
@@ -93,12 +90,20 @@ export class Chat {
           acc.output_tokens += msg.usage.output_tokens;
           acc.total_tokens += msg.usage.total_tokens;
           acc.cached_tokens = (acc.cached_tokens ?? 0) + (msg.usage.cached_tokens ?? 0);
-          acc.cache_creation_tokens = (acc.cache_creation_tokens ?? 0) + (msg.usage.cache_creation_tokens ?? 0);
+          acc.cache_creation_tokens =
+            (acc.cache_creation_tokens ?? 0) + (msg.usage.cache_creation_tokens ?? 0);
           acc.cost = (acc.cost ?? 0) + (msg.usage.cost ?? 0);
         }
         return acc;
       },
-      { input_tokens: 0, output_tokens: 0, total_tokens: 0, cached_tokens: 0, cache_creation_tokens: 0, cost: 0 }
+      {
+        input_tokens: 0,
+        output_tokens: 0,
+        total_tokens: 0,
+        cached_tokens: 0,
+        cache_creation_tokens: 0,
+        cost: 0
+      }
     );
   }
 
@@ -110,11 +115,11 @@ export class Chat {
     return this.withTools([tool]);
   }
 
-    /**
+  /**
    * Add multiple tools to the chat session.
    * Supports passing Tool classes (which will be instantiated) or instances.
    * Can replace existing tools if options.replace is true.
-   * 
+   *
    * @example
    * chat.withTools([WeatherTool, new CalculatorTool()], { replace: true });
    */
@@ -145,10 +150,10 @@ export class Chat {
     if (options?.replace) {
       this.systemMessages = [];
     }
-    
+
     // Always push to isolated storage
     this.systemMessages.push({ role: "system", content: instruction });
-    
+
     return this;
   }
 
@@ -180,12 +185,12 @@ export class Chat {
    * Set custom headers for the chat session.
    * Merges with existing headers.
    */
-  withRequestOptions(options: { headers?: Record<string, string>; responseFormat?: any }): this {
+  withRequestOptions(options: { headers?: Record<string, string>; responseFormat?: unknown }): this {
     if (options.headers) {
       this.options.headers = { ...this.options.headers, ...options.headers };
     }
     if (options.responseFormat) {
-      this.options.responseFormat = options.responseFormat;
+      this.options.responseFormat = options.responseFormat as { type: "json_object" | "text" };
     }
     return this;
   }
@@ -194,7 +199,7 @@ export class Chat {
    * Set provider-specific parameters.
    * These will be merged into the final request payload.
    */
-  withParams(params: Record<string, any>): this {
+  withParams(params: Record<string, unknown>): this {
     this.options.params = { ...this.options.params, ...params };
     return this;
   }
@@ -203,7 +208,7 @@ export class Chat {
    * Enforce a specific schema for the output.
    * Can accept a Schema object or a Zod schema/JSON Schema directly.
    */
-  withSchema(schema: Schema | z.ZodType<any> | Record<string, any> | null): this {
+  withSchema(schema: Schema | z.ZodType<unknown> | Record<string, unknown> | null): this {
     if (schema === null) {
       this.options.schema = undefined;
       return this;
@@ -214,7 +219,7 @@ export class Chat {
     } else if (schema instanceof z.ZodType) {
       this.options.schema = Schema.fromZod("output", schema);
     } else {
-      this.options.schema = Schema.fromJson("output", schema as Record<string, any>);
+      this.options.schema = Schema.fromJson("output", schema as Record<string, unknown>);
     }
     return this;
   }
@@ -231,18 +236,18 @@ export class Chat {
     return this;
   }
 
-  onToolCall(handler: (toolCall: any) => void): this {
+  onToolCall(handler: (toolCall: unknown) => void): this {
     return this.onToolCallStart(handler);
   }
 
-  onToolResult(handler: (result: any) => void): this {
+  onToolResult(handler: (result: unknown) => void): this {
     return this.onToolCallEnd((_call, result) => handler(result));
   }
 
   /**
    * Called when a tool call starts.
    */
-  onToolCallStart(handler: (toolCall: any) => void): this {
+  onToolCallStart(handler: (toolCall: unknown) => void): this {
     this.options.onToolCallStart = handler;
     return this;
   }
@@ -250,12 +255,17 @@ export class Chat {
   /**
    * Called when a tool call ends successfully.
    */
-  onToolCallEnd(handler: (toolCall: any, result: any) => void): this {
+  onToolCallEnd(handler: (toolCall: unknown, result: unknown) => void): this {
     this.options.onToolCallEnd = handler;
     return this;
   }
 
-  onToolCallError(handler: (toolCall: any, error: Error) => 'STOP' | 'CONTINUE' | void | Promise<'STOP' | 'CONTINUE' | void>): this {
+  onToolCallError(
+    handler: (
+      toolCall: unknown,
+      error: Error
+    ) => "STOP" | "CONTINUE" | "RETRY" | void | Promise<"STOP" | "CONTINUE" | "RETRY" | void>
+  ): this {
     this.options.onToolCallError = handler;
     return this;
   }
@@ -275,7 +285,7 @@ export class Chat {
    * Hook for confirming tool execution in "confirm" mode.
    * Return true to proceed, false to cancel the specific call.
    */
-  onConfirmToolCall(handler: (toolCall: any) => Promise<boolean> | boolean): this {
+  onConfirmToolCall(handler: (toolCall: unknown) => Promise<boolean> | boolean): this {
     this.options.onConfirmToolCall = handler;
     return this;
   }
@@ -293,7 +303,9 @@ export class Chat {
    * Add a hook to process the response before returning it.
    * Useful for output redaction, compliance, and post-moderation.
    */
-  afterResponse(handler: (response: ChatResponseString) => Promise<ChatResponseString | void>): this {
+  afterResponse(
+    handler: (response: ChatResponseString) => Promise<ChatResponseString | void>
+  ): this {
     this.options.onAfterResponse = handler;
     return this;
   }
@@ -301,8 +313,8 @@ export class Chat {
   /**
    * Ask the model a question
    */
-  async ask(content: string | any[], options?: AskOptions): Promise<ChatResponseString> {
-    let messageContent: any = content;
+  async ask(content: string | ContentPart[], options?: AskOptions): Promise<ChatResponseString> {
+    let messageContent: unknown = content;
     const files = [...(options?.images ?? []), ...(options?.files ?? [])];
     if (files.length > 0) {
       const processedFiles = await Promise.all(files.map((f: string) => FileLoader.load(f)));
@@ -318,24 +330,24 @@ export class Chat {
 
     this.messages.push({
       role: "user",
-      content: messageContent,
+      content: messageContent as MessageContent
     });
-    
+
     // Process Schema/Structured Output
-    let responseFormat: any = this.options.responseFormat;
-    
+    let responseFormat: ResponseFormat | undefined = this.options.responseFormat;
+
     if (this.options.schema) {
       ChatValidator.validateStructuredOutput(this.provider, this.model, true, this.options);
-      
+
       const jsonSchema = toJsonSchema(this.options.schema.definition.schema);
-      
+
       responseFormat = {
         type: "json_schema",
         json_schema: {
           name: this.options.schema.definition.name,
           description: this.options.schema.definition.description,
           strict: this.options.schema.definition.strict ?? true,
-          schema: jsonSchema,
+          schema: jsonSchema
         }
       };
     }
@@ -348,9 +360,10 @@ export class Chat {
       max_tokens: options?.maxTokens ?? this.options.maxTokens ?? config.maxTokens,
       headers: { ...this.options.headers, ...options?.headers },
       response_format: responseFormat, // Pass to provider
-      requestTimeout: options?.requestTimeout ?? this.options.requestTimeout ?? config.requestTimeout,
+      requestTimeout:
+        options?.requestTimeout ?? this.options.requestTimeout ?? config.requestTimeout,
       signal: options?.signal,
-      ...this.options.params,
+      ...this.options.params
     };
 
     // --- Content Policy Hooks (Input) ---
@@ -363,7 +376,7 @@ export class Chat {
       }
     }
 
-    let totalUsage: Usage = { input_tokens: 0, output_tokens: 0, total_tokens: 0 };
+    const totalUsage: Usage = { input_tokens: 0, output_tokens: 0, total_tokens: 0 };
     const trackUsage = (u?: Usage) => {
       if (u) {
         totalUsage.input_tokens += u.input_tokens;
@@ -384,8 +397,8 @@ export class Chat {
     trackUsage(response.usage);
 
     let assistantMessage = new ChatResponseString(
-      response.content ?? "", 
-      response.usage ?? { input_tokens: 0, output_tokens: 0, total_tokens: 0 }, 
+      response.content ?? "",
+      response.usage ?? { input_tokens: 0, output_tokens: 0, total_tokens: 0 },
       this.model,
       this.provider.id,
       response.reasoning,
@@ -402,15 +415,15 @@ export class Chat {
 
     this.messages.push({
       role: "assistant",
-      content: assistantMessage || null,
+      content: assistantMessage?.toString() || null,
       tool_calls: response.tool_calls,
-      usage: response.usage,
+      usage: response.usage
     });
 
     if (this.options.onEndMessage && (!response.tool_calls || response.tool_calls.length === 0)) {
       this.options.onEndMessage(assistantMessage);
     }
-    
+
     const maxToolCalls = options?.maxToolCalls ?? this.options.maxToolCalls ?? 5;
     let stepCount = 0;
 
@@ -428,13 +441,12 @@ export class Chat {
       for (const toolCall of response.tool_calls) {
         // Human-in-the-loop: check for approval
         if (this.options.toolExecution === ToolExecutionMode.CONFIRM) {
-          const approved = await ToolHandler.requestToolConfirmation(toolCall, this.options.onConfirmToolCall);
+          const approved = await ToolHandler.requestToolConfirmation(
+            toolCall,
+            this.options.onConfirmToolCall
+          );
           if (!approved) {
-            this.messages.push({
-              role: "tool",
-              tool_call_id: toolCall.id,
-              content: "Action cancelled by user.",
-            });
+            this.messages.push(this.provider.formatToolResultMessage(toolCall.id, "Action cancelled by user."));
             continue;
           }
         }
@@ -442,36 +454,54 @@ export class Chat {
         try {
           const toolResult = await ToolHandler.execute(
             toolCall,
-            this.options.tools,
+            this.options.tools as unknown as ToolDefinition[],
             this.options.onToolCallStart,
             this.options.onToolCallEnd
           );
-          this.messages.push(toolResult);
-        } catch (error: any) {
-          const directive = await this.options.onToolCallError?.(toolCall, error);
+          this.messages.push(this.provider.formatToolResultMessage(toolResult.tool_call_id, toolResult.content));
+        } catch (error: unknown) {
+          let currentError: unknown = error;
+          const directive = await this.options.onToolCallError?.(toolCall, currentError as Error);
 
-          if (directive === 'STOP') {
-            throw error;
+          if (directive === "STOP") {
+            throw currentError;
           }
 
-          this.messages.push({
-            role: "tool",
-            tool_call_id: toolCall.id,
-            content: `Fatal error executing tool '${toolCall.function.name}': ${error.message}`,
-          });
+          if (directive === "RETRY") {
+            try {
+              const toolResult = await ToolHandler.execute(
+                toolCall,
+                this.options.tools as unknown as ToolDefinition[],
+                this.options.onToolCallStart,
+                this.options.onToolCallEnd
+              );
+              this.messages.push(this.provider.formatToolResultMessage(toolResult.tool_call_id, toolResult.content));
+              continue;
+            } catch (retryError: unknown) {
+              // If retry also fails, fall through to default logic
+              currentError = retryError;
+            }
+          }
 
-          if (directive === 'CONTINUE') {
+          this.messages.push(this.provider.formatToolResultMessage(
+            toolCall.id,
+            `Fatal error executing tool '${toolCall.function.name}': ${(currentError as Error).message}`,
+            { isError: true }
+          ));
+
+          if (directive === "CONTINUE") {
             continue;
           }
 
           // Default short-circuit logic
-          const isFatal = error.fatal === true || error.status === 401 || error.status === 403;
-          
+          const errorObj = currentError as { fatal?: boolean; status?: number; message?: string };
+          const isFatal = errorObj.fatal === true || errorObj.status === 401 || errorObj.status === 403;
+
           if (isFatal) {
-            throw error;
+            throw currentError;
           }
 
-          logger.error(`Tool execution failed for '${toolCall.function.name}':`, error as Error);
+          logger.error(`Tool execution failed for '${toolCall.function.name}':`, currentError as Error);
         }
       }
 
@@ -483,15 +513,16 @@ export class Chat {
         max_tokens: options?.maxTokens ?? this.options.maxTokens ?? config.maxTokens,
         headers: this.options.headers,
         response_format: responseFormat,
-        requestTimeout: options?.requestTimeout ?? this.options.requestTimeout ?? config.requestTimeout,
+        requestTimeout:
+          options?.requestTimeout ?? this.options.requestTimeout ?? config.requestTimeout,
         signal: options?.signal,
-        ...this.options.params,
+        ...this.options.params
       });
       trackUsage(response.usage);
 
       assistantMessage = new ChatResponseString(
-        response.content ?? "", 
-        response.usage ?? { input_tokens: 0, output_tokens: 0, total_tokens: 0 }, 
+        response.content ?? "",
+        response.usage ?? { input_tokens: 0, output_tokens: 0, total_tokens: 0 },
         this.model,
         this.provider.id,
         response.reasoning
@@ -507,9 +538,9 @@ export class Chat {
 
       this.messages.push({
         role: "assistant",
-        content: assistantMessage || null,
+        content: assistantMessage?.toString() || null,
         tool_calls: response.tool_calls,
-        usage: response.usage,
+        usage: response.usage
       });
 
       if (this.options.onEndMessage && (!response.tool_calls || response.tool_calls.length === 0)) {
@@ -517,13 +548,13 @@ export class Chat {
       }
     }
 
-    // For the final return, we might want to aggregate reasoning too if it happened in multiple turns? 
+    // For the final return, we might want to aggregate reasoning too if it happened in multiple turns?
     // Usually reasoning only happens once or we just want the last one.
     return new ChatResponseString(
-      assistantMessage.toString() || "", 
-      totalUsage, 
-      this.model, 
-      this.provider.id, 
+      assistantMessage.toString() || "",
+      totalUsage,
+      this.model,
+      this.provider.id,
       assistantMessage.reasoning,
       response.tool_calls
     );
@@ -533,7 +564,13 @@ export class Chat {
    * Streams the model's response to a user question.
    */
   stream(content: string | ContentPart[], options: AskOptions = {}): Stream<ChatChunk> {
-    const streamer = new ChatStream(this.provider, this.model, this.options, this.messages, this.systemMessages);
+    const streamer = new ChatStream(
+      this.provider,
+      this.model,
+      this.options,
+      this.messages,
+      this.systemMessages
+    );
     return streamer.create(content, options);
   }
 
@@ -541,14 +578,14 @@ export class Chat {
    * Normalizes a ToolResolvable into a ToolDefinition.
    */
   private normalizeTool(tool: ToolResolvable): ToolDefinition | null {
-    let toolInstance: any;
+    let toolInstance: unknown;
 
     // Handle class constructor
     if (typeof tool === "function") {
       try {
-        toolInstance = new (tool as any)();
-      } catch (e) {
-        logger.error(`Failed to instantiate tool class: ${(tool as any).name}`, e as Error);
+        toolInstance = new (tool as new () => unknown)();
+      } catch (e: unknown) {
+        logger.error(`Failed to instantiate tool class: ${(tool as { name?: string }).name}`, e as Error);
         return null;
       }
     } else {
@@ -558,23 +595,33 @@ export class Chat {
     if (!toolInstance) return null;
 
     // Normalized to standard ToolDefinition interface if it's a Tool class instance
-    if (typeof toolInstance.toLLMTool === "function") {
-      return toolInstance.toLLMTool();
+    if (typeof (toolInstance as { toLLMTool?: unknown }).toLLMTool === "function") {
+      return (toolInstance as { toLLMTool: () => ToolDefinition }).toLLMTool();
     }
 
-    if (!toolInstance.function || !toolInstance.function.name) {
+    const toolObj = toolInstance as {
+      function?: { name?: string };
+      type?: string;
+      handler?: unknown;
+    };
+
+    if (!toolObj.function || !toolObj.function.name) {
       // 1. Validate structure
-      throw new ConfigurationError(`[NodeLLM] Tool validation failed: 'function.name' is required for raw tool objects.`);
+      throw new ConfigurationError(
+        `[NodeLLM] Tool validation failed: 'function.name' is required for raw tool objects.`
+      );
     }
 
-    if (toolInstance.type !== 'function') {
+    if (toolObj.type !== "function") {
       // 2. Ensure 'type: function' exists (standardize for providers)
-      toolInstance.type = 'function';
+      (toolObj as { type: string }).type = "function";
     }
 
-    if (typeof toolInstance.handler !== 'function') {
+    if (typeof toolObj.handler !== "function") {
       // 3. Validate handler existence
-      throw new ConfigurationError(`[NodeLLM] Tool validation failed: Tool '${toolInstance.function.name}' must have a 'handler' function. (Note: Only Tool subclasses use 'execute()')`);
+      throw new ConfigurationError(
+        `[NodeLLM] Tool validation failed: Tool '${toolObj.function.name}' must have a 'handler' function. (Note: Only Tool subclasses use 'execute()')`
+      );
     }
 
     return toolInstance as ToolDefinition;

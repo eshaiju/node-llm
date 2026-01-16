@@ -1,10 +1,10 @@
 import { describe, it, expect, afterEach } from "vitest";
-import { NodeLLM } from "../../../src/index.js";
+import { createLLM } from "../../../src/index.js";
 import { setupVCR } from "../../helpers/vcr.js";
 import "dotenv/config";
 
 describe("OpenAI Manual Schema (VCR)", { timeout: 30000 }, () => {
-  let polly: any;
+  let polly: { stop: () => Promise<void> } | undefined;
 
   afterEach(async () => {
     if (polly) {
@@ -14,38 +14,36 @@ describe("OpenAI Manual Schema (VCR)", { timeout: 30000 }, () => {
 
   it("should support structured output with manual JSON schema", async ({ task }) => {
     polly = setupVCR(task.name, "openai");
-    NodeLLM.configure({
+    const llm = createLLM({
       openaiApiKey: process.env.OPENAI_API_KEY,
-      provider: "openai",
+      provider: "openai"
     });
-    const chat = NodeLLM.chat("gpt-4o-mini");
+    const chat = llm.chat("gpt-4o-mini");
 
     // The user's exact manual schema example
     const person_schema = {
-      type: 'object',
+      type: "object",
       properties: {
-        name: { type: 'string' },
-        age: { type: 'integer' },
+        name: { type: "string" },
+        age: { type: "integer" },
         hobbies: {
-          type: 'array',
-          items: { type: 'string' }
+          type: "array",
+          items: { type: "string" }
         }
       },
-      required: ['name', 'age', 'hobbies'],
+      required: ["name", "age", "hobbies"],
       additionalProperties: false
     };
 
-    // We pass the schema name via the second argument if we want to name it (Schema.fromJson), 
+    // We pass the schema name via the second argument if we want to name it (Schema.fromJson),
     // or withSchema can handle raw objects if logic implies a default name.
     // My implementation of withSchema uses Schema.fromJson("output", ...) for raw objects.
-    
-    const response = await chat
-      .withSchema(person_schema)
-      .ask("Generate a person who likes Ruby");
+
+    const response = await chat.withSchema(person_schema).ask("Generate a person who likes Ruby");
 
     // Check automatic parsing
-    const content = response.parsed;
-    
+    const content = response.parsed as { name: string; age: number; hobbies: string[] };
+
     expect(content).toBeDefined();
     expect(content.name).toBeDefined();
     expect(typeof content.age).toBe("number");

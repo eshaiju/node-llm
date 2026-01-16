@@ -1,17 +1,16 @@
 import "dotenv/config";
-import { NodeLLM } from "../../../packages/core/dist/index.js";
+import { createLLM, NodeLLM, Tool, z } from "../../../packages/core/dist/index.js";
 
 async function main() {
-  NodeLLM.configure((config) => {
-    config.geminiApiKey = process.env.GEMINI_API_KEY;
+  const llm = createLLM({
+    provider: "gemini",
+    geminiApiKey: process.env.GEMINI_API_KEY
   });
-  
-  NodeLLM.configure({ provider: "gemini" });
-
-  const imageUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Gnome-face-smile.svg/1200px-Gnome-face-smile.svg.png";
+  const imageUrl =
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Gnome-face-smile.svg/1200px-Gnome-face-smile.svg.png";
 
   console.log("Gemini analyzing image...");
-  const response = await NodeLLM.chat("gemini-2.0-flash").ask("Describe this image.", {
+  const response = await llm.chat("gemini-2.0-flash").ask("Describe this image.", {
     files: [imageUrl]
   });
 

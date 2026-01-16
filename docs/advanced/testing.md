@@ -7,12 +7,14 @@ description: Run automated tests using our high-fidelity VCR recording system to
 ---
 
 # {{ page.title }}
+
 {: .no_toc }
 
 {{ page.description }}
 {: .fs-6 .fw-300 }
 
 ## Table of contents
+
 {: .no_toc .text-delta }
 
 1. TOC
@@ -25,6 +27,7 @@ description: Run automated tests using our high-fidelity VCR recording system to
 ## Running Tests
 
 ### Unit Tests
+
 Test core logic and provider handlers in isolation without hitting any APIs.
 
 ```bash
@@ -32,18 +35,21 @@ npm run test:unit
 ```
 
 ### Integration Tests (VCR)
+
 Uses Polly.js to record and replay real LLM interactions.
 
 **Replay Mode (Default)**:
 Runs against recorded cassettes. Fast and requires no API keys.
+
 ```bash
 npm run test:integration
 ```
 
 **Record Mode**:
 Update cassettes by hitting real APIs (requires API keys).
+
 ```bash
 VCR_MODE=record npm run test:integration
 ```
 
-*All recordings are automatically scrubbed of sensitive data (API keys, org IDs) before being saved to disk.*
+_All recordings are automatically scrubbed of sensitive data (API keys, org IDs) before being saved to disk._

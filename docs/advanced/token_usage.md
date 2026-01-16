@@ -7,12 +7,14 @@ description: Monitor costs and resource consumption by tracking input/output tok
 ---
 
 # {{ page.title }}
+
 {: .no_toc }
 
 {{ page.description }}
 {: .fs-6 .fw-300 }
 
 ## Table of contents
+
 {: .no_toc .text-delta }
 
 1. TOC
@@ -29,9 +31,9 @@ Every response object contains usage metadata for that specific interaction.
 ```ts
 const response = await chat.ask("Hello!");
 
-console.log(response.input_tokens);  // e.g. 10
+console.log(response.input_tokens); // e.g. 10
 console.log(response.output_tokens); // e.g. 5
-console.log(response.cost);          // Estimated cost in USD
+console.log(response.cost); // Estimated cost in USD
 ```
 
 ## Session Totals

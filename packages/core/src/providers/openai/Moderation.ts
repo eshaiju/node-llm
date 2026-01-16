@@ -6,31 +6,38 @@ import { logger } from "../../utils/logger.js";
 import { fetchWithTimeout } from "../../utils/fetch.js";
 
 export class OpenAIModeration {
-  constructor(private readonly baseUrl: string, private readonly apiKey: string) {}
+  constructor(
+    private readonly baseUrl: string,
+    private readonly apiKey: string
+  ) {}
 
   async execute(request: ModerationRequest): Promise<ModerationResponse> {
     const body = {
       input: request.input,
-      model: request.model || DEFAULT_MODELS.MODERATION,
+      model: request.model || DEFAULT_MODELS.MODERATION
     };
 
-    const url = buildUrl(this.baseUrl, '/moderations');
+    const url = buildUrl(this.baseUrl, "/moderations");
     logger.logRequest("OpenAI", "POST", url, body);
 
-    const response = await fetchWithTimeout(url, {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${this.apiKey}`,
-        "Content-Type": "application/json",
+    const response = await fetchWithTimeout(
+      url,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${this.apiKey}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(body)
       },
-      body: JSON.stringify(body),
-    }, request.requestTimeout);
+      request.requestTimeout
+    );
 
     if (!response.ok) {
       await handleOpenAIError(response, request.model || DEFAULT_MODELS.MODERATION);
     }
 
-    const json = await response.json() as ModerationResponse;
+    const json = (await response.json()) as ModerationResponse;
     logger.logResponse("OpenAI", response.status, response.statusText, json);
     return json;
   }

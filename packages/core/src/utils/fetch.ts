@@ -1,7 +1,7 @@
 /**
  * Fetch with timeout support.
  * Wraps the standard fetch API with an AbortController to enforce request timeouts.
- * 
+ *
  * @param url - The URL to fetch
  * @param options - Standard fetch options
  * @param timeoutMs - Timeout in milliseconds (optional)
@@ -14,7 +14,7 @@ export async function fetchWithTimeout(
   timeoutMs?: number
 ): Promise<Response> {
   const userSignal = options.signal;
-  
+
   // If no timeout is specified and no user signal, use standard fetch
   if ((!timeoutMs || timeoutMs <= 0) && !userSignal) {
     return fetch(url, options);
@@ -31,24 +31,25 @@ export async function fetchWithTimeout(
 
   try {
     // Merge user signal with timeout signal
-    const mergedSignal = userSignal 
+    const mergedSignal = userSignal
       ? AbortSignal.any([userSignal, controller.signal])
       : controller.signal;
 
     const response = await fetch(url, {
       ...options,
-      signal: mergedSignal,
+      signal: mergedSignal
     });
     clearTimeout(timeoutId);
     return response;
-  } catch (error: any) {
+  } catch (error: unknown) {
     clearTimeout(timeoutId);
-    
+
     // Check if the error was due to timeout abort
-    if (error.name === 'AbortError' && controller.signal.aborted) {
+    const isAbortError = error instanceof Error && error.name === "AbortError";
+    if (isAbortError && controller.signal.aborted) {
       throw new Error(`Request timeout after ${timeoutMs}ms`);
     }
-    
+
     throw error;
   }
 }

@@ -7,24 +7,28 @@ import { logger } from "../../utils/logger.js";
 import { fetchWithTimeout } from "../../utils/fetch.js";
 
 export class AnthropicStreaming {
-  constructor(private readonly baseUrl: string, private readonly apiKey: string) {}
+  constructor(
+    private readonly baseUrl: string,
+    private readonly apiKey: string
+  ) {}
 
-  async *execute(
-    request: ChatRequest,
-    controller?: AbortController
-  ): AsyncGenerator<ChatChunk> {
+  async *execute(request: ChatRequest, controller?: AbortController): AsyncGenerator<ChatChunk> {
     const abortController = controller || new AbortController();
     const model = request.model;
     const maxTokens = request.max_tokens || Capabilities.getMaxOutputTokens(model) || 4096;
-    
+
     const systemPrompt = formatSystemPrompt(request.messages);
     const messages = formatMessages(request.messages);
 
     let system = systemPrompt;
     if (request.response_format) {
       let schemaText = "";
-      if (request.response_format.type === "json_schema" && request.response_format.json_schema?.schema) {
-        schemaText = "\nSchema:\n" + JSON.stringify(request.response_format.json_schema.schema, null, 2);
+      if (
+        request.response_format.type === "json_schema" &&
+        request.response_format.json_schema?.schema
+      ) {
+        schemaText =
+          "\nSchema:\n" + JSON.stringify(request.response_format.json_schema.schema, null, 2);
       }
       const instruction = `CRITICAL: Respond ONLY with a valid JSON object matching the requested schema.${schemaText}\n\nDo not include any other text or explanation.`;
       system = system ? `${system}\n\n${instruction}` : instruction;
@@ -35,7 +39,7 @@ export class AnthropicStreaming {
       messages: messages,
       max_tokens: maxTokens,
       system: system,
-      stream: true,
+      stream: true
     };
 
     if (request.temperature !== undefined) {
@@ -43,51 +47,60 @@ export class AnthropicStreaming {
     }
 
     if (request.tools && request.tools.length > 0) {
-        body.tools = request.tools.map(tool => ({
-          name: tool.function.name,
-          description: tool.function.description,
-          input_schema: tool.function.parameters
-        }));
+      body.tools = request.tools.map((tool) => ({
+        name: tool.function.name,
+        description: tool.function.description,
+        input_schema: tool.function.parameters
+      }));
     }
 
     // Check if any message contains PDF content to add beta header
-    const hasPdf = messages.some(msg => 
-      Array.isArray(msg.content) && msg.content.some(block => block.type === "document")
+    const hasPdf = messages.some(
+      (msg) => Array.isArray(msg.content) && msg.content.some((block) => block.type === "document")
     );
 
     const headers: Record<string, string> = {
       "x-api-key": this.apiKey,
       "anthropic-version": "2023-06-01",
       "content-type": "application/json",
-      ...request.headers,
+      ...request.headers
     };
 
     if (hasPdf) {
       headers["anthropic-beta"] = "pdfs-2024-09-25";
     }
 
-
     let done = false;
     // Track tool calls being built across chunks
-    const toolCallsMap = new Map<number, any>();
+    const toolCallsMap = new Map<
+      number,
+      { id: string; type: string; function: { name: string; arguments: string } }
+    >();
     let currentBlockIndex = -1;
 
     try {
       const url = `${this.baseUrl}/messages`;
       logger.logRequest("Anthropic", "POST", url, body);
 
-      const response = await fetchWithTimeout(url, {
-        method: "POST",
-        headers: headers,
-        body: JSON.stringify(body),
-        signal: abortController.signal,
-      }, request.requestTimeout);
+      const response = await fetchWithTimeout(
+        url,
+        {
+          method: "POST",
+          headers: headers,
+          body: JSON.stringify(body),
+          signal: abortController.signal
+        },
+        request.requestTimeout
+      );
 
       if (!response.ok) {
         await handleAnthropicError(response, model);
       }
 
-      logger.debug("Anthropic streaming started", { status: response.status, statusText: response.statusText });
+      logger.debug("Anthropic streaming started", {
+        status: response.status,
+        statusText: response.statusText
+      });
 
       if (!response.body) {
         throw new Error("No response body for streaming");
@@ -109,22 +122,22 @@ export class AnthropicStreaming {
 
         for (const line of lines) {
           let trimmed = line.trim();
-          
+
           // Handle carriage returns
-          if (trimmed.endsWith('\r')) {
+          if (trimmed.endsWith("\r")) {
             trimmed = trimmed.substring(0, trimmed.length - 1);
           }
 
           if (!trimmed.startsWith("event: ")) continue;
-          
+
           // Format is:
           // event: type
           // data: json
-          
+
           const parts = trimmed.split("\n");
           const eventLine = parts[0];
-          const dataLine = parts.find(p => p.startsWith("data: "));
-          
+          const dataLine = parts.find((p) => p.startsWith("data: "));
+
           if (!dataLine || !eventLine) continue;
 
           const eventType = eventLine.replace("event: ", "").trim();
@@ -132,7 +145,7 @@ export class AnthropicStreaming {
 
           try {
             const data = JSON.parse(dataStr);
-            
+
             // Handle different event types from Anthropic
             if (eventType === "content_block_start") {
               // Track the block index for tool use
@@ -147,12 +160,10 @@ export class AnthropicStreaming {
                   }
                 });
               }
-            }
-            else if (eventType === "content_block_delta") {
+            } else if (eventType === "content_block_delta") {
               if (data.delta && data.delta.type === "text_delta") {
                 yield { content: data.delta.text };
-              }
-              else if (data.delta && data.delta.type === "input_json_delta") {
+              } else if (data.delta && data.delta.type === "input_json_delta") {
                 // Accumulate tool arguments
                 const index = data.index;
                 if (toolCallsMap.has(index)) {
@@ -160,18 +171,15 @@ export class AnthropicStreaming {
                   toolCall.function.arguments += data.delta.partial_json;
                 }
               }
-            }
-            else if (eventType === "content_block_stop") {
+            } else if (eventType === "content_block_stop") {
               // Block finished
-            }
-            else if (eventType === "message_start") {
+            } else if (eventType === "message_start") {
               // Could extract initial usage here
-            }
-            else if (eventType === "message_delta") {
+            } else if (eventType === "message_delta") {
               // Update usage or stop reason
               if (data.delta?.stop_reason === "end_turn" && toolCallsMap.size > 0) {
                 // Yield accumulated tool calls
-                const toolCalls = Array.from(toolCallsMap.values()).map(tc => ({
+                const toolCalls = Array.from(toolCallsMap.values()).map((tc) => ({
                   id: tc.id,
                   type: "function" as const,
                   function: {
@@ -181,11 +189,9 @@ export class AnthropicStreaming {
                 }));
                 yield { content: "", tool_calls: toolCalls, done: true };
               }
-            }
-            else if (eventType === "message_stop") {
+            } else if (eventType === "message_stop") {
               done = true;
-            }
-            else if (eventType === "error") {
+            } else if (eventType === "error") {
               throw new Error(`Stream error: ${data.error?.message}`);
             }
           } catch (e) {
@@ -198,7 +204,7 @@ export class AnthropicStreaming {
       done = true;
     } catch (e) {
       // Graceful exit on abort
-      if (e instanceof Error && e.name === 'AbortError') {
+      if (e instanceof Error && e.name === "AbortError") {
         return;
       }
       throw e;

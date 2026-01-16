@@ -1,12 +1,12 @@
 import { describe, it, expect, afterEach } from "vitest";
-import { NodeLLM, Tool } from "../../../../src/index.js";
+import { createLLM, ToolDefinition } from "../../../../src/index.js";
 import { setupVCR } from "../../../helpers/vcr.js";
-import { z } from "zod";
+
 import "dotenv/config";
 
 // Define a test tool
 // Define a test tool
-const WeatherTool: Tool = {
+const WeatherTool: ToolDefinition = {
   type: "function",
   function: {
     name: "get_weather",
@@ -31,13 +31,13 @@ const WeatherTool: Tool = {
       location,
       temperature: 22,
       unit: unit || "celsius",
-      conditions: "Sunny",
+      conditions: "Sunny"
     });
   }
 };
 
 describe("Anthropic Tool Calling Integration (VCR)", { timeout: 30000 }, () => {
-  let polly: any;
+  let polly: { stop: () => Promise<void> } | undefined;
 
   afterEach(async () => {
     if (polly) {
@@ -48,12 +48,11 @@ describe("Anthropic Tool Calling Integration (VCR)", { timeout: 30000 }, () => {
   it("should support tool calling", async ({ task }) => {
     polly = setupVCR(task.name, "anthropic");
 
-    NodeLLM.configure({
+    const llm = createLLM({
       anthropicApiKey: process.env.ANTHROPIC_API_KEY,
-      provider: "anthropic",
+      provider: "anthropic"
     });
-    const chat = NodeLLM.chat("claude-3-haiku-20240307")
-        .withTool(WeatherTool);
+    const chat = llm.chat("claude-3-haiku-20240307").withTool(WeatherTool);
 
     const response = await chat.ask("What is the weather in Paris?");
 

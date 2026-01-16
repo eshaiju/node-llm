@@ -1,17 +1,15 @@
-import { 
-  Provider, 
-  ChatRequest, 
-  ChatResponse, 
-  ModelInfo, 
-  ChatChunk, 
-  ImageRequest, 
-  ImageResponse, 
-  TranscriptionRequest, 
+import {
+  Provider,
+  ChatRequest,
+  ChatResponse,
+  ModelInfo,
+  ChatChunk,
+  ImageRequest,
+  ImageResponse,
+  TranscriptionRequest,
   TranscriptionResponse,
-  ModerationRequest,
-  ModerationResponse,
   EmbeddingRequest,
-  EmbeddingResponse 
+  EmbeddingResponse
 } from "../Provider.js";
 import { BaseProvider } from "../BaseProvider.js";
 import { Capabilities } from "./Capabilities.js";
@@ -46,7 +44,7 @@ export class GeminiProvider extends BaseProvider implements Provider {
     supportsModeration: (model: string) => Capabilities.supportsModeration(model),
     supportsReasoning: (_model: string) => false,
     supportsDeveloperRole: (_model: string) => true,
-    getContextWindow: (model: string) => Capabilities.getContextWindow(model),
+    getContextWindow: (model: string) => Capabilities.getContextWindow(model)
   };
 
   constructor(private readonly options: GeminiProviderOptions) {
@@ -66,7 +64,7 @@ export class GeminiProvider extends BaseProvider implements Provider {
 
   public headers(): Record<string, string> {
     return {
-      "Content-Type": "application/json",
+      "Content-Type": "application/json"
     };
   }
 
@@ -74,7 +72,7 @@ export class GeminiProvider extends BaseProvider implements Provider {
     return "Gemini";
   }
 
-  public override defaultModel(feature?: string): string {
+  public override defaultModel(_feature?: string): string {
     return "gemini-2.0-flash-exp";
   }
 

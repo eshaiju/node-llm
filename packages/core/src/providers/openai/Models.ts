@@ -5,7 +5,7 @@ import { buildUrl } from "./utils.js";
 
 export class OpenAIModels {
   constructor(
-    protected readonly baseUrl: string, 
+    protected readonly baseUrl: string,
     protected readonly apiKey: string
   ) {}
 
@@ -20,11 +20,19 @@ export class OpenAIModels {
   }
 
   protected getContextWindow(modelId: string): number | null {
-    return ModelRegistry.getContextWindow(modelId, this.getProviderName()) || Capabilities.getContextWindow(modelId) || null;
+    return (
+      ModelRegistry.getContextWindow(modelId, this.getProviderName()) ||
+      Capabilities.getContextWindow(modelId) ||
+      null
+    );
   }
 
   protected getMaxOutputTokens(modelId: string): number | null {
-    return ModelRegistry.getMaxOutputTokens(modelId, this.getProviderName()) || Capabilities.getMaxOutputTokens(modelId) || null;
+    return (
+      ModelRegistry.getMaxOutputTokens(modelId, this.getProviderName()) ||
+      Capabilities.getMaxOutputTokens(modelId) ||
+      null
+    );
   }
 
   protected getModalities(modelId: string) {
@@ -45,21 +53,21 @@ export class OpenAIModels {
   async execute(): Promise<ModelInfo[]> {
     const provider = this.getProviderName();
     try {
-      const response = await fetch(buildUrl(this.baseUrl, '/models'), {
+      const response = await fetch(buildUrl(this.baseUrl, "/models"), {
         method: "GET",
         headers: {
-          "Authorization": `Bearer ${this.apiKey}`,
-          "Content-Type": "application/json",
-        },
+          Authorization: `Bearer ${this.apiKey}`,
+          "Content-Type": "application/json"
+        }
       });
 
       if (response.ok) {
-        const { data } = await response.json() as { data: any[] };
-        
-        return data.map(m => {
+        const { data } = (await response.json()) as { data: { id: string; created: number; owned_by: string }[] };
+
+        return data.map((m) => {
           const modelId = m.id;
           const registryModel = ModelRegistry.find(modelId, provider);
-          
+
           return {
             id: modelId,
             name: this.formatDisplayName(modelId),
@@ -84,8 +92,8 @@ export class OpenAIModels {
 
     // Fallback to registry data
     return ModelRegistry.all()
-      .filter((m: any) => m.provider === provider)
-      .map((m: any) => ({
+      .filter((m) => m.provider === provider)
+      .map((m) => ({
         id: m.id,
         name: m.name,
         family: m.family || m.id,
@@ -95,7 +103,7 @@ export class OpenAIModels {
         modalities: m.modalities,
         max_output_tokens: m.max_output_tokens ?? null,
         pricing: m.pricing || {}
-      })) as unknown as ModelInfo[]; 
+      })) as ModelInfo[];
   }
 
   find(modelId: string) {

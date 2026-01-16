@@ -1,23 +1,23 @@
 import "dotenv/config";
-import { NodeLLM, z } from "../../../packages/core/dist/index.js";
+import { createLLM, NodeLLM, Tool, z } from "../../../packages/core/dist/index.js";
 
 async function main() {
-  NodeLLM.configure((config) => {
-    config.anthropicApiKey = process.env.ANTHROPIC_API_KEY;
+  const llm = createLLM({
+    provider: "anthropic",
+    anthropicApiKey: process.env.ANTHROPIC_API_KEY
   });
-  
-  NodeLLM.configure({ provider: "anthropic" });
-
-  const chat = NodeLLM.chat("claude-3-haiku-20240307");
+  const chat = llm.chat("claude-3-haiku-20240307");
 
   // --- Example 1: Using Zod (Recommended) ---
   const bookSchema = z.object({
     title: z.string(),
     author: z.string(),
-    chapters: z.array(z.object({
-      number: z.number(),
-      title: z.string()
-    })),
+    chapters: z.array(
+      z.object({
+        number: z.number(),
+        title: z.string()
+      })
+    ),
     summary: z.string()
   });
 
@@ -41,9 +41,7 @@ async function main() {
   };
 
   console.log("\n--- Structured Output (Manual JSON Schema) ---");
-  const response2 = await chat
-    .withSchema(manualSchema)
-    .ask("Generate a superhero character.");
+  const response2 = await chat.withSchema(manualSchema).ask("Generate a superhero character.");
 
   console.log("Parsed Hero Name:", response2.parsed.hero_name);
   console.log("JSON:", JSON.stringify(response2.parsed, null, 2));

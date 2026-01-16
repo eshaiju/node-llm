@@ -1,20 +1,18 @@
 import "dotenv/config";
 import { NodeLLM } from "../../../packages/core/dist/index.js";
 
-// Configure provider - Callback style (recommended)
-NodeLLM.configure((config) => {
-  config.deepseekApiKey = process.env.DEEPSEEK_API_KEY;
-});
+async function main() {
+  // Pattern: Direct Usage (Singleton)
+  // NodeLLM automatically reads NODELLM_PROVIDER=deepseek and DEEPSEEK_API_KEY from .env
+  const chat = NodeLLM.chat();
+  console.log(`Using model: ${chat.modelId}`);
 
-// Alternative: NodeLLM.configure({ deepseekApiKey: "...", provider: "deepseek" });
-NodeLLM.configure({
-  provider: "deepseek",
-});
+  console.log("Sending message...");
+  const response = await chat.ask("Hello, who are you?");
 
-const chat = NodeLLM.chat("deepseek-chat");
+  console.log("\nResponse:");
+  console.log(response.content);
+  console.log("\nUsage:", response.usage);
+}
 
-console.log("Chatting with DeepSeek...");
-const response = await chat.ask("Hello! Tell me a one-liner joke.");
-
-console.log("\nResponse:", response.content);
-console.log("\nUsage:", response.usage);
+main().catch(console.error);

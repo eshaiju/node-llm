@@ -4,7 +4,9 @@ import { Provider, ChatRequest, ChatResponse } from "../../../src/providers/Prov
 
 describe("Chat.withParams", () => {
   const mockProvider: Provider = {
-    chat: vi.fn(async (request: ChatRequest): Promise<ChatResponse> => {
+    id: "mock-provider",
+    defaultModel: () => "test-model",
+    chat: vi.fn(async (_request: ChatRequest): Promise<ChatResponse> => {
       return {
         content: "Test response",
         usage: { input_tokens: 10, output_tokens: 20, total_tokens: 30 }
@@ -14,10 +16,8 @@ describe("Chat.withParams", () => {
 
   it("should merge custom params into the request", async () => {
     const chat = new Chat(mockProvider, "test-model");
-    
-    await chat
-      .withParams({ seed: 42, user: "test-user" })
-      .ask("Hello");
+
+    await chat.withParams({ seed: 42, user: "test-user" }).ask("Hello");
 
     expect(mockProvider.chat).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -29,7 +29,7 @@ describe("Chat.withParams", () => {
 
   it("should merge multiple withParams calls", async () => {
     const chat = new Chat(mockProvider, "test-model");
-    
+
     await chat
       .withParams({ seed: 42 })
       .withParams({ user: "test-user", custom_field: "value" })
@@ -46,11 +46,8 @@ describe("Chat.withParams", () => {
 
   it("should allow params to override standard parameters", async () => {
     const chat = new Chat(mockProvider, "test-model");
-    
-    await chat
-      .withTemperature(0.5)
-      .withParams({ temperature: 0.9 })
-      .ask("Hello");
+
+    await chat.withTemperature(0.5).withParams({ temperature: 0.9 }).ask("Hello");
 
     // Params spread after standard params, so they can override
     expect(mockProvider.chat).toHaveBeenCalledWith(
@@ -62,9 +59,9 @@ describe("Chat.withParams", () => {
 
   it("should allow provider-specific nested parameters", async () => {
     const chat = new Chat(mockProvider, "test-model");
-    
+
     await chat
-      .withParams({ 
+      .withParams({
         generationConfig: { topP: 0.8, topK: 40 },
         safetySettings: [{ category: "TEST", threshold: "BLOCK_NONE" }]
       })
@@ -80,11 +77,8 @@ describe("Chat.withParams", () => {
 
   it("should work with other fluent methods", async () => {
     const chat = new Chat(mockProvider, "test-model");
-    
-    await chat
-      .withTemperature(0.7)
-      .withParams({ seed: 123 })
-      .ask("Hello", { maxTokens: 100 });
+
+    await chat.withTemperature(0.7).withParams({ seed: 123 }).ask("Hello", { maxTokens: 100 });
 
     expect(mockProvider.chat).toHaveBeenCalledWith(
       expect.objectContaining({

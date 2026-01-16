@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { z } from "zod";
 import { Tool, ToolDefinition } from "../../../src/chat/Tool.js";
-import { NodeLLMCore } from "../../../src/llm.js";
+import { createLLM } from "../../../src/llm.js";
 import { FakeProvider } from "../../fake-provider.js";
 
 class TestTool extends Tool {
@@ -32,24 +32,23 @@ describe("Tool DSL", () => {
   it("should execute the logic via the handler", async () => {
     const tool = new TestTool();
     const llmTool = tool.toLLMTool();
-    
-    // @ts-ignore
+
+    // @ts-expect-error
     const result = await llmTool.handler({ input: "hello" });
     expect(result).toBe("Output: hello");
   });
 
   it("should be correctly registered in a Chat session", async () => {
     const provider = new FakeProvider();
-    const llm = new NodeLLMCore();
-    llm.configure({ provider });
+    const llm = createLLM({ provider });
 
     const chat = llm.chat("fake-model");
     chat.withTools([TestTool]);
 
     // Check if the tool was normalized
-    const registeredTool = (chat as any).options.tools[0] as ToolDefinition;
-    expect(registeredTool.function.name).toBe("test_tool");
-    expect(typeof registeredTool.handler).toBe("function");
+    const registeredTool = ((chat as unknown) as { options: { tools: ToolDefinition[] } }).options.tools[0];
+    expect(registeredTool?.function.name).toBe("test_tool");
+    expect(typeof registeredTool?.handler).toBe("function");
   });
 
   it("should handle object responses by stringifying them", async () => {
@@ -64,7 +63,7 @@ describe("Tool DSL", () => {
 
     const tool = new ObjectTool();
     const llmTool = tool.toLLMTool();
-    // @ts-ignore
+    // @ts-expect-error
     const result = await llmTool.handler({});
     expect(result).toBe('{"success":true}');
   });

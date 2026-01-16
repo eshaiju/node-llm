@@ -2,11 +2,7 @@ import "dotenv/config";
 import { NodeLLM } from "../../../packages/core/dist/index.js";
 
 async function main() {
-  NodeLLM.configure({
-    provider: "openai",
-    openaiApiKey: process.env.OPENAI_API_KEY,
-  });
-
+  // Using NodeLLM directly - requires OPENAI_API_KEY and NODELLM_PROVIDER=openai
   const chat = NodeLLM.chat("gpt-4o-mini");
 
   // Example 1: Basic streaming
@@ -30,7 +26,7 @@ async function main() {
   // Example 3: Streaming with manual abort
   console.log("=== Example 3: Streaming with Abort Controller ===");
   const controller = new AbortController();
-  
+
   // Abort after 2 seconds
   const timeout = setTimeout(() => {
     console.log("\n[Aborting stream...]");
@@ -42,7 +38,7 @@ async function main() {
       process.stdout.write(chunk.content || "");
     }
   } catch (error) {
-    if (error.name === 'AbortError') {
+    if (error.name === "AbortError") {
       console.log("\n[Stream aborted successfully]");
     } else {
       console.error("Error:", error.message);
@@ -55,10 +51,10 @@ async function main() {
   // Example 4: Streaming with conversation history
   console.log("=== Example 4: Streaming with History ===");
   const chatWithHistory = NodeLLM.chat("gpt-4o-mini");
-  
+
   // First message
   await chatWithHistory.ask("My name is Alice.");
-  
+
   // Stream second message that references history
   console.log("Streaming response:");
   for await (const chunk of chatWithHistory.stream("What's my name?")) {
@@ -68,9 +64,10 @@ async function main() {
 
   // Example 5: Streaming with system instructions
   console.log("=== Example 5: Streaming with System Instructions ===");
-  const chatWithSystem = NodeLLM.chat("gpt-4o-mini")
-    .withInstructions("You are a pirate. Always respond in pirate speak.");
-  
+  const chatWithSystem = NodeLLM.chat("gpt-4o-mini").withInstructions(
+    "You are a pirate. Always respond in pirate speak."
+  );
+
   for await (const chunk of chatWithSystem.stream("Tell me about the ocean.")) {
     process.stdout.write(chunk.content || "");
   }
@@ -79,7 +76,7 @@ async function main() {
   // Example 6: Streaming with temperature control
   console.log("=== Example 6: Streaming with High Temperature (Creative) ===");
   const creativeChat = NodeLLM.chat("gpt-4o-mini").withTemperature(1.5);
-  
+
   for await (const chunk of creativeChat.stream("Invent a new word.")) {
     process.stdout.write(chunk.content || "");
   }
@@ -88,13 +85,13 @@ async function main() {
   // Example 7: Collecting full response while streaming
   console.log("=== Example 7: Collecting Full Response ===");
   let fullResponse = "";
-  
+
   for await (const chunk of chat.stream("What is 2+2?")) {
     const content = chunk.content || "";
     process.stdout.write(content);
     fullResponse += content;
   }
-  
+
   console.log("\n\nFull collected response:", fullResponse);
   console.log("\n");
 
@@ -111,11 +108,7 @@ async function main() {
 
   // Example 9: Multiple concurrent streams (advanced)
   console.log("=== Example 9: Sequential Streams ===");
-  const questions = [
-    "What is AI?",
-    "What is ML?",
-    "What is DL?"
-  ];
+  const questions = ["What is AI?", "What is ML?", "What is DL?"];
 
   for (const question of questions) {
     console.log(`\nQ: ${question}`);
@@ -129,7 +122,9 @@ async function main() {
   console.log("\n=== All streaming examples completed ===");
 }
 
-main().then(() => process.exit(0)).catch((err) => {
-  console.error(err);
-  process.exit(1);
-});
+main()
+  .then(() => process.exit(0))
+  .catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });

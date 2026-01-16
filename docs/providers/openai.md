@@ -7,12 +7,14 @@ description: Full support for the complete range of NodeLLM features including t
 ---
 
 # {{ page.title }}
+
 {: .no_toc }
 
 {{ page.description }}
 {: .fs-6 .fw-300 }
 
 ## Table of contents
+
 {: .no_toc .text-delta }
 
 1. TOC
@@ -25,12 +27,9 @@ The OpenAI provider supports the full range of \`NodeLLM\` features, including r
 ## Configuration
 
 ```ts
-import { NodeLLM } from "@node-llm/core";
+import { createLLM } from "@node-llm/core";
 
-NodeLLM.configure({
-  provider: "openai",
-  openaiApiKey: process.env.OPENAI_API_KEY, // Optional if set in env
-});
+const llm = createLLM({ provider: "openai", openaiApiKey: process.env.OPENAI_API_KEY, // Optional if set in env });
 ```
 
 ## Specific Parameters
@@ -38,13 +37,12 @@ NodeLLM.configure({
 You can pass OpenAI-specific parameters using `.withParams()`.
 
 ```ts
-const chat = NodeLLM.chat("gpt-4o")
-  .withParams({ 
-    seed: 42,           // for deterministic output
-    user: "user-123",   // for user tracking
-    presence_penalty: 0.5,
-    frequency_penalty: 0.5
-  });
+const chat = llm.chat("gpt-4o").withParams({
+  seed: 42, // for deterministic output
+  user: "user-123", // for user tracking
+  presence_penalty: 0.5,
+  frequency_penalty: 0.5
+});
 ```
 
 ## Features

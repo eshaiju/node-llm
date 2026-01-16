@@ -1,22 +1,22 @@
 import "dotenv/config";
-import { NodeLLM, z } from "../../../packages/core/dist/index.js";
+import { createLLM, NodeLLM, Tool, z } from "../../../packages/core/dist/index.js";
 
 async function main() {
-  NodeLLM.configure((config) => {
-    config.openaiApiKey = process.env.OPENAI_API_KEY;
+  const llm = createLLM({
+    provider: "openai",
+    openaiApiKey: process.env.OPENAI_API_KEY
   });
-  
-  NodeLLM.configure({ provider: "openai" });
-
-  const chat = NodeLLM.chat("gpt-4o-mini");
+  const chat = llm.chat("gpt-4o-mini");
 
   // --- Example 1: Using Zod (Recommended) ---
   const recipeSchema = z.object({
     name: z.string(),
-    ingredients: z.array(z.object({
-      item: z.string(),
-      amount: z.string()
-    })),
+    ingredients: z.array(
+      z.object({
+        item: z.string(),
+        amount: z.string()
+      })
+    ),
     steps: z.array(z.string()),
     prep_time_minutes: z.number()
   });
@@ -50,4 +50,9 @@ async function main() {
   console.log("JSON:", JSON.stringify(response2.parsed, null, 2));
 }
 
-main().then(() => process.exit(0)).catch((err) => { console.error(err); process.exit(1); });
+main()
+  .then(() => process.exit(0))
+  .catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });

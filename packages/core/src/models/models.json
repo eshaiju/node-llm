@@ -9,20 +9,10 @@
     "max_output_tokens": 8192,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text",
-        "image",
-        "pdf"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["text", "image", "pdf"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "streaming",
-      "function_calling",
-      "batch"
-    ],
+    "capabilities": ["streaming", "function_calling", "batch"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -47,22 +37,10 @@
     "max_output_tokens": 8192,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text",
-        "image",
-        "pdf"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["text", "image", "pdf"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "streaming",
-      "function_calling",
-      "batch",
-      "reasoning",
-      "citations"
-    ],
+    "capabilities": ["streaming", "function_calling", "batch", "reasoning", "citations"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -89,20 +67,10 @@
     "max_output_tokens": 4096,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text",
-        "image",
-        "pdf"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["text", "image", "pdf"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "streaming",
-      "function_calling",
-      "batch"
-    ],
+    "capabilities": ["streaming", "function_calling", "batch"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -127,20 +95,10 @@
     "max_output_tokens": 4096,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text",
-        "image",
-        "pdf"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["text", "image", "pdf"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "streaming",
-      "function_calling",
-      "batch"
-    ],
+    "capabilities": ["streaming", "function_calling", "batch"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -165,17 +123,10 @@
     "max_output_tokens": 64000,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "image",
-        "text"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["image", "text"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "function_calling"
-    ],
+    "capabilities": ["function_calling"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -196,17 +147,10 @@
     "max_output_tokens": 64000,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "image",
-        "text"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["image", "text"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "function_calling"
-    ],
+    "capabilities": ["function_calling"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -227,17 +171,10 @@
     "max_output_tokens": 32000,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "image",
-        "text"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["image", "text"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "function_calling"
-    ],
+    "capabilities": ["function_calling"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -258,17 +195,10 @@
     "max_output_tokens": 32000,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "image",
-        "text"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["image", "text"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "function_calling"
-    ],
+    "capabilities": ["function_calling"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -289,19 +219,10 @@
     "max_output_tokens": 4096,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text",
-        "image",
-        "pdf"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["text", "image", "pdf"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "streaming",
-      "reasoning"
-    ],
+    "capabilities": ["streaming", "reasoning"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -326,19 +247,10 @@
     "max_output_tokens": 4096,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text",
-        "image",
-        "pdf"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["text", "image", "pdf"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "streaming",
-      "reasoning"
-    ],
+    "capabilities": ["streaming", "reasoning"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -363,17 +275,10 @@
     "max_output_tokens": 64000,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "image",
-        "text"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["image", "text"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "function_calling"
-    ],
+    "capabilities": ["function_calling"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -394,17 +299,10 @@
     "max_output_tokens": 64000,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "image",
-        "text"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["image", "text"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "function_calling"
-    ],
+    "capabilities": ["function_calling"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -425,23 +323,15 @@
     "max_output_tokens": 1024,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["text"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "streaming"
-    ],
+    "capabilities": ["streaming"],
     "pricing": {},
     "metadata": {
       "version": "001",
       "description": "Model trained to return answers to questions that are grounded in provided sources, along with estimating answerable probability.",
-      "supported_generation_methods": [
-        "generateAnswer"
-      ]
+      "supported_generation_methods": ["generateAnswer"]
     }
   },
   {
@@ -454,18 +344,10 @@
     "max_output_tokens": 1,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text"
-      ],
-      "output": [
-        "text",
-        "embeddings"
-      ]
+      "input": ["text"],
+      "output": ["text", "embeddings"]
     },
-    "capabilities": [
-      "streaming",
-      "batch"
-    ],
+    "capabilities": ["streaming", "batch"],
     "pricing": {
       "embeddings": {
         "standard": {
@@ -476,9 +358,7 @@
     "metadata": {
       "version": "001",
       "description": "Obtain a distributed representation of a text.",
-      "supported_generation_methods": [
-        "embedContent"
-      ]
+      "supported_generation_methods": ["embedContent"]
     }
   },
   {
@@ -491,18 +371,10 @@
     "max_output_tokens": 1,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text"
-      ],
-      "output": [
-        "text",
-        "embeddings"
-      ]
+      "input": ["text"],
+      "output": ["text", "embeddings"]
     },
-    "capabilities": [
-      "streaming",
-      "batch"
-    ],
+    "capabilities": ["streaming", "batch"],
     "pricing": {
       "embeddings": {
         "standard": {
@@ -513,10 +385,7 @@
     "metadata": {
       "version": "001",
       "description": "Obtain a distributed representation of a text.",
-      "supported_generation_methods": [
-        "embedText",
-        "countTextTokens"
-      ]
+      "supported_generation_methods": ["embedText", "countTextTokens"]
     }
   },
   {
@@ -529,20 +398,10 @@
     "max_output_tokens": 8192,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "audio",
-        "image",
-        "text"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["audio", "image", "text"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "batch",
-      "function_calling",
-      "structured_output"
-    ],
+    "capabilities": ["batch", "function_calling", "structured_output"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -577,23 +436,10 @@
     "max_output_tokens": 8192,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text",
-        "image",
-        "pdf",
-        "video"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["text", "image", "pdf", "video"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "streaming",
-      "function_calling",
-      "structured_output",
-      "batch",
-      "caching"
-    ],
+    "capabilities": ["streaming", "function_calling", "structured_output", "batch", "caching"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -627,23 +473,10 @@
     "max_output_tokens": 8192,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text",
-        "image",
-        "pdf",
-        "video"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["text", "image", "pdf", "video"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "streaming",
-      "function_calling",
-      "structured_output",
-      "batch",
-      "caching"
-    ],
+    "capabilities": ["streaming", "function_calling", "structured_output", "batch", "caching"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -659,11 +492,7 @@
     "metadata": {
       "version": "2.0",
       "description": "Gemini 2.0 Flash Experimental",
-      "supported_generation_methods": [
-        "generateContent",
-        "countTokens",
-        "bidiGenerateContent"
-      ]
+      "supported_generation_methods": ["generateContent", "countTokens", "bidiGenerateContent"]
     }
   },
   {
@@ -676,23 +505,10 @@
     "max_output_tokens": 8192,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text",
-        "image",
-        "pdf",
-        "video"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["text", "image", "pdf", "video"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "streaming",
-      "function_calling",
-      "structured_output",
-      "batch",
-      "caching"
-    ],
+    "capabilities": ["streaming", "function_calling", "structured_output", "batch", "caching"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -708,11 +524,7 @@
     "metadata": {
       "version": "2.0",
       "description": "Gemini 2.0 Flash (Image Generation) Experimental",
-      "supported_generation_methods": [
-        "generateContent",
-        "countTokens",
-        "bidiGenerateContent"
-      ]
+      "supported_generation_methods": ["generateContent", "countTokens", "bidiGenerateContent"]
     }
   },
   {
@@ -725,20 +537,10 @@
     "max_output_tokens": 8192,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "audio",
-        "image",
-        "text"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["audio", "image", "text"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "batch",
-      "function_calling",
-      "structured_output"
-    ],
+    "capabilities": ["batch", "function_calling", "structured_output"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -773,20 +575,10 @@
     "max_output_tokens": 8192,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text",
-        "image",
-        "pdf",
-        "video"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["text", "image", "pdf", "video"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "streaming",
-      "batch"
-    ],
+    "capabilities": ["streaming", "batch"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -820,20 +612,10 @@
     "max_output_tokens": 8192,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text",
-        "image",
-        "pdf",
-        "video"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["text", "image", "pdf", "video"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "streaming",
-      "batch"
-    ],
+    "capabilities": ["streaming", "batch"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -867,20 +649,10 @@
     "max_output_tokens": 8192,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text",
-        "image",
-        "pdf",
-        "video"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["text", "image", "pdf", "video"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "streaming",
-      "batch"
-    ],
+    "capabilities": ["streaming", "batch"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -914,23 +686,10 @@
     "max_output_tokens": 65536,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text",
-        "image",
-        "pdf",
-        "video"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["text", "image", "pdf", "video"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "streaming",
-      "function_calling",
-      "structured_output",
-      "batch",
-      "caching"
-    ],
+    "capabilities": ["streaming", "function_calling", "structured_output", "batch", "caching"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -964,23 +723,10 @@
     "max_output_tokens": 65536,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text",
-        "image",
-        "pdf",
-        "video"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["text", "image", "pdf", "video"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "streaming",
-      "function_calling",
-      "structured_output",
-      "batch",
-      "caching"
-    ],
+    "capabilities": ["streaming", "function_calling", "structured_output", "batch", "caching"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -1014,23 +760,10 @@
     "max_output_tokens": 65536,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text",
-        "image",
-        "pdf",
-        "video"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["text", "image", "pdf", "video"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "streaming",
-      "function_calling",
-      "structured_output",
-      "batch",
-      "caching"
-    ],
+    "capabilities": ["streaming", "function_calling", "structured_output", "batch", "caching"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -1064,22 +797,10 @@
     "max_output_tokens": 65536,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text",
-        "image",
-        "pdf",
-        "video"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["text", "image", "pdf", "video"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "streaming",
-      "function_calling",
-      "structured_output",
-      "caching"
-    ],
+    "capabilities": ["streaming", "function_calling", "structured_output", "caching"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -1113,22 +834,10 @@
     "max_output_tokens": 65536,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text",
-        "image",
-        "pdf",
-        "video"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["text", "image", "pdf", "video"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "streaming",
-      "function_calling",
-      "structured_output",
-      "caching"
-    ],
+    "capabilities": ["streaming", "function_calling", "structured_output", "caching"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -1162,22 +871,10 @@
     "max_output_tokens": 65536,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text",
-        "image",
-        "pdf",
-        "video"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["text", "image", "pdf", "video"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "streaming",
-      "function_calling",
-      "structured_output",
-      "caching"
-    ],
+    "capabilities": ["streaming", "function_calling", "structured_output", "caching"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -1193,10 +890,7 @@
     "metadata": {
       "version": "Gemini 2.5 Computer Use Preview 10-2025",
       "description": "Gemini 2.5 Computer Use Preview 10-2025",
-      "supported_generation_methods": [
-        "generateContent",
-        "countTokens"
-      ]
+      "supported_generation_methods": ["generateContent", "countTokens"]
     }
   },
   {
@@ -1209,20 +903,10 @@
     "max_output_tokens": 65536,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "audio",
-        "image",
-        "text"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["audio", "image", "text"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "batch",
-      "function_calling",
-      "structured_output"
-    ],
+    "capabilities": ["batch", "function_calling", "structured_output"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -1257,23 +941,10 @@
     "max_output_tokens": 32768,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text",
-        "image",
-        "pdf",
-        "video"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["text", "image", "pdf", "video"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "streaming",
-      "function_calling",
-      "structured_output",
-      "batch",
-      "caching"
-    ],
+    "capabilities": ["streaming", "function_calling", "structured_output", "batch", "caching"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -1289,11 +960,7 @@
     "metadata": {
       "version": "2.0",
       "description": "Gemini 2.5 Flash Preview Image",
-      "supported_generation_methods": [
-        "generateContent",
-        "countTokens",
-        "batchGenerateContent"
-      ]
+      "supported_generation_methods": ["generateContent", "countTokens", "batchGenerateContent"]
     }
   },
   {
@@ -1306,23 +973,10 @@
     "max_output_tokens": 32768,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text",
-        "image",
-        "pdf",
-        "video"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["text", "image", "pdf", "video"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "streaming",
-      "function_calling",
-      "structured_output",
-      "batch",
-      "caching"
-    ],
+    "capabilities": ["streaming", "function_calling", "structured_output", "batch", "caching"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -1338,11 +992,7 @@
     "metadata": {
       "version": "2.0",
       "description": "Gemini 2.5 Flash Preview Image",
-      "supported_generation_methods": [
-        "generateContent",
-        "countTokens",
-        "batchGenerateContent"
-      ]
+      "supported_generation_methods": ["generateContent", "countTokens", "batchGenerateContent"]
     }
   },
   {
@@ -1355,20 +1005,10 @@
     "max_output_tokens": 65536,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "audio",
-        "image",
-        "text"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["audio", "image", "text"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "batch",
-      "function_calling",
-      "structured_output"
-    ],
+    "capabilities": ["batch", "function_calling", "structured_output"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -1403,21 +1043,10 @@
     "max_output_tokens": 65536,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text",
-        "image",
-        "pdf",
-        "video"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["text", "image", "pdf", "video"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "streaming",
-      "structured_output",
-      "batch"
-    ],
+    "capabilities": ["streaming", "structured_output", "batch"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -1451,23 +1080,10 @@
     "max_output_tokens": 65536,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text",
-        "image",
-        "pdf",
-        "video"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["text", "image", "pdf", "video"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "streaming",
-      "function_calling",
-      "structured_output",
-      "batch",
-      "caching"
-    ],
+    "capabilities": ["streaming", "function_calling", "structured_output", "batch", "caching"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -1501,23 +1117,10 @@
     "max_output_tokens": 16384,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text",
-        "image",
-        "pdf",
-        "video"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["text", "image", "pdf", "video"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "streaming",
-      "function_calling",
-      "structured_output",
-      "batch",
-      "caching"
-    ],
+    "capabilities": ["streaming", "function_calling", "structured_output", "batch", "caching"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -1533,10 +1136,7 @@
     "metadata": {
       "version": "gemini-2.5-flash-exp-tts-2025-05-19",
       "description": "Gemini 2.5 Flash Preview TTS",
-      "supported_generation_methods": [
-        "countTokens",
-        "generateContent"
-      ]
+      "supported_generation_methods": ["countTokens", "generateContent"]
     }
   },
   {
@@ -1549,20 +1149,10 @@
     "max_output_tokens": 65536,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "audio",
-        "image",
-        "text"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["audio", "image", "text"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "batch",
-      "function_calling",
-      "structured_output"
-    ],
+    "capabilities": ["batch", "function_calling", "structured_output"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -1597,22 +1187,10 @@
     "max_output_tokens": 65536,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text",
-        "image",
-        "pdf",
-        "video"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["text", "image", "pdf", "video"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "streaming",
-      "function_calling",
-      "structured_output",
-      "caching"
-    ],
+    "capabilities": ["streaming", "function_calling", "structured_output", "caching"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -1646,22 +1224,10 @@
     "max_output_tokens": 65536,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text",
-        "image",
-        "pdf",
-        "video"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["text", "image", "pdf", "video"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "streaming",
-      "function_calling",
-      "structured_output",
-      "caching"
-    ],
+    "capabilities": ["streaming", "function_calling", "structured_output", "caching"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -1695,22 +1261,10 @@
     "max_output_tokens": 65536,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text",
-        "image",
-        "pdf",
-        "video"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["text", "image", "pdf", "video"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "streaming",
-      "function_calling",
-      "structured_output",
-      "caching"
-    ],
+    "capabilities": ["streaming", "function_calling", "structured_output", "caching"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -1744,22 +1298,10 @@
     "max_output_tokens": 16384,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text",
-        "image",
-        "pdf",
-        "video"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["text", "image", "pdf", "video"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "streaming",
-      "function_calling",
-      "structured_output",
-      "caching"
-    ],
+    "capabilities": ["streaming", "function_calling", "structured_output", "caching"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -1775,10 +1317,7 @@
     "metadata": {
       "version": "gemini-2.5-pro-preview-tts-2025-05-19",
       "description": "Gemini 2.5 Pro Preview TTS",
-      "supported_generation_methods": [
-        "countTokens",
-        "generateContent"
-      ]
+      "supported_generation_methods": ["countTokens", "generateContent"]
     }
   },
   {
@@ -1791,22 +1330,10 @@
     "max_output_tokens": 65536,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text",
-        "image",
-        "pdf",
-        "video"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["text", "image", "pdf", "video"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "streaming",
-      "function_calling",
-      "structured_output",
-      "caching"
-    ],
+    "capabilities": ["streaming", "function_calling", "structured_output", "caching"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -1840,19 +1367,10 @@
     "max_output_tokens": 1,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text",
-        "video"
-      ],
-      "output": [
-        "text",
-        "embeddings"
-      ]
+      "input": ["text", "video"],
+      "output": ["text", "embeddings"]
     },
-    "capabilities": [
-      "streaming",
-      "batch"
-    ],
+    "capabilities": ["streaming", "batch"],
     "pricing": {
       "embeddings": {
         "standard": {
@@ -1881,24 +1399,10 @@
     "max_output_tokens": 1,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text",
-        "image",
-        "pdf",
-        "video"
-      ],
-      "output": [
-        "text",
-        "embeddings"
-      ]
+      "input": ["text", "image", "pdf", "video"],
+      "output": ["text", "embeddings"]
     },
-    "capabilities": [
-      "streaming",
-      "function_calling",
-      "structured_output",
-      "batch",
-      "caching"
-    ],
+    "capabilities": ["streaming", "function_calling", "structured_output", "batch", "caching"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -1919,11 +1423,7 @@
     "metadata": {
       "version": "exp-03-07",
       "description": "Obtain a distributed representation of a text.",
-      "supported_generation_methods": [
-        "embedContent",
-        "countTextTokens",
-        "countTokens"
-      ]
+      "supported_generation_methods": ["embedContent", "countTextTokens", "countTokens"]
     }
   },
   {
@@ -1936,24 +1436,10 @@
     "max_output_tokens": 1,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text",
-        "image",
-        "pdf",
-        "video"
-      ],
-      "output": [
-        "text",
-        "embeddings"
-      ]
+      "input": ["text", "image", "pdf", "video"],
+      "output": ["text", "embeddings"]
     },
-    "capabilities": [
-      "streaming",
-      "function_calling",
-      "structured_output",
-      "batch",
-      "caching"
-    ],
+    "capabilities": ["streaming", "function_calling", "structured_output", "batch", "caching"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -1974,11 +1460,7 @@
     "metadata": {
       "version": "exp-03-07",
       "description": "Obtain a distributed representation of a text.",
-      "supported_generation_methods": [
-        "embedContent",
-        "countTextTokens",
-        "countTokens"
-      ]
+      "supported_generation_methods": ["embedContent", "countTextTokens", "countTokens"]
     }
   },
   {
@@ -1991,22 +1473,10 @@
     "max_output_tokens": 65536,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text",
-        "image",
-        "pdf",
-        "video"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["text", "image", "pdf", "video"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "streaming",
-      "function_calling",
-      "structured_output",
-      "caching"
-    ],
+    "capabilities": ["streaming", "function_calling", "structured_output", "caching"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -2040,23 +1510,10 @@
     "max_output_tokens": 65536,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text",
-        "image",
-        "pdf",
-        "video"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["text", "image", "pdf", "video"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "streaming",
-      "function_calling",
-      "structured_output",
-      "batch",
-      "caching"
-    ],
+    "capabilities": ["streaming", "function_calling", "structured_output", "batch", "caching"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -2090,21 +1547,10 @@
     "max_output_tokens": 65536,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text",
-        "image",
-        "pdf",
-        "video"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["text", "image", "pdf", "video"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "streaming",
-      "structured_output",
-      "batch"
-    ],
+    "capabilities": ["streaming", "structured_output", "batch"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -2138,22 +1584,10 @@
     "max_output_tokens": 65536,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text",
-        "image",
-        "pdf",
-        "video"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["text", "image", "pdf", "video"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "streaming",
-      "function_calling",
-      "structured_output",
-      "caching"
-    ],
+    "capabilities": ["streaming", "function_calling", "structured_output", "caching"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -2187,22 +1621,10 @@
     "max_output_tokens": 65536,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text",
-        "image",
-        "pdf",
-        "video"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["text", "image", "pdf", "video"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "streaming",
-      "function_calling",
-      "structured_output",
-      "caching"
-    ],
+    "capabilities": ["streaming", "function_calling", "structured_output", "caching"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -2218,10 +1640,7 @@
     "metadata": {
       "version": "1.5-preview",
       "description": "Gemini Robotics-ER 1.5 Preview",
-      "supported_generation_methods": [
-        "generateContent",
-        "countTokens"
-      ]
+      "supported_generation_methods": ["generateContent", "countTokens"]
     }
   },
   {
@@ -2234,16 +1653,10 @@
     "max_output_tokens": 8192,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["text"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "streaming"
-    ],
+    "capabilities": ["streaming"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -2259,10 +1672,7 @@
     "metadata": {
       "version": "001",
       "description": null,
-      "supported_generation_methods": [
-        "generateContent",
-        "countTokens"
-      ]
+      "supported_generation_methods": ["generateContent", "countTokens"]
     }
   },
   {
@@ -2275,16 +1685,10 @@
     "max_output_tokens": 8192,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["text"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "streaming"
-    ],
+    "capabilities": ["streaming"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -2300,10 +1704,7 @@
     "metadata": {
       "version": "001",
       "description": null,
-      "supported_generation_methods": [
-        "generateContent",
-        "countTokens"
-      ]
+      "supported_generation_methods": ["generateContent", "countTokens"]
     }
   },
   {
@@ -2316,16 +1717,10 @@
     "max_output_tokens": 8192,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["text"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "streaming"
-    ],
+    "capabilities": ["streaming"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -2341,10 +1736,7 @@
     "metadata": {
       "version": "001",
       "description": null,
-      "supported_generation_methods": [
-        "generateContent",
-        "countTokens"
-      ]
+      "supported_generation_methods": ["generateContent", "countTokens"]
     }
   },
   {
@@ -2357,16 +1749,10 @@
     "max_output_tokens": 8192,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["text"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "streaming"
-    ],
+    "capabilities": ["streaming"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -2382,10 +1768,7 @@
     "metadata": {
       "version": "001",
       "description": null,
-      "supported_generation_methods": [
-        "generateContent",
-        "countTokens"
-      ]
+      "supported_generation_methods": ["generateContent", "countTokens"]
     }
   },
   {
@@ -2398,16 +1781,10 @@
     "max_output_tokens": 2048,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["text"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "streaming"
-    ],
+    "capabilities": ["streaming"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -2423,10 +1800,7 @@
     "metadata": {
       "version": "001",
       "description": null,
-      "supported_generation_methods": [
-        "generateContent",
-        "countTokens"
-      ]
+      "supported_generation_methods": ["generateContent", "countTokens"]
     }
   },
   {
@@ -2439,16 +1813,10 @@
     "max_output_tokens": 2048,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["text"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "streaming"
-    ],
+    "capabilities": ["streaming"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -2464,10 +1832,7 @@
     "metadata": {
       "version": "001",
       "description": null,
-      "supported_generation_methods": [
-        "generateContent",
-        "countTokens"
-      ]
+      "supported_generation_methods": ["generateContent", "countTokens"]
     }
   },
   {
@@ -2480,25 +1845,15 @@
     "max_output_tokens": 8192,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text",
-        "image",
-        "pdf"
-      ],
-      "output": [
-        "image"
-      ]
+      "input": ["text", "image", "pdf"],
+      "output": ["image"]
     },
-    "capabilities": [
-      "streaming"
-    ],
+    "capabilities": ["streaming"],
     "pricing": {},
     "metadata": {
       "version": "001",
       "description": "Vertex served Imagen 4.0 model",
-      "supported_generation_methods": [
-        "predict"
-      ]
+      "supported_generation_methods": ["predict"]
     }
   },
   {
@@ -2511,25 +1866,15 @@
     "max_output_tokens": 8192,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text",
-        "image",
-        "pdf"
-      ],
-      "output": [
-        "image"
-      ]
+      "input": ["text", "image", "pdf"],
+      "output": ["image"]
     },
-    "capabilities": [
-      "streaming"
-    ],
+    "capabilities": ["streaming"],
     "pricing": {},
     "metadata": {
       "version": "01",
       "description": "Vertex served Imagen 4.0 model",
-      "supported_generation_methods": [
-        "predict"
-      ]
+      "supported_generation_methods": ["predict"]
     }
   },
   {
@@ -2542,25 +1887,15 @@
     "max_output_tokens": 8192,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text",
-        "image",
-        "pdf"
-      ],
-      "output": [
-        "image"
-      ]
+      "input": ["text", "image", "pdf"],
+      "output": ["image"]
     },
-    "capabilities": [
-      "streaming"
-    ],
+    "capabilities": ["streaming"],
     "pricing": {},
     "metadata": {
       "version": "001",
       "description": "Vertex served Imagen 4.0 ultra model",
-      "supported_generation_methods": [
-        "predict"
-      ]
+      "supported_generation_methods": ["predict"]
     }
   },
   {
@@ -2573,25 +1908,15 @@
     "max_output_tokens": 8192,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text",
-        "image",
-        "pdf"
-      ],
-      "output": [
-        "image"
-      ]
+      "input": ["text", "image", "pdf"],
+      "output": ["image"]
     },
-    "capabilities": [
-      "streaming"
-    ],
+    "capabilities": ["streaming"],
     "pricing": {},
     "metadata": {
       "version": "01",
       "description": "Vertex served Imagen 4.0 ultra model",
-      "supported_generation_methods": [
-        "predict"
-      ]
+      "supported_generation_methods": ["predict"]
     }
   },
   {
@@ -2604,22 +1929,10 @@
     "max_output_tokens": 32768,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text",
-        "image",
-        "pdf"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["text", "image", "pdf"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "streaming",
-      "function_calling",
-      "structured_output",
-      "batch",
-      "caching"
-    ],
+    "capabilities": ["streaming", "function_calling", "structured_output", "batch", "caching"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -2635,10 +1948,7 @@
     "metadata": {
       "version": "2.0",
       "description": "LearnLM 2.0 Flash Experimental",
-      "supported_generation_methods": [
-        "generateContent",
-        "countTokens"
-      ]
+      "supported_generation_methods": ["generateContent", "countTokens"]
     }
   },
   {
@@ -2651,18 +1961,10 @@
     "max_output_tokens": 1,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text"
-      ],
-      "output": [
-        "text",
-        "embeddings"
-      ]
+      "input": ["text"],
+      "output": ["text", "embeddings"]
     },
-    "capabilities": [
-      "streaming",
-      "batch"
-    ],
+    "capabilities": ["streaming", "batch"],
     "pricing": {
       "embeddings": {
         "standard": {
@@ -2673,9 +1975,7 @@
     "metadata": {
       "version": "004",
       "description": "Obtain a distributed representation of a text.",
-      "supported_generation_methods": [
-        "embedContent"
-      ]
+      "supported_generation_methods": ["embedContent"]
     }
   },
   {
@@ -2688,13 +1988,8 @@
     "max_output_tokens": 16384,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["text"],
+      "output": ["embeddings", "text"]
     },
     "capabilities": [],
     "pricing": {
@@ -2720,14 +2015,8 @@
     "max_output_tokens": 16384,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "image",
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["image", "text"],
+      "output": ["embeddings", "text"]
     },
     "capabilities": [],
     "pricing": {
@@ -2753,19 +2042,10 @@
     "max_output_tokens": 100000,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "image",
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["image", "text"],
+      "output": ["embeddings", "text"]
     },
-    "capabilities": [
-      "function_calling",
-      "structured_output"
-    ],
+    "capabilities": ["function_calling", "structured_output"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -2790,19 +2070,10 @@
     "max_output_tokens": 1024,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "image",
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["image", "text"],
+      "output": ["embeddings", "text"]
     },
-    "capabilities": [
-      "batch",
-      "function_calling"
-    ],
+    "capabilities": ["batch", "function_calling"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -2827,19 +2098,10 @@
     "max_output_tokens": 1024,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "image",
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["image", "text"],
+      "output": ["embeddings", "text"]
     },
-    "capabilities": [
-      "batch",
-      "function_calling"
-    ],
+    "capabilities": ["batch", "function_calling"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -2865,9 +2127,7 @@
     "knowledge_cutoff": null,
     "modalities": {
       "input": [],
-      "output": [
-        "embeddings"
-      ]
+      "output": ["embeddings"]
     },
     "capabilities": [],
     "pricing": {},
@@ -2886,19 +2146,10 @@
     "max_output_tokens": null,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "image",
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "image",
-        "text"
-      ]
+      "input": ["image", "text"],
+      "output": ["embeddings", "image", "text"]
     },
-    "capabilities": [
-      "structured_output"
-    ],
+    "capabilities": ["structured_output"],
     "pricing": {},
     "metadata": {
       "object": "model",
@@ -2915,13 +2166,8 @@
     "max_output_tokens": 16384,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["text"],
+      "output": ["embeddings", "text"]
     },
     "capabilities": [],
     "pricing": {
@@ -2947,17 +2193,10 @@
     "max_output_tokens": 4096,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["text"],
+      "output": ["embeddings", "text"]
     },
-    "capabilities": [
-      "batch"
-    ],
+    "capabilities": ["batch"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -2985,16 +2224,10 @@
     "max_output_tokens": 4096,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["text"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "streaming"
-    ],
+    "capabilities": ["streaming"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -3018,16 +2251,10 @@
     "max_output_tokens": 4096,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["text"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "streaming"
-    ],
+    "capabilities": ["streaming"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -3051,16 +2278,10 @@
     "max_output_tokens": 4096,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["text"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "streaming"
-    ],
+    "capabilities": ["streaming"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -3084,16 +2305,10 @@
     "max_output_tokens": 4096,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["text"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "streaming"
-    ],
+    "capabilities": ["streaming"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -3117,16 +2332,10 @@
     "max_output_tokens": 4096,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["text"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "streaming"
-    ],
+    "capabilities": ["streaming"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -3150,17 +2359,10 @@
     "max_output_tokens": 8192,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["text"],
+      "output": ["embeddings", "text"]
     },
-    "capabilities": [
-      "batch"
-    ],
+    "capabilities": ["batch"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -3188,16 +2390,10 @@
     "max_output_tokens": 16384,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["text"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "streaming"
-    ],
+    "capabilities": ["streaming"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -3221,17 +2417,10 @@
     "max_output_tokens": 8192,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["text"],
+      "output": ["embeddings", "text"]
     },
-    "capabilities": [
-      "batch"
-    ],
+    "capabilities": ["batch"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -3259,16 +2448,10 @@
     "max_output_tokens": 16384,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["text"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "streaming"
-    ],
+    "capabilities": ["streaming"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -3292,19 +2475,10 @@
     "max_output_tokens": 4096,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "image",
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["image", "text"],
+      "output": ["embeddings", "text"]
     },
-    "capabilities": [
-      "batch",
-      "function_calling"
-    ],
+    "capabilities": ["batch", "function_calling"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -3332,19 +2506,10 @@
     "max_output_tokens": 4096,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "image",
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["image", "text"],
+      "output": ["embeddings", "text"]
     },
-    "capabilities": [
-      "batch",
-      "function_calling"
-    ],
+    "capabilities": ["batch", "function_calling"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -3372,13 +2537,8 @@
     "max_output_tokens": 4096,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["text"],
+      "output": ["embeddings", "text"]
     },
     "capabilities": [],
     "pricing": {
@@ -3404,20 +2564,10 @@
     "max_output_tokens": 32768,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "image",
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["image", "text"],
+      "output": ["embeddings", "text"]
     },
-    "capabilities": [
-      "batch",
-      "function_calling",
-      "structured_output"
-    ],
+    "capabilities": ["batch", "function_calling", "structured_output"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -3446,20 +2596,10 @@
     "max_output_tokens": 32768,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "image",
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["image", "text"],
+      "output": ["embeddings", "text"]
     },
-    "capabilities": [
-      "batch",
-      "function_calling",
-      "structured_output"
-    ],
+    "capabilities": ["batch", "function_calling", "structured_output"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -3488,20 +2628,10 @@
     "max_output_tokens": 32768,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "image",
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["image", "text"],
+      "output": ["embeddings", "text"]
     },
-    "capabilities": [
-      "batch",
-      "function_calling",
-      "structured_output"
-    ],
+    "capabilities": ["batch", "function_calling", "structured_output"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -3530,20 +2660,10 @@
     "max_output_tokens": 32768,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "image",
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["image", "text"],
+      "output": ["embeddings", "text"]
     },
-    "capabilities": [
-      "batch",
-      "function_calling",
-      "structured_output"
-    ],
+    "capabilities": ["batch", "function_calling", "structured_output"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -3572,20 +2692,10 @@
     "max_output_tokens": 32768,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "image",
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["image", "text"],
+      "output": ["embeddings", "text"]
     },
-    "capabilities": [
-      "batch",
-      "function_calling",
-      "structured_output"
-    ],
+    "capabilities": ["batch", "function_calling", "structured_output"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -3614,20 +2724,10 @@
     "max_output_tokens": 32768,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "image",
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["image", "text"],
+      "output": ["embeddings", "text"]
     },
-    "capabilities": [
-      "batch",
-      "function_calling",
-      "structured_output"
-    ],
+    "capabilities": ["batch", "function_calling", "structured_output"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -3656,20 +2756,10 @@
     "max_output_tokens": 16384,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "image",
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["image", "text"],
+      "output": ["embeddings", "text"]
     },
-    "capabilities": [
-      "batch",
-      "function_calling",
-      "structured_output"
-    ],
+    "capabilities": ["batch", "function_calling", "structured_output"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -3695,20 +2785,10 @@
     "max_output_tokens": 16384,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "image",
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["image", "text"],
+      "output": ["embeddings", "text"]
     },
-    "capabilities": [
-      "batch",
-      "function_calling",
-      "structured_output"
-    ],
+    "capabilities": ["batch", "function_calling", "structured_output"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -3734,20 +2814,10 @@
     "max_output_tokens": 16384,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "image",
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["image", "text"],
+      "output": ["embeddings", "text"]
     },
-    "capabilities": [
-      "batch",
-      "function_calling",
-      "structured_output"
-    ],
+    "capabilities": ["batch", "function_calling", "structured_output"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -3776,20 +2846,10 @@
     "max_output_tokens": 16384,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "image",
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["image", "text"],
+      "output": ["embeddings", "text"]
     },
-    "capabilities": [
-      "batch",
-      "function_calling",
-      "structured_output"
-    ],
+    "capabilities": ["batch", "function_calling", "structured_output"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -3815,20 +2875,10 @@
     "max_output_tokens": 16384,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text",
-        "image",
-        "pdf"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["text", "image", "pdf"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "streaming",
-      "function_calling",
-      "structured_output"
-    ],
+    "capabilities": ["streaming", "function_calling", "structured_output"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -3852,20 +2902,10 @@
     "max_output_tokens": 16384,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text",
-        "image",
-        "pdf"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["text", "image", "pdf"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "streaming",
-      "function_calling",
-      "structured_output"
-    ],
+    "capabilities": ["streaming", "function_calling", "structured_output"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -3889,20 +2929,10 @@
     "max_output_tokens": 16384,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text",
-        "image",
-        "pdf"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["text", "image", "pdf"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "streaming",
-      "function_calling",
-      "structured_output"
-    ],
+    "capabilities": ["streaming", "function_calling", "structured_output"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -3926,19 +2956,10 @@
     "max_output_tokens": 16384,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "audio",
-        "text"
-      ],
-      "output": [
-        "audio",
-        "embeddings",
-        "text"
-      ]
+      "input": ["audio", "text"],
+      "output": ["audio", "embeddings", "text"]
     },
-    "capabilities": [
-      "function_calling"
-    ],
+    "capabilities": ["function_calling"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -3962,20 +2983,10 @@
     "max_output_tokens": 16384,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text",
-        "audio"
-      ],
-      "output": [
-        "text",
-        "audio"
-      ]
+      "input": ["text", "audio"],
+      "output": ["text", "audio"]
     },
-    "capabilities": [
-      "streaming",
-      "speech_generation",
-      "transcription"
-    ],
+    "capabilities": ["streaming", "speech_generation", "transcription"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -3999,20 +3010,10 @@
     "max_output_tokens": 16384,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text",
-        "audio"
-      ],
-      "output": [
-        "text",
-        "audio"
-      ]
+      "input": ["text", "audio"],
+      "output": ["text", "audio"]
     },
-    "capabilities": [
-      "streaming",
-      "speech_generation",
-      "transcription"
-    ],
+    "capabilities": ["streaming", "speech_generation", "transcription"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -4036,20 +3037,10 @@
     "max_output_tokens": 16384,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text",
-        "audio"
-      ],
-      "output": [
-        "text",
-        "audio"
-      ]
+      "input": ["text", "audio"],
+      "output": ["text", "audio"]
     },
-    "capabilities": [
-      "streaming",
-      "speech_generation",
-      "transcription"
-    ],
+    "capabilities": ["streaming", "speech_generation", "transcription"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -4073,20 +3064,10 @@
     "max_output_tokens": 16384,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "image",
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["image", "text"],
+      "output": ["embeddings", "text"]
     },
-    "capabilities": [
-      "batch",
-      "function_calling",
-      "structured_output"
-    ],
+    "capabilities": ["batch", "function_calling", "structured_output"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -4115,20 +3096,10 @@
     "max_output_tokens": 16384,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "image",
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["image", "text"],
+      "output": ["embeddings", "text"]
     },
-    "capabilities": [
-      "batch",
-      "function_calling",
-      "structured_output"
-    ],
+    "capabilities": ["batch", "function_calling", "structured_output"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -4157,19 +3128,10 @@
     "max_output_tokens": 16384,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "audio",
-        "text"
-      ],
-      "output": [
-        "audio",
-        "embeddings",
-        "text"
-      ]
+      "input": ["audio", "text"],
+      "output": ["audio", "embeddings", "text"]
     },
-    "capabilities": [
-      "function_calling"
-    ],
+    "capabilities": ["function_calling"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -4193,20 +3155,10 @@
     "max_output_tokens": 16384,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text",
-        "audio"
-      ],
-      "output": [
-        "text",
-        "audio"
-      ]
+      "input": ["text", "audio"],
+      "output": ["text", "audio"]
     },
-    "capabilities": [
-      "streaming",
-      "speech_generation",
-      "transcription"
-    ],
+    "capabilities": ["streaming", "speech_generation", "transcription"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -4230,19 +3182,10 @@
     "max_output_tokens": 4096,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "audio",
-        "text"
-      ],
-      "output": [
-        "audio",
-        "embeddings",
-        "text"
-      ]
+      "input": ["audio", "text"],
+      "output": ["audio", "embeddings", "text"]
     },
-    "capabilities": [
-      "function_calling"
-    ],
+    "capabilities": ["function_calling"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -4267,16 +3210,10 @@
     "max_output_tokens": 4096,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["text"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "streaming"
-    ],
+    "capabilities": ["streaming"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -4300,17 +3237,10 @@
     "max_output_tokens": 16384,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["text"],
+      "output": ["embeddings", "text"]
     },
-    "capabilities": [
-      "structured_output"
-    ],
+    "capabilities": ["structured_output"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -4334,17 +3264,10 @@
     "max_output_tokens": 16384,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["text"],
+      "output": ["embeddings", "text"]
     },
-    "capabilities": [
-      "structured_output"
-    ],
+    "capabilities": ["structured_output"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -4368,18 +3291,10 @@
     "max_output_tokens": 2000,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "audio",
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["audio", "text"],
+      "output": ["embeddings", "text"]
     },
-    "capabilities": [
-      "structured_output"
-    ],
+    "capabilities": ["structured_output"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -4403,13 +3318,8 @@
     "max_output_tokens": null,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text"
-      ],
-      "output": [
-        "audio",
-        "embeddings"
-      ]
+      "input": ["text"],
+      "output": ["audio", "embeddings"]
     },
     "capabilities": [],
     "pricing": {
@@ -4435,19 +3345,10 @@
     "max_output_tokens": 4096,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "audio",
-        "text"
-      ],
-      "output": [
-        "audio",
-        "embeddings",
-        "text"
-      ]
+      "input": ["audio", "text"],
+      "output": ["audio", "embeddings", "text"]
     },
-    "capabilities": [
-      "function_calling"
-    ],
+    "capabilities": ["function_calling"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -4472,16 +3373,10 @@
     "max_output_tokens": 4096,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["text"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "streaming"
-    ],
+    "capabilities": ["streaming"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -4505,16 +3400,10 @@
     "max_output_tokens": 4096,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["text"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "streaming"
-    ],
+    "capabilities": ["streaming"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -4538,16 +3427,10 @@
     "max_output_tokens": 4096,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["text"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "streaming"
-    ],
+    "capabilities": ["streaming"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -4571,17 +3454,10 @@
     "max_output_tokens": 16384,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["text"],
+      "output": ["embeddings", "text"]
     },
-    "capabilities": [
-      "structured_output"
-    ],
+    "capabilities": ["structured_output"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -4605,17 +3481,10 @@
     "max_output_tokens": 16384,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["text"],
+      "output": ["embeddings", "text"]
     },
-    "capabilities": [
-      "structured_output"
-    ],
+    "capabilities": ["structured_output"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -4639,18 +3508,10 @@
     "max_output_tokens": 2000,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "audio",
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["audio", "text"],
+      "output": ["embeddings", "text"]
     },
-    "capabilities": [
-      "structured_output"
-    ],
+    "capabilities": ["structured_output"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -4674,18 +3535,10 @@
     "max_output_tokens": 2000,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "audio",
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["audio", "text"],
+      "output": ["embeddings", "text"]
     },
-    "capabilities": [
-      "structured_output"
-    ],
+    "capabilities": ["structured_output"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -4709,20 +3562,10 @@
     "max_output_tokens": 128000,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "image",
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["image", "text"],
+      "output": ["embeddings", "text"]
     },
-    "capabilities": [
-      "batch",
-      "function_calling",
-      "structured_output"
-    ],
+    "capabilities": ["batch", "function_calling", "structured_output"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -4751,20 +3594,10 @@
     "max_output_tokens": 128000,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "image",
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["image", "text"],
+      "output": ["embeddings", "text"]
     },
-    "capabilities": [
-      "batch",
-      "function_calling",
-      "structured_output"
-    ],
+    "capabilities": ["batch", "function_calling", "structured_output"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -4793,19 +3626,10 @@
     "max_output_tokens": 16384,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "image",
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["image", "text"],
+      "output": ["embeddings", "text"]
     },
-    "capabilities": [
-      "function_calling",
-      "structured_output"
-    ],
+    "capabilities": ["function_calling", "structured_output"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -4830,19 +3654,10 @@
     "max_output_tokens": 128000,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "image",
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["image", "text"],
+      "output": ["embeddings", "text"]
     },
-    "capabilities": [
-      "function_calling",
-      "structured_output"
-    ],
+    "capabilities": ["function_calling", "structured_output"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -4867,20 +3682,10 @@
     "max_output_tokens": 128000,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "image",
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["image", "text"],
+      "output": ["embeddings", "text"]
     },
-    "capabilities": [
-      "batch",
-      "function_calling",
-      "structured_output"
-    ],
+    "capabilities": ["batch", "function_calling", "structured_output"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -4909,20 +3714,10 @@
     "max_output_tokens": 128000,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "image",
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["image", "text"],
+      "output": ["embeddings", "text"]
     },
-    "capabilities": [
-      "batch",
-      "function_calling",
-      "structured_output"
-    ],
+    "capabilities": ["batch", "function_calling", "structured_output"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -4951,20 +3746,10 @@
     "max_output_tokens": 128000,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "image",
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["image", "text"],
+      "output": ["embeddings", "text"]
     },
-    "capabilities": [
-      "batch",
-      "function_calling",
-      "structured_output"
-    ],
+    "capabilities": ["batch", "function_calling", "structured_output"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -4993,20 +3778,10 @@
     "max_output_tokens": 128000,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "image",
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["image", "text"],
+      "output": ["embeddings", "text"]
     },
-    "capabilities": [
-      "batch",
-      "function_calling",
-      "structured_output"
-    ],
+    "capabilities": ["batch", "function_calling", "structured_output"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -5035,20 +3810,10 @@
     "max_output_tokens": 272000,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "image",
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["image", "text"],
+      "output": ["embeddings", "text"]
     },
-    "capabilities": [
-      "batch",
-      "function_calling",
-      "structured_output"
-    ],
+    "capabilities": ["batch", "function_calling", "structured_output"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -5076,20 +3841,10 @@
     "max_output_tokens": 272000,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "image",
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["image", "text"],
+      "output": ["embeddings", "text"]
     },
-    "capabilities": [
-      "batch",
-      "function_calling",
-      "structured_output"
-    ],
+    "capabilities": ["batch", "function_calling", "structured_output"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -5117,21 +3872,10 @@
     "max_output_tokens": 400000,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text",
-        "image",
-        "pdf"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["text", "image", "pdf"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "streaming",
-      "function_calling",
-      "structured_output",
-      "reasoning"
-    ],
+    "capabilities": ["streaming", "function_calling", "structured_output", "reasoning"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -5156,21 +3900,10 @@
     "max_output_tokens": 400000,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text",
-        "image",
-        "pdf"
-      ],
-      "output": [
-        "text"
-      ]
+      "input": ["text", "image", "pdf"],
+      "output": ["text"]
     },
-    "capabilities": [
-      "streaming",
-      "function_calling",
-      "structured_output",
-      "reasoning"
-    ],
+    "capabilities": ["streaming", "function_calling", "structured_output", "reasoning"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -5195,20 +3928,10 @@
     "max_output_tokens": 128000,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "image",
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "image",
-        "text"
-      ]
+      "input": ["image", "text"],
+      "output": ["embeddings", "image", "text"]
     },
-    "capabilities": [
-      "function_calling",
-      "structured_output"
-    ],
+    "capabilities": ["function_calling", "structured_output"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -5233,20 +3956,10 @@
     "max_output_tokens": 128000,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "image",
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "image",
-        "text"
-      ]
+      "input": ["image", "text"],
+      "output": ["embeddings", "image", "text"]
     },
-    "capabilities": [
-      "function_calling",
-      "structured_output"
-    ],
+    "capabilities": ["function_calling", "structured_output"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -5271,19 +3984,10 @@
     "max_output_tokens": 16384,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "image",
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["image", "text"],
+      "output": ["embeddings", "text"]
     },
-    "capabilities": [
-      "function_calling",
-      "structured_output"
-    ],
+    "capabilities": ["function_calling", "structured_output"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -5308,20 +4012,10 @@
     "max_output_tokens": 128000,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "image",
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "image",
-        "text"
-      ]
+      "input": ["image", "text"],
+      "output": ["embeddings", "image", "text"]
     },
-    "capabilities": [
-      "function_calling",
-      "structured_output"
-    ],
+    "capabilities": ["function_calling", "structured_output"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -5346,20 +4040,10 @@
     "max_output_tokens": 128000,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "image",
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "image",
-        "text"
-      ]
+      "input": ["image", "text"],
+      "output": ["embeddings", "image", "text"]
     },
-    "capabilities": [
-      "function_calling",
-      "structured_output"
-    ],
+    "capabilities": ["function_calling", "structured_output"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -5384,19 +4068,10 @@
     "max_output_tokens": 16384,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "audio",
-        "text"
-      ],
-      "output": [
-        "audio",
-        "embeddings",
-        "text"
-      ]
+      "input": ["audio", "text"],
+      "output": ["audio", "embeddings", "text"]
     },
-    "capabilities": [
-      "function_calling"
-    ],
+    "capabilities": ["function_calling"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -5420,19 +4095,10 @@
     "max_output_tokens": 16384,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "audio",
-        "text"
-      ],
-      "output": [
-        "audio",
-        "embeddings",
-        "text"
-      ]
+      "input": ["audio", "text"],
+      "output": ["audio", "embeddings", "text"]
     },
-    "capabilities": [
-      "function_calling"
-    ],
+    "capabilities": ["function_calling"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -5456,19 +4122,10 @@
     "max_output_tokens": 16384,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "audio",
-        "text"
-      ],
-      "output": [
-        "audio",
-        "embeddings",
-        "text"
-      ]
+      "input": ["audio", "text"],
+      "output": ["audio", "embeddings", "text"]
     },
-    "capabilities": [
-      "function_calling"
-    ],
+    "capabilities": ["function_calling"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -5492,19 +4149,10 @@
     "max_output_tokens": 16384,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "audio",
-        "text"
-      ],
-      "output": [
-        "audio",
-        "embeddings",
-        "text"
-      ]
+      "input": ["audio", "text"],
+      "output": ["audio", "embeddings", "text"]
     },
-    "capabilities": [
-      "function_calling"
-    ],
+    "capabilities": ["function_calling"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -5528,14 +4176,8 @@
     "max_output_tokens": null,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "image",
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "image"
-      ]
+      "input": ["image", "text"],
+      "output": ["embeddings", "image"]
     },
     "capabilities": [],
     "pricing": {
@@ -5562,19 +4204,10 @@
     "max_output_tokens": null,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "image",
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "image",
-        "text"
-      ]
+      "input": ["image", "text"],
+      "output": ["embeddings", "image", "text"]
     },
-    "capabilities": [
-      "structured_output"
-    ],
+    "capabilities": ["structured_output"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -5599,19 +4232,10 @@
     "max_output_tokens": 131072,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["text"],
+      "output": ["embeddings", "text"]
     },
-    "capabilities": [
-      "batch",
-      "function_calling",
-      "structured_output"
-    ],
+    "capabilities": ["batch", "function_calling", "structured_output"],
     "pricing": {},
     "metadata": {}
   },
@@ -5625,19 +4249,10 @@
     "max_output_tokens": 131072,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["text"],
+      "output": ["embeddings", "text"]
     },
-    "capabilities": [
-      "batch",
-      "function_calling",
-      "structured_output"
-    ],
+    "capabilities": ["batch", "function_calling", "structured_output"],
     "pricing": {},
     "metadata": {}
   },
@@ -5651,20 +4266,10 @@
     "max_output_tokens": 4096,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "audio",
-        "image",
-        "text"
-      ],
-      "output": [
-        "audio",
-        "embeddings",
-        "text"
-      ]
+      "input": ["audio", "image", "text"],
+      "output": ["audio", "embeddings", "text"]
     },
-    "capabilities": [
-      "function_calling"
-    ],
+    "capabilities": ["function_calling"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -5689,20 +4294,10 @@
     "max_output_tokens": 4096,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "audio",
-        "image",
-        "text"
-      ],
-      "output": [
-        "audio",
-        "embeddings",
-        "text"
-      ]
+      "input": ["audio", "image", "text"],
+      "output": ["audio", "embeddings", "text"]
     },
-    "capabilities": [
-      "function_calling"
-    ],
+    "capabilities": ["function_calling"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -5727,20 +4322,10 @@
     "max_output_tokens": 4096,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "audio",
-        "image",
-        "text"
-      ],
-      "output": [
-        "audio",
-        "embeddings",
-        "text"
-      ]
+      "input": ["audio", "image", "text"],
+      "output": ["audio", "embeddings", "text"]
     },
-    "capabilities": [
-      "function_calling"
-    ],
+    "capabilities": ["function_calling"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -5765,20 +4350,10 @@
     "max_output_tokens": 4096,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "audio",
-        "image",
-        "text"
-      ],
-      "output": [
-        "audio",
-        "embeddings",
-        "text"
-      ]
+      "input": ["audio", "image", "text"],
+      "output": ["audio", "embeddings", "text"]
     },
-    "capabilities": [
-      "function_calling"
-    ],
+    "capabilities": ["function_calling"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -5803,20 +4378,10 @@
     "max_output_tokens": 100000,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "image",
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["image", "text"],
+      "output": ["embeddings", "text"]
     },
-    "capabilities": [
-      "batch",
-      "function_calling",
-      "structured_output"
-    ],
+    "capabilities": ["batch", "function_calling", "structured_output"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -5845,20 +4410,10 @@
     "max_output_tokens": 100000,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "image",
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["image", "text"],
+      "output": ["embeddings", "text"]
     },
-    "capabilities": [
-      "batch",
-      "function_calling",
-      "structured_output"
-    ],
+    "capabilities": ["batch", "function_calling", "structured_output"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -5887,13 +4442,8 @@
     "max_output_tokens": 65536,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["text"],
+      "output": ["embeddings", "text"]
     },
     "capabilities": [],
     "pricing": {
@@ -5917,13 +4467,8 @@
     "max_output_tokens": 65536,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["text"],
+      "output": ["embeddings", "text"]
     },
     "capabilities": [],
     "pricing": {
@@ -5947,18 +4492,10 @@
     "max_output_tokens": 32768,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["text"],
+      "output": ["embeddings", "text"]
     },
-    "capabilities": [
-      "function_calling",
-      "structured_output"
-    ],
+    "capabilities": ["function_calling", "structured_output"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -5980,18 +4517,10 @@
     "max_output_tokens": 32768,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["text"],
+      "output": ["embeddings", "text"]
     },
-    "capabilities": [
-      "function_calling",
-      "structured_output"
-    ],
+    "capabilities": ["function_calling", "structured_output"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -6014,15 +4543,9 @@
     "knowledge_cutoff": null,
     "modalities": {
       "input": [],
-      "output": [
-        "embeddings"
-      ]
+      "output": ["embeddings"]
     },
-    "capabilities": [
-      "batch",
-      "function_calling",
-      "structured_output"
-    ],
+    "capabilities": ["batch", "function_calling", "structured_output"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -6051,15 +4574,9 @@
     "knowledge_cutoff": null,
     "modalities": {
       "input": [],
-      "output": [
-        "embeddings"
-      ]
+      "output": ["embeddings"]
     },
-    "capabilities": [
-      "batch",
-      "function_calling",
-      "structured_output"
-    ],
+    "capabilities": ["batch", "function_calling", "structured_output"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -6087,20 +4604,10 @@
     "max_output_tokens": 100000,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "image",
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["image", "text"],
+      "output": ["embeddings", "text"]
     },
-    "capabilities": [
-      "batch",
-      "function_calling",
-      "structured_output"
-    ],
+    "capabilities": ["batch", "function_calling", "structured_output"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -6129,20 +4636,10 @@
     "max_output_tokens": 100000,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "image",
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["image", "text"],
+      "output": ["embeddings", "text"]
     },
-    "capabilities": [
-      "batch",
-      "function_calling",
-      "structured_output"
-    ],
+    "capabilities": ["batch", "function_calling", "structured_output"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -6171,18 +4668,10 @@
     "max_output_tokens": 100000,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "image",
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["image", "text"],
+      "output": ["embeddings", "text"]
     },
-    "capabilities": [
-      "batch"
-    ],
+    "capabilities": ["batch"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -6211,18 +4700,10 @@
     "max_output_tokens": 100000,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "image",
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["image", "text"],
+      "output": ["embeddings", "text"]
     },
-    "capabilities": [
-      "batch"
-    ],
+    "capabilities": ["batch"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -6251,19 +4732,10 @@
     "max_output_tokens": 100000,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["text"],
+      "output": ["embeddings", "text"]
     },
-    "capabilities": [
-      "batch",
-      "function_calling",
-      "structured_output"
-    ],
+    "capabilities": ["batch", "function_calling", "structured_output"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -6292,19 +4764,10 @@
     "max_output_tokens": 100000,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["text"],
+      "output": ["embeddings", "text"]
     },
-    "capabilities": [
-      "batch",
-      "function_calling",
-      "structured_output"
-    ],
+    "capabilities": ["batch", "function_calling", "structured_output"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -6333,20 +4796,10 @@
     "max_output_tokens": 100000,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "image",
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["image", "text"],
+      "output": ["embeddings", "text"]
     },
-    "capabilities": [
-      "batch",
-      "function_calling",
-      "structured_output"
-    ],
+    "capabilities": ["batch", "function_calling", "structured_output"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -6374,20 +4827,10 @@
     "max_output_tokens": 100000,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "image",
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["image", "text"],
+      "output": ["embeddings", "text"]
     },
-    "capabilities": [
-      "batch",
-      "function_calling",
-      "structured_output"
-    ],
+    "capabilities": ["batch", "function_calling", "structured_output"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -6415,20 +4858,10 @@
     "max_output_tokens": 100000,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "image",
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["image", "text"],
+      "output": ["embeddings", "text"]
     },
-    "capabilities": [
-      "batch",
-      "function_calling",
-      "structured_output"
-    ],
+    "capabilities": ["batch", "function_calling", "structured_output"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -6457,20 +4890,10 @@
     "max_output_tokens": 100000,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "image",
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["image", "text"],
+      "output": ["embeddings", "text"]
     },
-    "capabilities": [
-      "batch",
-      "function_calling",
-      "structured_output"
-    ],
+    "capabilities": ["batch", "function_calling", "structured_output"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -6499,18 +4922,10 @@
     "max_output_tokens": 100000,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "image",
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["image", "text"],
+      "output": ["embeddings", "text"]
     },
-    "capabilities": [
-      "batch"
-    ],
+    "capabilities": ["batch"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -6539,18 +4954,10 @@
     "max_output_tokens": 100000,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "image",
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["image", "text"],
+      "output": ["embeddings", "text"]
     },
-    "capabilities": [
-      "batch"
-    ],
+    "capabilities": ["batch"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -6579,15 +4986,8 @@
     "max_output_tokens": null,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text",
-        "image",
-        "pdf"
-      ],
-      "output": [
-        "text",
-        "moderation"
-      ]
+      "input": ["text", "image", "pdf"],
+      "output": ["text", "moderation"]
     },
     "capabilities": [],
     "pricing": {},
@@ -6606,18 +5006,10 @@
     "max_output_tokens": null,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "image",
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["image", "text"],
+      "output": ["embeddings", "text"]
     },
-    "capabilities": [
-      "batch"
-    ],
+    "capabilities": ["batch"],
     "pricing": {},
     "metadata": {
       "object": "model",
@@ -6635,9 +5027,7 @@
     "knowledge_cutoff": null,
     "modalities": {
       "input": [],
-      "output": [
-        "embeddings"
-      ]
+      "output": ["embeddings"]
     },
     "capabilities": [],
     "pricing": {
@@ -6662,18 +5052,10 @@
     "max_output_tokens": null,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "image"
-      ],
-      "output": [
-        "audio",
-        "embeddings",
-        "image"
-      ]
+      "input": ["image"],
+      "output": ["audio", "embeddings", "image"]
     },
-    "capabilities": [
-      "structured_output"
-    ],
+    "capabilities": ["structured_output"],
     "pricing": {},
     "metadata": {
       "object": "model",
@@ -6690,18 +5072,10 @@
     "max_output_tokens": null,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["text"],
+      "output": ["embeddings", "text"]
     },
-    "capabilities": [
-      "batch",
-      "structured_output"
-    ],
+    "capabilities": ["batch", "structured_output"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -6736,13 +5110,9 @@
     "knowledge_cutoff": null,
     "modalities": {
       "input": [],
-      "output": [
-        "embeddings"
-      ]
+      "output": ["embeddings"]
     },
-    "capabilities": [
-      "batch"
-    ],
+    "capabilities": ["batch"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -6777,14 +5147,9 @@
     "knowledge_cutoff": null,
     "modalities": {
       "input": [],
-      "output": [
-        "embeddings"
-      ]
+      "output": ["embeddings"]
     },
-    "capabilities": [
-      "batch",
-      "structured_output"
-    ],
+    "capabilities": ["batch", "structured_output"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -6818,13 +5183,8 @@
     "max_output_tokens": 32768,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["text"],
+      "output": ["embeddings", "text"]
     },
     "capabilities": [],
     "pricing": {},
@@ -6840,17 +5200,10 @@
     "max_output_tokens": 32768,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text"
-      ],
-      "output": [
-        "embeddings",
-        "text"
-      ]
+      "input": ["text"],
+      "output": ["embeddings", "text"]
     },
-    "capabilities": [
-      "structured_output"
-    ],
+    "capabilities": ["structured_output"],
     "pricing": {},
     "metadata": {}
   },
@@ -6865,10 +5218,7 @@
     "knowledge_cutoff": null,
     "modalities": {
       "input": [],
-      "output": [
-        "audio",
-        "embeddings"
-      ]
+      "output": ["audio", "embeddings"]
     },
     "capabilities": [],
     "pricing": {
@@ -6893,18 +5243,10 @@
     "max_output_tokens": null,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text",
-        "audio"
-      ],
-      "output": [
-        "text",
-        "audio"
-      ]
+      "input": ["text", "audio"],
+      "output": ["text", "audio"]
     },
-    "capabilities": [
-      "streaming"
-    ],
+    "capabilities": ["streaming"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -6928,18 +5270,10 @@
     "max_output_tokens": null,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text"
-      ],
-      "output": [
-        "audio",
-        "embeddings",
-        "text"
-      ]
+      "input": ["text"],
+      "output": ["audio", "embeddings", "text"]
     },
-    "capabilities": [
-      "structured_output"
-    ],
+    "capabilities": ["structured_output"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -6962,18 +5296,10 @@
     "max_output_tokens": null,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "text",
-        "audio"
-      ],
-      "output": [
-        "text",
-        "audio"
-      ]
+      "input": ["text", "audio"],
+      "output": ["text", "audio"]
     },
-    "capabilities": [
-      "streaming"
-    ],
+    "capabilities": ["streaming"],
     "pricing": {
       "text_tokens": {
         "standard": {
@@ -6997,13 +5323,8 @@
     "max_output_tokens": null,
     "knowledge_cutoff": null,
     "modalities": {
-      "input": [
-        "audio"
-      ],
-      "output": [
-        "audio",
-        "embeddings"
-      ]
+      "input": ["audio"],
+      "output": ["audio", "embeddings"]
     },
     "capabilities": [],
     "pricing": {

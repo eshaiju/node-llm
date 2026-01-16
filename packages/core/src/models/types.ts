@@ -1,3 +1,36 @@
+export interface ModelPricing {
+  text_tokens?: {
+    standard?: {
+      input_per_million?: number;
+      cached_input_per_million?: number;
+      output_per_million?: number;
+      reasoning_output_per_million?: number;
+    };
+    batch?: {
+      input_per_million?: number;
+      cached_input_per_million?: number;
+      output_per_million?: number;
+      reasoning_output_per_million?: number;
+    };
+  };
+  images?: {
+    standard?: {
+      input?: number;
+      output?: number;
+    };
+    batch?: {
+      input?: number;
+      output?: number;
+    };
+  };
+  audio_tokens?: {
+    standard?: {
+      input_per_million?: number;
+      output_per_million?: number;
+    };
+  };
+}
+
 export interface Model {
   id: string;
   name: string;
@@ -12,69 +45,47 @@ export interface Model {
     output: string[];
   };
   capabilities: string[];
-  pricing?: {
-    text_tokens?: {
-      standard?: {
-        input_per_million?: number;
-        cached_input_per_million?: number;
-        output_per_million?: number;
-        reasoning_output_per_million?: number;
-      };
-      batch?: {
-        input_per_million?: number;
-        output_per_million?: number;
-      };
-    };
-    images?: {
-      standard?: {
-        input?: number;
-        output?: number;
-      };
-      batch?: {
-        input?: number;
-        output?: number;
-      };
-    };
-    audio_tokens?: {
-      standard?: {
-        input_per_million?: number;
-        output_per_million?: number;
-      };
-    };
-  };
-  metadata?: Record<string, any>;
+  pricing?: ModelPricing;
+  metadata?: Record<string, unknown>;
 }
 
-export type ProviderName = 'openai' | 'anthropic' | 'gemini' | 'deepseek' | 'openrouter' | 'ollama';
+export type ProviderName =
+  | "openai"
+  | "anthropic"
+  | "gemini"
+  | "deepseek"
+  | "openrouter"
+  | "ollama"
+  | (string & {});
 
-export type ModelCapability = 
-  | 'streaming'
-  | 'function_calling'
-  | 'structured_output'
-  | 'predicted_outputs'
-  | 'distillation'
-  | 'fine_tuning'
-  | 'batch'
-  | 'realtime'
-  | 'image_generation'
-  | 'speech_generation'
-  | 'transcription'
-  | 'translation'
-  | 'citations'
-  | 'reasoning'
-  | 'caching'
-  | 'moderation'
-  | 'json_mode'
-  | 'vision'
-  | 'chat'
-  | 'tools';
+export type ModelCapability =
+  | "streaming"
+  | "function_calling"
+  | "structured_output"
+  | "predicted_outputs"
+  | "distillation"
+  | "fine_tuning"
+  | "batch"
+  | "realtime"
+  | "image_generation"
+  | "speech_generation"
+  | "transcription"
+  | "translation"
+  | "citations"
+  | "reasoning"
+  | "caching"
+  | "moderation"
+  | "json_mode"
+  | "vision"
+  | "chat"
+  | "tools";
 
-export type ModelModality = 
-  | 'text'
-  | 'image'
-  | 'audio'
-  | 'pdf'
-  | 'video'
-  | 'file'
-  | 'embeddings'
-  | 'moderation';
+export type ModelModality =
+  | "text"
+  | "image"
+  | "audio"
+  | "pdf"
+  | "video"
+  | "file"
+  | "embeddings"
+  | "moderation";

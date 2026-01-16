@@ -6,11 +6,11 @@ import { Message } from "../chat/Message.js";
  * If supportsDeveloperRole is false, both "system" and "developer" messages are mapped to "system".
  */
 export function mapSystemMessages(messages: Message[], supportsDeveloperRole: boolean): Message[] {
-  return messages.map(msg => {
-    if (msg.role === "system" || (msg.role as any) === "developer") {
-      return { 
-        ...msg, 
-        role: supportsDeveloperRole ? "developer" : "system" 
+  return messages.map((msg) => {
+    if (msg.role === "system" || (msg.role as string) === "developer") {
+      return {
+        ...msg,
+        role: supportsDeveloperRole ? "developer" : "system"
       } as Message;
     }
     return msg;

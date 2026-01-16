@@ -32,7 +32,7 @@ describe("Anthropic Capabilities", () => {
 
   it("gets correct pricing", () => {
     const pricing = Capabilities.getPricing("claude-3-7-sonnet");
-    
+
     // Standard pricing
     expect(pricing.text_tokens.standard.input_per_million).toBe(3.0);
     expect(pricing.text_tokens.standard.output_per_million).toBe(15.0);

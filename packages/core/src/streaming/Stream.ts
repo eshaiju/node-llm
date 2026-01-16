@@ -1,4 +1,3 @@
-import { ChatChunk } from "../providers/Provider.js";
 
 /**
  * Stream wrapper class inspired by OpenAI SDK
@@ -15,16 +14,13 @@ export class Stream<T> implements AsyncIterable<T> {
   /**
    * Create a Stream from an async generator
    */
-  static fromAsyncIterable<T>(
-    iterable: AsyncIterable<T>,
-    controller?: AbortController
-  ): Stream<T> {
+  static fromAsyncIterable<T>(iterable: AsyncIterable<T>, controller?: AbortController): Stream<T> {
     return new Stream(() => iterable[Symbol.asyncIterator](), controller);
   }
 
   [Symbol.asyncIterator](): AsyncIterator<T> {
     if (this.consumed) {
-      throw new Error('Cannot iterate over a consumed stream, use `.tee()` to split the stream.');
+      throw new Error("Cannot iterate over a consumed stream, use `.tee()` to split the stream.");
     }
     this.consumed = true;
     return this.iterator();
@@ -48,13 +44,13 @@ export class Stream<T> implements AsyncIterable<T> {
             right.push(result);
           }
           return queue.shift()!;
-        },
+        }
       };
     };
 
     return [
       new Stream(() => teeIterator(left), this.controller),
-      new Stream(() => teeIterator(right), this.controller),
+      new Stream(() => teeIterator(right), this.controller)
     ];
   }
 

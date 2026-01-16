@@ -1,10 +1,10 @@
 import { describe, it, expect, afterEach } from "vitest";
-import { NodeLLM } from "../../../../src/index.js";
+import { createLLM } from "../../../../src/index.js";
 import { setupVCR } from "../../../helpers/vcr.js";
 import "dotenv/config";
 
 describe("DeepSeek Chat Usage Integration (VCR)", { timeout: 30000 }, () => {
-  let polly: any;
+  let polly: { stop: () => Promise<void> } | undefined;
 
   afterEach(async () => {
     if (polly) {
@@ -14,11 +14,11 @@ describe("DeepSeek Chat Usage Integration (VCR)", { timeout: 30000 }, () => {
 
   it("should track token usage", async ({ task }) => {
     polly = setupVCR(task.name, "deepseek");
-    NodeLLM.configure({
+    const llm = createLLM({
       deepseekApiKey: process.env.DEEPSEEK_API_KEY,
-      provider: "deepseek",
+      provider: "deepseek"
     });
-    const chat = NodeLLM.chat("deepseek-chat");
+    const chat = llm.chat("deepseek-chat");
 
     const response = await chat.ask("Hello");
 

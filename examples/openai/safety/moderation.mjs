@@ -1,17 +1,18 @@
 import "dotenv/config";
-import { NodeLLM } from "../../../packages/core/dist/index.js";
+import { createLLM, NodeLLM, Tool, z } from "../../../packages/core/dist/index.js";
 
 async function main() {
-  NodeLLM.configure({ 
+  const llm = createLLM({
     provider: "openai",
-    defaultModerationModel: "omni-moderation-latest" 
+    openaiApiKey: process.env.OPENAI_API_KEY,
+    defaultModerationModel: "omni-moderation-latest"
   });
 
   const input = "I want to hurt someone and steal their money";
   console.log(`Moderating: "${input}"`);
-  
+
   // 1. Basic Check
-  const result = await NodeLLM.moderate(input);
+  const result = await llm.moderate(input);
   if (result.flagged) {
     console.log(`❌ Flagged for: ${result.flaggedCategories.join(", ")}`);
   } else {
@@ -21,7 +22,7 @@ async function main() {
   // 2. Advanced Risk Assessment (Custom Logic)
   console.log("\n--- Custom Risk Assessment ---");
   const scores = Object.values(result.categoryScores);
-  const highRisk = scores.some(score => score > 0.8);
+  const highRisk = scores.some((score) => score > 0.8);
 
   if (highRisk) {
     console.log("🚨 HIGH RISK DETECTED: Blocking content immediately.");

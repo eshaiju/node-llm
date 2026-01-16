@@ -1,4 +1,4 @@
-import { Provider, ChatRequest, ChatResponse, ModelInfo, ChatChunk, ImageRequest, ImageResponse, ModerationRequest, ModerationResponse, TranscriptionRequest, TranscriptionResponse, EmbeddingRequest, EmbeddingResponse } from "../Provider.js";
+import { Provider, ChatRequest, ChatResponse, ModelInfo, ChatChunk } from "../Provider.js";
 import { BaseProvider } from "../BaseProvider.js";
 import { Capabilities } from "./Capabilities.js";
 import { AnthropicChat } from "./Chat.js";
@@ -26,7 +26,7 @@ export class AnthropicProvider extends BaseProvider implements Provider {
     supportsModeration: (_model: string) => false,
     supportsReasoning: (_model: string) => false,
     supportsDeveloperRole: (_model: string) => true,
-    getContextWindow: (model: string) => Capabilities.getContextWindow(model),
+    getContextWindow: (model: string) => Capabilities.getContextWindow(model)
   };
 
   constructor(private readonly options: AnthropicProviderOptions) {
@@ -45,7 +45,7 @@ export class AnthropicProvider extends BaseProvider implements Provider {
     return {
       "x-api-key": this.options.apiKey,
       "anthropic-version": "2023-06-01",
-      "Content-Type": "application/json",
+      "Content-Type": "application/json"
     };
   }
 
@@ -53,7 +53,7 @@ export class AnthropicProvider extends BaseProvider implements Provider {
     return "Anthropic";
   }
 
-  public override defaultModel(feature?: string): string {
+  public override defaultModel(_feature?: string): string {
     return "claude-3-5-haiku-20241022";
   }
 
@@ -71,4 +71,3 @@ export class AnthropicProvider extends BaseProvider implements Provider {
 
   // Unsupported features will use BaseProvider's default implementations
 }
-

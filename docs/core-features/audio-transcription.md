@@ -7,12 +7,14 @@ description: Convert speech to text using specialized models like Whisper or lev
 ---
 
 # {{ page.title }}
+
 {: .no_toc }
 
 {{ page.description }}
 {: .fs-6 .fw-300 }
 
 ## Table of contents
+
 {: .no_toc .text-delta }
 
 1. TOC
@@ -37,13 +39,14 @@ console.log(text.toString());
 ## Advanced Options
 
 ### Speed vs Accuracy
+
 You can choose different models or parameters depending on your needs.
 
 ```ts
 await NodeLLM.transcribe("audio.mp3", {
   model: "whisper-1",
-  language: "en",           // ISO-639-1 code hint to improve accuracy
-  prompt: "ZyntriQix, API"  // Guide the model with domain-specific terms
+  language: "en", // ISO-639-1 code hint to improve accuracy
+  prompt: "ZyntriQix, API" // Guide the model with domain-specific terms
 });
 ```
 
@@ -68,7 +71,7 @@ for (const segment of response.segments) {
 There are two ways to work with audio:
 
 1.  **Transcription (`NodeLLM.transcribe`)**: Best when you need the verbatim text.
-    *   *Result*: "Hello everyone today we are..."
+    - _Result_: "Hello everyone today we are..."
 2.  **Multimodal Chat (`chat.ask`)**: Best when you need to **analyze** or **summarize** the audio directly, without seeing the raw text first. Supported by models like `gemini-1.5-pro` and `gpt-4o`.
 
 ```ts

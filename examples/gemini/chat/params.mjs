@@ -1,32 +1,30 @@
 import "dotenv/config";
-import { NodeLLM } from "../../../packages/core/dist/index.js";
+import { createLLM, NodeLLM, Tool, z } from "../../../packages/core/dist/index.js";
 
 async function main() {
-  NodeLLM.configure((config) => {
-    config.geminiApiKey = process.env.GEMINI_API_KEY;
+  const llm = createLLM({
+    provider: "gemini",
+    geminiApiKey: process.env.GEMINI_API_KEY
   });
-  
-  NodeLLM.configure({ provider: "gemini" });
-
-  const chat = NodeLLM.chat("gemini-2.0-flash");
+  const chat = llm.chat("gemini-2.0-flash");
 
   process.env.NODELLM_DEBUG = "true";
 
   console.log("--- Gemini Request with withParams ---");
-  
+
   // Example: Setting topP and safetySettings via withParams
   const response = await chat
-    .withParams({ 
-        generationConfig: {
-            topP: 0.8,
-            topK: 40
-        },
-        safetySettings: [
-            {
-                category: "HARM_CATEGORY_HARASSMENT",
-                threshold: "BLOCK_LOW_AND_ABOVE"
-            }
-        ]
+    .withParams({
+      generationConfig: {
+        topP: 0.8,
+        topK: 40
+      },
+      safetySettings: [
+        {
+          category: "HARM_CATEGORY_HARASSMENT",
+          threshold: "BLOCK_LOW_AND_ABOVE"
+        }
+      ]
     })
     .ask("Tell me a joke about robots.");
 

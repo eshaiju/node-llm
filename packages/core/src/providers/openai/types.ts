@@ -13,7 +13,7 @@ export interface OpenAIChatResponse {
       reasoning_content?: string | null;
       tool_calls?: Array<{
         id: string;
-        type: 'function';
+        type: "function";
         function: {
           name: string;
           arguments: string;

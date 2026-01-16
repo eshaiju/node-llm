@@ -11,15 +11,13 @@ describe("Chat Events", () => {
     const onNewMessage = vi.fn();
     const onEndMessage = vi.fn();
 
-    chat
-      .onNewMessage(onNewMessage)
-      .onEndMessage(onEndMessage);
+    chat.onNewMessage(onNewMessage).onEndMessage(onEndMessage);
 
     await chat.ask("Hello");
 
     expect(onNewMessage).toHaveBeenCalledTimes(1);
     expect(onEndMessage).toHaveBeenCalledTimes(1);
-    
+
     // Verify payload of onEndMessage
     const endMsg = onEndMessage.mock.calls[0][0];
     expect(endMsg.content).toBe("Hello world");
@@ -33,9 +31,7 @@ describe("Chat Events", () => {
     const onNewMessage = vi.fn();
     const onEndMessage = vi.fn();
 
-    chat
-      .onNewMessage(onNewMessage)
-      .onEndMessage(onEndMessage);
+    chat.onNewMessage(onNewMessage).onEndMessage(onEndMessage);
 
     const streamer = chat.stream("Hello stream");
     for await (const _chunk of streamer) {
@@ -55,17 +51,19 @@ describe("Chat Events", () => {
     const provider = new FakeProvider([
       {
         content: null,
-        tool_calls: [{ 
-          id: "call_1", 
-          type: "function", 
-          function: { name: "test_tool", arguments: "{}" } 
-        }]
+        tool_calls: [
+          {
+            id: "call_1",
+            type: "function",
+            function: { name: "test_tool", arguments: "{}" }
+          }
+        ]
       },
       "Final Answer"
     ]);
 
     const chat = new Chat(provider, "test-model");
-    
+
     // Mock tool
     const tool = {
       type: "function" as const,

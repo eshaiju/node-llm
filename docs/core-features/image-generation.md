@@ -7,12 +7,14 @@ description: Create photorealistic images and digital art from text descriptions
 ---
 
 # {{ page.title }}
+
 {: .no_toc }
 
 {{ page.description }}
 {: .fs-6 .fw-300 }
 
 ## Table of contents
+
 {: .no_toc .text-delta }
 
 1. TOC
@@ -41,7 +43,7 @@ Customize the model and dimensions.
 const image = await NodeLLM.paint("A red panda coding", {
   model: "dall-e-3",
   size: "1024x1792", // Portrait
-  quality: "hd"      // DALL-E 3 specific
+  quality: "hd" // DALL-E 3 specific
 });
 ```
 
@@ -55,9 +57,9 @@ The return value is a `GeneratedImage` object which behaves like a URL string bu
 const image = await NodeLLM.paint("A landscape");
 
 // Metadata
-console.log(image.url);           // "https://..."
+console.log(image.url); // "https://..."
 console.log(image.revisedPrompt); // "A photorealistic landscape..." (DALL-E 3)
-console.log(image.mimeType);      // "image/png"
+console.log(image.mimeType); // "image/png"
 
 // Check if it's base64 (some providers return data, not URLs)
 if (image.isBase64) {

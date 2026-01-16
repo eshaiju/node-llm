@@ -1,11 +1,11 @@
 import "dotenv/config";
-import { NodeLLM, Tool, z } from "../../../packages/core/dist/index.js";
+import { createLLM, NodeLLM, Tool, z } from "../../../packages/core/dist/index.js";
 
 class WeatherTool extends Tool {
   name = "get_weather";
   description = "Get the current weather in a given location";
   schema = z.object({
-    location: z.string().describe("The city and state, e.g. San Francisco, CA"),
+    location: z.string().describe("The city and state, e.g. San Francisco, CA")
   });
 
   async execute({ location }) {
@@ -15,12 +15,11 @@ class WeatherTool extends Tool {
 }
 
 async function main() {
-  NodeLLM.configure({
+  const llm = createLLM({
     provider: "anthropic",
+    anthropicApiKey: process.env.ANTHROPIC_API_KEY
   });
-
-  const chat = NodeLLM.chat("claude-3-haiku-20240307")
-    .withTool(WeatherTool);
+  const chat = llm.chat("claude-3-haiku-20240307").withTool(WeatherTool);
 
   console.log("Asking about weather in two cities...");
 

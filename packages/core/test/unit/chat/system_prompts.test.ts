@@ -13,7 +13,7 @@ describe("Chat System Prompts", () => {
 
     expect(chat.history[0]).toMatchObject({
       role: "system",
-      content: "Be helpful",
+      content: "Be helpful"
     });
   });
 
@@ -28,11 +28,11 @@ describe("Chat System Prompts", () => {
 
     expect(chat.history[0]).toMatchObject({
       role: "system",
-      content: "First instruction",
+      content: "First instruction"
     });
     expect(chat.history[1]).toMatchObject({
       role: "system",
-      content: "Second instruction",
+      content: "Second instruction"
     });
   });
 
@@ -48,23 +48,23 @@ describe("Chat System Prompts", () => {
     await chat.ask("Question 2");
 
     // Check final state of history
-    // History should contain: 
+    // History should contain:
     // 0: New instruction (system)
     // 1: System prompt (First instruction) - wait, replace removes PREVIOUS system messages.
     // Let's verify expectations.
-    
+
     // Initial state: [System(First), User(Q1), Assistant(R1)]
     // After replace:
     // It filters out old system messages.
     // So [User(Q1), Assistant(R1)]
     // Then unshifts New Instruction.
     // So [System(New), User(Q1), Assistant(R1), ... new stuff]
-    
+
     // Find all system messages
-    const systemMessages = chat.history.filter(m => m.role === "system");
+    const systemMessages = chat.history.filter((m) => m.role === "system");
     expect(systemMessages).toHaveLength(1);
     expect(systemMessages[0].content).toBe("New instruction");
-    
+
     // Verify it's at the start
     expect(chat.history[0].role).toBe("system");
     expect(chat.history[0].content).toBe("New instruction");
@@ -73,10 +73,10 @@ describe("Chat System Prompts", () => {
   it("supports withSystemPrompt alias", async () => {
     const provider = new FakeProvider(["Response"]);
     const chat = new Chat(provider, "test-model");
-    
+
     chat.withSystemPrompt("Alias test");
     await chat.ask("Hello");
-    
+
     expect(chat.history[0].content).toBe("Alias test");
   });
 });

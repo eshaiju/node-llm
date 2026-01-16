@@ -17,13 +17,27 @@ export class ChatResponseString extends String {
     super(content);
   }
 
-  get input_tokens() { return this.usage.input_tokens; }
-  get output_tokens() { return this.usage.output_tokens; }
-  get total_tokens() { return this.usage.total_tokens; }
-  get cached_tokens() { return this.usage.cached_tokens; }
-  get cost() { return this.usage.cost; }
-  get input_cost() { return this.usage.input_cost; }
-  get output_cost() { return this.usage.output_cost; }
+  get input_tokens() {
+    return this.usage.input_tokens;
+  }
+  get output_tokens() {
+    return this.usage.output_tokens;
+  }
+  get total_tokens() {
+    return this.usage.total_tokens;
+  }
+  get cached_tokens() {
+    return this.usage.cached_tokens;
+  }
+  get cost() {
+    return this.usage.cost;
+  }
+  get input_cost() {
+    return this.usage.input_cost;
+  }
+  get output_cost() {
+    return this.usage.output_cost;
+  }
 
   get content(): string {
     return this.valueOf();
@@ -55,10 +69,10 @@ export class ChatResponseString extends String {
    * Attempt to parse the content as JSON.
    * Returns the parsed object or null if parsing fails.
    */
-  get parsed(): any {
+  get parsed(): unknown {
     try {
       return JSON.parse(this.valueOf());
-    } catch (e) {
+    } catch {
       return null;
     }
   }

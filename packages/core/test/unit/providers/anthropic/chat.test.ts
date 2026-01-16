@@ -1,5 +1,6 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { AnthropicChat } from "../../../../src/providers/anthropic/Chat.ts";
+import { describe, it, expect, vi, beforeEach, Mock } from "vitest";
+import { AnthropicChat } from "../../../../src/providers/anthropic/Chat.js";
+import { Message } from "../../../../src/chat/Message.js";
 import { ChatRequest } from "../../../../src/providers/Provider.js";
 
 describe("AnthropicChat", () => {
@@ -23,17 +24,20 @@ describe("AnthropicChat", () => {
       usage: { input_tokens: 10, output_tokens: 5 }
     };
 
-    (fetch as any).mockResolvedValue({
+    (fetch as unknown as Mock).mockResolvedValue({
       ok: true,
       json: () => Promise.resolve(mockResponse)
     });
 
     const result = await chat.execute(request);
 
-    expect(fetch).toHaveBeenCalledWith(`${baseUrl}/messages`, expect.objectContaining({
-      method: "POST",
-      body: expect.stringContaining('"messages":[{"role":"user","content":"Hello"}]')
-    }));
+    expect(fetch).toHaveBeenCalledWith(
+      `${baseUrl}/messages`,
+      expect.objectContaining({
+        method: "POST",
+        body: expect.stringContaining('"messages":[{"role":"user","content":"Hello"}]')
+      })
+    );
     expect(result.content).toBe("Hi!");
     expect(result.usage?.total_tokens).toBe(15);
   });
@@ -52,7 +56,7 @@ describe("AnthropicChat", () => {
       usage: { input_tokens: 15, output_tokens: 20 }
     };
 
-    (fetch as any).mockResolvedValue({
+    (fetch as unknown as Mock).mockResolvedValue({
       ok: true,
       json: () => Promise.resolve(mockResponse)
     });
@@ -71,7 +75,7 @@ describe("AnthropicChat", () => {
       messages: [{ role: "user", content: "Hello" }]
     };
 
-    (fetch as any).mockResolvedValue({
+    (fetch as unknown as Mock).mockResolvedValue({
       ok: false,
       status: 400,
       json: () => Promise.resolve({ error: { message: "Invalid model" } })
@@ -83,23 +87,30 @@ describe("AnthropicChat", () => {
   it("should add PDF beta header if document present", async () => {
     const request: ChatRequest = {
       model: "claude-3-5-sonnet-20240620",
-      messages: [{ 
-        role: "user", 
-        content: [{ type: "image_url", image_url: { url: "data:application/pdf;base64,JVBERi0xLjEK" } }] 
-      } as any]
+      messages: [
+        {
+          role: "user",
+          content: [
+            { type: "image_url", image_url: { url: "data:application/pdf;base64,JVBERi0xLjEK" } }
+          ]
+        } as unknown as Message
+      ]
     };
 
-    (fetch as any).mockResolvedValue({
+    (fetch as unknown as Mock).mockResolvedValue({
       ok: true,
       json: () => Promise.resolve({ content: [] })
     });
 
     await chat.execute(request);
 
-    expect(fetch).toHaveBeenCalledWith(expect.any(String), expect.objectContaining({
-      headers: expect.objectContaining({
-        "anthropic-beta": "pdfs-2024-09-25"
+    expect(fetch).toHaveBeenCalledWith(
+      expect.any(String),
+      expect.objectContaining({
+        headers: expect.objectContaining({
+          "anthropic-beta": "pdfs-2024-09-25"
+        })
       })
-    }));
+    );
   });
 });

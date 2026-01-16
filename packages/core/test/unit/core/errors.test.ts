@@ -1,9 +1,10 @@
 import { describe, it, expect, vi } from "vitest";
-import { 
-  LLMError, 
-  APIError, 
-  RateLimitError, 
-  AuthenticationError, 
+import { Provider } from "../../../src/providers/Provider.js";
+import {
+  LLMError,
+  APIError,
+  RateLimitError,
+  AuthenticationError,
   BadRequestError,
   ServerError
 } from "../../../src/errors/index.js";
@@ -13,8 +14,13 @@ import { handleOpenAIError } from "../../../src/providers/openai/Errors.js";
 describe("Error System", () => {
   describe("Hierarchy", () => {
     it("should maintain proper inheritance", () => {
-      const error = new RateLimitError("Too many requests", { detail: "limit exceeded" }, "openai", "gpt-4");
-      
+      const error = new RateLimitError(
+        "Too many requests",
+        { detail: "limit exceeded" },
+        "openai",
+        "gpt-4"
+      );
+
       expect(error).toBeInstanceOf(RateLimitError);
       expect(error).toBeInstanceOf(APIError);
       expect(error).toBeInstanceOf(LLMError);
@@ -37,7 +43,7 @@ describe("Error System", () => {
         })
       };
 
-      const executor = new Executor(mockProvider as any, { attempts: 3, delayMs: 0 });
+      const executor = new Executor(mockProvider as unknown as Provider, { attempts: 3, delayMs: 0 });
       const result = await executor.executeChat({ model: "test", messages: [] });
 
       expect(result.content).toBe("Success");
@@ -54,11 +60,12 @@ describe("Error System", () => {
         })
       };
 
-      const executor = new Executor(mockProvider as any, { attempts: 3, delayMs: 0 });
-      
-      await expect(executor.executeChat({ model: "test", messages: [] }))
-        .rejects.toThrow(AuthenticationError);
-        
+      const executor = new Executor(mockProvider as unknown as Provider, { attempts: 3, delayMs: 0 });
+
+      await expect(executor.executeChat({ model: "test", messages: [] })).rejects.toThrow(
+        AuthenticationError
+      );
+
       expect(attempts).toBe(1); // Should fail fast
     });
 
@@ -71,22 +78,24 @@ describe("Error System", () => {
         })
       };
 
-      const executor = new Executor(mockProvider as any, { attempts: 3, delayMs: 0 });
-      
-      await expect(executor.executeChat({ model: "test", messages: [] }))
-        .rejects.toThrow(BadRequestError);
-        
+      const executor = new Executor(mockProvider as unknown as Provider, { attempts: 3, delayMs: 0 });
+
+      await expect(executor.executeChat({ model: "test", messages: [] })).rejects.toThrow(
+        BadRequestError
+      );
+
       expect(attempts).toBe(1);
     });
   });
 
   describe("OpenAI Error Mapper", () => {
-    const mockResponse = (status: number, body: any) => ({
-      status,
-      ok: false,
-      json: async () => body,
-      text: async () => JSON.stringify(body)
-    } as Response);
+    const mockResponse = (status: number, body: unknown) =>
+      ({
+        status,
+        ok: false,
+        json: async () => body,
+        text: async () => JSON.stringify(body)
+      }) as Response;
 
     it("should map 401 to AuthenticationError", async () => {
       const response = mockResponse(401, { error: { message: "Invalid API Key" } });
@@ -107,8 +116,8 @@ describe("Error System", () => {
       const response = mockResponse(400, { error: { message: "Custom OpenAI message" } });
       try {
         await handleOpenAIError(response);
-      } catch (e: any) {
-        expect(e.message).toBe("Custom OpenAI message");
+      } catch (e) {
+        expect((e as Error).message).toBe("Custom OpenAI message");
         expect(e).toBeInstanceOf(BadRequestError);
       }
     });

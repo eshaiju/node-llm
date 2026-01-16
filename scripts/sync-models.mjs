@@ -1,52 +1,54 @@
-import fs from 'node:fs';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const ROOT_DIR = path.resolve(__dirname, '..');
-const MODELS_FILE = path.join(ROOT_DIR, 'packages/core/src/models/models.ts');
-const ALIASES_FILE = path.join(ROOT_DIR, 'packages/core/src/aliases.ts');
-const API_URL = 'https://models.dev/api.json';
+const ROOT_DIR = path.resolve(__dirname, "..");
+const MODELS_FILE = path.join(ROOT_DIR, "packages/core/src/models/models.ts");
+const ALIASES_FILE = path.join(ROOT_DIR, "packages/core/src/aliases.ts");
+const API_URL = "https://models.dev/api.json";
 
-const SUPPORTED_PROVIDERS = [
-  'openai',
-  'anthropic',
-  'gemini',
-  'deepseek',
-  'openrouter',
-  'ollama'
-];
+const SUPPORTED_PROVIDERS = ["openai", "anthropic", "gemini", "deepseek", "openrouter", "ollama"];
 
 const PROVIDER_MAP = {
-  'google': 'gemini',
-  'google-vertex': 'gemini',
-  'vertexai': 'gemini'
+  google: "gemini",
+  "google-vertex": "gemini",
+  vertexai: "gemini"
 };
 
 // High-quality manual overrides for the most common models
 const GOLDEN_ALIASES = {
-  "gpt-4o": { "openai": "gpt-4o", "openrouter": "openai/gpt-4o" },
-  "gpt-4o-mini": { "openai": "gpt-4o-mini", "openrouter": "openai/gpt-4o-mini" },
-  "o1": { "openai": "o1", "openrouter": "openai/o1" },
-  "o3-mini": { "openai": "o3-mini", "openrouter": "openai/o3-mini" },
-  "claude-3-5-sonnet": { "anthropic": "claude-3-5-sonnet-20241022", "openrouter": "anthropic/claude-3.5-sonnet" },
-  "claude-3-7-sonnet": { "anthropic": "claude-3-7-sonnet-20250219", "openrouter": "anthropic/claude-3.7-sonnet" },
-  "claude-3-5-haiku": { "anthropic": "claude-3-5-haiku-20241022", "openrouter": "anthropic/claude-3.5-haiku" },
-  "deepseek-chat": { "deepseek": "deepseek-chat", "openrouter": "deepseek/deepseek-chat" },
-  "deepseek-reasoner": { "deepseek": "deepseek-reasoner", "openrouter": "deepseek/deepseek-reasoner" },
-  "gemini-2.0-flash": { "gemini": "gemini-2.0-flash", "openrouter": "google/gemini-2.0-flash-001" },
-  "gemini-1.5-pro": { "gemini": "gemini-1.5-pro-latest", "openrouter": "google/gemini-pro-1.5" }
+  "gpt-4o": { openai: "gpt-4o", openrouter: "openai/gpt-4o" },
+  "gpt-4o-mini": { openai: "gpt-4o-mini", openrouter: "openai/gpt-4o-mini" },
+  o1: { openai: "o1", openrouter: "openai/o1" },
+  "o3-mini": { openai: "o3-mini", openrouter: "openai/o3-mini" },
+  "claude-3-5-sonnet": {
+    anthropic: "claude-3-5-sonnet-20241022",
+    openrouter: "anthropic/claude-3.5-sonnet"
+  },
+  "claude-3-7-sonnet": {
+    anthropic: "claude-3-7-sonnet-20250219",
+    openrouter: "anthropic/claude-3.7-sonnet"
+  },
+  "claude-3-5-haiku": {
+    anthropic: "claude-3-5-haiku-20241022",
+    openrouter: "anthropic/claude-3.5-haiku"
+  },
+  "deepseek-chat": { deepseek: "deepseek-chat", openrouter: "deepseek/deepseek-chat" },
+  "deepseek-reasoner": { deepseek: "deepseek-reasoner", openrouter: "deepseek/deepseek-reasoner" },
+  "gemini-2.0-flash": { gemini: "gemini-2.0-flash", openrouter: "google/gemini-2.0-flash-001" },
+  "gemini-1.5-pro": { gemini: "gemini-1.5-pro-latest", openrouter: "google/gemini-pro-1.5" }
 };
 
 async function syncModels() {
   console.log(`Fetching models from ${API_URL}...`);
-  
+
   try {
     const response = await fetch(API_URL);
     if (!response.ok) {
       throw new Error(`Failed to fetch: ${response.statusText}`);
     }
-    
+
     const rawData = await response.json();
     const finalModels = [];
     const generatedAliases = { ...GOLDEN_ALIASES };
@@ -58,24 +60,30 @@ async function syncModels() {
       const models = providerData.models || {};
       for (const [modelId, details] of Object.entries(models)) {
         const caps = [];
-        
-        if (details.streaming !== false) caps.push('streaming');
-        if (details.reasoning || details.id?.includes('reasoner') || details.id?.match(/[or]1|[or]3/)) caps.push('reasoning');
-        
+
+        if (details.streaming !== false) caps.push("streaming");
+        if (
+          details.reasoning ||
+          details.id?.includes("reasoner") ||
+          details.id?.match(/[or]1|[or]3/)
+        )
+          caps.push("reasoning");
+
         const inputMod = details.modalities?.input || [];
         const outputMod = details.modalities?.output || [];
 
-        if (inputMod.includes('text')) caps.push('chat');
-        if (inputMod.includes('image') || details.attachment) caps.push('vision');
-        if (inputMod.includes('audio') || details.id?.includes('whisper')) caps.push('transcription');
-        if (outputMod.includes('audio')) caps.push('speech_generation');
-        if (outputMod.includes('image')) caps.push('image_generation');
+        if (inputMod.includes("text")) caps.push("chat");
+        if (inputMod.includes("image") || details.attachment) caps.push("vision");
+        if (inputMod.includes("audio") || details.id?.includes("whisper"))
+          caps.push("transcription");
+        if (outputMod.includes("audio")) caps.push("speech_generation");
+        if (outputMod.includes("image")) caps.push("image_generation");
 
         if (details.tool_call) {
-          caps.push('function_calling');
-          caps.push('tools');
-          caps.push('structured_output');
-          caps.push('json_mode');
+          caps.push("function_calling");
+          caps.push("tools");
+          caps.push("structured_output");
+          caps.push("json_mode");
         }
 
         const modelEntry = {
@@ -87,7 +95,7 @@ async function syncModels() {
           context_window: details.limit?.context || 0,
           max_output_tokens: details.limit?.output || 0,
           knowledge_cutoff: details.knowledge,
-          modalities: details.modalities || { input: ['text'], output: ['text'] },
+          modalities: details.modalities || { input: ["text"], output: ["text"] },
           capabilities: Array.from(new Set(caps)),
           pricing: {
             text_tokens: {
@@ -99,16 +107,17 @@ async function syncModels() {
               }
             }
           },
-          metadata: { source: 'models.dev', ...(details.cost || {}), ...(details.limit || {}) }
+          metadata: { source: "models.dev", ...(details.cost || {}), ...(details.limit || {}) }
         };
 
         finalModels.push(modelEntry);
 
         // Alias Generation: Slugify the name (e.g. "GPT-4o Mini" -> "gpt-4o-mini")
-        const slug = details.name.toLowerCase()
-          .replace(/\s+/g, '-')
-          .replace(/[^a-z0-9-.]/g, '')
-          .replace(/-v[0-9]+$/, '');
+        const slug = details.name
+          .toLowerCase()
+          .replace(/\s+/g, "-")
+          .replace(/[^a-z0-9-.]/g, "")
+          .replace(/-v[0-9]+$/, "");
 
         if (slug.length > 3 && !generatedAliases[slug]) {
           generatedAliases[slug] = {};
@@ -120,35 +129,42 @@ async function syncModels() {
     }
 
     finalModels.sort((a, b) => a.id.localeCompare(b.id));
-    fs.writeFileSync(MODELS_FILE, `export const modelsData = ${JSON.stringify(finalModels, null, 2)};\n`);
+    fs.writeFileSync(
+      MODELS_FILE,
+      `export const modelsData = ${JSON.stringify(finalModels, null, 2)};\n`
+    );
     console.log(`Synced ${finalModels.length} models.`);
 
     // Cleanup and save Aliases
     const finalAliases = {};
-    Object.keys(generatedAliases).sort().forEach(key => {
-      if (Object.keys(generatedAliases[key]).length > 0) {
-        finalAliases[key] = generatedAliases[key];
-      }
-    });
+    Object.keys(generatedAliases)
+      .sort()
+      .forEach((key) => {
+        if (Object.keys(generatedAliases[key]).length > 0) {
+          finalAliases[key] = generatedAliases[key];
+        }
+      });
 
-    fs.writeFileSync(ALIASES_FILE, `export default ${JSON.stringify(finalAliases, null, 2)} as const;\n`);
+    fs.writeFileSync(
+      ALIASES_FILE,
+      `export default ${JSON.stringify(finalAliases, null, 2)} as const;\n`
+    );
     console.log(`Successfully generated verified aliases to ${ALIASES_FILE}`);
 
     // Generate available-models.md documentation
     generateAvailableModelsDoc(finalModels);
-
   } catch (error) {
-    console.error('Error syncing:', error);
+    console.error("Error syncing:", error);
     process.exit(1);
   }
 }
 
 function generateAvailableModelsDoc(models) {
-  const DOCS_FILE = path.join(ROOT_DIR, 'docs/models/available_models.md');
-  
+  const DOCS_FILE = path.join(ROOT_DIR, "docs/models/available_models.md");
+
   // Group models by provider
   const byProvider = {};
-  models.forEach(model => {
+  models.forEach((model) => {
     if (!byProvider[model.provider]) {
       byProvider[model.provider] = [];
     }
@@ -158,21 +174,22 @@ function generateAvailableModelsDoc(models) {
   // Helper to format cost
   const formatCost = (model) => {
     const pricing = model.pricing?.text_tokens?.standard;
-    if (!pricing) return '-';
-    
+    if (!pricing) return "-";
+
     const parts = [];
     if (pricing.input_per_million) parts.push(`In: $${pricing.input_per_million.toFixed(2)}`);
     if (pricing.output_per_million) parts.push(`Out: $${pricing.output_per_million.toFixed(2)}`);
-    if (pricing.cached_input_per_million) parts.push(`Cache: $${pricing.cached_input_per_million.toFixed(2)}`);
-    
-    return parts.length > 0 ? parts.join(', ') : '-';
+    if (pricing.cached_input_per_million)
+      parts.push(`Cache: $${pricing.cached_input_per_million.toFixed(2)}`);
+
+    return parts.length > 0 ? parts.join(", ") : "-";
   };
 
   // Helper to format context window
   const formatContext = (tokens) => {
-    if (!tokens) return '-';
+    if (!tokens) return "-";
     if (tokens >= 1000000) return `${(tokens / 1000000).toFixed(1)}M`;
-    if (tokens >= 1000) return `${(tokens / 1000)}k`;
+    if (tokens >= 1000) return `${tokens / 1000}k`;
     return tokens.toString();
   };
 
@@ -204,7 +221,7 @@ _Model information enriched by [models.dev](https://models.dev)._
 ## Last Updated
 {: .d-inline-block }
 
-${new Date().toISOString().split('T')[0]}
+${new Date().toISOString().split("T")[0]}
 {: .label .label-green }
 
 ## Models by Provider
@@ -212,31 +229,32 @@ ${new Date().toISOString().split('T')[0]}
 `;
 
   // Generate tables for each provider
-  const providerOrder = ['openai', 'anthropic', 'gemini', 'deepseek', 'openrouter', 'ollama'];
+  const providerOrder = ["openai", "anthropic", "gemini", "deepseek", "openrouter", "ollama"];
   const providerNames = {
-    'openai': 'OpenAI',
-    'anthropic': 'Anthropic',
-    'gemini': 'Gemini',
-    'deepseek': 'DeepSeek',
-    'openrouter': 'OpenRouter',
-    'ollama': 'Ollama (Local)'
+    openai: "OpenAI",
+    anthropic: "Anthropic",
+    gemini: "Gemini",
+    deepseek: "DeepSeek",
+    openrouter: "OpenRouter",
+    ollama: "Ollama (Local)"
   };
 
-  providerOrder.forEach(provider => {
+  providerOrder.forEach((provider) => {
     if (!byProvider[provider]) return;
-    
-    const providerModels = byProvider[provider]
-      .sort((a, b) => (b.context_window || 0) - (a.context_window || 0));
+
+    const providerModels = byProvider[provider].sort(
+      (a, b) => (b.context_window || 0) - (a.context_window || 0)
+    );
 
     markdown += `### ${providerNames[provider]} (${providerModels.length})\n\n`;
     markdown += `| Model | Context | Max Output | Pricing (per 1M tokens) |\n`;
     markdown += `| :--- | ---: | ---: | :--- |\n`;
 
-    providerModels.forEach(model => {
+    providerModels.forEach((model) => {
       const context = formatContext(model.context_window);
       const maxOutput = formatContext(model.max_output_tokens);
       const cost = formatCost(model);
-      
+
       markdown += `| \`${model.id}\` | ${context} | ${maxOutput} | ${cost} |\n`;
     });
 
@@ -247,11 +265,11 @@ ${new Date().toISOString().split('T')[0]}
   markdown += `## Models by Capability\n\n`;
 
   const capabilities = {
-    'Function Calling': models.filter(m => m.capabilities?.includes('function_calling')),
-    'Vision': models.filter(m => m.capabilities?.includes('vision')),
-    'Reasoning': models.filter(m => m.capabilities?.includes('reasoning')),
-    'Streaming': models.filter(m => m.capabilities?.includes('streaming')),
-    'Structured Output': models.filter(m => m.capabilities?.includes('structured_output'))
+    "Function Calling": models.filter((m) => m.capabilities?.includes("function_calling")),
+    Vision: models.filter((m) => m.capabilities?.includes("vision")),
+    Reasoning: models.filter((m) => m.capabilities?.includes("reasoning")),
+    Streaming: models.filter((m) => m.capabilities?.includes("streaming")),
+    "Structured Output": models.filter((m) => m.capabilities?.includes("structured_output"))
   };
 
   Object.entries(capabilities).forEach(([capability, capModels]) => {
@@ -261,7 +279,7 @@ ${new Date().toISOString().split('T')[0]}
     markdown += `| Model | Provider | Context | Pricing |\n`;
     markdown += `| :--- | :--- | ---: | :--- |\n`;
 
-    capModels.slice(0, 20).forEach(model => {
+    capModels.slice(0, 20).forEach((model) => {
       const context = formatContext(model.context_window);
       const cost = formatCost(model);
       markdown += `| \`${model.id}\` | ${model.provider} | ${context} | ${cost} |\n`;
@@ -273,34 +291,34 @@ ${new Date().toISOString().split('T')[0]}
   // Models by Modality
   markdown += `## Models by Modality\n\n`;
 
-  const visionModels = models.filter(m => m.modalities?.input?.includes('image'));
+  const visionModels = models.filter((m) => m.modalities?.input?.includes("image"));
   if (visionModels.length > 0) {
     markdown += `### Vision Models (${visionModels.length})\n\nModels that can process images:\n\n`;
     markdown += `| Model | Provider | Context | Pricing |\n`;
     markdown += `| :--- | :--- | ---: | :--- |\n`;
-    visionModels.slice(0, 15).forEach(model => {
+    visionModels.slice(0, 15).forEach((model) => {
       markdown += `| \`${model.id}\` | ${model.provider} | ${formatContext(model.context_window)} | ${formatCost(model)} |\n`;
     });
     markdown += `\n`;
   }
 
-  const audioModels = models.filter(m => m.modalities?.input?.includes('audio'));
+  const audioModels = models.filter((m) => m.modalities?.input?.includes("audio"));
   if (audioModels.length > 0) {
     markdown += `### Audio Input Models (${audioModels.length})\n\nModels that can process audio:\n\n`;
     markdown += `| Model | Provider | Context | Pricing |\n`;
     markdown += `| :--- | :--- | ---: | :--- |\n`;
-    audioModels.slice(0, 15).forEach(model => {
+    audioModels.slice(0, 15).forEach((model) => {
       markdown += `| \`${model.id}\` | ${model.provider} | ${formatContext(model.context_window)} | ${formatCost(model)} |\n`;
     });
     markdown += `\n`;
   }
 
-  const embeddingModels = models.filter(m => m.modalities?.output?.includes('embeddings'));
+  const embeddingModels = models.filter((m) => m.modalities?.output?.includes("embeddings"));
   if (embeddingModels.length > 0) {
     markdown += `### Embedding Models (${embeddingModels.length})\n\nModels that generate embeddings:\n\n`;
     markdown += `| Model | Provider | Dimensions | Pricing |\n`;
     markdown += `| :--- | :--- | ---: | :--- |\n`;
-    embeddingModels.slice(0, 15).forEach(model => {
+    embeddingModels.slice(0, 15).forEach((model) => {
       markdown += `| \`${model.id}\` | ${model.provider} | - | ${formatCost(model)} |\n`;
     });
     markdown += `\n`;
@@ -352,9 +370,9 @@ Aliases abstract away the specific model ID strings required by different provid
 When you call a method like \`NodeLLM.chat("claude-3-5-sonnet")\`, \`NodeLLM\` checks the configured provider and automatically resolves the alias.
 
 \`\`\`ts
-// If configured with Anthropic
-NodeLLM.configure({ provider: "anthropic" });
-const chat = NodeLLM.chat("claude-3-5-sonnet"); 
+// Using Anthropic provider
+const llm = createLLM({ provider: "anthropic" });
+const chat = llm.chat("claude-3-5-sonnet"); 
 // Resolves internally to "claude-3-5-sonnet-20241022" (or latest stable version)
 \`\`\`
 
@@ -419,12 +437,11 @@ This is useful for:
 
 ---
 
-**Auto-generated by \`npm run sync-models\`** • Last updated: ${new Date().toISOString().split('T')[0]}
+**Auto-generated by \`npm run sync-models\`** • Last updated: ${new Date().toISOString().split("T")[0]}
 `;
 
   fs.writeFileSync(DOCS_FILE, markdown);
   console.log(`Generated documentation: ${DOCS_FILE}`);
 }
-
 
 syncModels();

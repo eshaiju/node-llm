@@ -1,12 +1,6 @@
 import { Chat } from "./chat/Chat.js";
 import { ChatOptions } from "./chat/ChatOptions.js";
-import {
-  Provider,
-  ModelInfo,
-  TranscriptionResponse,
-  ModerationResponse,
-  EmbeddingResponse
-} from "./providers/Provider.js";
+import { Provider, ModelInfo } from "./providers/Provider.js";
 import {
   providerRegistry,
   ensureOpenAIRegistered,
@@ -14,18 +8,20 @@ import {
   registerGeminiProvider,
   registerDeepSeekProvider,
   registerOllamaProvider,
-  registerOpenRouterProvider,
+  registerOpenRouterProvider
 } from "./providers/registry.js";
 import { GeneratedImage } from "./image/GeneratedImage.js";
 import { ModelRegistry } from "./models/ModelRegistry.js";
+import { PricingRegistry } from "./models/PricingRegistry.js";
+import { Model } from "./models/types.js";
 import { Transcription } from "./transcription/Transcription.js";
 import { Moderation } from "./moderation/Moderation.js";
 import { Embedding } from "./embedding/Embedding.js";
 import { EmbeddingRequest } from "./providers/Provider.js";
-import { 
-  ProviderNotConfiguredError, 
+import {
+  ProviderNotConfiguredError,
   UnsupportedFeatureError,
-  ModelCapabilityError 
+  ModelCapabilityError
 } from "./errors/index.js";
 import { resolveModelAlias } from "./model_aliases.js";
 import { logger } from "./utils/logger.js";
@@ -44,7 +40,7 @@ type LLMConfig = {
   defaultTranscriptionModel?: string;
   defaultModerationModel?: string;
   defaultEmbeddingModel?: string;
-} & Partial<NodeLLMConfig>;
+} & Omit<Partial<NodeLLMConfig>, "provider">;
 
 // Provider registration map
 const PROVIDER_REGISTRARS: Record<string, () => void> = {
@@ -53,159 +49,82 @@ const PROVIDER_REGISTRARS: Record<string, () => void> = {
   anthropic: registerAnthropicProvider,
   deepseek: registerDeepSeekProvider,
   ollama: registerOllamaProvider,
-  openrouter: registerOpenRouterProvider,
+  openrouter: registerOpenRouterProvider
 };
 
 export class NodeLLMCore {
   public readonly models = ModelRegistry;
-  public readonly config: NodeLLMConfig;
-  private provider?: Provider;
-  private defaultChatModelId?: string;
-  private defaultTranscriptionModelId?: string;
-  private defaultModerationModelId?: string;
-  private defaultEmbeddingModelId?: string;
-   
-  private retry: Required<RetryOptions> = {
-    attempts: 1,
-    delayMs: 0,
-  };
+  public readonly pricing = PricingRegistry;
 
-  /**
-   * Create a new LLM instance. Defaults to the global config.
-   */
-  constructor(customConfig?: NodeLLMConfig) {
-    if (customConfig instanceof Configuration) {
-      this.config = customConfig;
-    } else if (customConfig) {
-      this.config = new Configuration();
-      Object.assign(this.config, customConfig);
-    } else {
-      this.config = config;
-    }
-    
-    if (this.config.maxRetries !== undefined) {
-      this.retry.attempts = this.config.maxRetries + 1;
-    }
+  constructor(
+    public readonly config: NodeLLMConfig,
+    public readonly provider?: Provider,
+    public readonly retry: Required<RetryOptions> = { attempts: 1, delayMs: 0 },
+    private readonly defaults: {
+      chat?: string;
+      transcription?: string;
+      moderation?: string;
+      embedding?: string;
+    } = {}
+  ) {
+    Object.freeze(this.config);
+    Object.freeze(this.retry);
+    Object.freeze(this.defaults);
+  }
+
+  get defaultChatModel(): string | undefined {
+    return this.defaults.chat;
+  }
+  get defaultTranscriptionModel(): string | undefined {
+    return this.defaults.transcription;
+  }
+  get defaultModerationModel(): string | undefined {
+    return this.defaults.moderation;
+  }
+  get defaultEmbeddingModel(): string | undefined {
+    return this.defaults.embedding;
   }
 
   /**
    * Returns a scoped LLM instance configured for a specific provider.
-   * This respects the current global configuration but avoids side effects 
-   * on the main NodeLLM singleton.
-   * 
-   * @param providerName - The provider to use (e.g., "openai", "anthropic")
-   * @param scopedConfig - Optional configuration overrides for this scoped instance
-   * 
-   * @example
-   * ```ts
-   * const openai = NodeLLM.withProvider("openai");
-   * const anthropic = NodeLLM.withProvider("anthropic");
-   * 
-   * // These can now run in parallel without race conditions
-   * await Promise.all([
-   *   openai.chat("gpt-4o").ask(prompt),
-   *   anthropic.chat("claude-3-5-sonnet").ask(prompt),
-   * ]);
-   * ```
-   * 
-   * @example With scoped credentials
-   * ```ts
-   * const customAnthropic = NodeLLM.withProvider("anthropic", {
-   *   anthropicApiKey: "sk-ant-custom-key"
-   * });
-   * ```
+   * This returns a NEW immutable instance.
    */
   withProvider(providerName: string, scopedConfig?: Partial<NodeLLMConfig>): NodeLLMCore {
-    const baseConfig = (this.config instanceof Configuration) ? this.config.toPlainObject() : this.config;
-    const scoped = new NodeLLMCore({ ...baseConfig, ...scopedConfig });
-    scoped.configure({ provider: providerName });
-    return scoped;
+    const baseConfig =
+      this.config instanceof Configuration ? this.config.toPlainObject() : this.config;
+    // We leverage createLLM to handle the resolution of the new provider string
+    return createLLM({
+      ...baseConfig,
+      ...scopedConfig,
+      provider: providerName,
+      // Preserve defaults unless overridden (conceptually, though createLLM takes specific keys)
+      defaultChatModel: this.defaults.chat,
+      defaultTranscriptionModel: this.defaults.transcription,
+      defaultModerationModel: this.defaults.moderation,
+      defaultEmbeddingModel: this.defaults.embedding
+    });
   }
 
   /**
    * Register a custom LLM provider.
-   * This allows you to extend NodeLLM with your own logic at runtime.
-   * 
-   * @param name - Unique identifier for the provider
-   * @param factory - A function that returns a Provider instance
+   * Note: This modifies the global provider registry.
    */
   registerProvider(name: string, factory: () => Provider): void {
     providerRegistry.register(name, factory);
   }
 
-  configure(configOrCallback: LLMConfig | ((config: NodeLLMConfig) => void)) {
-    // Callback style: for setting API keys
-    if (typeof configOrCallback === "function") {
-      configOrCallback(this.config);
-      return;
-    }
-
-    // Object style: for setting provider and other options
-    const options = configOrCallback;
-
-    // Extract known control keys
-    const { 
-      provider, 
-      retry, 
-      defaultChatModel,
-      defaultTranscriptionModel, 
-      defaultModerationModel, 
-      defaultEmbeddingModel, 
-      ...apiConfig 
-    } = options;
-
-    // Merge API keys into global config
-    Object.assign(this.config, apiConfig);
-
-    if (apiConfig.maxRetries !== undefined) {
-      this.retry.attempts = apiConfig.maxRetries + 1;
-    }
-    
-    if (defaultChatModel) {
-      this.defaultChatModelId = defaultChatModel;
-    }
-
-    if (defaultTranscriptionModel) {
-      this.defaultTranscriptionModelId = defaultTranscriptionModel;
-    }
-
-    if (defaultModerationModel) {
-      this.defaultModerationModelId = defaultModerationModel;
-    }
-
-    if (defaultEmbeddingModel) {
-      this.defaultEmbeddingModelId = defaultEmbeddingModel;
-    }
-
-    if (retry) {
-      this.retry = {
-        attempts: retry.attempts ?? 1,
-        delayMs: retry.delayMs ?? 0,
-      };
-    }
-
-    if (typeof provider === "string") {
-      // Use the provider registrars map
-      const registrar = PROVIDER_REGISTRARS[provider];
-      if (registrar) {
-        registrar();
-      }
-      
-      this.provider = providerRegistry.resolve(provider);
-    } else if (provider) {
-      this.provider = provider;
-    }
+  getRetryConfig() {
+    return this.retry;
   }
 
-  private ensureProviderSupport<K extends keyof Provider>(method: K): Provider & Record<K, NonNullable<Provider[K]>> {
+  private ensureProviderSupport<K extends keyof Provider>(
+    method: K
+  ): Provider & Record<K, NonNullable<Provider[K]>> {
     if (!this.provider) {
       throw new ProviderNotConfiguredError();
     }
     if (!this.provider[method]) {
-      throw new UnsupportedFeatureError(
-        "Provider",
-        String(method)
-      );
+      throw new UnsupportedFeatureError("Provider", String(method));
     }
     return this.provider as Provider & Record<K, NonNullable<Provider[K]>>;
   }
@@ -215,7 +134,7 @@ export class NodeLLMCore {
       throw new ProviderNotConfiguredError();
     }
 
-    const rawModel = model || this.defaultChatModelId || this.provider.defaultModel("chat");
+    const rawModel = model || this.defaults.chat || this.provider.defaultModel("chat");
     const resolvedModel = resolveModelAlias(rawModel, this.provider.id);
     return new Chat(this.provider, resolvedModel, options, this.retry);
   }
@@ -223,23 +142,35 @@ export class NodeLLMCore {
   async listModels(): Promise<ModelInfo[]> {
     const provider = this.ensureProviderSupport("listModels");
     const models = await provider.listModels();
-    
+
     // Dynamically update the model registry with the fetched info
-    ModelRegistry.save(models as any);
-    
+    ModelRegistry.save(models as unknown as Model[]);
+
     return models;
   }
 
-  async paint(prompt: string, options?: { model?: string; size?: string; quality?: string; assumeModelExists?: boolean; requestTimeout?: number }): Promise<GeneratedImage> {
+  async paint(
+    prompt: string,
+    options?: {
+      model?: string;
+      size?: string;
+      quality?: string;
+      assumeModelExists?: boolean;
+      requestTimeout?: number;
+    }
+  ): Promise<GeneratedImage> {
     const provider = this.ensureProviderSupport("paint");
-    
-    // Default to resolving aliases
+
     const rawModel = options?.model;
     const model = resolveModelAlias(rawModel || "", provider.id);
 
     if (options?.assumeModelExists) {
       logger.warn(`Skipping validation for model ${model}`);
-    } else if (model && provider.capabilities && !provider.capabilities.supportsImageGeneration(model)) {
+    } else if (
+      model &&
+      provider.capabilities &&
+      !provider.capabilities.supportsImageGeneration(model)
+    ) {
       throw new ModelCapabilityError(model, "image generation");
     }
 
@@ -247,17 +178,17 @@ export class NodeLLMCore {
       prompt,
       ...options,
       model,
-      requestTimeout: options?.requestTimeout ?? this.config.requestTimeout,
+      requestTimeout: options?.requestTimeout ?? this.config.requestTimeout
     });
 
     return new GeneratedImage(response);
   }
 
   async transcribe(
-    file: string, 
-    options?: { 
-      model?: string; 
-      prompt?: string; 
+    file: string,
+    options?: {
+      model?: string;
+      prompt?: string;
       language?: string;
       speakerNames?: string[];
       speakerReferences?: string[];
@@ -267,11 +198,15 @@ export class NodeLLMCore {
   ): Promise<Transcription> {
     const provider = this.ensureProviderSupport("transcribe");
 
-    const rawModel = options?.model || this.defaultTranscriptionModelId || "";
+    const rawModel = options?.model || this.defaults.transcription || "";
     const model = resolveModelAlias(rawModel, provider.id);
     if (options?.assumeModelExists) {
-       logger.warn(`Skipping validation for model ${model}`);
-    } else if (model && provider.capabilities && !provider.capabilities.supportsTranscription(model)) {
+      logger.warn(`Skipping validation for model ${model}`);
+    } else if (
+      model &&
+      provider.capabilities &&
+      !provider.capabilities.supportsTranscription(model)
+    ) {
       throw new ModelCapabilityError(model, "transcription");
     }
 
@@ -279,32 +214,19 @@ export class NodeLLMCore {
       file,
       ...options,
       model,
-      requestTimeout: options?.requestTimeout ?? this.config.requestTimeout,
+      requestTimeout: options?.requestTimeout ?? this.config.requestTimeout
     });
 
     return new Transcription(response);
   }
 
-  get defaultTranscriptionModel(): string | undefined {
-    return this.defaultTranscriptionModelId;
-  }
-
-  get defaultModerationModel(): string | undefined {
-    return this.defaultModerationModelId;
-  }
-
-  get defaultEmbeddingModel(): string | undefined {
-    return this.defaultEmbeddingModelId;
-  }
-
-  getRetryConfig() {
-    return this.retry;
-  }
-
-  async moderate(input: string | string[], options?: { model?: string; assumeModelExists?: boolean; requestTimeout?: number }): Promise<Moderation> {
+  async moderate(
+    input: string | string[],
+    options?: { model?: string; assumeModelExists?: boolean; requestTimeout?: number }
+  ): Promise<Moderation> {
     const provider = this.ensureProviderSupport("moderate");
 
-    const rawModel = options?.model || this.defaultModerationModelId || "";
+    const rawModel = options?.model || this.defaults.moderation || "";
     const model = resolveModelAlias(rawModel, provider.id);
     if (options?.assumeModelExists) {
       logger.warn(`Skipping validation for model ${model}`);
@@ -316,7 +238,7 @@ export class NodeLLMCore {
       input,
       ...options,
       model,
-      requestTimeout: options?.requestTimeout ?? this.config.requestTimeout,
+      requestTimeout: options?.requestTimeout ?? this.config.requestTimeout
     });
 
     return new Moderation(response);
@@ -324,23 +246,32 @@ export class NodeLLMCore {
 
   async embed(
     input: string | string[],
-    options?: { model?: string; dimensions?: number; assumeModelExists?: boolean; requestTimeout?: number }
+    options?: {
+      model?: string;
+      dimensions?: number;
+      assumeModelExists?: boolean;
+      requestTimeout?: number;
+    }
   ): Promise<Embedding> {
     const provider = this.ensureProviderSupport("embed");
 
-    const rawModel = options?.model || this.defaultEmbeddingModelId || "";
+    const rawModel = options?.model || this.defaults.embedding || "";
     const model = resolveModelAlias(rawModel, provider.id);
 
     const request: EmbeddingRequest = {
       input,
       model,
       dimensions: options?.dimensions,
-      requestTimeout: options?.requestTimeout ?? this.config.requestTimeout,
+      requestTimeout: options?.requestTimeout ?? this.config.requestTimeout
     };
 
     if (options?.assumeModelExists) {
       logger.warn(`Skipping validation for model ${request.model}`);
-    } else if (request.model && provider.capabilities && !provider.capabilities.supportsEmbeddings(request.model)) {
+    } else if (
+      request.model &&
+      provider.capabilities &&
+      !provider.capabilities.supportsEmbeddings(request.model)
+    ) {
       throw new ModelCapabilityError(request.model, "embeddings");
     }
 
@@ -349,6 +280,153 @@ export class NodeLLMCore {
   }
 }
 
-export { Transcription, Moderation, Embedding };
+export { Transcription, Moderation, Embedding, ModelRegistry, PricingRegistry };
 
-export const NodeLLM = new NodeLLMCore();
+/**
+ * Creates a new immutable LLM instance.
+ */
+export function createLLM(options: LLMConfig = {}): NodeLLMCore {
+  // 1. Resolve Configuration
+  // We must ensure we are working with a SNAPSHOT of the configuration,
+  // not a live reference to the global mutable Configuration instance.
+  let configSnapshot: NodeLLMConfig;
+
+  if (options instanceof Configuration) {
+    configSnapshot = options.toPlainObject();
+  } else {
+    // If it's a plain object, we merge it into a fresh Configuration to handle
+    // defaults and environment variable fallbacks correctly, then snapshot it.
+    const tempConfig = new Configuration();
+    Object.assign(tempConfig, options);
+    configSnapshot = tempConfig.toPlainObject();
+  }
+
+  // Use the snapshot for the rest of the logic
+  const baseConfig = configSnapshot;
+
+  // 2. Resolve Retry
+  let retry: Required<RetryOptions> = { attempts: 1, delayMs: 0 };
+  if (baseConfig.maxRetries !== undefined) {
+    retry.attempts = baseConfig.maxRetries + 1;
+  }
+  if (options.retry) {
+    retry = {
+      attempts: options.retry.attempts ?? retry.attempts,
+      delayMs: options.retry.delayMs ?? retry.delayMs
+    };
+  }
+
+  // 3. Resolve Provider
+  let providerInstance: Provider | undefined;
+  if (typeof options.provider === "string") {
+    const registrar = PROVIDER_REGISTRARS[options.provider];
+    if (registrar) registrar();
+    providerInstance = providerRegistry.resolve(options.provider, baseConfig);
+  } else if (options.provider) {
+    providerInstance = options.provider;
+  }
+
+  // 4. Resolve Defaults
+  const defaults = {
+    chat: options.defaultChatModel,
+    transcription: options.defaultTranscriptionModel,
+    moderation: options.defaultModerationModel,
+    embedding: options.defaultEmbeddingModel
+  };
+
+  return new NodeLLMCore(baseConfig, providerInstance, retry, defaults);
+}
+
+/**
+ * DEFAULT IMMUTABLE INSTANCE
+ *
+ * NodeLLM is a default immutable instance created at startup.
+ *
+ * **Architectural Contract**:
+ * - Configuration is captured from environment variables at module load time
+ * - The instance is frozen and cannot be mutated
+ * - Runtime provider switching is achieved via `withProvider()`, not mutation
+ * - Model names do NOT imply provider selection (provider must be explicit)
+ *
+ * **Usage Patterns**:
+ *
+ * 1. Using the default instance (if env vars are set):
+ * ```typescript
+ * import { NodeLLM } from '@node-llm/core';
+ * const chat = NodeLLM.chat("gpt-4");
+ * ```
+ *
+ * 2. Runtime provider switching (recommended):
+ * ```typescript
+ * const llm = NodeLLM.withProvider("openai", {
+ *   openaiApiKey: process.env.OPENAI_API_KEY
+ * });
+ * const chat = llm.chat("gpt-4");
+ * ```
+ *
+ * 3. Creating custom instances:
+ * ```typescript
+ * import { createLLM } from '@node-llm/core';
+ * const llm = createLLM({ provider: "anthropic", anthropicApiKey: "..." });
+ * ```
+ *
+ * @see ARCHITECTURE.md for full contract details
+ */
+let _defaultInstance: NodeLLMCore | undefined;
+
+/**
+ * The global, immutable NodeLLM instance.
+ *
+ * DESIGN: Lazy Initialization
+ * To support 'import "dotenv/config"' patterns in ESM, this instance
+ * does NOT snapshot the environment until its first property access.
+ * Once accessed, it is frozen and becomes a stable, immutable contract.
+ *
+ * @see ARCHITECTURE.md for full contract details
+ */
+export const NodeLLM: NodeLLMCore = new Proxy({} as NodeLLMCore, {
+  get: (target, prop) => {
+    if (!_defaultInstance) {
+      _defaultInstance = createLLM(config);
+      Object.freeze(_defaultInstance);
+    }
+    const val = Reflect.get(_defaultInstance, prop);
+    // Only bind if it's a function AND it exists on the prototype (is a method)
+    // This avoids binding properties like 'models' which is a Class.
+    if (typeof val === "function" && prop in NodeLLMCore.prototype) {
+      return val.bind(_defaultInstance);
+    }
+    return val;
+  },
+  getPrototypeOf: () => NodeLLMCore.prototype,
+  getOwnPropertyDescriptor: (target, prop) => {
+    if (!_defaultInstance) {
+      _defaultInstance = createLLM(config);
+      Object.freeze(_defaultInstance);
+    }
+    return Object.getOwnPropertyDescriptor(_defaultInstance, prop);
+  },
+  ownKeys: () => {
+    if (!_defaultInstance) {
+      _defaultInstance = createLLM(config);
+      Object.freeze(_defaultInstance);
+    }
+    return Reflect.ownKeys(_defaultInstance);
+  }
+});
+
+/**
+ * LEGACY BOOTSTRAPPER (DEPRECATED)
+ *
+ * Provided to ease migration from the mutable singleton pattern.
+ * configure() will warn and no-op, as the global instance is now immutable.
+ */
+export const LegacyNodeLLM = {
+  configure(_options: LLMConfig | ((config: NodeLLMConfig) => void)) {
+    console.warn(
+      "NodeLLM.configure() is deprecated and currently a NO-OP. " +
+        "The global NodeLLM instance is now immutable. " +
+        "Use createLLM() for instance-based LLMs or NodeLLM.withProvider() for runtime switching."
+    );
+  }
+};

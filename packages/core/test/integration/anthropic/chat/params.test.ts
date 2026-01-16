@@ -1,10 +1,10 @@
 import { describe, it, expect, afterEach } from "vitest";
-import { NodeLLM } from "../../../../src/index.js";
+import { createLLM } from "../../../../src/index.js";
 import { setupVCR } from "../../../helpers/vcr.js";
 import "dotenv/config";
 
 describe("Anthropic Parameters Integration (VCR)", { timeout: 30000 }, () => {
-  let polly: any;
+  let polly: { stop: () => Promise<void> } | undefined;
 
   afterEach(async () => {
     if (polly) {
@@ -15,11 +15,11 @@ describe("Anthropic Parameters Integration (VCR)", { timeout: 30000 }, () => {
   it("should respect max_tokens parameter", async ({ task }) => {
     polly = setupVCR(task.name, "anthropic");
 
-    NodeLLM.configure({
+    const llm = createLLM({
       anthropicApiKey: process.env.ANTHROPIC_API_KEY,
-      provider: "anthropic",
+      provider: "anthropic"
     });
-    const chat = NodeLLM.chat("claude-3-haiku-20240307");
+    const chat = llm.chat("claude-3-haiku-20240307");
 
     const response = await chat.ask("Write a long poem about the sea.", {
       maxTokens: 5

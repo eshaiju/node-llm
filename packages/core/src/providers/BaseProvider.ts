@@ -1,3 +1,5 @@
+import { Message } from "../chat/Message.js";
+import { UnsupportedFeatureError } from "../errors/index.js";
 import {
   Provider,
   ChatRequest,
@@ -11,7 +13,8 @@ import {
   ModerationRequest,
   ModerationResponse,
   EmbeddingRequest,
-  EmbeddingResponse
+  EmbeddingResponse,
+  ProviderCapabilities
 } from "./Provider.js";
 
 /**
@@ -28,38 +31,48 @@ export abstract class BaseProvider implements Provider {
     return this.providerName();
   }
 
-  public defaultModel(feature?: string): string {
+  public defaultModel(_feature?: string): string {
     return "";
   }
 
   protected throwUnsupportedError(feature: string): never {
-    throw new Error(`${this.providerName()} does not support ${feature}`);
+    throw new UnsupportedFeatureError(this.providerName(), feature);
   }
 
   abstract chat(request: ChatRequest): Promise<ChatResponse>;
-  abstract capabilities?: any;
+  abstract capabilities?: ProviderCapabilities;
 
-  async *stream?(request: ChatRequest): AsyncIterable<ChatChunk> {
+  async *stream?(_request: ChatRequest): AsyncIterable<ChatChunk> {
     this.throwUnsupportedError("stream");
+    yield* [];
   }
 
   async listModels?(): Promise<ModelInfo[]> {
     this.throwUnsupportedError("listModels");
   }
 
-  async paint?(request: ImageRequest): Promise<ImageResponse> {
+  async paint?(_request: ImageRequest): Promise<ImageResponse> {
     this.throwUnsupportedError("paint");
   }
 
-  async transcribe?(request: TranscriptionRequest): Promise<TranscriptionResponse> {
+  async transcribe?(_request: TranscriptionRequest): Promise<TranscriptionResponse> {
     this.throwUnsupportedError("transcribe");
   }
 
-  async moderate?(request: ModerationRequest): Promise<ModerationResponse> {
+  async moderate?(_request: ModerationRequest): Promise<ModerationResponse> {
     this.throwUnsupportedError("moderate");
   }
 
-  async embed?(request: EmbeddingRequest): Promise<EmbeddingResponse> {
+  async embed?(_request: EmbeddingRequest): Promise<EmbeddingResponse> {
     this.throwUnsupportedError("embed");
+  }
+
+  formatToolResultMessage(toolCallId: string, content: string, options?: { isError?: boolean }): Message {
+    return {
+      role: "tool",
+      tool_call_id: toolCallId,
+      content: content,
+      isError: options?.isError
+    };
   }
 }
