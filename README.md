@@ -85,11 +85,7 @@ for await (const chunk of chat.stream("Explain event-driven architecture")) {
 
 ### 🎯 Real-World Example: Brand Perception Checker
 
-Built with NodeLLM - Multi-provider AI analysis, tool calling, and structured outputs working together:
-
-<p align="center">
-  <img src="assets/brand-perception-checker.png" alt="Brand Perception Checker" width="800" />
-</p>
+Built with NodeLLM - Multi-provider AI analysis, tool calling, and structured outputs working together.
 
 **[View Example →](examples/brand-perception-checker/)**
 

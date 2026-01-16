@@ -126,7 +126,7 @@ export async function* getAuditStream(brandName) {
   const stream = chat.stream(`Begin continuous analysis of ${brandName}...`);
 
   for await (const chunk of stream) {
-    if (chunk.type === "content") {
+    if (chunk.content) {
       yield chunk.content;
     }
   }

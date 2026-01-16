@@ -2,6 +2,16 @@
 
 This directory contains examples demonstrating how to integrate LLMs as an architectural surface using `NodeLLM`.
 
+### 🎯 Flagship Example: Brand Perception Checker
+
+A full-stack application demonstrating multi-provider orchestration, tool calling, and structured outputs.
+
+![Brand Perception Checker](./brand-perception-checker/demo.png)
+
+**[View Example →](./brand-perception-checker/)**
+
+---
+
 ## Available Providers
 
 - **DeepSeek**: `examples/deepseek/`
