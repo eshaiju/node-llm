@@ -1,5 +1,5 @@
 import { describe, it, expect, afterEach } from "vitest";
-import { NodeLLM } from "../../../../src/index.js";
+import { NodeLLM, createLLM } from "../../../../src/index.js";
 import { setupVCR } from "../../../helpers/vcr.js";
 import "dotenv/config";
 
@@ -14,7 +14,7 @@ describe("DeepSeek Chat Tools Integration (VCR)", { timeout: 30000 }, () => {
 
   it("should support tool calling", async ({ task }) => {
     polly = setupVCR(task.name, "deepseek");
-    NodeLLM.configure({
+        const llm = createLLM({
       deepseekApiKey: process.env.DEEPSEEK_API_KEY,
       provider: "deepseek",
     });
@@ -37,7 +37,7 @@ describe("DeepSeek Chat Tools Integration (VCR)", { timeout: 30000 }, () => {
         }
     };
 
-    const chat = NodeLLM.chat("deepseek-chat").withTool(weatherTool);
+    const chat = llm.chat("deepseek-chat").withTool(weatherTool);
     
     // Track tool calls
     let toolCalled = false;

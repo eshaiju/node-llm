@@ -1,4 +1,19 @@
 /**
+ * NodeLLM Error Hierarchy
+ * 
+ * **Stability Contract**: These error types and their semantics are part of the 
+ * public API and will not change without a major version bump.
+ * 
+ * - Error names are stable
+ * - Error codes are stable
+ * - Error semantics (when they're thrown) are stable
+ * - New errors may be added (non-breaking)
+ * - Existing error meanings will not change
+ * 
+ * @see ARCHITECTURE.md for error contract details
+ */
+
+/**
  * Base class for all NodeLLM errors
  */
 export class LLMError extends Error {

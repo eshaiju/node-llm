@@ -1,5 +1,5 @@
 import { describe, it, expect, afterEach } from "vitest";
-import { NodeLLM } from "../../../../src/index.js";
+import { NodeLLM, createLLM } from "../../../../src/index.js";
 import { setupVCR } from "../../../helpers/vcr.js";
 import "dotenv/config";
 
@@ -14,11 +14,11 @@ describe("OpenAI Safety Integration (VCR)", { timeout: 30000 }, () => {
 
   it("should moderate content", async ({ task }) => {
     polly = setupVCR(task.name, "openai");
-    NodeLLM.configure({
+        const llm = createLLM({
       openaiApiKey: process.env.OPENAI_API_KEY,
       provider: "openai",
     });
-    const result = await NodeLLM.moderate("This is a safe message about coding.");
+    const result = await llm.moderate("This is a safe message about coding.");
 
     expect(result.flagged).toBe(false);
     expect(result.model).toBeDefined();

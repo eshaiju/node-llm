@@ -2,12 +2,7 @@ import "dotenv/config";
 import { NodeLLM } from "../../../packages/core/dist/index.js";
 
 async function main() {
-  NodeLLM.configure((config) => {
-    config.openaiApiKey = process.env.OPENAI_API_KEY;
-  });
-  
-  NodeLLM.configure({ provider: "openai" });
-
+  // Using NodeLLM directly - requires OPENAI_API_KEY and NODELLM_PROVIDER=openai
   console.log("--- Single Item Embedding ---");
   const single = await NodeLLM.embed("NodeLLM makes AI easy!");
   console.log(`Vector length: ${single.vector.length}`);

@@ -8,7 +8,15 @@ export * from "./chat/ChatStream.js";
 export * from "./streaming/Stream.js";
 
 export { z } from "zod";
-export { NodeLLM, Transcription, Moderation, Embedding } from "./llm.js";
+export { 
+  NodeLLM, 
+  LegacyNodeLLM,
+  createLLM, 
+  NodeLLMCore, 
+  Transcription, 
+  Moderation, 
+  Embedding 
+} from "./llm.js";
 export { config } from "./config.js";
 export type { NodeLLMConfig } from "./config.js";
 export { providerRegistry } from "./providers/registry.js";

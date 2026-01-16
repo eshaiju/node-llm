@@ -20,6 +20,7 @@ export interface NodeLLMConfig {
   requestTimeout?: number;
   maxTokens?: number;
   toolExecution?: ToolExecutionMode;
+  provider?: string;
 }
 
 import { 
@@ -45,6 +46,7 @@ export class Configuration implements NodeLLMConfig {
   private _openrouterApiKey?: string;
   private _openrouterApiBase?: string;
   private _debug?: boolean;
+  private _provider?: string;
 
   public get openaiApiKey(): string | undefined { return this._openaiApiKey ?? process.env.OPENAI_API_KEY?.trim(); }
   public set openaiApiKey(v: string | undefined) { this._openaiApiKey = v; }
@@ -81,6 +83,9 @@ export class Configuration implements NodeLLMConfig {
 
   public get debug(): boolean | undefined { return this._debug ?? process.env.NODELLM_DEBUG === "true"; }
   public set debug(v: boolean | undefined) { this._debug = v; }
+
+  public get provider(): string | undefined { return this._provider ?? process.env.NODELLM_PROVIDER?.trim(); }
+  public set provider(v: string | undefined) { this._provider = v; }
 
   public maxToolCalls: number = DEFAULT_MAX_TOOL_CALLS;
   public maxRetries: number = DEFAULT_MAX_RETRIES;

@@ -1,5 +1,5 @@
 import { describe, it, expect, afterEach } from "vitest";
-import { NodeLLM } from "../../../../src/index.js";
+import { NodeLLM, createLLM } from "../../../../src/index.js";
 import { setupVCR } from "../../../helpers/vcr.js";
 import "dotenv/config";
 
@@ -15,11 +15,11 @@ describe("OpenAI Usage Integration (VCR)", { timeout: 30000 }, () => {
   it("should track total token usage", async ({ task }) => {
     polly = setupVCR(task.name, "openai");
 
-    NodeLLM.configure({
+        const llm = createLLM({
       openaiApiKey: process.env.OPENAI_API_KEY,
       provider: "openai",
     });
-    const chat = NodeLLM.chat("gpt-4o-mini");
+    const chat = llm.chat("gpt-4o-mini");
 
     await chat.ask("Hello");
     await chat.ask("How are you?");

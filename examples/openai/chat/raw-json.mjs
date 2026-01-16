@@ -1,10 +1,10 @@
 import "dotenv/config";
-import { NodeLLM } from "../../../packages/core/dist/index.js";
+import { createLLM, NodeLLM, Tool, z } from "../../../packages/core/dist/index.js";
 
 /**
  * This example demonstrates defining tools using raw JSON Schema and plain objects.
  * This is useful for migrating from other libraries or when schemas are dynamic.
- * 
+ *
  * RECOMMENDED: Use class-based tools (see tools.mjs) for better type safety and DX.
  */
 
@@ -29,13 +29,12 @@ const weatherTool = {
 };
 
 async function main() {
-  NodeLLM.configure({
+  const llm = createLLM({
     provider: "openai",
     openaiApiKey: process.env.OPENAI_API_KEY,
   });
+  const chat = llm.chat("gpt-4o-mini").withTool(weatherTool);
 
-  const chat = NodeLLM.chat("gpt-4o-mini").withTool(weatherTool);
-  
   console.log("Asking: What's the weather in Paris?");
   const response = await chat.ask("What's the weather in Paris?");
   console.log("\nResponse:", response.content);

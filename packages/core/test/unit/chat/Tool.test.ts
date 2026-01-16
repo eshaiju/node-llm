@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { z } from "zod";
 import { Tool, ToolDefinition } from "../../../src/chat/Tool.js";
-import { NodeLLMCore } from "../../../src/llm.js";
+import { createLLM } from "../../../src/llm.js";
 import { FakeProvider } from "../../fake-provider.js";
 
 class TestTool extends Tool {
@@ -40,8 +40,7 @@ describe("Tool DSL", () => {
 
   it("should be correctly registered in a Chat session", async () => {
     const provider = new FakeProvider();
-    const llm = new NodeLLMCore();
-    llm.configure({ provider });
+    const llm = createLLM({ provider });
 
     const chat = llm.chat("fake-model");
     chat.withTools([TestTool]);

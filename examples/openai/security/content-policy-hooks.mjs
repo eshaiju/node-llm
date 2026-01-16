@@ -1,29 +1,28 @@
 import "dotenv/config";
-import { NodeLLM } from "../../../packages/core/dist/index.js";
+import { createLLM, NodeLLM, Tool, z } from "../../../packages/core/dist/index.js";
 
 /**
  * Example: Content Policy Hooks
- * 
+ *
  * Demonstrates:
  * 1. beforeRequest: Redacting PII (Social Security Numbers) before sending to LLM.
  * 2. afterResponse: Redacting sensitive output or enforcing compliance.
- * 
+ *
  * This provides a flexible, non-opinionated way to implement security layers
  * without hard-coding moderation into the library.
  */
 
 async function main() {
-  NodeLLM.configure({ 
-    provider: "openai", 
-    openaiApiKey: process.env.OPENAI_API_KEY 
+  const llm = createLLM({
+    provider: "openai",
+    openaiApiKey: process.env.OPENAI_API_KEY,
   });
-
-  const chat = NodeLLM.chat("gpt-4o-mini");
+  const chat = llm.chat("gpt-4o-mini");
 
   // --- 1. Input Policy (PII Redaction) ---
   chat.beforeRequest(async (messages) => {
     console.log("[Policy] Checking for PII in request...");
-    
+
     return messages.map(msg => {
       if (typeof msg.content === "string") {
         // Simple regex for SSN-like patterns (e.g., 000-00-0000)
@@ -40,13 +39,13 @@ async function main() {
   // --- 2. Output Policy (Sensitive Content Masking) ---
   chat.afterResponse(async (response) => {
     console.log("[Policy] Checking for sensitive info in AI response...");
-    
+
     // Example: Redact certain "Internal Project Names"
     const redactedContent = response.content.replace(/Project X-Ray/gi, "[INTERNAL-PROJECT]");
-    
+
     if (redactedContent !== response.content) {
       console.log("[Policy] Redacted sensitive project name from output.");
-      
+
       // Use the helper method to return modified content while preserving metadata
       return response.withContent(redactedContent);
     }

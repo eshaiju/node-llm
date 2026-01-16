@@ -11,7 +11,7 @@ describe('Brand Auditor Logic', () => {
       { sentiment: 'neutral', error: false }
     ];
     const marketAudit = { risk_signals: [] };
-    
+
     const result = calculateAlignment(aiPerception, marketAudit);
     assert.strictEqual(result.consensusVibe, 'Positive');
     assert.strictEqual(result.divergence, 'Medium'); // positive & neutral = 2 types
@@ -23,7 +23,7 @@ describe('Brand Auditor Logic', () => {
       { sentiment: 'negative', error: false }
     ];
     const marketAudit = { risk_signals: [] };
-    
+
     const result = calculateAlignment(aiPerception, marketAudit);
     assert.strictEqual(result.consensusVibe, 'Neutral');
   });
@@ -34,7 +34,7 @@ describe('Brand Auditor Logic', () => {
       { sentiment: 'neutral', error: false },
       { sentiment: 'negative', error: false }
     ];
-    
+
     const result = calculateAlignment(aiPerception, {});
     assert.strictEqual(result.divergence, 'High');
   });
@@ -44,7 +44,7 @@ describe('Brand Auditor Logic', () => {
       { sentiment: 'positive', error: false },
       { sentiment: 'unknown', error: true } // Should be ignored
     ];
-    
+
     const result = calculateAlignment(aiPerception, {});
     assert.strictEqual(result.consensusVibe, 'Positive');
     assert.strictEqual(result.divergence, 'Low'); // Only 1 valid sentiment

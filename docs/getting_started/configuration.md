@@ -21,33 +21,42 @@ description: Learn how to configure NodeLLM with API keys, custom base URLs, sec
 
 ---
 
-`NodeLLM` uses a simple configuration object to set API keys and active providers.
+`NodeLLM` provides three ways to configure providers: **Zero-Config** (via environment variables), **Explicit Factory** (via `createLLM`), and **Isolated Branching** (via `.withProvider`).
 
-## Quick Start
+## 1. Zero-Config (The "Direct" Pattern)
 
-The simplest configuration sets your API keys and the active provider:
+The simplest way to use NodeLLM is by relying on environment variables. NodeLLM will automatically snapshot your environment at load time.
 
-```typescript
-import { NodeLLM } from "@node-llm/core";
-
-// Configure OpenAI
-NodeLLM.configure({
-  provider: "openai",
-  openaiApiKey: process.env.OPENAI_API_KEY,
-});
+**Environment variables (`.env`):**
+```env
+NODELLM_PROVIDER=openai
+OPENAI_API_KEY=sk-....
 ```
 
-That's it. `NodeLLM` uses sensible defaults for everything else.
+**Code:**
+```typescript
+import "dotenv/config";
+import { NodeLLM } from "@node-llm/core";
+
+// Zero setup required
+const chat = NodeLLM.chat(); 
+```
+
+---
+
+## 2. Explicit Factory (`createLLM`)
+
+Recommended for production applications where you want to explicitly define provider behavior or manage multiple providers in one application.
 
 ## Switching Providers
 
-You can switch providers at any time by calling `configure` again.
+Since `NodeLLM` is immutable, you switch providers by creating a new instance using `createLLM()` or `withProvider()`.
 
 ```typescript
-// Switch to Anthropic
-NodeLLM.configure({
-  provider: "anthropic",
-  anthropicApiKey: process.env.ANTHROPIC_API_KEY,
+// Create an Anthropic instance
+const llm = createLLM({ 
+  provider: "anthropic", 
+  anthropicApiKey: process.env.ANTHROPIC_API_KEY, 
 });
 ```
 
@@ -58,7 +67,7 @@ NodeLLM.configure({
 Configure API keys in the configuration object.
 
 ```typescript
-NodeLLM.configure({
+const llm = createLLM({
   openaiApiKey: process.env.OPENAI_API_KEY,
   anthropicApiKey: process.env.ANTHROPIC_API_KEY,
   geminiApiKey: process.env.GEMINI_API_KEY,
@@ -72,11 +81,8 @@ NodeLLM.configure({
 Override the default API endpoints for custom deployments (e.g., Azure OpenAI):
 
 ```typescript
-NodeLLM.configure({
-  provider: "openai",
-  openaiApiKey: process.env.AZURE_OPENAI_API_KEY,
-  openaiApiBase: process.env.AZURE_OPENAI_API_BASE_ENDPOINT,
-});
+const llm = createLLM({ provider: "openai", openaiApiKey: process.env.AZURE_OPENAI_API_KEY,
+  openaiApiBase: process.env.AZURE_OPENAI_API_BASE_ENDPOINT, });
 ```
 
 ### Loop Protection & Security Limits
@@ -84,7 +90,7 @@ NodeLLM.configure({
 Prevent runaway costs, infinite loops, and hanging requests by setting execution and timeout limits:
 
 ```typescript
-NodeLLM.configure({
+const llm = createLLM({
   maxToolCalls: 5,      // Stop after 5 sequential tool execution turns
   maxRetries: 2,        // Retry network/server errors 2 times
   requestTimeout: 30000,// Timeout requests after 30 seconds (default)
@@ -136,53 +142,52 @@ Attempting to use an unconfigured provider will raise a clear error:
 
 ```typescript
 // If API key is not set
-NodeLLM.configure({ provider: "openai" });
+const llm = createLLM({ provider: "openai" });
 // Error: openaiApiKey is not set in config...
 ```
 
-### Lazy Loading & ESM Safety
+### Snapshotting & Instance Initialization
 
-By default, `NodeLLM` lazily initializes its configuration from environment variables. This means `process.env` is only read when you actually make your first AI request.
+When you create an LLM instance (including the default `NodeLLM` export), it **snapshots** all relevant environment variables.
 
-**Why this matters:** In ESM environments, import hoisting can sometimes cause code to run before `dotenv.config()` has finished populating `process.env`. Because `NodeLLM` is lazy, it is **immune** to this race condition. You can safely import `NodeLLM` and call `dotenv.config()` in any order.
+In the global `NodeLLM` instance, this initialization is **lazy**. It only snapshots `process.env` the first time you access a property or method (like `.chat()`). This makes it safe to use with `dotenv/config` or similar libraries in ESM, even if they are imported after the core library.
 
 ```typescript
-// Environment variable takes precedence initially
-// OPENAI_API_KEY=sk-env-key
+// ✅ Safe in NodeLLM v1.5.4+: Initialized on first call
+import { NodeLLM } from "@node-llm/core";
+import "dotenv/config"; 
 
-// Override programmatically
-NodeLLM.configure({
-  openaiApiKey: "sk-programmatic-key" // This wins
-});
+const chat = NodeLLM.chat(); // Snapshots environment NOW
 ```
+
 
 ## Best Practices
 
 1. **Use dotenv for local development**:
    ```typescript
    import "dotenv/config";
-   import { NodeLLM } from "@node-llm/core";
+   import { createLLM } from "@node-llm/core";
    
-   NodeLLM.configure({ provider: "openai" });
+   const llm = createLLM({ provider: "openai" });
    ```
 
 2. **Configure once at startup**:
    ```typescript
    // app.ts
-   NodeLLM.configure({
+   const llm = createLLM({
      openaiApiKey: process.env.OPENAI_API_KEY,
      anthropicApiKey: process.env.ANTHROPIC_API_KEY
    });
    ```
 
-### Scoped Configuration (Parallel Execution)
+### Scoped Configuration (Isolation)
 
-By default, `NodeLLM` is a singleton. If you need to use multiple providers in parallel, or if you need to use different API keys for the same provider, calling `NodeLLM.configure()` concurrently can lead to race conditions.
+`NodeLLM` is a **frozen, immutable instance**. It cannot be mutated at runtime. This design ensures that configurations do not leak between parallel requests, making it safe for multi-tenant applications.
 
-Use `.withProvider()` to create a **scoped context**. This returns an isolated instance of `NodeLLM` that inherits your global configuration but allows for local overrides.
+Use `createLLM()` or `.withProvider()` to create an **isolated context**.
 
 #### 1. Isolated Provider State
-Run multiple providers in parallel safely without global configuration side effects:
+Run multiple providers in parallel safely without any side effects:
 
 ```ts
 const [gpt, claude] = await Promise.all([

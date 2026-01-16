@@ -352,9 +352,9 @@ Aliases abstract away the specific model ID strings required by different provid
 When you call a method like \`NodeLLM.chat("claude-3-5-sonnet")\`, \`NodeLLM\` checks the configured provider and automatically resolves the alias.
 
 \`\`\`ts
-// If configured with Anthropic
-NodeLLM.configure({ provider: "anthropic" });
-const chat = NodeLLM.chat("claude-3-5-sonnet"); 
+// Using Anthropic provider
+const llm = createLLM({ provider: "anthropic" });
+const chat = llm.chat("claude-3-5-sonnet"); 
 // Resolves internally to "claude-3-5-sonnet-20241022" (or latest stable version)
 \`\`\`
 

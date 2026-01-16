@@ -1,5 +1,5 @@
 import { describe, it, expect, afterEach } from "vitest";
-import { NodeLLM } from "../../../src/index.js";
+import { NodeLLM, createLLM } from "../../../src/index.js";
 import { setupVCR } from "../../helpers/vcr.js";
 import { z } from "zod";
 import "dotenv/config";
@@ -15,11 +15,11 @@ describe("OpenAI Structured Output (VCR)", { timeout: 30000 }, () => {
 
   it("should support structured output with Zod schema", async ({ task }) => {
     polly = setupVCR(task.name, "openai");
-    NodeLLM.configure({
+        const llm = createLLM({
       openaiApiKey: process.env.OPENAI_API_KEY,
       provider: "openai",
     });
-    const chat = NodeLLM.chat("gpt-4o-mini");
+    const chat = llm.chat("gpt-4o-mini");
 
     const schema = z.object({
       name: z.string(),

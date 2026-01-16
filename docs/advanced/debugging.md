@@ -29,9 +29,9 @@ You can enable detailed debug logging in two ways:
 ### 1. Programmatic Configuration (Recommended)
 
 ```ts
-import { NodeLLM } from "@node-llm/core";
+import { createLLM } from "@node-llm/core";
 
-NodeLLM.configure({ debug: true });
+const llm = createLLM({ debug: true });
 ```
 
 This will print the raw HTTP requests and responses for **all API calls** across **every feature and provider**.

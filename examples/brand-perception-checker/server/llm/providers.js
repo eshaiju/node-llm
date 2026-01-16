@@ -1,4 +1,4 @@
-import { NodeLLM } from '@node-llm/core';
+import { createLLM } from '@node-llm/core';
 import dotenv from 'dotenv';
 
 dotenv.config();

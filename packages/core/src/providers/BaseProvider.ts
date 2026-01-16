@@ -1,3 +1,4 @@
+import { UnsupportedFeatureError } from "../errors/index.js";
 import {
   Provider,
   ChatRequest,
@@ -33,7 +34,7 @@ export abstract class BaseProvider implements Provider {
   }
 
   protected throwUnsupportedError(feature: string): never {
-    throw new Error(`${this.providerName()} does not support ${feature}`);
+    throw new UnsupportedFeatureError(this.providerName(), feature);
   }
 
   abstract chat(request: ChatRequest): Promise<ChatResponse>;

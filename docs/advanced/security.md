@@ -118,7 +118,7 @@ Prevent hanging requests that could tie up resources or enable DoS attacks. By d
 
 ```ts
 // Global configuration
-NodeLLM.configure({
+const llm = createLLM({
   requestTimeout: 30000 // 30 seconds (default)
 });
 
@@ -139,7 +139,7 @@ await chat.ask("Analyze this large dataset", {
 Prevent infinite tool execution loops that could exhaust resources or rack up costs.
 
 ```ts
-NodeLLM.configure({
+const llm = createLLM({
   maxToolCalls: 5 // Stop after 5 sequential tool execution turns (default)
 });
 
@@ -156,7 +156,7 @@ await chat.ask("Deep research task", { maxToolCalls: 10 });
 Prevent retry storms that could cascade through your system during provider outages.
 
 ```ts
-NodeLLM.configure({
+const llm = createLLM({
   maxRetries: 2 // Retry failed requests twice (default)
 });
 ```
@@ -170,7 +170,7 @@ NodeLLM.configure({
 Combine all limits for comprehensive protection:
 
 ```ts
-NodeLLM.configure({
+const llm = createLLM({
   requestTimeout: 30000,  // 30 second timeout
   maxRetries: 2,          // Retry failed requests twice
   maxToolCalls: 5,        // Limit tool execution loops

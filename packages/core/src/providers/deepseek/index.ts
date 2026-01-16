@@ -1,4 +1,4 @@
-import { config } from "../../config.js";
+import { config as globalConfig } from "../../config.js";
 import { providerRegistry } from "../registry.js";
 import { DeepSeekProvider } from "./DeepSeekProvider.js";
 
@@ -12,9 +12,10 @@ let registered = false;
 export function registerDeepSeekProvider() {
   if (registered) return;
 
-  providerRegistry.register("deepseek", () => {
-    const apiKey = config.deepseekApiKey;
-    const baseUrl = config.deepseekApiBase; // Optional override
+  providerRegistry.register("deepseek", (config) => {
+    const cfg = config || globalConfig;
+    const apiKey = cfg.deepseekApiKey;
+    const baseUrl = cfg.deepseekApiBase; // Optional override
 
     if (!apiKey) {
       throw new Error("deepseek_api_key is not set in config or DEEPSEEK_API_KEY environment variable");

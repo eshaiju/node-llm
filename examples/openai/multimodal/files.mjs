@@ -1,21 +1,19 @@
 import "dotenv/config";
-import { NodeLLM } from "../../../packages/core/dist/index.js";
+import { createLLM, NodeLLM, Tool, z } from "../../../packages/core/dist/index.js";
 import path from "path";
 import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 async function main() {
-  NodeLLM.configure((config) => {
-    config.openaiApiKey = process.env.OPENAI_API_KEY;
+  const llm = createLLM({
+    provider: "openai",
+    openaiApiKey: process.env.OPENAI_API_KEY,
   });
-  
-  NodeLLM.configure({ provider: "openai" });
-
-  const chat = NodeLLM.chat("gpt-4o");
+  const chat = llm.chat("gpt-4o");
 
   console.log("Analyzing multiple project files (README + code)...\n");
-  
+
   // We can pass multiple local file paths directly
   const response = await chat.ask("Summarize the relationship between these files.", {
     files: [

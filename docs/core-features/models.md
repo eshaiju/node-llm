@@ -27,7 +27,7 @@ description: Programmatically discover available models, their capabilities, and
 You can look up any supported model to check its context window, costs, and features.
 
 ```ts
-import { NodeLLM } from "@node-llm/core";
+import { createLLM } from "@node-llm/core";
 
 const model = NodeLLM.models.find("gpt-4o");
 
@@ -97,11 +97,11 @@ await chat.ask("Hello");
 To point to a custom URL (like an Azure endpoint or local proxy), configure the base URL globally.
 
 ```ts
-NodeLLM.configure({
+const llm = createLLM({
   openaiApiBase: "https://my-azure-resource.openai.azure.com",
   openaiApiKey: process.env.AZURE_API_KEY
 });
 
 // Now valid for all OpenAI requests
-const chat = NodeLLM.chat("gpt-4", { provider: "openai" });
+const chat = llm.chat("gpt-4", { provider: "openai" });
 ```

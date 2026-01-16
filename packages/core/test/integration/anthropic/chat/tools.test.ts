@@ -1,5 +1,5 @@
 import { describe, it, expect, afterEach } from "vitest";
-import { NodeLLM, Tool } from "../../../../src/index.js";
+import { NodeLLM, createLLM, Tool } from "../../../../src/index.js";
 import { setupVCR } from "../../../helpers/vcr.js";
 import { z } from "zod";
 import "dotenv/config";
@@ -48,11 +48,11 @@ describe("Anthropic Tool Calling Integration (VCR)", { timeout: 30000 }, () => {
   it("should support tool calling", async ({ task }) => {
     polly = setupVCR(task.name, "anthropic");
 
-    NodeLLM.configure({
+        const llm = createLLM({
       anthropicApiKey: process.env.ANTHROPIC_API_KEY,
       provider: "anthropic",
     });
-    const chat = NodeLLM.chat("claude-3-haiku-20240307")
+    const chat = llm.chat("claude-3-haiku-20240307")
         .withTool(WeatherTool);
 
     const response = await chat.ask("What is the weather in Paris?");

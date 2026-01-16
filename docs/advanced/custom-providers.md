@@ -114,9 +114,9 @@ Register your provider with `NodeLLM` during your application's initialization.
 NodeLLM.registerProvider("my-service", () => new MyCustomProvider());
 
 // 2. Use it globally
-NodeLLM.configure({ provider: "my-service" });
+const llm = createLLM({ provider: "my-service" });
 
-const response = await NodeLLM.chat().ask("Hi!");
+const response = await llm.chat().ask("Hi!");
 ```
 
 ## Advanced Implementation
@@ -135,12 +135,12 @@ async *stream(request: ChatRequest) {
 ```
 
 ### Handling Scoped Credentials
-It's best to pull configuration from environment variables or the `NodeLLM.configure` block within your factory function:
+It's best to pull configuration from environment variables or use the injected configuration when the provider factory is called:
 
 ```ts
-NodeLLM.registerProvider("internal-llm", () => {
+NodeLLM.registerProvider("internal-llm", (config) => {
   return new MyCustomProvider({
-    apiKey: process.env.INTERNAL_LLM_KEY,
+    apiKey: config?.["internalApiKey"] || process.env.INTERNAL_LLM_KEY,
     region: "us-east-1"
   });
 });

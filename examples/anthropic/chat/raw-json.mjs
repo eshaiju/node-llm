@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { NodeLLM } from "../../../packages/core/dist/index.js";
+import { createLLM, NodeLLM, Tool, z } from "../../../packages/core/dist/index.js";
 
 /**
  * This example demonstrates defining tools using raw JSON Schema and plain objects for Anthropic.
@@ -27,12 +27,12 @@ const weatherTool = {
 };
 
 async function main() {
-  NodeLLM.configure({
+  const llm = createLLM({
     provider: "anthropic",
+    anthropicApiKey: process.env.ANTHROPIC_API_KEY,
   });
+  const chat = llm.chat("claude-3-haiku-20240307").withTool(weatherTool);
 
-  const chat = NodeLLM.chat("claude-3-haiku-20240307").withTool(weatherTool);
-  
   console.log("Asking: What's the weather in Paris?");
   const response = await chat.ask("What's the weather in Paris?");
   console.log("\nResponse:", response.content);

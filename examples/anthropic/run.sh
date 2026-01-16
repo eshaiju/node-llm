@@ -9,6 +9,7 @@ cd ../..
 # Get API Key
 ANTHROPIC_API_KEY=$(grep "^ANTHROPIC_API_KEY=" .env | cut -d '=' -f2)
 export ANTHROPIC_API_KEY
+export NODELLM_PROVIDER=anthropic
 
 if [ -z "$ANTHROPIC_API_KEY" ]; then
   echo "Error: ANTHROPIC_API_KEY not found in .env"

@@ -1,5 +1,5 @@
 
-import { NodeLLM } from "../../../packages/core/dist/index.js";
+import { createLLM, NodeLLM, Tool, z } from "../../../packages/core/dist/index.js";
 
 // Tool Definition
 const weatherTool = {
@@ -18,23 +18,25 @@ const weatherTool = {
   },
   handler: async ({ location, unit }) => {
     console.log(`[Tool] Fetching weather for ${location}...`);
-    return JSON.stringify({ 
-        location, 
-        temperature: "72", 
-        unit: unit || "fahrenheit", 
-        forecast: ["sunny", "windy"] 
+    return JSON.stringify({
+        location,
+        temperature: "72",
+        unit: unit || "fahrenheit",
+        forecast: ["sunny", "windy"]
     });
   }
 };
 
 async function main() {
+  const llm = createLLM({
+    provider: "ollama",
+  });
   console.log("🦙 Ollama Tools Example");
   console.log("Note: Requires a tool-capable model (e.g., 'llama3.1')");
   console.log("Run: ollama pull llama3.1\n");
 
-  NodeLLM.configure({ provider: "ollama" });
-  
-  const chat = NodeLLM.chat("llama3.1");
+
+  const chat = llm.chat("llama3.1");
 
   console.log("User: What is the weather in San Francisco?");
   try {

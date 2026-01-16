@@ -1,5 +1,5 @@
 import { describe, it, expect, afterEach } from "vitest";
-import { NodeLLM } from "../../../../src/index.js";
+import { NodeLLM, createLLM } from "../../../../src/index.js";
 import { setupVCR } from "../../../helpers/vcr.js";
 import "dotenv/config";
 
@@ -14,12 +14,12 @@ describe("OpenRouter Discovery Integration (VCR)", { timeout: 30000 }, () => {
 
   it("should list available models", async ({ task }) => {
     polly = setupVCR(task.name, "openrouter");
-    NodeLLM.configure({
+        const llm = createLLM({
       openrouterApiKey: process.env.OPENROUTER_API_KEY,
       provider: "openrouter",
     });
 
-    const models = await NodeLLM.listModels();
+    const models = await llm.listModels();
 
     expect(Array.isArray(models)).toBe(true);
     expect(models.length).toBeGreaterThan(0);

@@ -1,18 +1,9 @@
 import "dotenv/config";
 import { NodeLLM } from "../../../packages/core/dist/index.js";
 
-// Configure provider - Callback style (recommended)
-NodeLLM.configure((config) => {
-  config.anthropicApiKey = process.env.ANTHROPIC_API_KEY;
-});
-
-// Alternative: NodeLLM.configure({ anthropicApiKey: "sk-ant-...", provider: "anthropic" });
-NodeLLM.configure({
-  provider: "anthropic",
-});
-
 async function main() {
-  // No model specified - defaults to Claude 3.5 Haiku for Anthropic
+  // Pattern: Direct Usage (Singleton)
+  // NodeLLM automatically reads NODELLM_PROVIDER=anthropic and ANTHROPIC_API_KEY from .env
   const chat = NodeLLM.chat();
   console.log(`Using model: ${chat.modelId}`);
 

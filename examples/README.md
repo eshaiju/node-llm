@@ -20,6 +20,7 @@ This directory contains examples demonstrating how to integrate LLMs as an archi
     ANTHROPIC_API_KEY=your_anthropic_api_key
     GEMINI_API_KEY=your_gemini_api_key
     OPENROUTER_API_KEY=your_openrouter_api_key
+    NODELLM_PROVIDER=openai # Required for NodeLLM Direct pattern
     ```
 
 2.  **Build**: Before running examples, make sure the core package is built:
@@ -27,23 +28,35 @@ This directory contains examples demonstrating how to integrate LLMs as an archi
     npm run build --workspace=packages/core
     ```
 
-## Configuration Example
+## Configuration
 
-Learn how to configure `NodeLLM`:
+Examples use one of three patterns:
 
-```bash
-### Configuration
-
-The examples use `NodeLLM.configure` to set up the provider. You can pass your API key directly in the configuration object:
-
+1. **NodeLLM Direct** (simplest - uses environment variables):
 ```javascript
-NodeLLM.configure({
-  openaiApiKey: process.env.OPENAI_API_KEY,
-  provider: "openai" 
+import { NodeLLM } from "@node-llm/core";
+const chat = NodeLLM.chat("gpt-4");
+```
+
+2. **createLLM()** (recommended - explicit configuration):
+```javascript
+import { createLLM } from "@node-llm/core";
+const llm = createLLM({
+  provider: "openai",
+  openaiApiKey: process.env.OPENAI_API_KEY
+});
+const chat = llm.chat("gpt-4");
+```
+
+3. **withProvider()** (advanced - runtime switching):
+```javascript
+import { NodeLLM } from "@node-llm/core";
+const llm = NodeLLM.withProvider("openai", {
+  openaiApiKey: process.env.OPENAI_API_KEY
 });
 ```
 
-See [CONFIGURATION.md](../docs/CONFIGURATION.md) for full details.
+See [Configuration Guide](../docs/getting_started/configuration.md) for full details.
 
 ---
 

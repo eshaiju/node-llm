@@ -27,12 +27,10 @@ Allows you to run large language models locally using [Ollama](https://ollama.co
 Standard configuration for local inference (defaults to `http://localhost:11434/v1`):
 
 ```javascript
-import { NodeLLM } from "@node-llm/core";
+import { createLLM } from "@node-llm/core";
 
 // Defaults to http://localhost:11434/v1
-NodeLLM.configure({
-  provider: "ollama",
-});
+const llm = createLLM({ provider: "ollama" });
 ```
 
 ### Custom URL
@@ -40,10 +38,7 @@ NodeLLM.configure({
 If your Ollama instance is running on a different machine or port:
 
 ```javascript
-NodeLLM.configure({
-  provider: "ollama",
-  ollamaApiBase: "http://192.168.1.10:11434/v1", // Note the /v1 suffix
-});
+const llm = createLLM({ provider: "ollama", ollamaApiBase: "http://192.168.1.10:11434/v1", // Note the /v1 suffix });
 ```
 
 ## Specific Parameters
@@ -51,7 +46,7 @@ NodeLLM.configure({
 You can pass Ollama/OpenAI-compatible parameters using `.withParams()`.
 
 ```javascript
-const chat = NodeLLM.chat("llama3")
+const chat = llm.chat("llama3")
   .withParams({ 
     temperature: 0.7,
     seed: 42,

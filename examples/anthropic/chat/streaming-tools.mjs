@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { NodeLLM, Tool, z } from "../../../packages/core/dist/index.js";
+import { createLLM, NodeLLM, Tool, z } from "../../../packages/core/dist/index.js";
 
 class WeatherTool extends Tool {
   name = "get_weather";
@@ -22,18 +22,17 @@ class WeatherTool extends Tool {
 }
 
 async function main() {
-  NodeLLM.configure({
+  const llm = createLLM({
     provider: "anthropic",
     anthropicApiKey: process.env.ANTHROPIC_API_KEY,
   });
-
   // Example 1: Streaming with tool calling
   console.log("=== Example 1: Anthropic Streaming with Tool Calling ===\n");
-  const chat1 = NodeLLM.chat("claude-3-haiku-20240307").withTool(WeatherTool);
-  
+  const chat1 = llm.chat("claude-3-haiku-20240307").withTool(WeatherTool);
+
   console.log("Question: What's the weather in Paris?\n");
   console.log("Streaming response:");
-  
+
   for await (const chunk of chat1.stream("What's the weather in Paris?")) {
     if (chunk.content) {
       process.stdout.write(chunk.content);
@@ -43,11 +42,11 @@ async function main() {
 
   // Example 2: Streaming with multiple tool calls
   console.log("\n=== Example 2: Streaming with Multiple Cities ===\n");
-  const chat2 = NodeLLM.chat("claude-3-haiku-20240307").withTool(WeatherTool);
-  
+  const chat2 = llm.chat("claude-3-haiku-20240307").withTool(WeatherTool);
+
   console.log("Question: Compare weather in London and Tokyo\n");
   console.log("Streaming response:");
-  
+
   for await (const chunk of chat2.stream("Compare the weather in London and Tokyo")) {
     if (chunk.content) {
       process.stdout.write(chunk.content);
@@ -57,7 +56,7 @@ async function main() {
 
   // Example 3: Streaming with tool events
   console.log("\n=== Example 3: Streaming with Tool Event Handlers ===\n");
-  const chat3 = NodeLLM.chat("claude-3-haiku-20240307")
+  const chat3 = llm.chat("claude-3-haiku-20240307")
     .withTool(WeatherTool)
     .onToolCall((toolCall) => {
       console.log(`\n[Event] Tool called: ${toolCall.function.name}`);
@@ -65,10 +64,10 @@ async function main() {
     .onToolResult((result) => {
       console.log(`[Event] Tool result: ${JSON.stringify(result)}\n`);
     });
-  
+
   console.log("Question: What's the weather in Berlin?\n");
   console.log("Streaming response:");
-  
+
   for await (const chunk of chat3.stream("What's the weather in Berlin?")) {
     if (chunk.content) {
       process.stdout.write(chunk.content);

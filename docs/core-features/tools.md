@@ -50,7 +50,7 @@ class WeatherTool extends Tool {
 }
 
 // Register as a class (instantiated automatically) or instance
-const chat = NodeLLM.chat().withTool(WeatherTool);
+const chat = llm.chat().withTool(WeatherTool);
 await chat.ask("What is the weather in SF?");
 ```
 
@@ -82,7 +82,7 @@ Use the fluent `.withTool()` or `.withTools()` API to register tools for a chat 
 
 ```ts
 // Append tools
-const chat = NodeLLM.chat("gpt-4o")
+const chat = llm.chat("gpt-4o")
   .withTools([WeatherTool, CalculatorTool]);
 
 // Replace all existing tools with a new list
@@ -96,7 +96,7 @@ const reply = await chat.ask("What is the weather in London?");
 Tools now work seamlessly with streaming! The same tool execution happens automatically during streaming:
 
 ```ts
-const chat = NodeLLM.chat("gpt-4o").withTool(WeatherTool);
+const chat = llm.chat("gpt-4o").withTool(WeatherTool);
 
 // Tool is automatically executed during streaming
 for await (const chunk of chat.stream("What's the weather in Paris?")) {
@@ -124,7 +124,7 @@ You can configure this limit globally or override it for a specific request:
 
 ```ts
 // 1. Global Change
-NodeLLM.configure({ maxToolCalls: 10 });
+const llm = createLLM({ maxToolCalls: 10 });
 
 await chat.ask("Perform a complex deep research task", { 
   maxToolCalls: 15 
@@ -219,7 +219,7 @@ The hook can return one of two directives:
 *   **`"CONTINUE"`**: Catch the error, log it, and tell the agent to ignore it and move to the next turn.
 
 ```ts
-const chat = NodeLLM.chat("gpt-4o", {
+const chat = llm.chat("gpt-4o", {
   onToolCallError: (toolCall, error) => {
     // 1. Critical Tool: Stop everything
     if (toolCall.function.name === "process_payment") {

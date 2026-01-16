@@ -11,7 +11,7 @@ export class SerpTool extends Tool {
   async execute({ brandName }) {
     console.log(`[Tool] Fetching live market telemetry for: ${brandName}`);
     const apiKey = process.env.SERPER_API_KEY;
-    
+
     if (!apiKey) {
       console.warn('[Tool] SYSTEM_WARNING: SERPER_API_KEY omitted, failing over to mock data');
       return this.getMockData(brandName);
@@ -32,7 +32,7 @@ export class SerpTool extends Tool {
       const data = response.data;
       const snippets = (data.organic || []).slice(0, 5).map(item => item.snippet);
       const paa = (data.peopleAlsoAsk || []).map(item => item.question);
-      
+
       return {
         visibility: data.searchParameters?.totalResults > 100000 ? 'high' : 'medium',
         totalResults: data.searchParameters?.totalResults,

@@ -24,19 +24,22 @@ description: A unified interface for stateful conversations across all providers
 
 ## Starting a Conversation
 
-The core entry point is `NodeLLM.chat(model_id, options?)`.
+The core entry point is `NodeLLM.chat(model_id?, options?)`.
 
 ```ts
+import "dotenv/config";
 import { NodeLLM } from "@node-llm/core";
 
-// Create a chat instance
+// 1. Get a chat instance
+// (No setup required if NODELLM_PROVIDER is in env)
 const chat = NodeLLM.chat("gpt-4o-mini");
 
-// Ask a question
+// 2. Ask a question
 const response = await chat.ask("What is the capital of France?");
 
 console.log(response.content); // "The capital of France is Paris."
 ```
+
 
 ### Continuing the Conversation
 
@@ -56,7 +59,7 @@ Guide the AI's behavior, personality, or constraints using system prompts. You c
 
 ```ts
 // Option 1: Set at initialization
-const chat = NodeLLM.chat("gpt-4o", {
+const chat = llm.chat("gpt-4o", {
   systemPrompt: "You are a helpful assistant that answers in rhyming couplets."
 });
 
@@ -73,7 +76,7 @@ Some providers offer beta features or require specific headers (like for observa
 
 ```ts
 // Enable Anthropic's beta features
-const chat = NodeLLM.chat("claude-3-5-sonnet")
+const chat = llm.chat("claude-3-5-sonnet")
   .withRequestOptions({
     headers: {
       "anthropic-beta": "max-tokens-3-5-sonnet-2024-07-15"
@@ -95,35 +98,28 @@ const systemBlock = {
   cache_control: { type: "ephemeral" }
 };
 
-const chat = NodeLLM.chat("claude-3-5-sonnet", {
+const chat = llm.chat("claude-3-5-sonnet", {
   systemPrompt: systemBlock as any // Cast if strict types complain
 });
 ```
 
 ## Working with Multiple Providers
 
-You can switch providers globally or use scoped instances for parallel execution without side effects.
+### Isolation and Multi-tenancy
 
-### Global Switching
+`NodeLLM` is a **frozen, immutable instance**. It cannot be mutated at runtime. This design ensures that configurations (like API keys) do not leak between different parts of your application, making it safe for multi-tenant environments like SaaS or serverless functions.
 
-{: .warning }
-> **⚠️ Multi-tenancy Warning**  
-> Global configuration (`NodeLLM.configure()`) affects **all subsequent calls** in the same Node.js process. This is unsafe for multi-tenant applications (e.g., SaaS, serverless functions) where different users/requests need different API keys or settings. Use scoped instances instead.
-
-Global configuration is safe for:
-- Single-tenant applications
-- CLI tools
-- Scripts
-- Development/testing
+If you need isolated configurations for different users or requests, use `createLLM()` or `NodeLLM.withProvider()`.
 
 ```ts
-// ❌ UNSAFE in multi-tenant apps
-NodeLLM.configure({ provider: "openai", openaiApiKey: tenant1Key });
-const chat1 = NodeLLM.chat("gpt-4o"); // Uses tenant1Key
+import { createLLM } from "@node-llm/core";
 
-NodeLLM.configure({ provider: "openai", openaiApiKey: tenant2Key });
-const chat2 = NodeLLM.chat("gpt-4o"); // Uses tenant2Key
-// But chat1 is now also using tenant2Key! 🐛
+// Safe for multi-tenant apps
+const userA = createLLM({ provider: "openai", openaiApiKey: "..." });
+const userB = createLLM({ provider: "anthropic", anthropicApiKey: "..." });
+
+await userA.chat().ask("Hello!"); // Uses User A's key
+await userB.chat().ask("Hello!"); // Uses User B's key
 ```
 
 ### ⚡ Scoped Instances
@@ -239,7 +235,7 @@ By default, `NodeLLM` handles network instabilities or temporary provider errors
 You can configure these limits globally:
 
 ```ts
-NodeLLM.configure({
+const llm = createLLM({
   maxRetries: 3,        // Increase retries for unstable connections
   maxToolCalls: 10,     // Allow deeper tool calling sequences
   requestTimeout: 60000 // 60 second timeout for long-running requests

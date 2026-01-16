@@ -25,12 +25,9 @@ The OpenAI provider supports the full range of \`NodeLLM\` features, including r
 ## Configuration
 
 ```ts
-import { NodeLLM } from "@node-llm/core";
+import { createLLM } from "@node-llm/core";
 
-NodeLLM.configure({
-  provider: "openai",
-  openaiApiKey: process.env.OPENAI_API_KEY, // Optional if set in env
-});
+const llm = createLLM({ provider: "openai", openaiApiKey: process.env.OPENAI_API_KEY, // Optional if set in env });
 ```
 
 ## Specific Parameters
@@ -38,7 +35,7 @@ NodeLLM.configure({
 You can pass OpenAI-specific parameters using `.withParams()`.
 
 ```ts
-const chat = NodeLLM.chat("gpt-4o")
+const chat = llm.chat("gpt-4o")
   .withParams({ 
     seed: 42,           // for deterministic output
     user: "user-123",   // for user tracking

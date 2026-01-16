@@ -25,12 +25,9 @@ The OpenRouter provider acts as a unified gateway to AI models from multiple pro
 ## Configuration
 
 ```ts
-import { NodeLLM } from "@node-llm/core";
+import { createLLM } from "@node-llm/core";
 
-NodeLLM.configure({
-  provider: "openrouter",
-  openrouterApiKey: process.env.OPENROUTER_API_KEY,
-});
+const llm = createLLM({ provider: "openrouter", openrouterApiKey: process.env.OPENROUTER_API_KEY, });
 ```
 
 ## Features
@@ -47,7 +44,7 @@ NodeLLM.configure({
 OpenRouter supports various unique parameters that can be passed via `.withParams()`:
 
 ```ts
-const chat = NodeLLM.chat("google/gemini-2.0-flash-exp:free")
+const chat = llm.chat("google/gemini-2.0-flash-exp:free")
   .withParams({
     transforms: ["middle-out"], // OpenRouter specific compression
     route: "fallback"

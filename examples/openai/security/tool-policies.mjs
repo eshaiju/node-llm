@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { NodeLLM, Tool, z } from "../../../packages/core/dist/index.js";
+import { createLLM, NodeLLM, Tool, z } from "../../../packages/core/dist/index.js";
 
 // 1. Define a Mock Database Tool
 class AdminDBTool extends Tool {
@@ -22,38 +22,33 @@ class AdminDBTool extends Tool {
 }
 
 async function runExample() {
-  // Configure NodeLLM (Reads from .env via dotenv/config)
-  NodeLLM.configure({
+  const llm = createLLM({
     provider: "openai",
     openaiApiKey: process.env.OPENAI_API_KEY
   });
 
   console.log("--- 🕵️ Scenario 1: Dry-Run Mode (Pre-flight Check) ---");
-  const dryRunChat = NodeLLM.chat("gpt-4o")
+  const dryRunChat = llm.chat("gpt-4o-mini")
     .withTool(AdminDBTool)
     .withToolExecution("dry-run");
 
   const plan = await dryRunChat.ask("Delete user #123 from the database");
   console.log("Model Intent:", plan.content);
   console.log("Proposed Tool Calls:", JSON.stringify(plan.tool_calls, null, 2));
-  console.log("History size (should be 2: user + plan):", dryRunChat.history.length);
   console.log("\n");
 
   console.log("--- 🚦 Scenario 2: Confirm Mode (Human-in-the-loop) ---");
-  const secureChat = NodeLLM.chat("gpt-4o")
+  const secureChat = llm.chat("gpt-4o-mini")
     .withTool(AdminDBTool)
     .withToolExecution("confirm")
-    // This is where your security logic or UI approval lives
     .onConfirmToolCall(async (call) => {
       const args = JSON.parse(call.function.arguments);
       console.log(`[APPROVAL REQUIRED] LLM wants to ${args.action} table '${args.table}'`);
-      
-      // Real-world: This could be a Slack message or a React UI button
+
       const isSafe = args.action === "query";
       console.log(`Decision: ${isSafe ? "✅ Auto-approving query" : "❌ Rejecting deletion for security"}`);
       return isSafe;
     })
-    // High-fidelity auditing
     .onToolCallStart((call) => console.log(`[AUDIT] Starting: ${call.function.name}`))
     .onToolCallEnd((call, res) => console.log(`[AUDIT] Success: Result: ${res}`))
     .onToolCallError((call, err) => console.error(`[AUDIT] Failed: ${err.message}`));

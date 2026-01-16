@@ -9,6 +9,7 @@ cd ../..
 # Get API Key
 OPENAI_API_KEY=$(grep "^OPENAI_API_KEY=" .env | cut -d '=' -f2)
 export OPENAI_API_KEY
+export NODELLM_PROVIDER=openai
 
 echo "Found API Key: ${OPENAI_API_KEY:0:5}..."
 

@@ -26,7 +26,7 @@ Embeddings are vector representations of text used for semantic search, clusteri
 
 ### Single Text
 ```ts
-import { NodeLLM } from "@node-llm/core";
+import { createLLM } from "@node-llm/core";
 
 const embedding = await NodeLLM.embed("Ruby is a programmer's best friend");
 
@@ -56,7 +56,7 @@ By default, `NodeLLM` uses `text-embedding-3-small`. You can change this globall
 
 ### Global Configuration
 ```ts
-NodeLLM.configure({
+const llm = createLLM({
   defaultEmbeddingModel: "text-embedding-3-large"
 });
 ```

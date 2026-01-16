@@ -1,14 +1,12 @@
 import "dotenv/config";
-import { NodeLLM } from "../../../packages/core/dist/index.js";
+import { createLLM, NodeLLM, Tool, z } from "../../../packages/core/dist/index.js";
 
 async function main() {
-  NodeLLM.configure((config) => {
-    config.geminiApiKey = process.env.GEMINI_API_KEY;
+  const llm = createLLM({
+    provider: "gemini",
+    geminiApiKey: process.env.GEMINI_API_KEY,
   });
-  
-  NodeLLM.configure({ provider: "gemini" });
-
-  const chat = NodeLLM.chat("gemini-2.0-flash");
+  const chat = llm.chat("gemini-2.0-flash");
 
   console.log("Turn 1...");
   await chat.ask("What is a star?");
@@ -16,7 +14,7 @@ async function main() {
 
   console.log("\nTurn 2...");
   await chat.ask("How long does it live?");
-  
+
   console.log("\n--- Total Conversation Usage ---");
   console.log(`Total Tokens: ${chat.totalUsage.total_tokens}`);
 }

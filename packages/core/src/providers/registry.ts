@@ -6,7 +6,9 @@ import { registerDeepSeekProvider } from "./deepseek/index.js";
 import { registerOllamaProvider } from "./ollama/index.js";
 import { registerOpenRouterProvider } from "./openrouter/index.js";
 
-type ProviderFactory = () => Provider;
+import { NodeLLMConfig } from "../config.js";
+
+type ProviderFactory = (config?: NodeLLMConfig) => Provider;
 
 class ProviderRegistry {
   private providers = new Map<string, ProviderFactory>();
@@ -25,14 +27,14 @@ class ProviderRegistry {
   /**
    * Resolve a provider by name
    */
-  resolve(name: string): Provider {
+  resolve(name: string, config?: NodeLLMConfig): Provider {
     const factory = this.providers.get(name);
 
     if (!factory) {
       throw new Error(`Unknown LLM provider '${name}'`);
     }
 
-    return factory();
+    return factory(config);
   }
 
   /**
@@ -50,6 +52,21 @@ class ProviderRegistry {
   }
 }
 
+/**
+ * Global provider registry.
+ * 
+ * @internal
+ * This is an internal implementation detail. Use `NodeLLM.registerProvider()` 
+ * or `createLLM()` instead of accessing this directly.
+ * 
+ * **For custom providers**, use the public API:
+ * ```typescript
+ * import { NodeLLM, BaseProvider } from '@node-llm/core';
+ * 
+ * class MyProvider extends BaseProvider { ... }
+ * NodeLLM.registerProvider("my-provider", () => new MyProvider());
+ * ```
+ */
 export const providerRegistry = new ProviderRegistry();
 
 // Exported registration functions (delegates to provider-specific index files)

@@ -1,20 +1,18 @@
 import "dotenv/config";
-import { NodeLLM } from "../../../packages/core/dist/index.js";
+import { createLLM, NodeLLM, Tool, z } from "../../../packages/core/dist/index.js";
 import fs from "fs/promises";
 
 async function main() {
-  NodeLLM.configure((config) => {
-    config.geminiApiKey = process.env.GEMINI_API_KEY;
+  const llm = createLLM({
+    provider: "gemini",
+    geminiApiKey: process.env.GEMINI_API_KEY,
   });
-  
-  NodeLLM.configure({ provider: "gemini" });
-
   try {
     console.log("🎨 Generatig with Imagen...");
-    const image = await NodeLLM.paint("a futuristic space station", {
+    const image = await llm.paint("a futuristic space station", {
       model: "imagen-3.0-generate-001",
     });
-    
+
     console.log(`✅ Image generated! MIME: ${image.mimeType}`);
 
     const filename = "space_station.png";

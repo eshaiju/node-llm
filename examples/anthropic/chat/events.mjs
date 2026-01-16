@@ -1,16 +1,16 @@
 import "dotenv/config";
-import { NodeLLM } from "../../../packages/core/dist/index.js";
+import { createLLM, NodeLLM, Tool, z } from "../../../packages/core/dist/index.js";
 
 // Ensure ANTHROPIC_API_KEY is set in your environment
 
-NodeLLM.configure({
-  provider: "anthropic",
-});
-
 async function main() {
+  const llm = createLLM({
+    provider: "anthropic",
+    anthropicApiKey: process.env.ANTHROPIC_API_KEY,
+  });
   console.log("Creating chat with event handlers...");
-  
-  const chat = NodeLLM.chat("claude-3-haiku-20240307")
+
+  const chat = llm.chat("claude-3-haiku-20240307")
     .onNewMessage(() => {
         console.log(">> New message started");
     })

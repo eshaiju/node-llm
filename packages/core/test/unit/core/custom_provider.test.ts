@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import { NodeLLM, BaseProvider } from "../../../src/index.js";
+import { createLLM, NodeLLM, BaseProvider } from "../../../src/index.js";
 import { providerRegistry } from "../../../src/providers/registry.js";
 
 class CustomTestProvider extends BaseProvider {
@@ -11,6 +11,19 @@ class CustomTestProvider extends BaseProvider {
   public apiBase() { return "https://api.test"; }
   public headers() { return { Authorization: `Bearer ${this.config.apiKey}` }; }
   public defaultModel() { return "test-model"; }
+
+  public capabilities = {
+    supportsVision: () => false,
+    supportsTools: () => false,
+    supportsStructuredOutput: () => false,
+    supportsEmbeddings: () => false,
+    supportsImageGeneration: () => false,
+    supportsTranscription: () => false,
+    supportsModeration: () => false,
+    supportsReasoning: () => false,
+    supportsDeveloperRole: () => false,
+    getContextWindow: () => 8192
+  };
 
   async chat(request: any) {
     return {
@@ -31,9 +44,9 @@ describe("Custom Provider Registration", () => {
     // 2. Verify registry has it
     expect(providerRegistry.has(name)).toBe(true);
 
-    // 3. Configure and use
-    NodeLLM.configure({ provider: name });
-    const response = await NodeLLM.chat().ask("Ping");
+    // 3. Configure and use via createLLM
+    const llm = createLLM({ provider: name });
+    const response = await llm.chat().ask("Ping");
 
     expect(response.content).toBe("Response from test-key-123");
     expect(response.provider).toBe("custom-test");
@@ -43,6 +56,7 @@ describe("Custom Provider Registration", () => {
     const name = "scoped-custom";
     NodeLLM.registerProvider(name, () => new CustomTestProvider({ apiKey: "scoped-key" }));
 
+    // Use withProvider on the default instance (which creates a new one)
     const scoped = NodeLLM.withProvider(name);
     const response = await scoped.chat().ask("Ping");
 
@@ -54,9 +68,10 @@ describe("Custom Provider Registration", () => {
     const name = "unsupported-provider";
     NodeLLM.registerProvider(name, () => new CustomTestProvider({ apiKey: "key" }));
     
-    NodeLLM.configure({ provider: name });
+    // Create new instance
+    const llm = createLLM({ provider: name });
 
     // moderate() is not implemented in CustomTestProvider
-    await expect(NodeLLM.moderate("test")).rejects.toThrow("custom-test does not support moderate");
+    await expect(llm.moderate("test")).rejects.toThrow("custom-test does not support moderate");
   });
 });

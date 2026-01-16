@@ -1,30 +1,22 @@
-import { describe, it, expect, beforeEach } from "vitest";
-import { NodeLLMCore } from "../../../src/llm.js";
-import { config } from "../../../src/config.js";
+import { describe, it, expect } from "vitest";
+import { createLLM } from "../../../src/llm.js";
 
 describe("Request Timeout Configuration", () => {
-  beforeEach(() => {
-    // Reset to default
-    config.requestTimeout = 30000;
-  });
-
   it("should have default timeout of 30 seconds", () => {
-    const llm = new NodeLLMCore();
+    const llm = createLLM();
+    // Default is from configuration class, check what it is there or expected behavior.
+    // Assuming 30000 is default in Configuration class.
+    // Note: If using mock config it might be different, but createLLM() creates fresh Config instance if none passed.
     expect(llm.config.requestTimeout).toBe(30000);
   });
 
   it("should accept requestTimeout in global config", () => {
-    const llm = new NodeLLMCore();
-    llm.configure({
-      requestTimeout: 60000,
-    });
-
+    const llm = createLLM({ requestTimeout: 60000 });
     expect(llm.config.requestTimeout).toBe(60000);
   });
 
   it("should allow per-chat timeout configuration", () => {
-    const llm = new NodeLLMCore();
-    llm.configure({ 
+    const llm = createLLM({ 
       provider: "openai",
       openaiApiKey: "test-key"
     });

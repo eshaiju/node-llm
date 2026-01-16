@@ -1,15 +1,14 @@
 import "dotenv/config";
-import { NodeLLM } from "../../../packages/core/dist/index.js";
+import { createLLM, NodeLLM, Tool, z } from "../../../packages/core/dist/index.js";
 
 async function main() {
-  NodeLLM.configure({ 
-    openrouterApiKey: process.env.OPENROUTER_API_KEY, 
-    provider: "openrouter" 
+  const llm = createLLM({
+    provider: "openrouter",
+    openrouterApiKey: process.env.OPENROUTER_API_KEY,
   });
-
   console.log("--- Model Discovery ---");
-  const models = await NodeLLM.listModels();
-  
+  const models = await llm.listModels();
+
   console.log(`Found ${models.length} models.`);
   console.log("First 5 models:");
   models.slice(0, 5).forEach(m => {

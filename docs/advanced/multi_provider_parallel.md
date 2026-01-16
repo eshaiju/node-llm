@@ -21,34 +21,28 @@ description: Learn how to safely run multiple LLM providers concurrently using N
 ---
 
 ## The Problem
-\`NodeLLM\` is a singleton. When calling \`NodeLLM.configure({ provider: '...' })\` in parallel (e.g., inside \`Promise.all\`), one provider call could "overwrite" the provider for another call, leading to race conditions.
+In previous versions, `NodeLLM` was a mutable singleton. Calling `NodeLLM.configure()` concurrently could lead to race conditions where one request would overwrite the configuration of another.
 
 ## The Solution
-Added a `.withProvider()` method to `NodeLLM`. This returns a **scoped copy** of the LLM instance that is isolated from the global singleton state.
+As of v1.5.4, `NodeLLM` is a **frozen, immutable instance**. It cannot be mutated at runtime. For parallel execution with different providers or configurations, you use **context branching** via `.withProvider()` or create independent instances via `createLLM()`.
 
 ---
 
 ## How to use it
 
-### 1. Configure once globally
+### 1. Simple Parallel Calls
+The most elegant way to run multiple providers is using `.withProvider()`. This creates a scoped, isolated instance for that specific call.
+
 ```javascript
 import { NodeLLM } from "@node-llm/core";
 
-NodeLLM.configure((config) => {
-  config.openaiApiKey = "...";
-  config.anthropicApiKey = "...";
-  config.geminiApiKey = "...";
-});
-```
-
-### 2. Run in parallel safely
-```javascript
 const [score1, score2, score3] = await Promise.all([
   NodeLLM.withProvider("openai").chat("gpt-4o").ask(prompt),
-  NodeLLM.withProvider("anthropic").chat("claude-3").ask(prompt),
-  NodeLLM.withProvider("gemini").chat("gemini-2.0").ask(prompt),
+  NodeLLM.withProvider("anthropic").chat("claude-3-5-sonnet").ask(prompt),
+  NodeLLM.withProvider("gemini").chat("gemini-2.0-flash").ask(prompt),
 ]);
 ```
+
 
 ## Benefits
 ✅ **Singleton maintained**: No need to use `new NodeLLM()` unless you want to.  

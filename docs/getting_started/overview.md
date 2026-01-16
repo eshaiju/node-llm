@@ -31,7 +31,7 @@ Understanding these components will help you use the framework effectively.
 The primary interface for conversational AI. `NodeLLM.chat()` creates a stateful object that manages conversation history.
 
 ```ts
-const chat = NodeLLM.chat("gpt-4o");
+const chat = llm.chat("gpt-4o");
 ```
 
 ### 2. Providers
@@ -44,7 +44,7 @@ Functions that the AI can execute. You define the schema and the handler, and `N
 Global settings for API keys and defaults.
 
 ```ts
-NodeLLM.configure({
+const llm = createLLM({
   openaiApiKey: "sk-...",
   provider: "openai"
 });

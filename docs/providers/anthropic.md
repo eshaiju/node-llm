@@ -25,12 +25,9 @@ The Anthropic provider gives access to the Claude family of models, known for hi
 ## Configuration
 
 ```ts
-import { NodeLLM } from "@node-llm/core";
+import { createLLM } from "@node-llm/core";
 
-NodeLLM.configure({
-  provider: "anthropic",
-  anthropicApiKey: process.env.ANTHROPIC_API_KEY, // Optional if set in env
-});
+const llm = createLLM({ provider: "anthropic", anthropicApiKey: process.env.ANTHROPIC_API_KEY, // Optional if set in env });
 ```
 
 ## Specific Parameters
@@ -38,7 +35,7 @@ NodeLLM.configure({
 You can pass Anthropic-specific parameters or custom headers.
 
 ```ts
-const chat = NodeLLM.chat("claude-3-5-sonnet-20241022")
+const chat = llm.chat("claude-3-5-sonnet-20241022")
   .withParams({ 
     top_k: 50,
     top_p: 0.9,

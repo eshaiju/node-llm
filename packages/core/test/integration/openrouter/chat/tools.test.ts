@@ -1,5 +1,5 @@
 import { describe, it, expect, afterEach } from "vitest";
-import { NodeLLM } from "../../../../src/llm.js";
+import { NodeLLM, createLLM } from "../../../../src/llm.js";
 import { setupVCR } from "../../../helpers/vcr.js";
 import "dotenv/config";
 
@@ -15,7 +15,7 @@ describe("OpenRouter Tool Calling Integration (VCR)", { timeout: 30000 }, () => 
   it("should handle tool calling", async ({ task }) => {
     polly = setupVCR(task.name, "openrouter");
 
-    NodeLLM.configure({
+        const llm = createLLM({
       openrouterApiKey: process.env.OPENROUTER_API_KEY,
       provider: "openrouter",
     });
@@ -32,7 +32,7 @@ describe("OpenRouter Tool Calling Integration (VCR)", { timeout: 30000 }, () => 
       }
     };
 
-    const chat = NodeLLM.chat("openai/gpt-4o-mini").withTool(weatherTool);
+    const chat = llm.chat("openai/gpt-4o-mini").withTool(weatherTool);
     const response = await chat.ask("What is the weather in London?");
 
     expect(String(response)).toContain("22");

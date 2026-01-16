@@ -1,4 +1,4 @@
-import { config } from "../../config.js";
+import { config as globalConfig } from "../../config.js";
 import { providerRegistry } from "../registry.js";
 import { OpenRouterProvider } from "./OpenRouterProvider.js";
 
@@ -8,14 +8,15 @@ let registered = false;
 
 /**
  * Idempotent registration of the OpenRouter provider.
- * Automatically called by NodeLLM.configure({ provider: 'openrouter' })
+ * Automatically called when using createLLM({ provider: 'openrouter' })
  */
 export function registerOpenRouterProvider() {
   if (registered) return;
 
-  providerRegistry.register("openrouter", () => {
-    const apiKey = config.openrouterApiKey;
-    const baseUrl = config.openrouterApiBase;
+  providerRegistry.register("openrouter", (config) => {
+    const cfg = config || globalConfig;
+    const apiKey = cfg.openrouterApiKey;
+    const baseUrl = cfg.openrouterApiBase;
 
     if (!apiKey) {
       throw new Error("openrouterApiKey is not set in config or OPENROUTER_API_KEY environment variable");

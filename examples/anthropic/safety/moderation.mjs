@@ -1,15 +1,15 @@
 import "dotenv/config";
-import { NodeLLM } from "../../../packages/core/dist/index.js";
+import { createLLM, NodeLLM, Tool, z } from "../../../packages/core/dist/index.js";
 
 async function main() {
-  NodeLLM.configure({
+  const llm = createLLM({
     provider: "anthropic",
+    anthropicApiKey: process.env.ANTHROPIC_API_KEY,
   });
-
   console.log("Attempting to moderate content with Anthropic...");
 
   try {
-    await NodeLLM.moderate({
+    await llm.moderate({
       input: "I want to hurt someone",
     });
   } catch (error) {

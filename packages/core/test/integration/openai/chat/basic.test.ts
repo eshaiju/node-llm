@@ -1,5 +1,5 @@
 import { describe, it, expect, afterEach } from "vitest";
-import { NodeLLM } from "../../../../src/index.js";
+import { NodeLLM, createLLM } from "../../../../src/index.js";
 import { setupVCR } from "../../../helpers/vcr.js";
 import "dotenv/config";
 
@@ -14,11 +14,10 @@ describe("OpenAI Chat Integration (VCR)", { timeout: 30000 }, () => {
 
   it("should perform a basic chat completion", async ({ task }) => {
     polly = setupVCR(task.name, "openai");
-    NodeLLM.configure({
+    const llm = NodeLLM.withProvider("openai", {
       openaiApiKey: process.env.OPENAI_API_KEY,
-      provider: "openai",
     });
-    const chat = NodeLLM.chat("gpt-4o-mini");
+    const chat = llm.chat("gpt-4o-mini");
 
     const response = await chat.ask("What is the capital of France?");
 
@@ -29,8 +28,10 @@ describe("OpenAI Chat Integration (VCR)", { timeout: 30000 }, () => {
   it("should support streaming", async ({ task }) => {
     polly = setupVCR(task.name, "openai");
 
-    NodeLLM.configure({ provider: "openai" });
-    const chat = NodeLLM.chat("gpt-4o-mini");
+    const llm = NodeLLM.withProvider("openai", {
+      openaiApiKey: process.env.OPENAI_API_KEY,
+    });
+    const chat = llm.chat("gpt-4o-mini");
 
     let fullText = "";
     for await (const chunk of chat.stream("Say 'Stream Test'")) {

@@ -81,7 +81,8 @@ try {
 `NodeLLM` automatically retries transient errors (Rate Limits, 5xx Server Errors) using an exponential backoff strategy. You can configure this globally.
 
 ```ts
-NodeLLM.configure({
+const llm = createLLM({
+  provider: "openai",
   retry: {
     attempts: 3,      // Max retries (default: 3)
     delayMs: 1000,    // Initial delay (default: 1000ms)
@@ -89,6 +90,7 @@ NodeLLM.configure({
   }
 });
 ```
+
 
 The library will **not** retry non-transient errors like `BadRequestError` (400) or `AuthenticationError` (401).
 
@@ -105,7 +107,7 @@ The agent loop will **short-circuit and crash** immediately if:
 You can override this behavior using the `onToolCallError` hook in `ChatOptions`:
 
 ```ts
-const chat = NodeLLM.chat("gpt-4o", {
+const chat = llm.chat("gpt-4o", {
   onToolCallError: (toolCall, error) => {
     if (isCritical(toolCall)) return "STOP";     // Crash immediately
     if (isOptional(toolCall)) return "CONTINUE"; // Swallow error and proceed

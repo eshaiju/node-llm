@@ -1,9 +1,9 @@
 import "dotenv/config";
-import { NodeLLM, BaseProvider } from "../../packages/core/dist/index.js";
+import { NodeLLM, createLLM, BaseProvider } from "../../packages/core/dist/index.js";
 
 /**
  * EXAMPLE: Implementing a Custom Provider using BaseProvider
- * 
+ *
  * This is the RECOMMENDED way to extend NodeLLM.
  * Extending BaseProvider provides:
  * 1. Default implementations for unsupported features.
@@ -12,7 +12,7 @@ import { NodeLLM, BaseProvider } from "../../packages/core/dist/index.js";
  */
 
 class MyCustomMockProvider extends BaseProvider {
-  constructor(config) {
+  constructor(config = {}) {
     super();
     this.apiKey = config.apiKey;
     this.region = config.region;
@@ -54,7 +54,7 @@ class MyCustomMockProvider extends BaseProvider {
   async chat(request) {
     console.log(`[MyMockProvider] Using Region: ${this.region}`);
     console.log(`[MyMockProvider] Request for model: ${request.model}`);
-    
+
     // Demonstrate handling extra fields passed via .withParams()
     const { model, messages, ...extraFields } = request;
     if (Object.keys(extraFields).length > 0) {
@@ -90,28 +90,29 @@ NodeLLM.registerProvider("my-mock", () => {
 async function main() {
   console.log("=== RECOMMENDED: Custom Provider via BaseProvider ===\n");
 
-  // 2. Configure NodeLLM
-  NodeLLM.configure({ provider: "my-mock" });
+  const llm = createLLM({
+    provider: "my-mock",
+  });
 
   // 3. Simple execution
   console.log("--- Standard Chat ---");
-  const response = await NodeLLM.chat().ask("Hello!");
+  const response = await llm.chat().ask("Hello!");
   console.log("Response:", response.content);
 
   // 4. Sending extra provider-specific fields
   console.log("\n--- Chat with Extra Fields ---");
-  const responseWithExtra = await NodeLLM
+  const responseWithExtra = await llm
     .chat()
-    .withParams({ 
-      top_p: 0.9, 
+    .withParams({
+      top_p: 0.9,
       custom_flag: true,
-      internal_routing_id: "node-1" 
+      internal_routing_id: "node-1"
     })
     .ask("What is the weather?");
   console.log("Response:", responseWithExtra.content);
 
   console.log("\n--- Streaming Chat ---");
-  const stream = NodeLLM.chat().stream("Tell me more.");
+  const stream = llm.chat().stream("Tell me more.");
   for await (const chunk of stream) {
     process.stdout.write(chunk.content);
   }
@@ -120,7 +121,7 @@ async function main() {
   // 5. Verification of Unsupported Features
   console.log("--- Checking Unsupported Feature (Moderate) ---");
   try {
-    await NodeLLM.moderate("test content");
+    await llm.moderate("test content");
   } catch (error) {
     console.log("Caught expected error:", error.message);
     // Output: "my-mock does not support moderate"

@@ -1,33 +1,35 @@
 
-import { NodeLLM } from "../../../packages/core/dist/index.js";
+import { createLLM, NodeLLM, Tool, z } from "../../../packages/core/dist/index.js";
 
 async function main() {
+  const llm = createLLM({
+    provider: "ollama",
+  });
   console.log("🦙 Ollama Embeddings Example");
-  NodeLLM.configure({ provider: "ollama" });
-  
-  // Note: 'nomic-embed-text' is a popular embedding model on Ollama. 
+
+  // Note: 'nomic-embed-text' is a popular embedding model on Ollama.
   // You can also use 'llama3', but dedicated models are better for embeddings.
-  const model = "nomic-embed-text"; 
-  
+  const model = "nomic-embed-text";
+
   console.log(`Generating embeddings using ${model}...`);
-  
+
   const text1 = "The cat chases the mouse.";
   const text2 = "A feline is running after a rodent.";
   const text3 = "The planet Jupiter is a gas giant.";
 
   try {
-      const emb1 = await NodeLLM.embed(text1, { model });
-      const emb2 = await NodeLLM.embed(text2, { model });
-      const emb3 = await NodeLLM.embed(text3, { model });
-      
+      const emb1 = await llm.embed(text1, { model });
+      const emb2 = await llm.embed(text2, { model });
+      const emb3 = await llm.embed(text3, { model });
+
       console.log("Embedding vector length:", emb1.vector.length);
-      
+
       const score1 = cosineSimilarity(emb1.vector, emb2.vector);
       console.log(`Similarity (Cat vs Feline): ${score1.toFixed(4)}`);
-      
+
       const score2 = cosineSimilarity(emb1.vector, emb3.vector);
       console.log(`Similarity (Cat vs Jupiter): ${score2.toFixed(4)}`);
-      
+
   } catch (error) {
       console.error("Error:", error.message);
       console.info("Hint: Ensure you have the model pulled.");

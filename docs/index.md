@@ -82,11 +82,10 @@ NodeLLM helps solve **architectural problems**, not just provide API access. It 
 ```ts
 import { NodeLLM } from "@node-llm/core";
 
-// 1. Configure once
-NodeLLM.configure({ provider: "openai" });
+// 1. Zero-Config (Uses NODELLM_PROVIDER and API keys from environment)
+const chat = NodeLLM.chat("gpt-4o");
 
 // 2. Chat (High-level request/response)
-const chat = NodeLLM.chat("gpt-4o");
 const response = await chat.ask("Explain event-driven architecture");
 console.log(response.content);
 
@@ -97,6 +96,7 @@ for await (const chunk of chat.stream("Explain event-driven architecture")) {
 ```
 
 
+
 ---
 
 ## 🔧 Strategic Configuration
@@ -105,17 +105,13 @@ NodeLLM provides a flexible configuration system designed for enterprise usage:
 
 ```ts
 // Recommended for multi-provider pipelines
-NodeLLM.configure((config) => {
-  config.openaiApiKey = process.env.OPENAI_API_KEY;
-  config.anthropicApiKey = process.env.ANTHROPIC_API_KEY;
-  config.ollamaApiBase = process.env.OLLAMA_API_BASE;
-});
+// Use createLLM() instead;
 
 // Switch providers at the framework level
-NodeLLM.configure({ provider: "anthropic" });
+const llm = createLLM({ provider: "anthropic" });
 
 // Support for Custom Endpoints (e.g., Azure or LocalAI)
-NodeLLM.configure({
+const llm = createLLM({
   openaiApiKey: process.env.AZURE_KEY,
   openaiApiBase: "https://your-resource.openai.azure.com/openai/deployments/...",
 });
@@ -127,10 +123,15 @@ NodeLLM.configure({
 
 ### 💬 Unified Chat
 Stop rewriting code for every provider. `NodeLLM` normalizes inputs and outputs into a single, predictable mental model.
+
 ```ts
-const chat = NodeLLM.chat(); // Defaults to GPT-4o
+import { NodeLLM } from "@node-llm/core";
+
+// Uses NODELLM_PROVIDER from environment (defaults to GPT-4o)
+const chat = NodeLLM.chat(); 
 await chat.ask("Hello world");
 ```
+
 
 ### 👁️ Smart Vision & Files
 Pass images, PDFs, or audio files directly. We handle the heavy lifting: fetching remote URLs, base64 encoding, and MIME type mapping.

@@ -68,20 +68,19 @@ NodeLLM helps solve **architectural problems**, not just provide API access. It 
 ```ts
 import { NodeLLM } from "@node-llm/core";
 
-// 1. Configure once (Safe for ESM + dotenv race conditions)
-NodeLLM.configure({ provider: "openai" });
+// 1. Zero-Config (NodeLLM automatically reads NODELLM_PROVIDER and API keys)
+const chat = NodeLLM.chat("gpt-4o");
 
 // 2. Chat (High-level request/response)
-const chat = NodeLLM.chat("gpt-4o");
 const response = await chat.ask("Explain event-driven architecture");
 console.log(response.content);
 
 // 3. Streaming (Standard AsyncIterator)
-// NOW with full support for Tools, Vision, and Schemas!
 for await (const chunk of chat.stream("Explain event-driven architecture")) {
   process.stdout.write(chunk.content);
 }
 ```
+
 
 ### 🎯 Real-World Example: Brand Perception Checker
 
@@ -102,14 +101,14 @@ NodeLLM provides a flexible, **lazy-initialized** configuration system designed 
 
 ```ts
 // Recommended for multi-provider pipelines
-NodeLLM.configure({
+const llm = createLLM({
   openaiApiKey: process.env.OPENAI_API_KEY,
   anthropicApiKey: process.env.ANTHROPIC_API_KEY,
   ollamaApiBase: process.env.OLLAMA_API_BASE,
 });
 
 // Support for Custom Endpoints (e.g., Azure or LocalAI)
-NodeLLM.configure({
+const llm = createLLM({
   openaiApiKey: process.env.AZURE_KEY,
   openaiApiBase: "https://your-resource.openai.azure.com/openai/deployments/...",
 });
@@ -125,10 +124,15 @@ NodeLLM.configure({
 
 ### 💬 Unified Chat
 Stop rewriting code for every provider. `NodeLLM` normalizes inputs and outputs into a single, predictable mental model.
+
 ```ts
-const chat = NodeLLM.chat(); // Defaults to GPT-4o
+import { NodeLLM } from "@node-llm/core";
+
+// Uses NODELLM_PROVIDER from environment (defaults to GPT-4o)
+const chat = NodeLLM.chat(); 
 await chat.ask("Hello world");
 ```
+
 
 ### 👁️ Smart Vision & Files
 Pass images, PDFs, or audio files directly to **both `ask()` and `stream()`**. We handle the heavy lifting: fetching remote URLs, base64 encoding, and MIME type mapping.

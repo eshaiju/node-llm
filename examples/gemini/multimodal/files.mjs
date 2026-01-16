@@ -1,18 +1,16 @@
 import "dotenv/config";
-import { NodeLLM } from "../../../packages/core/dist/index.js";
+import { createLLM, NodeLLM, Tool, z } from "../../../packages/core/dist/index.js";
 import path from "path";
 import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 async function main() {
-  NodeLLM.configure((config) => {
-    config.geminiApiKey = process.env.GEMINI_API_KEY;
+  const llm = createLLM({
+    provider: "gemini",
+    geminiApiKey: process.env.GEMINI_API_KEY,
   });
-  
-  NodeLLM.configure({ provider: "gemini" });
-
-  const chat = NodeLLM.chat("gemini-2.0-flash");
+  const chat = llm.chat("gemini-2.0-flash");
 
   console.log("Analyzing local project files with Gemini context...");
   const response = await chat.ask("Summarize these files.", {

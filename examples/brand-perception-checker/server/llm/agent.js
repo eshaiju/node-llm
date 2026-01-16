@@ -3,11 +3,11 @@ import { PerceptionSchema, MarketSchema } from './schema.js';
 import { SerpTool } from './tools/serp.tool.js';
 import { logExecutionStep } from './utils.js';
 import { calculateAlignment, createResilientIntrinsicFallback } from './logic.js';
-import { 
-  INTRINSIC_ANALYSIS_PROMPT, 
-  MARKET_SYNTHESIS_PROMPT, 
-  STREAMING_NARRATIVE_PROMPT, 
-  MARKET_ANALYST_INSTRUCTIONS 
+import {
+  INTRINSIC_ANALYSIS_PROMPT,
+  MARKET_SYNTHESIS_PROMPT,
+  STREAMING_NARRATIVE_PROMPT,
+  MARKET_ANALYST_INSTRUCTIONS
 } from './prompts.js';
 
 /**
@@ -16,7 +16,7 @@ import {
  */
 export async function getIntrinsicPerception(brandName) {
   logExecutionStep('tracing', `Starting latent analysis for ${brandName}`);
-  
+
   const entries = [
     { provider: 'openai', model: 'gpt-4o', instance: systemAuditCore },
     { provider: 'anthropic', model: 'claude-haiku-3', instance: anthropic },
@@ -28,7 +28,7 @@ export async function getIntrinsicPerception(brandName) {
         const chat = m.instance.chat(m.model)
           .withSchema(PerceptionSchema)
           .withTemperature(0);
-        
+
         const response = await chat.ask(INTRINSIC_ANALYSIS_PROMPT(brandName));
         const parsed = response.parsed || {};
         return {
@@ -57,7 +57,7 @@ export async function getIntrinsicPerception(brandName) {
  */
 export async function getMarketAudit(brandName) {
   logExecutionStep('agent_spawn', `Initializing Market Data Synthesis Analyst`);
-  
+
   try {
     const chat = systemAuditCore.chat('gpt-4o')
       .withInstructions(MARKET_ANALYST_INSTRUCTIONS)
@@ -69,13 +69,13 @@ export async function getMarketAudit(brandName) {
 
     const response = await chat.ask(MARKET_SYNTHESIS_PROMPT(brandName));
     let parsed = response.parsed || {};
-    
+
     // 1. Auto-flatten if the model nested the response under an arbitrary key
     const wrapperKey = Object.keys(parsed).find(k => typeof parsed[k] === 'object' && !Array.isArray(parsed[k]));
     if (wrapperKey && (parsed[wrapperKey].visibility || parsed[wrapperKey].dominant_themes || parsed[wrapperKey].organicMentions)) {
       parsed = parsed[wrapperKey];
     }
-    
+
     return {
       visibility: 'unknown',
       sentiment_trend: 'stable',
@@ -131,7 +131,7 @@ export async function* getAuditStream(brandName) {
  */
 export async function auditBrand(brandName) {
   logExecutionStep('orchestration', `Commencing full system audit for "${brandName}"`);
-  
+
   const [aiPerception, marketAudit] = await Promise.all([
     getIntrinsicPerception(brandName),
     getMarketAudit(brandName)

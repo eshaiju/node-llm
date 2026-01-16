@@ -1,5 +1,5 @@
 import { expect, it } from "vitest";
-import { NodeLLM } from "../../../src/llm.js";
+import { createLLM } from "../../../src/llm.js";
 import { ServerError } from "../../../src/errors/index.js";
 
 it("retries provider failures", async () => {
@@ -15,12 +15,12 @@ it("retries provider failures", async () => {
     },
   };
 
-  NodeLLM.configure({
+  const llm = createLLM({
     provider: provider as any,
     retry: { attempts: 3 },
   });
 
-  const chat = NodeLLM.chat("test");
+  const chat = llm.chat("test");
 
   const result = await chat.ask("hi");
 

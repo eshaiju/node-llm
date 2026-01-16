@@ -479,7 +479,7 @@ Models that can process audio:
 You can access this data programmatically using the registry:
 
 ```ts
-import { NodeLLM } from "@node-llm/core";
+import { createLLM } from "@node-llm/core";
 
 // Get metadata for a specific model
 const model = await NodeLLM.model("gpt-4o");
@@ -520,8 +520,8 @@ When you call a method like `NodeLLM.chat("claude-3-5-sonnet")`, `NodeLLM` check
 
 ```ts
 // If configured with Anthropic
-NodeLLM.configure({ provider: "anthropic" });
-const chat = NodeLLM.chat("claude-3-5-sonnet"); 
+const llm = createLLM({ provider: "anthropic" });
+const chat = llm.chat("claude-3-5-sonnet"); 
 // Resolves internally to "claude-3-5-sonnet-20241022" (or latest stable version)
 ```
 

@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { NodeLLM, Tool, z } from "../../../packages/core/dist/index.js";
+import { createLLM, NodeLLM, Tool, z } from "../../../packages/core/dist/index.js";
 
 class WeatherTool extends Tool {
   name = "get_weather";
@@ -17,15 +17,14 @@ class WeatherTool extends Tool {
 }
 
 async function main() {
-  NodeLLM.configure({ 
+  const llm = createLLM({
     provider: "openai",
-    openaiApiKey: process.env.OPENAI_API_KEY
+    openaiApiKey: process.env.OPENAI_API_KEY,
   });
-
-  const chat = NodeLLM.chat("gpt-4o-mini").withTool(WeatherTool);
+  const chat = llm.chat("gpt-4o-mini").withTool(WeatherTool);
 
   console.log("User: What is the weather in Tokyo, London, and New York?");
-  
+
   // This single prompt should trigger 3 parallel tool calls
   const response = await chat.ask("What is the weather in Tokyo, London, and New York?");
 

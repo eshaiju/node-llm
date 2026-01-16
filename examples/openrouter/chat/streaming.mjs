@@ -1,13 +1,12 @@
 import "dotenv/config";
-import { NodeLLM } from "../../../packages/core/dist/index.js";
+import { createLLM, NodeLLM, Tool, z } from "../../../packages/core/dist/index.js";
 
 async function main() {
-  NodeLLM.configure({ 
-    openrouterApiKey: process.env.OPENROUTER_API_KEY, 
-    provider: "openrouter" 
+  const llm = createLLM({
+    provider: "openrouter",
+    openrouterApiKey: process.env.OPENROUTER_API_KEY,
   });
-
-  const chat = NodeLLM.chat("openai/gpt-4o-mini");
+  const chat = llm.chat("openai/gpt-4o-mini");
 
   console.log("--- Streaming Request ---");
   for await (const chunk of chat.stream("Write a short poem about the ocean.")) {

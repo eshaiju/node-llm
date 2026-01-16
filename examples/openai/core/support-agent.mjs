@@ -1,14 +1,8 @@
 import "dotenv/config";
-import { NodeLLM, Tool, z } from "../../../packages/core/dist/index.js";
+import { createLLM, NodeLLM, Tool, z } from "../../../packages/core/dist/index.js";
 
 /**
  * Real-world Example: Travel Support AI Agent
- * 
- * Features demonstrated:
- * 1. Zero-Config Context Isolation (using withInstructions)
- * 2. Smart Developer Role Mapping (automatically maps to 'developer' for gpt-4o)
- * 3. Auto-executing Tools (fetching data)
- * 4. Structured Output (standardized agent response)
  */
 
 // 1. Define a "Real" Tool
@@ -31,20 +25,16 @@ class FlightStatusTool extends Tool {
 }
 
 async function main() {
-  // 0. Enable Debug Logging to see the payloads
-  process.env.NODELLM_DEBUG = "true";
-
-  // Configure NodeLLM
-  NodeLLM.configure({ 
-    provider: "openai", 
-    openaiApiKey: process.env.OPENAI_API_KEY 
+  const llm = createLLM({
+    provider: "openai",
+    openaiApiKey: process.env.OPENAI_API_KEY,
   });
 
-  const chat = NodeLLM.chat("gpt-4o");
+  const chat = llm.chat("gpt-4o-mini");
 
-  // 2. Set strict instructions (Isolated externally)
+  // 2. Set strict instructions
   chat.withInstructions(`
-    You are a premium travel support agent. 
+    You are a premium travel support agent.
     1. Always check flight status if a flight number is mentioned.
     2. Be empathetic but professional.
     3. If a flight is delayed, propose a visit to a nearby airport lounge.

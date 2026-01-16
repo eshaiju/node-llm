@@ -33,27 +33,33 @@ pnpm add @node-llm/core
 
 ## Configuration
 
-Configure your providers once at the entry point of your app.
+The fastest way to start is using **Zero-Config**. NodeLLM automatically reads your API keys and the active provider from environment variables.
 
 ```ts
-import { NodeLLM } from "@node-llm/core";
 import "dotenv/config";
+import { NodeLLM } from "@node-llm/core";
 
-// 1. Ensure keys are in process.env (e.g. via dotenv)
-// process.env.OPENAI_API_KEY = "sk-..."
+// 1. Ensure NODELLM_PROVIDER=openai and OPENAI_API_KEY=... are in .env
+const llm = NodeLLM; // Exported singleton, ready to go!
+```
 
-// 2. Configure defaults
-NodeLLM.configure({
-  provider: "openai",
-  defaultChatModel: "gpt-4o",
+Alternatively, use **Explicit Configuration** for multi-tenant or multi-provider apps:
+
+```ts
+import { createLLM } from "@node-llm/core";
+
+const llm = createLLM({ 
+  provider: "openai", 
+  openaiApiKey: process.env.OPENAI_API_KEY 
 });
 ```
+
 
 ## Quick Start Examples
 
 ### 1. Chat
 ```ts
-const chat = NodeLLM.chat(); // Uses default model
+const chat = llm.chat(); // Uses default model
 const response = await chat.ask("Explain quantum computing in 5 words.");
 console.log(response.content);
 // => "Computing using quantum mechanical phenomena."
@@ -61,13 +67,13 @@ console.log(response.content);
 
 ### 2. Generate Images
 ```ts
-const image = await NodeLLM.paint("A cyberpunk city with neon rain");
+const image = await llm.paint("A cyberpunk city with neon rain");
 console.log(image.url);
 ```
 
 ### 3. Create Embeddings
 ```ts
-const embedding = await NodeLLM.embed("Semantic search is powerful.");
+const embedding = await llm.embed("Semantic search is powerful.");
 console.log(`Vector dimensions: ${embedding.dimensions}`);
 ```
 

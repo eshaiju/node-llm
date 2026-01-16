@@ -1,14 +1,12 @@
 import "dotenv/config";
-import { NodeLLM, z } from "../../../packages/core/dist/index.js";
+import { createLLM, NodeLLM, Tool, z } from "../../../packages/core/dist/index.js";
 
 async function main() {
-  NodeLLM.configure((config) => {
-    config.anthropicApiKey = process.env.ANTHROPIC_API_KEY;
+  const llm = createLLM({
+    provider: "anthropic",
+    anthropicApiKey: process.env.ANTHROPIC_API_KEY,
   });
-  
-  NodeLLM.configure({ provider: "anthropic" });
-
-  const chat = NodeLLM.chat("claude-3-haiku-20240307");
+  const chat = llm.chat("claude-3-haiku-20240307");
 
   // --- Example 1: Using Zod (Recommended) ---
   const bookSchema = z.object({

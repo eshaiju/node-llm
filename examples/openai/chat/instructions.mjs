@@ -1,16 +1,14 @@
 import "dotenv/config";
-import { NodeLLM } from "../../../packages/core/dist/index.js";
+import { createLLM, NodeLLM, Tool, z } from "../../../packages/core/dist/index.js";
 
 async function main() {
-  NodeLLM.configure((config) => {
-    config.openaiApiKey = process.env.OPENAI_API_KEY;
+  const llm = createLLM({
+    provider: "openai",
+    openaiApiKey: process.env.OPENAI_API_KEY,
   });
-  
-  NodeLLM.configure({ provider: "openai" });
-
   // 1. Behavior Tuning with System Prompts
   console.log("--- System Instructions ---");
-  const chat = NodeLLM.chat("gpt-4o-mini").withInstructions(
+  const chat = llm.chat("gpt-4o-mini").withInstructions(
     "You are a strictly professional assistant. Keep answers under 20 words."
   );
 
@@ -19,9 +17,9 @@ async function main() {
 
   // 2. Creativity Control with Temperature
   console.log("\n--- Creative vs Deterministic ---");
-  
-  const factual = NodeLLM.chat("gpt-4o-mini").withTemperature(0.1);
-  const creative = NodeLLM.chat("gpt-4o-mini").withTemperature(0.9);
+
+  const factual = llm.chat("gpt-4o-mini").withTemperature(0.1);
+  const creative = llm.chat("gpt-4o-mini").withTemperature(0.9);
 
   console.log("Factual (Temp 0.1):");
   console.log((await factual.ask("Suggest a Name for a new Coffee Shop.")).content);

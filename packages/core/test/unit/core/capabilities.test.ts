@@ -8,6 +8,8 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const textFilePath = path.resolve(__dirname, "../../../package.json");
 
 class MockLimitedProvider implements Provider {
+  public id = "mock-limited";
+  public defaultModel(type?: string) { return "limited-model"; }
   public capabilities = {
     supportsVision: () => false,
     supportsTools: () => false,
@@ -17,6 +19,7 @@ class MockLimitedProvider implements Provider {
     supportsTranscription: () => false,
     supportsModeration: () => false,
     supportsReasoning: () => false,
+    supportsDeveloperRole: () => false,
     getContextWindow: () => 4096,
   };
 
