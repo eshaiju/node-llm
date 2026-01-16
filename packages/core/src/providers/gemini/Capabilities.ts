@@ -1,4 +1,6 @@
 import { ModelRegistry } from "../../models/ModelRegistry.js";
+import { PricingRegistry } from "../../models/PricingRegistry.js";
+import { ModelPricing } from "../../models/types.js";
 
 export class Capabilities {
   static getContextWindow(modelId: string): number | null {
@@ -151,33 +153,8 @@ export class Capabilities {
     return caps;
   }
 
-  static getPricing(modelId: string) {
-    const model = ModelRegistry.find(modelId, "gemini");
-    if (model?.pricing) return model.pricing;
-
-    const id = this.normalizeModelId(modelId);
-    let input = 0;
-    let output = 0;
-
-    if (id.match(/gemini-1\.5-flash/)) {
-      input = 0.075;
-      output = 0.3;
-    } else if (id.match(/gemini-1\.5-pro/)) {
-      input = 3.5;
-      output = 10.5;
-    } else if (id.match(/gemini-2\.0-flash/)) {
-      input = 0.1;
-      output = 0.4;
-    }
-
-    return {
-      text_tokens: {
-        standard: {
-          input_per_million: input,
-          output_per_million: output
-        }
-      }
-    };
+  static getPricing(modelId: string): ModelPricing | undefined {
+    return PricingRegistry.getPricing(modelId, "gemini");
   }
 
   private static normalizeModelId(modelId: string): string {

@@ -15,7 +15,9 @@ export {
   NodeLLMCore,
   Transcription,
   Moderation,
-  Embedding
+  Embedding,
+  ModelRegistry,
+  PricingRegistry
 } from "./llm.js";
 export { config } from "./config.js";
 export type { NodeLLMConfig } from "./config.js";

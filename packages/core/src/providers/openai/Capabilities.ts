@@ -1,4 +1,6 @@
 import { ModelRegistry } from "../../models/ModelRegistry.js";
+import { PricingRegistry } from "../../models/PricingRegistry.js";
+import { ModelPricing } from "../../models/types.js";
 
 export class Capabilities {
   static getContextWindow(modelId: string): number | null {
@@ -168,25 +170,7 @@ export class Capabilities {
     return modelId.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
   }
 
-  static getPricing(modelId: string): unknown {
-    const model = ModelRegistry.find(modelId, "openai");
-    if (model?.pricing) return model.pricing;
-
-    let input = 2.5,
-      output = 10.0;
-    if (/gpt-3/.test(modelId)) {
-      input = 0.5;
-      output = 1.5;
-    }
-    if (/mini/.test(modelId)) {
-      input = 0.15;
-      output = 0.6;
-    }
-
-    return {
-      text_tokens: {
-        standard: { input_per_million: input, output_per_million: output }
-      }
-    };
+  static getPricing(modelId: string): ModelPricing | undefined {
+    return PricingRegistry.getPricing(modelId, "openai");
   }
 }

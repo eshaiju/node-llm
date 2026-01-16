@@ -1,4 +1,7 @@
 import { ModelRegistry } from "../../models/ModelRegistry.js";
+import { PricingRegistry } from "../../models/PricingRegistry.js";
+import { ModelPricing } from "../../models/types.js";
+
 
 export class Capabilities {
   static getCapabilities(modelId: string): string[] {
@@ -62,5 +65,9 @@ export class Capabilities {
 
   static supportsReasoning(modelId: string): boolean {
     return /deepseek-reasoner/.test(modelId);
+  }
+
+  static getPricing(modelId: string): ModelPricing | undefined {
+    return PricingRegistry.getPricing(modelId, "deepseek");
   }
 }

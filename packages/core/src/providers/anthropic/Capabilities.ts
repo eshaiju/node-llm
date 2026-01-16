@@ -1,4 +1,6 @@
 import { ModelRegistry } from "../../models/ModelRegistry.js";
+import { PricingRegistry } from "../../models/PricingRegistry.js";
+import { ModelPricing } from "../../models/types.js";
 
 export class Capabilities {
   static getContextWindow(modelId: string): number | null {
@@ -61,30 +63,7 @@ export class Capabilities {
     return caps;
   }
 
-  static getPricing(modelId: string): unknown {
-    const model = ModelRegistry.find(modelId, "anthropic");
-    if (model?.pricing) return model.pricing;
-
-    const inputCpm = 3.0;
-    const outputCpm = 15.0;
-
-    return {
-      text_tokens: {
-        standard: {
-          input_per_million: inputCpm,
-          output_per_million: outputCpm,
-          ...(this.supportsExtendedThinking(modelId)
-            ? { reasoning_output_per_million: outputCpm * 2.5 }
-            : {})
-        },
-        batch: {
-          input_per_million: inputCpm * 0.5,
-          output_per_million: outputCpm * 0.5,
-          ...(this.supportsExtendedThinking(modelId)
-            ? { reasoning_output_per_million: outputCpm * 1.25 }
-            : {})
-        }
-      }
-    };
+  static getPricing(modelId: string): ModelPricing | undefined {
+    return PricingRegistry.getPricing(modelId, "anthropic");
   }
 }

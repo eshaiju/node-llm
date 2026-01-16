@@ -1,13 +1,12 @@
 import { Model } from "./types.js";
 import { modelsData } from "./models.js";
+import { PricingRegistry } from "./PricingRegistry.js";
 
 export class ModelRegistry {
   private static models: Model[] = modelsData as unknown as Model[];
 
   static find(modelId: string, provider?: string): Model | undefined {
-    return this.models.find(
-      (m) => (m.id === modelId || m.family === modelId) && (!provider || m.provider === provider)
-    );
+    return this.models.find((m) => m.id.toLowerCase() === modelId.toLowerCase() && (!provider || m.provider === provider));
   }
 
   /**
@@ -73,15 +72,20 @@ export class ModelRegistry {
     modelId: string,
     provider: string
   ) {
-    const model = this.find(modelId, provider);
-    if (!model || !model.pricing?.text_tokens?.standard) {
+    const pricing = PricingRegistry.getPricing(modelId, provider);
+    if (!pricing || !pricing.text_tokens?.standard) {
       return usage;
     }
 
-    const prices = model.pricing.text_tokens.standard;
+    const prices = pricing.text_tokens.standard;
     const inputPrice = prices.input_per_million || 0;
     const outputPrice = prices.output_per_million || 0;
-    const reasoningPrice = prices.reasoning_output_per_million || outputPrice;
+    
+    // Fallback for reasoning: if not specified, default to 2.5x standard output price for specific reasoning models
+    // or just standard output price for others.
+    const reasoningPrice = prices.reasoning_output_per_million ?? (
+      modelId.includes("reasoner") || modelId.includes("3-7") ? outputPrice * 2.5 : outputPrice
+    );
 
     const cachedPrice = prices.cached_input_per_million ?? inputPrice / 2;
 

@@ -3,6 +3,7 @@ layout: default
 title: Migration Guide (v1.6)
 parent: Getting Started
 nav_order: 10
+permalink: /getting-started/migration-guide-v1-6
 description: Guide for migrating to NodeLLM v1.6.0 strict provider configuration.
 ---
 

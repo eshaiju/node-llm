@@ -18,7 +18,7 @@ description: Extend NodeLLM with support for proprietary models, internal APIs, 
 {: .no_toc .text-delta }
 
 1. TOC
-   {:toc}
+{:toc}
 
 ---
 
@@ -200,6 +200,26 @@ async chat(request: ChatRequest): Promise<ChatResponse> {
 **Note**: The `requestTimeout` parameter is available in all provider methods:
 
 - `chat(request)`, `stream(request)`, `paint(request)`, `transcribe(request)`, `moderate(request)`, `embed(request)`
+
+## Custom Pricing
+
+If your custom provider has associated costs, you can register them in the `PricingRegistry`. This allows `NodeLLM` to automatically calculate usage costs for your custom models.
+
+```ts
+import { PricingRegistry } from "@node-llm/core";
+
+// Register pricing for your custom service
+PricingRegistry.register("my-custom-service", "my-model-v1", {
+  text_tokens: {
+    standard: {
+      input_per_million: 1.5,
+      output_per_million: 4.5
+    }
+  }
+});
+```
+
+For more details on managing costs, see the [Model Pricing](./pricing.md) guide.
 
 ## Example Implementation
 

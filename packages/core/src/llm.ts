@@ -12,6 +12,7 @@ import {
 } from "./providers/registry.js";
 import { GeneratedImage } from "./image/GeneratedImage.js";
 import { ModelRegistry } from "./models/ModelRegistry.js";
+import { PricingRegistry } from "./models/PricingRegistry.js";
 import { Model } from "./models/types.js";
 import { Transcription } from "./transcription/Transcription.js";
 import { Moderation } from "./moderation/Moderation.js";
@@ -53,6 +54,7 @@ const PROVIDER_REGISTRARS: Record<string, () => void> = {
 
 export class NodeLLMCore {
   public readonly models = ModelRegistry;
+  public readonly pricing = PricingRegistry;
 
   constructor(
     public readonly config: NodeLLMConfig,
@@ -278,7 +280,7 @@ export class NodeLLMCore {
   }
 }
 
-export { Transcription, Moderation, Embedding };
+export { Transcription, Moderation, Embedding, ModelRegistry, PricingRegistry };
 
 /**
  * Creates a new immutable LLM instance.
