@@ -2,17 +2,17 @@
 
 This directory contains examples demonstrating how to integrate LLMs as an architectural surface using `NodeLLM`.
 
-## 🎯 Flagship Examples
+## 🎯 Flagship Examples (Full Applications)
 
 ### 1. HR Chatbot with RAG & Streaming
 
 A complete, production-ready Next.js application demonstrating the full NodeLLM stack: RAG, streaming, persistence with `@node-llm/orm`, and real-time chat.
 
-![HR Chatbot](./hr-chatbot-rag/hr-chatbot.png)
+![HR Chatbot](./applications/hr-chatbot-rag/hr-chatbot.png)
 
 **Features:** Streaming responses, vector search, chat persistence, tool calling, JSON metadata, custom fields
 
-**[View Example →](./hr-chatbot-rag/)**
+**[View Example →](./applications/hr-chatbot-rag/)**
 
 ---
 
@@ -20,21 +20,23 @@ A complete, production-ready Next.js application demonstrating the full NodeLLM 
 
 A full-stack application demonstrating multi-provider orchestration, tool calling, and structured outputs.
 
-![Brand Perception Checker](./brand-perception-checker/demo.png)
+![Brand Perception Checker](./applications/brand-perception-checker/demo.png)
 
-**[View Example →](./brand-perception-checker/)**
+**[View Example →](./applications/brand-perception-checker/)**
 
 ---
 
-## Available Providers
+## Available Provider Scripts
 
-- **DeepSeek**: `examples/deepseek/`
-- **OpenAI**: `examples/openai/`
-- **Anthropic**: `examples/anthropic/`
-- **Gemini**: `examples/gemini/`
-- **OpenRouter**: `examples/openrouter/`
-- **Ollama**: `examples/ollama/`
-- **Core (Advanced)**: `examples/core/`
+These standalone scripts demonstrate specific features of each provider.
+
+- **DeepSeek**: `examples/scripts/deepseek/`
+- **OpenAI**: `examples/scripts/openai/`
+- **Anthropic**: `examples/scripts/anthropic/`
+- **Gemini**: `examples/scripts/gemini/`
+- **OpenRouter**: `examples/scripts/openrouter/`
+- **Ollama**: `examples/scripts/ollama/`
+- **Core (Advanced)**: `examples/scripts/core/`
 
 ## Prerequisites
 
@@ -98,34 +100,34 @@ OpenAI is the most feature-complete provider in `NodeLLM`.
 To run the full suite of OpenAI examples:
 
 ```bash
-./examples/openai/run.sh
+./examples/scripts/openai/run.sh
 ```
 
 ### 2. Security & Resource Limits (NEW)
 
-- **Complete Security Config**: `node examples/openai/security/configuration.mjs`
-- **Request Timeouts**: `node examples/openai/security/request-timeout.mjs`
-- **Content Policy Hooks**: `node examples/openai/security/content-policy-hooks.mjs`
-- **Tool Verification Policy**: `node examples/openai/security/tool-policies.mjs`
+- **Complete Security Config**: `node examples/scripts/openai/security/configuration.mjs`
+- **Request Timeouts**: `node examples/scripts/openai/security/request-timeout.mjs`
+- **Content Policy Hooks**: `node examples/scripts/openai/security/content-policy-hooks.mjs`
+- **Tool Verification Policy**: `node examples/scripts/openai/security/tool-policies.mjs`
 
 ### 3. Running Individual OpenAI Examples
 
-- **Basic Chat**: `node examples/openai/chat/basic.mjs`
-- **Streaming**: `node examples/openai/chat/streaming.mjs`
-- **Tools (Class-Based)**: `node examples/openai/chat/tools.mjs`
-- **Tools (Raw JSON)**: `node examples/openai/chat/raw-json.mjs`
-- **Reasoning (o1/o3)**: `node examples/openai/chat/reasoning.mjs`
-- **Vision**: `node examples/openai/multimodal/vision.mjs`
-- **Speech (TTS)**: `node examples/openai/multimodal/audio.mjs`
-- **Image Generation**: `node examples/openai/images/generate.mjs`
+- **Basic Chat**: `node examples/scripts/openai/chat/basic.mjs`
+- **Streaming**: `node examples/scripts/openai/chat/streaming.mjs`
+- **Tools (Class-Based)**: `node examples/scripts/openai/chat/tools.mjs`
+- **Tools (Raw JSON)**: `node examples/scripts/openai/chat/raw-json.mjs`
+- **Reasoning (o1/o3)**: `node examples/scripts/openai/chat/reasoning.mjs`
+- **Vision**: `node examples/scripts/openai/multimodal/vision.mjs`
+- **Speech (TTS)**: `node examples/scripts/openai/multimodal/audio.mjs`
+- **Image Generation**: `node examples/scripts/openai/images/generate.mjs`
 
 ### 4. Advanced Core Patterns
 
-- **Global Configuration**: `node examples/openai/core/configuration.mjs`
-- **Support Agent Pattern**: `node examples/openai/core/support-agent.mjs`
-- **Parallel Provider Scoring**: `node examples/openai/core/parallel-scoring.mjs`
-- **Custom API Endpoints**: `node examples/openai/core/custom-endpoints.mjs`
-- **Custom Provider Implementation**: `node examples/core/custom-provider.mjs`
+- **Global Configuration**: `node examples/scripts/openai/core/configuration.mjs`
+- **Support Agent Pattern**: `node examples/scripts/openai/core/support-agent.mjs`
+- **Parallel Provider Scoring**: `node examples/scripts/openai/core/parallel-scoring.mjs`
+- **Custom API Endpoints**: `node examples/scripts/openai/core/custom-endpoints.mjs`
+- **Custom Provider Implementation**: `node examples/scripts/core/custom-provider.mjs`
 
 ---
 
@@ -138,18 +140,18 @@ You can run DeepSeek examples individually using `node` or run the entire suite 
 To run all available DeepSeek examples to verify functionality:
 
 ```bash
-./examples/deepseek/run.sh
+./examples/scripts/deepseek/run.sh
 ```
 
 ### 2. Running Individual DeepSeek Examples
 
-- **Chat**: `node examples/deepseek/chat/basic.mjs`
-- **Streaming**: `node examples/deepseek/chat/streaming.mjs`
-- **Structured Output**: `node examples/deepseek/chat/structured.mjs`
-- **Tools (Class-Based)**: `node examples/deepseek/chat/tools.mjs`
-- **Tools (Raw JSON)**: `node examples/deepseek/chat/raw-json.mjs`
-- **Reasoning (R1)**: `node examples/deepseek/chat/reasoning.mjs`
-- **Model Info**: `node examples/deepseek/discovery/models.mjs`
+- **Chat**: `node examples/scripts/deepseek/chat/basic.mjs`
+- **Streaming**: `node examples/scripts/deepseek/chat/streaming.mjs`
+- **Structured Output**: `node examples/scripts/deepseek/chat/structured.mjs`
+- **Tools (Class-Based)**: `node examples/scripts/deepseek/chat/tools.mjs`
+- **Tools (Raw JSON)**: `node examples/scripts/deepseek/chat/raw-json.mjs`
+- **Reasoning (R1)**: `node examples/scripts/deepseek/chat/reasoning.mjs`
+- **Model Info**: `node examples/scripts/deepseek/discovery/models.mjs`
 
 ---
 
@@ -158,16 +160,16 @@ To run all available DeepSeek examples to verify functionality:
 ### 1. Running All Gemini Examples
 
 ```bash
-./examples/gemini/run.sh
+./examples/scripts/gemini/run.sh
 ```
 
 ### 2. Running Individual Gemini Examples
 
-- **Basic Chat**: `node examples/gemini/chat/basic.mjs`
-- **Tools (Class-Based)**: `node examples/gemini/chat/tools.mjs`
-- **Tools (Raw JSON)**: `node examples/gemini/chat/raw-json.mjs`
-- **Vision**: `node examples/gemini/multimodal/vision.mjs`
-- **Embeddings**: `node examples/gemini/embeddings/create.mjs`
+- **Basic Chat**: `node examples/scripts/gemini/chat/basic.mjs`
+- **Tools (Class-Based)**: `node examples/scripts/gemini/chat/tools.mjs`
+- **Tools (Raw JSON)**: `node examples/scripts/gemini/chat/raw-json.mjs`
+- **Vision**: `node examples/scripts/gemini/multimodal/vision.mjs`
+- **Embeddings**: `node examples/scripts/gemini/embeddings/create.mjs`
 
 ---
 
@@ -176,24 +178,24 @@ To run all available DeepSeek examples to verify functionality:
 ### 1. Running All Anthropic Examples
 
 ```bash
-./examples/anthropic/run.sh
+./examples/scripts/anthropic/run.sh
 ```
 
 ### 2. Running Individual Anthropic Examples
 
-- **Basic Chat**: `node examples/anthropic/chat/basic.mjs`
-- **Tools (Class-Based)**: `node examples/anthropic/chat/tools.mjs`
-- **Tools (Raw JSON)**: `node examples/anthropic/chat/raw-json.mjs`
-- **Streaming Tools**: `node examples/anthropic/chat/streaming-tools.mjs`
+- **Basic Chat**: `node examples/scripts/anthropic/chat/basic.mjs`
+- **Tools (Class-Based)**: `node examples/scripts/anthropic/chat/tools.mjs`
+- **Tools (Raw JSON)**: `node examples/scripts/anthropic/chat/raw-json.mjs`
+- **Streaming Tools**: `node examples/scripts/anthropic/chat/streaming-tools.mjs`
 
 ### 3. Unsupported Features (Error Handling)
 
 These scripts demonstrate that `NodeLLM` correctly raises errors for features not supported by DeepSeek (Multimodal, Embeddings, Image Generation).
 
-- `node examples/deepseek/multimodal/vision.mjs`
-- `node examples/deepseek/embeddings/basic.mjs`
-- `node examples/deepseek/images/generate.mjs`
-- `node examples/deepseek/safety/moderation.mjs`
+- `node examples/scripts/deepseek/multimodal/vision.mjs`
+- `node examples/scripts/deepseek/embeddings/basic.mjs`
+- `node examples/scripts/deepseek/images/generate.mjs`
+- `node examples/scripts/deepseek/safety/moderation.mjs`
 
 ---
 
@@ -202,16 +204,17 @@ These scripts demonstrate that `NodeLLM` correctly raises errors for features no
 ### 1. Running All OpenRouter Examples
 
 ```bash
-./examples/openrouter/run.sh
+./examples/scripts/openrouter/run.sh
 ```
 
 ### 2. Running Individual OpenRouter Examples
 
-- **Basic Chat**: `node examples/openrouter/chat/basic.mjs`
-- **Streaming**: `node examples/openrouter/chat/streaming.mjs`
-- **Tools**: `node examples/openrouter/chat/tools.mjs`
-- **Reasoning**: `node examples/openrouter/chat/reasoning.mjs`
-- **Embeddings**: `node examples/openrouter/embeddings/create.mjs`
+- **Basic Chat**: `node examples/scripts/openrouter/chat/basic.mjs`
+- **Streaming**: `node examples/scripts/openrouter/chat/streaming.mjs`
+- **Tools**: `node examples/scripts/openrouter/chat/tools.mjs`
+- **Reasoning**: `node examples/scripts/openrouter/chat/reasoning.mjs`
+- **Embeddings**: `node examples/scripts/openrouter/embeddings/create.mjs`
+
 
 ## Troubleshooting
 

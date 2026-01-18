@@ -24,7 +24,7 @@ description: Give your models the ability to interact with the real world using 
 
 {: .highlight }
 
-> **Looking for a real-world example?** Check out the [Brand Perception Checker](../../examples/brand-perception-checker/), which uses the `SerpTool` to perform live Google searches and "read" the results to extract semantic signals.
+> **Looking for a real-world example?** Check out the [Brand Perception Checker](../../examples/applications/brand-perception-checker/), which uses the `SerpTool` to perform live Google searches and "read" the results to extract semantic signals.
 
 ---
 
@@ -119,7 +119,7 @@ See the [Streaming documentation](streaming.html#streaming-with-tools-) for more
 
 If the provider supports it (like OpenAI and Anthropic), the model can call multiple tools in a single turn. `NodeLLM` handles the concurrent execution of these tools automatically.
 
-See [examples/openai/chat/parallel-tools.mjs](https://github.com/node-llm/node-llm/blob/main/examples/openai/chat/parallel-tools.mjs) for a demo.
+See [examples/scripts/openai/chat/parallel-tools.mjs](https://github.com/node-llm/node-llm/blob/main/examples/scripts/openai/chat/parallel-tools.mjs) for a demo.
 
 ---
 
