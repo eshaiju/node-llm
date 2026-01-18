@@ -3,6 +3,7 @@ layout: default
 title: Tool Calling
 nav_order: 5
 parent: Core Features
+permalink: /core-features/tools
 description: Give your models the ability to interact with the real world using a clean class-based DSL, automatic execution loops, and built-in safety guards.
 ---
 

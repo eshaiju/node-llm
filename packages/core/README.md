@@ -116,9 +116,9 @@ Looking for persistence? use **[@node-llm/orm](https://www.npmjs.com/package/@no
 
 Visit **[node-llm.eshaiju.com](https://node-llm.eshaiju.com/)** for:
 
-- [Deep Dive into Tool Calling](https://node-llm.eshaiju.com/core-features/tools.html)
-- [Multi-modal Vision & Audio Guide](https://node-llm.eshaiju.com/core-features/multimodal.html)
-- [Custom Provider Plugin System](https://node-llm.eshaiju.com/advanced/custom-providers.html)
+- [Deep Dive into Tool Calling](https://node-llm.eshaiju.com/core-features/tools)
+- [Multi-modal Vision & Audio Guide](https://node-llm.eshaiju.com/core-features/multimodal)
+- [Custom Provider Plugin System](https://node-llm.eshaiju.com/advanced/custom-providers)
 
 ---
 

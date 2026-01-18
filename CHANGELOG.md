@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [1.6.1] - 2026-01-19
+## [1.6.1] - 2026-01-19 (@node-llm/core)
 
 ### Documentation & Examples
 
@@ -11,7 +11,23 @@ All notable changes to this project will be documented in this file.
 - **ORM Integration**: Added references to the new `@node-llm/orm` package.
 - **Test Stability**: Fixed integration test paths for vision and audio examples after reorganization.
 
-## [1.6.0] - 2026-01-16
+## [0.1.1] - 2026-01-19 (@node-llm/orm)
+
+### Fixed
+
+- **Broken Links**: Corrected documentation and example links in README.
+
+## [0.1.0] - 2026-01-18 (@node-llm/orm)
+
+### Added
+
+- **Initial Release**: Comprehensive persistence layer for NodeLLM using Prisma.
+- **Chat Persistence**: Automatic tracking of chat sessions, messages, and history.
+- **Streaming Support**: `chat.askStream()` with automatic token persistence.
+- **Tool Audit Trail**: Tracking of every tool execution, parameters, and results.
+- **API Metrics**: Automatic logging of latency, token usage, and cost.
+
+## [1.6.0] - 2026-01-16 (@node-llm/core)
 
 ### Major Changes
 

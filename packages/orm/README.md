@@ -7,7 +7,7 @@
 
 > Database persistence layer for NodeLLM. Automatically tracks chats, messages, tool calls, and API requests.
 
-**[Read the Full Documentation](https://node-llm.github.io/orm/prisma.html)** | **[View Example App](https://github.com/node-llm/node-llm/tree/main/examples/applications/hr-chatbot-rag)**
+**[Read the Full Documentation](https://node-llm.eshaiju.com/orm/prisma)** | **[View Example App](https://github.com/node-llm/node-llm/tree/main/examples/applications/hr-chatbot-rag)**
 
 ## Features
 

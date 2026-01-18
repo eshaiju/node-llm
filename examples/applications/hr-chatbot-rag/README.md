@@ -46,7 +46,7 @@ This is a **flagship example** showing how to build a sophisticated AI applicati
 ```bash
 # If you haven't cloned NodeLLM yet
 git clone https://github.com/node-llm/node-llm.git
-cd node-llm/examples/hr-chatbot-rag
+cd node-llm/examples/applications/hr-chatbot-rag
 
 # Install dependencies
 npm install

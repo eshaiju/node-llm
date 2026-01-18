@@ -3,6 +3,7 @@ layout: default
 title: Chat
 parent: Core Features
 nav_order: 1
+permalink: /core-features/chat
 description: A unified interface for stateful conversations across all providers. Learn how to manage history, instructions, and lifecycle hooks.
 ---
 

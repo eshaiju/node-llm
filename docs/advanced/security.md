@@ -3,6 +3,7 @@ layout: default
 title: Security & Compliance
 parent: Advanced
 nav_order: 1
+permalink: /advanced/security
 description: Learn how NodeLLM acts as an architectural security layer with context isolation, content filtering, human-in-the-loop tool execution, and resource limits.
 ---
 

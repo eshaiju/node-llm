@@ -89,6 +89,12 @@ Built with NodeLLM - Multi-provider AI analysis, tool calling, and structured ou
 
 **[View Example →](https://github.com/node-llm/node-llm/tree/main/examples/applications/brand-perception-checker)**
 
+### 🤖 Flagship: HR Chatbot RAG
+
+A production-grade Next.js application demonstrating **@node-llm/orm**, real-time streaming, and RAG architectures.
+
+**[View Example →](https://github.com/node-llm/node-llm/tree/main/examples/applications/hr-chatbot-rag)**
+
 ---
 
 ## 🔧 Strategic Configuration
