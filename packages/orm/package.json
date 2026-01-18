@@ -1,7 +1,7 @@
 {
   "name": "@node-llm/orm",
   "version": "0.1.0",
-  "description": "Database persistence layer for NodeLLM - Chat, Message, and ToolCall tracking",
+  "description": "Database persistence layer for NodeLLM - Chat, Message, and ToolCall tracking with streaming support",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -28,10 +28,34 @@
     "orm",
     "prisma",
     "chat",
+    "chatbot",
     "persistence",
-    "nodejs"
+    "database",
+    "nodejs",
+    "typescript",
+    "openai",
+    "anthropic",
+    "gemini",
+    "streaming",
+    "rag",
+    "retrieval-augmented-generation",
+    "conversation",
+    "message-history",
+    "tool-calling",
+    "ai",
+    "artificial-intelligence",
+    "nextjs"
   ],
-  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/node-llm/node-llm.git",
+    "directory": "packages/orm"
+  },
+  "homepage": "https://github.com/node-llm/node-llm/tree/main/packages/orm",
+  "bugs": {
+    "url": "https://github.com/node-llm/node-llm/issues"
+  },
+  "author": "NodeLLM Contributors",
   "license": "MIT",
   "peerDependencies": {
     "@node-llm/core": "^1.0.0",

@@ -1,8 +1,13 @@
 # @node-llm/orm
 
-Database persistence layer for NodeLLM. Automatically tracks chats, messages, tool calls, and API requests.
+[![npm version](https://img.shields.io/npm/v/@node-llm/orm.svg)](https://www.npmjs.com/package/@node-llm/orm)
+[![npm downloads](https://img.shields.io/npm/dm/@node-llm/orm.svg)](https://www.npmjs.com/package/@node-llm/orm)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
 
-**[Read the Full Documentation](https://node-llm.github.io/orm/prisma.html)**
+> Database persistence layer for NodeLLM. Automatically tracks chats, messages, tool calls, and API requests.
+
+**[Read the Full Documentation](https://node-llm.github.io/orm/prisma.html)** | **[View Example App](../../examples/hr-chatbot-rag/)**
 
 ## Features
 
