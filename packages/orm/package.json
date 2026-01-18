@@ -21,7 +21,10 @@
   "scripts": {
     "build": "tsc",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "prepack": "npm run build && cp ../../CHANGELOG.md ./CHANGELOG.md",
+    "postpack": "rm ./CHANGELOG.md",
+    "prepublishOnly": "npm run build"
   },
   "keywords": [
     "llm",

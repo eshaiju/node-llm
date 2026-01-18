@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.6.1] - 2026-01-19
+
+### Documentation & Examples
+
+- **Example Reorganization**: Better structure for examples, separating full applications from scripts.
+- **Improved READMEs**: Updated examples to use absolute GitHub URLs for better compatibility with npm.
+- **ORM Integration**: Added references to the new `@node-llm/orm` package.
+- **Test Stability**: Fixed integration test paths for vision and audio examples after reorganization.
+
+## [1.6.0] - 2026-01-16
+
+### Major Changes
+
+- **Rename LLM to NodeLLM**: Standardized naming across the library. `createLLM` now returns a `NodeLLM` instance.
+- **Singleton Removal**: Moved away from global singleton patterns to support multiple independent LLM instances.
+- **Improved Factory Pattern**: Refactored `createLLM()` for better provider initialization and type safety.
+
 ## [1.5.4] - 2026-01-15
 
 ### Fixed
