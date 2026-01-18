@@ -221,4 +221,4 @@ For more details on managing costs, see the [Model Pricing](./pricing.md) guide.
 
 ## Example Implementation
 
-See the [Custom Provider Example](https://github.com/node-llm/node-llm/blob/main/examples/custom-provider.mjs) in the repository for a complete working implementation including error handling, streaming, and extra field support.
+See the [Custom Provider Example](https://github.com/node-llm/node-llm/blob/main/examples/scripts/core/custom-provider.mjs) in the repository for a complete working implementation including error handling, streaming, and extra field support.

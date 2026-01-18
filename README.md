@@ -87,7 +87,7 @@ for await (const chunk of chat.stream("Explain event-driven architecture")) {
 
 Built with NodeLLM - Multi-provider AI analysis, tool calling, and structured outputs working together.
 
-**[View Example →](examples/brand-perception-checker/)**
+**[View Example →](https://github.com/node-llm/node-llm/tree/main/examples/applications/brand-perception-checker)**
 
 ---
 
@@ -206,6 +206,23 @@ await NodeLLM.paint("A cyberpunk city in rain");
 
 ```ts
 await NodeLLM.transcribe("meeting-recording.wav");
+```
+
+### 💾 Persistence Layer
+
+Automatically track chat history, tool executions, and API metrics with **@node-llm/orm**.
+
+```ts
+import { createChat } from "@node-llm/orm/prisma";
+
+// Chat state is automatically saved to your database (Postgres/MySQL/SQLite)
+const chat = await createChat(prisma, llm, { model: "gpt-4o" });
+
+await chat.ask("Hello");
+// -> Saves User Message
+// -> Saves Assistant Response
+// -> Tracks Token Usage & Cost
+// -> Logs Tool Calls & Results
 ```
 
 ### ⚡ Scoped Parallelism

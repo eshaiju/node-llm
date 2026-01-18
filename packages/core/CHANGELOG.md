@@ -1,6 +1,12 @@
 # Changelog
 
-## 1.1.0 (2026-01-03)
+## 1.6.1 (2026-01-19)
+
+### Documentation & Examples
+
+- **Example Reorganization**: Better structure for examples, separating full applications from scripts.
+- **Improved READMEs**: Updated examples to use absolute GitHub URLs for better compatibility with npm.
+- **ORM Integration**: Added references to the new `@node-llm/orm` package.
 
 🎉 ** Official Release of @node-llm/core**
 

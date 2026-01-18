@@ -1,0 +1,72 @@
+{
+  "name": "@node-llm/orm",
+  "version": "0.1.0",
+  "description": "Database persistence layer for NodeLLM - Chat, Message, and ToolCall tracking with streaming support",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "node-llm-orm": "./bin/cli.js"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./prisma": {
+      "import": "./dist/adapters/prisma/index.js",
+      "types": "./dist/adapters/prisma/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "keywords": [
+    "llm",
+    "orm",
+    "prisma",
+    "chat",
+    "chatbot",
+    "persistence",
+    "database",
+    "nodejs",
+    "typescript",
+    "openai",
+    "anthropic",
+    "gemini",
+    "streaming",
+    "rag",
+    "retrieval-augmented-generation",
+    "conversation",
+    "message-history",
+    "tool-calling",
+    "ai",
+    "artificial-intelligence",
+    "nextjs"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/node-llm/node-llm.git",
+    "directory": "packages/orm"
+  },
+  "homepage": "https://github.com/node-llm/node-llm/tree/main/packages/orm",
+  "bugs": {
+    "url": "https://github.com/node-llm/node-llm/issues"
+  },
+  "author": "NodeLLM Contributors",
+  "license": "MIT",
+  "peerDependencies": {
+    "@node-llm/core": "^1.0.0",
+    "@prisma/client": "^5.0.0"
+  },
+  "devDependencies": {
+    "@node-llm/core": "file:../core",
+    "@prisma/client": "^5.0.0",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0",
+    "vitest": "^1.0.0"
+  },
+  "dependencies": {}
+}
