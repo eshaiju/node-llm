@@ -1,0 +1,40 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-primary: #339933;
+  --color-brand-primary-light: #52a852;
+  --color-brand-primary-dark: #206020;
+  
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+:root {
+  --foreground-rgb: 36, 41, 46;
+  --background-rgb: 255, 255, 255;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: radial-gradient(circle at top right, rgba(51, 153, 51, 0.05), transparent 400px),
+              radial-gradient(circle at bottom left, rgba(51, 153, 51, 0.03), transparent 400px),
+              #ffffff;
+  min-height: 100vh;
+}
+
+/* Very Light Look - Premium Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #e1e4e8;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #d1d5da;
+}

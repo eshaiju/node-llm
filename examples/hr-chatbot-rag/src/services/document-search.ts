@@ -1,0 +1,36 @@
+import { llm } from "@/lib/node-llm";
+
+interface SearchResult {
+  content: string;
+  score: number;
+  metadata: {
+    source: string;
+    chunkIndex: number;
+    totalChunks: number;
+  };
+}
+
+export class DocumentSearch {
+  static async search(query: string, topK: number = 3): Promise<SearchResult[]> {
+    const { prisma } = await import("@/lib/db");
+    
+    const queryEmbedding = await llm.embed(query);
+    const queryVector = JSON.stringify(queryEmbedding.vectors[0]);
+
+    const results = await prisma.$queryRaw<any[]>`
+      SELECT 
+        content, 
+        metadata, 
+        (1 - (embedding <=> ${queryVector}::vector)) as score 
+      FROM "DocumentChunk"
+      ORDER BY embedding <=> ${queryVector}::vector
+      LIMIT ${topK}
+    `;
+
+    return results.map((row) => ({
+      content: row.content,
+      score: Number(row.score),
+      metadata: typeof row.metadata === 'string' ? JSON.parse(row.metadata) : row.metadata,
+    }));
+  }
+}

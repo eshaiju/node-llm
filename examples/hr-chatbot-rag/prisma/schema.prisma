@@ -1,0 +1,87 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  extensions = [vector]
+}
+
+model AssistantChat {
+  id           String             @id @default(uuid())
+  model        String?
+  provider     String?
+  instructions String?            // System instructions
+  metadata     Json?              // JSON metadata
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+  messages     AssistantMessage[]
+  requests     AssistantRequest[]
+}
+
+model AssistantMessage {
+  id           String              @id @default(uuid())
+  chatId       String
+  role         String             // user, assistant, system, tool
+  content      String?
+  contentRaw   String?            // JSON raw payload
+  reasoning    String?            // Chain of thought
+  inputTokens  Int?
+  outputTokens Int?
+  modelId      String?
+  provider     String?
+  createdAt    DateTime            @default(now())
+
+  chat         AssistantChat       @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  toolCalls    AssistantToolCall[]
+  requests     AssistantRequest[]
+}
+
+model AssistantToolCall {
+  id           String           @id @default(uuid())
+  messageId    String
+  toolCallId   String           // ID from the provider
+  name         String
+  arguments    String           // JSON string
+  thought      String?          // The LLM's reasoning for this tool call
+  result       String?          // Tool execution result
+  createdAt    DateTime         @default(now())
+
+  message      AssistantMessage @relation(fields: [messageId], references: [id], onDelete: Cascade)
+
+  @@unique([messageId, toolCallId])
+}
+
+model DocumentChunk {
+  id        String                 @id @default(uuid())
+  content   String                 // The actual text chunk
+  embedding Unsupported("vector")
+  metadata  String?                // JSON: { source: "handbook.pdf", page: 5, section: "Remote Work" }
+  createdAt DateTime               @default(now())
+
+  @@index([createdAt])
+}
+
+model AssistantRequest {
+  id           String   @id @default(uuid())
+  chatId       String
+  messageId    String?  // Optional because requests might fail before message creation or be intermediate
+  
+  provider     String
+  model        String
+  statusCode   Int
+  duration     Int      // milliseconds
+  inputTokens  Int
+  outputTokens Int
+  cost         Float?
+  
+  createdAt    DateTime @default(now())
+
+  chat         AssistantChat     @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  message      AssistantMessage? @relation(fields: [messageId], references: [id], onDelete: Cascade)
+}

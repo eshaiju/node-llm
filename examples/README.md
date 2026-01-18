@@ -2,7 +2,21 @@
 
 This directory contains examples demonstrating how to integrate LLMs as an architectural surface using `NodeLLM`.
 
-### 🎯 Flagship Example: Brand Perception Checker
+## 🎯 Flagship Examples
+
+### 1. HR Chatbot with RAG & Streaming
+
+A complete, production-ready Next.js application demonstrating the full NodeLLM stack: RAG, streaming, persistence with `@node-llm/orm`, and real-time chat.
+
+![HR Chatbot](./hr-chatbot-rag/hr-chatbot.png)
+
+**Features:** Streaming responses, vector search, chat persistence, tool calling, JSON metadata, custom fields
+
+**[View Example →](./hr-chatbot-rag/)**
+
+---
+
+### 2. Brand Perception Checker
 
 A full-stack application demonstrating multi-provider orchestration, tool calling, and structured outputs.
 
