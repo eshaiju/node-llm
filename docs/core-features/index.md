@@ -3,6 +3,7 @@ layout: default
 title: Core Features
 nav_order: 3
 has_children: true
+nav_fold: false
 permalink: /core-features
 description: Deep dive into the primary capabilities of NodeLLM, including chat, tools, vision, and reasoning.
 back_to_top: false

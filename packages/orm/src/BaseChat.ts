@@ -28,8 +28,6 @@ export interface UserHooks {
   afterResponse: ((resp: any) => any | Promise<any>)[];
   onNewMessage: (() => void | Promise<void>)[];
   onEndMessage: ((message: any) => void | Promise<void>)[];
-  onToolCallError: ((call: any, error: Error) => any | Promise<any>)[];
-  onConfirmToolCall: ((call: any) => boolean | Promise<boolean>)[];
   onBeforeRequest: ((messages: any[]) => any | Promise<any>)[];
 }
 
@@ -49,8 +47,6 @@ export abstract class BaseChat<
     afterResponse: [],
     onNewMessage: [],
     onEndMessage: [],
-    onToolCallError: [],
-    onConfirmToolCall: [],
     onBeforeRequest: []
   };
 

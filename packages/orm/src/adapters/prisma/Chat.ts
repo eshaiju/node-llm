@@ -211,8 +211,9 @@ export class Chat extends BaseChat {
         }
       });
     } catch (error) {
+      // Delete the empty assistant message, but keep the user message
+      // so there's a record of what was asked (useful for debugging)
       await (this.prisma as any)[messageModel].delete({ where: { id: assistantMessage!.id } });
-      // await (this.prisma as any)[messageModel].delete({ where: { id: userMessage!.id } });
       throw error;
     }
   }
@@ -264,13 +265,14 @@ export class Chat extends BaseChat {
           contentRaw: JSON.stringify(metadata),
           inputTokens: metadata.input_tokens || 0,
           outputTokens: metadata.output_tokens || 0,
-          modelId: coreChat.model || null,
-          provider: coreChat.provider?.id || null
+          modelId: this.localOptions.model || this.record.model || null,
+          provider: this.localOptions.provider || this.record.provider || null
         }
       });
     } catch (error) {
+      // Delete the empty assistant message, but keep the user message
+      // so there's a record of what was asked (useful for debugging)
       await (this.prisma as any)[messageModel].delete({ where: { id: assistantMessage!.id } });
-      // await (this.prisma as any)[messageModel].delete({ where: { id: userMessage!.id } });
       throw error;
     }
   }
