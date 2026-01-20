@@ -53,7 +53,38 @@ export class BadRequestError extends APIError {
 }
 
 /**
+ * 401 - Invalid or missing API key
+ */
+export class UnauthorizedError extends APIError {
+  constructor(message: string, body: unknown, provider?: string) {
+    super(message, 401, body, provider);
+    this.name = "UnauthorizedError";
+  }
+}
+
+/**
+ * 402 - Payment required (billing issues)
+ */
+export class PaymentRequiredError extends APIError {
+  constructor(message: string, body: unknown, provider?: string) {
+    super(message, 402, body, provider);
+    this.name = "PaymentRequiredError";
+  }
+}
+
+/**
+ * 403 - Permission denied
+ */
+export class ForbiddenError extends APIError {
+  constructor(message: string, body: unknown, provider?: string) {
+    super(message, 403, body, provider);
+    this.name = "ForbiddenError";
+  }
+}
+
+/**
  * 401/403 - API key or permission issues
+ * @deprecated Use UnauthorizedError (401) or ForbiddenError (403) for granular handling
  */
 export class AuthenticationError extends APIError {
   constructor(message: string, status: number, body: unknown, provider?: string) {

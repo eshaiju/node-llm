@@ -3,7 +3,7 @@ layout: default
 title: Error Handling
 parent: Advanced
 nav_order: 3
-description: Build resilient AI applications using our descriptive exception hierarchy and unified error reporting across all providers.
+description: Build resilient AI applications with NodeLLM's descriptive error hierarchy and unified error reporting across all providers.
 ---
 
 # {{ page.title }}
@@ -19,103 +19,223 @@ description: Build resilient AI applications using our descriptive exception hie
 {:toc}
 
 ---
-
-\`NodeLLM\` provides a rich exception hierarchy to help you handle failures gracefully. All errors inherit from the base \`LLMError\` class.
+NodeLLM provides a descriptive exception hierarchy to help you handle failures gracefully. All errors inherit from the base `LLMError` class.
 
 ## Error Hierarchy
 
-- `LLMError`: Base class for all library errors.
-  - `ConfigurationError`: Missing API keys or invalid config.
-  - `NotFoundError`: Model or provider not found in registry.
-  - `CapabilityError`: Model does not support the requested feature (e.g. vision).
-  - `APIError`: Base for all upstream provider API issues.
-    - `BadRequestError` (400): Invalid parameters.
-    - `AuthenticationError` (401/403): Invalid API key or permissions.
-    - `RateLimitError` (429): You are hitting limits.
-    - `ServerError` (500+): Provider internal issues.
-      - `ServiceUnavailableError`: Temporary outages or overloads.
-  - `ToolError`: Failure during tool execution. Includes `fatal` property for loop control.
+All errors raised by NodeLLM inherit from `LLMError`. Specific errors map to HTTP status codes or library-specific issues:
 
-## Handling Specific Errors
+```
+LLMError                        # Base error class
+├── APIError                    # Base for all provider API issues
+│   ├── BadRequestError         # 400: Invalid request parameters
+│   ├── UnauthorizedError       # 401: Invalid or missing API key
+│   ├── PaymentRequiredError    # 402: Billing issues
+│   ├── ForbiddenError          # 403: Permission denied
+│   ├── RateLimitError          # 429: Rate limit exceeded
+│   ├── ServerError             # 500+: Provider server error
+│   │   └── ServiceUnavailableError  # 502/503/529: Overloaded
+│   └── AuthenticationError     # 401/403 (deprecated, use specific classes)
+├── ConfigurationError          # Missing API key or invalid config
+├── NotFoundError               # Model or provider not found
+├── CapabilityError             # Model doesn't support feature (e.g. vision)
+├── ToolError                   # Tool execution failed (has `fatal` property)
+├── ProviderNotConfiguredError  # No provider set
+├── UnsupportedFeatureError     # Provider doesn't support feature
+└── ModelCapabilityError        # Model doesn't support capability
+```
 
-You can catch specific errors to implement custom logic.
+---
 
-```ts
-import { NodeLLM, RateLimitError, CapabilityError } from "@node-llm/core";
+## Basic Error Handling
+
+Catch the base `LLMError` for generic handling:
+
+```typescript
+import { LLMError, ConfigurationError } from "@node-llm/core";
 
 try {
-  await NodeLLM.chat("text-only-model").ask("Analyze", {
-    files: ["image.png"]
-  });
+  const response = await chat.ask("Hello");
 } catch (error) {
-  if (error instanceof CapabilityError) {
-    console.error("This model can't see images. Try gpt-4o.");
-  } else if (error instanceof RateLimitError) {
-    console.warn("Slowing down...");
-    await sleep(5000);
+  if (error instanceof ConfigurationError) {
+    console.error("Check your API key configuration");
+  } else if (error instanceof LLMError) {
+    console.error("AI error:", error.message);
   } else {
-    // Re-throw unknown errors
     throw error;
   }
 }
 ```
 
-## Accessing Response Details
+---
 
-`APIError` instances contain details about the failed request.
+## Handling Specific Errors
 
-```ts
+For granular control, catch specific error classes:
+
+```typescript
+import {
+  UnauthorizedError,
+  PaymentRequiredError,
+  ForbiddenError,
+  RateLimitError,
+  ServerError,
+  CapabilityError
+} from "@node-llm/core";
+
 try {
-  await chat.ask("Create a...");
+  await chat.ask("Analyze this image", { files: ["image.png"] });
 } catch (error) {
-  if (error instanceof APIError) {
-    console.log(`Status: ${error.status}`); // e.g. 500
-    console.log(`Provider: ${error.provider}`); // e.g. "openai"
-    console.log(`Raw Body:`, error.body); // { error: { message: "..." } }
+  if (error instanceof UnauthorizedError) {
+    console.error("Invalid API key. Check your configuration.");
+  } else if (error instanceof PaymentRequiredError) {
+    console.error("Billing issue. Check your provider account.");
+  } else if (error instanceof ForbiddenError) {
+    console.error("Permission denied. Check API key scopes.");
+  } else if (error instanceof RateLimitError) {
+    console.warn("Rate limited. Waiting before retry...");
+    await sleep(5000);
+  } else if (error instanceof CapabilityError) {
+    console.error("This model doesn't support images. Try gpt-4o.");
+  } else if (error instanceof ServerError) {
+    console.error("Provider is having issues. Try again later.");
+  } else {
+    throw error;
   }
 }
 ```
 
+---
+
+## Accessing Response Details
+
+`APIError` instances contain details about the failed request:
+
+```typescript
+import { APIError } from "@node-llm/core";
+
+try {
+  await chat.ask("Something that fails");
+} catch (error) {
+  if (error instanceof APIError) {
+    console.log(`Status: ${error.status}`);       // e.g. 429
+    console.log(`Provider: ${error.provider}`);   // e.g. "openai"
+    console.log(`Model: ${error.model}`);         // e.g. "gpt-4o"
+    console.log(`Body:`, error.body);             // Raw error response
+  }
+}
+```
+
+---
+
+## Error Handling During Streaming
+
+When streaming, errors can occur after some chunks have been received. NodeLLM will throw after the stream ends or is interrupted:
+
+```typescript
+let accumulated = "";
+
+try {
+  for await (const chunk of chat.stream("Tell me a long story")) {
+    accumulated += chunk.content || "";
+    process.stdout.write(chunk.content || "");
+  }
+} catch (error) {
+  console.error("\nStream failed:", error.message);
+  console.log("Partial content received:", accumulated);
+}
+```
+
+Your loop will process chunks received before the error. Always handle partial content when streaming.
+
+---
+
+## Handling Errors Within Tools
+
+When building tools, decide how errors should surface:
+
+### Return Error to LLM (Recoverable)
+
+If the LLM might fix the issue (e.g., bad parameters), return an error object:
+
+```typescript
+class WeatherTool extends Tool {
+  async execute({ location }) {
+    if (!location) {
+      return { error: "Location is required. Please provide a city name." };
+    }
+    // ... call API
+  }
+}
+```
+
+### Throw Error (Fatal)
+
+If the error is unrecoverable, throw it to stop the agent loop:
+
+```typescript
+import { ToolError } from "@node-llm/core";
+
+class DatabaseTool extends Tool {
+  async execute({ query }) {
+    if (query.includes("DROP")) {
+      throw new ToolError("Dangerous query blocked", "database", { fatal: true });
+    }
+    // ...
+  }
+}
+```
+
+See [Tool Error Handling](../core-features/tools.html#error-handling--flow-control-) for more patterns.
+
+---
+
 ## Automatic Retries
 
-`NodeLLM` automatically retries transient errors (Rate Limits, 5xx Server Errors) using an exponential backoff strategy. You can configure this globally.
+NodeLLM automatically retries transient errors:
 
-```ts
+- **Retried**: RateLimitError (429), ServerError (500+), ServiceUnavailableError
+- **Not retried**: BadRequestError (400), UnauthorizedError (401), ForbiddenError (403)
+
+Configure retry behavior:
+
+```typescript
 const llm = createLLM({
   provider: "openai",
-  retry: {
-    attempts: 3, // Max retries (default: 3)
-    delayMs: 1000, // Initial delay (default: 1000ms)
-    multiplier: 2 // Exponential factor
-  }
+  maxRetries: 3  // Default: 3
 });
 ```
 
-The library will **not** retry non-transient errors like `BadRequestError` (400) or `AuthenticationError` (401).
+---
 
-## Tool Loop Flow Control 🔄 <span style="background-color: #0d9488; color: white; padding: 1px 6px; border-radius: 3px; font-size: 0.65em; font-weight: 600; vertical-align: middle;">v1.5.1+</span>
+## Debugging
 
-When a tool fails inside a `Chat.ask()` or `Chat.stream()` loop, `NodeLLM` uses a strategy to stop infinite recursion.
+Enable debug logging to see detailed request/response information:
 
-### Automatic Logic
-
-The agent loop will **short-circuit and crash** immediately if:
-
-1.  An `AuthenticationError` (401/403) occurs.
-2.  A `ToolError` is thrown with `fatal: true`.
-
-### Manual Control
-
-You can override this behavior using the `onToolCallError` hook in `ChatOptions`:
-
-```ts
-const chat = llm.chat("gpt-4o", {
-  onToolCallError: (toolCall, error) => {
-    if (isCritical(toolCall)) return "STOP"; // Crash immediately
-    if (isOptional(toolCall)) return "CONTINUE"; // Swallow error and proceed
-    // return void to let NodeLLM decide
-  }
-});
+```bash
+export NODELLM_DEBUG=true
 ```
 
-See the [Tool Calling documentation](../core-features/tools.html#error-handling--flow-control-) for more examples.
+This logs API calls, headers, and responses (with sensitive data filtered).
+
+---
+
+## Best Practices
+
+1. **Be Specific**: Catch specific error classes for tailored recovery logic.
+
+2. **Log Context**: Include model, provider, and (safe) input data in logs.
+
+3. **User Feedback**: Show friendly messages, not raw API errors.
+
+4. **Fallbacks**: Consider trying a different model or returning cached data.
+
+5. **Monitor**: Track error frequency in production to identify patterns.
+
+---
+
+## Next Steps
+
+- [Tool Calling](../core-features/tools.html) — Build tools with proper error handling
+- [Streaming](../core-features/streaming.html) — Handle streaming responses
+- [Security](security.html) — Protect your application with rate limits and guards
