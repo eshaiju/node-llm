@@ -29,7 +29,7 @@ npm install @node-llm/core
 
 {: .highlight }
 
-> **Looking for a real-world example?** Check out the [Brand Perception Checker](../../examples/applications/brand-perception-checker/), which uses the `SerpTool` to perform live Google searches and "read" the results to extract semantic signals.
+> **Looking for a real-world example?** Check out the [Brand Perception Checker](https://github.com/node-llm/node-llm/tree/main/examples/applications/brand-perception-checker), which uses the `SerpTool` to perform live Google searches and "read" the results to extract semantic signals.
 
 ---
 

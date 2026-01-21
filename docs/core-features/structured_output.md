@@ -26,7 +26,7 @@ This feature abstracts the provider-specific implementations (like OpenAI's `jso
 
 {: .highlight }
 
-> **See it in action:** The [Brand Perception Checker](../../examples/applications/brand-perception-checker/) demonstrates utilizing rigorous Zod schemas to extract consistent semantic profiles across multiple providers simultaneously.
+> **See it in action:** The [Brand Perception Checker](https://github.com/node-llm/node-llm/tree/main/examples/applications/brand-perception-checker) demonstrates utilizing rigorous Zod schemas to extract consistent semantic profiles across multiple providers simultaneously.
 
 ---
 

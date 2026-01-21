@@ -61,4 +61,4 @@ const [score1, score2, score3] = await Promise.all([
 
 ## Example
 
-Check out `examples/parallel-scoring-clean.mjs` for a working demonstration.
+Check out the [Parallel Scoring Example](https://github.com/node-llm/node-llm/blob/main/examples/scripts/openai/core/parallel-scoring.mjs) for a working demonstration.
