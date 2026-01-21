@@ -219,6 +219,10 @@ PricingRegistry.register("my-custom-service", "my-model-v1", {
 
 For more details on managing costs, see the [Model Pricing](./pricing.md) guide.
 
+## Deep Dive
+
+- [Building a Custom Provider for Cohere on Oracle Cloud](https://eshaiju.com/blog/custom-nodellm-provider-oracle) — A real-world example of extending NodeLLM for proprietary cloud gateways.
+
 ## Example Implementation
 
 See the [Custom Provider Example](https://github.com/node-llm/node-llm/blob/main/examples/scripts/core/custom-provider.mjs) in the repository for a complete working implementation including error handling, streaming, and extra field support.

@@ -34,3 +34,5 @@ export {
   DEFAULT_OLLAMA_BASE_URL,
   DEFAULT_MODELS
 } from "./constants.js";
+
+export { fetchWithTimeout } from "./utils/fetch.js";
