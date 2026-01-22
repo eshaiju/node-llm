@@ -46,7 +46,15 @@ When calling `chat.ask("What is the capital of France?")`, the ORM adapter:
 
 ### 1. Schema Configuration
 
-Copy the reference models into your `prisma/schema.prisma` file. You can customize the model names (e.g., using `AssistantChat` instead of `LlmChat`) using the [Custom Table Names](#custom-table-names) option.
+The fastest way to get started is to use the **NodeLLM ORM CLI**. Run this command in your project root to generate the required Prisma schema:
+
+```bash
+npx @node-llm/orm init
+```
+
+This will create a `prisma/schema.prisma` file (or provide instructions if one already exists) populated with the standard models.
+
+Alternatively, you can manually copy the reference models below. You can customize the model names (e.g., using `AssistantChat` instead of `LlmChat`) using the [Custom Table Names](#custom-table-names) option.
 
 ```prisma
 model LlmChat {

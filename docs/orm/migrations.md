@@ -10,10 +10,23 @@ This guide explains how to manage schema updates professionally, translating Rai
 
 NodeLLM's ORM schema will evolve over time (e.g., adding "Extended Thinking" support). To update your application without losing user chat history, follow this workflow.
 
-### 1. Update the Schema
+### 1. Detect Changes (CLI)
+
+The easiest way to check if your existing database is missing columns for new NodeLLM features is to use the **ORM CLI Sync**:
+
+```bash
+npx @node-llm/orm sync
+```
+
+**What this does:**
+- Scans your `prisma/schema.prisma`.
+- Identifies missing fields (like `thinkingText` or `thoughtSignature`).
+- Provides guidance on the specific columns to add.
+
+### 2. Update the Schema manually
 Modify your `prisma/schema.prisma` with the new fields or models (or copy the latest version from `@node-llm/orm/schema.prisma`).
 
-### 2. Generate a Migration
+### 3. Generate a Migration
 Instead of pushing directly to the DB, generate a versioned migration file:
 
 ```bash
