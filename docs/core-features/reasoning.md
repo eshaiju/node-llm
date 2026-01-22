@@ -12,6 +12,9 @@ description: Access the inner thoughts and chain-of-thought process of advanced 
 {{ page.description }}
 {: .fs-6 .fw-300 }
 
+**Added in v1.7.0**
+{: .label .label-green }
+
 ## Table of contents
 {: .no_toc .text-delta }
 

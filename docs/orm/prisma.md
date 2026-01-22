@@ -12,6 +12,9 @@ permalink: /orm/prisma
 NodeLLM + Prisma made simple. Persist chats, messages, and tool calls automatically.
 {: .fs-6 .fw-300 }
 
+**Added in v0.2.0**
+{: .label .label-green }
+
 1. TOC
 {:toc}
 

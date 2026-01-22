@@ -93,6 +93,9 @@ await chat.ask("Solve this puzzle");
 ### 2. Direct Configuration Object (Stateless)
 Ideal for integrations that pass configuration dynamically or from a centralized settings object.
 
+**Enhanced in v1.7.0**
+{: .label .label-green }
+
 ```ts
 // All options can be passed together at initialization
 const chat = NodeLLM.chat("gpt-4o", {

@@ -4,6 +4,9 @@ Maintaining a production-grade database requires moving away from `npx prisma db
 
 This guide explains how to manage schema updates professionally, translating Rails-style migration discipline into the Node.js / Prisma ecosystem.
 
+**Added in v0.2.0**
+{: .label .label-green }
+
 ---
 
 ## The Migration Workflow
