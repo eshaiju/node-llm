@@ -2362,16 +2362,16 @@ export const modelsData = [
     "pricing": {
       "text_tokens": {
         "standard": {
-          "input_per_million": 0.1,
-          "output_per_million": 0.4,
+          "input_per_million": 0.15,
+          "output_per_million": 0.6,
           "cached_input_per_million": 0.025,
-          "reasoning_output_per_million": 0.4
+          "reasoning_output_per_million": 0.6
         }
       }
     },
     "metadata": {
       "source": "models.dev",
-      "input": 0.1,
+      "input": 0.15,
       "output": 8192,
       "cache_read": 0.025,
       "context": 1048576
@@ -5504,16 +5504,16 @@ export const modelsData = [
         "standard": {
           "input_per_million": 1.25,
           "output_per_million": 10,
-          "cached_input_per_million": 0.13,
+          "cached_input_per_million": 0.125,
           "reasoning_output_per_million": 10
         }
       }
     },
     "metadata": {
       "source": "models.dev",
-      "input": 1.25,
+      "input": 272000,
       "output": 128000,
-      "cache_read": 0.13,
+      "cache_read": 0.125,
       "context": 400000
     }
   },
@@ -5552,7 +5552,7 @@ export const modelsData = [
     },
     "metadata": {
       "source": "models.dev",
-      "input": 1.25,
+      "input": 272000,
       "output": 128000,
       "context": 400000
     }
@@ -5597,7 +5597,7 @@ export const modelsData = [
     },
     "metadata": {
       "source": "models.dev",
-      "input": 1.25,
+      "input": 272000,
       "output": 128000,
       "cache_read": 0.125,
       "context": 400000
@@ -5636,16 +5636,16 @@ export const modelsData = [
         "standard": {
           "input_per_million": 0.25,
           "output_per_million": 2,
-          "cached_input_per_million": 0.03,
+          "cached_input_per_million": 0.025,
           "reasoning_output_per_million": 2
         }
       }
     },
     "metadata": {
       "source": "models.dev",
-      "input": 0.25,
+      "input": 272000,
       "output": 128000,
-      "cache_read": 0.03,
+      "cache_read": 0.025,
       "context": 400000
     }
   },
@@ -5682,16 +5682,16 @@ export const modelsData = [
         "standard": {
           "input_per_million": 0.05,
           "output_per_million": 0.4,
-          "cached_input_per_million": 0.01,
+          "cached_input_per_million": 0.005,
           "reasoning_output_per_million": 0.4
         }
       }
     },
     "metadata": {
       "source": "models.dev",
-      "input": 0.05,
+      "input": 272000,
       "output": 128000,
-      "cache_read": 0.01,
+      "cache_read": 0.005,
       "context": 400000
     }
   },
@@ -5734,7 +5734,7 @@ export const modelsData = [
     },
     "metadata": {
       "source": "models.dev",
-      "input": 15,
+      "input": 272000,
       "output": 272000,
       "context": 400000
     }
@@ -5779,7 +5779,7 @@ export const modelsData = [
     },
     "metadata": {
       "source": "models.dev",
-      "input": 1.25,
+      "input": 272000,
       "output": 128000,
       "cache_read": 0.13,
       "context": 400000
@@ -6009,7 +6009,7 @@ export const modelsData = [
     },
     "metadata": {
       "source": "models.dev",
-      "input": 1.75,
+      "input": 272000,
       "output": 128000,
       "cache_read": 0.175,
       "context": 400000
@@ -6073,7 +6073,8 @@ export const modelsData = [
     "modalities": {
       "input": [
         "text",
-        "image"
+        "image",
+        "pdf"
       ],
       "output": [
         "text"
@@ -6146,7 +6147,7 @@ export const modelsData = [
     },
     "metadata": {
       "source": "models.dev",
-      "input": 21,
+      "input": 272000,
       "output": 128000,
       "context": 400000
     }
@@ -8550,6 +8551,52 @@ export const modelsData = [
       "input": 1.25,
       "output": 128000,
       "cache_read": 0.125,
+      "context": 400000
+    }
+  },
+  {
+    "id": "openai/gpt-5.1-codex-max",
+    "name": "GPT-5.1-Codex-Max",
+    "provider": "openrouter",
+    "family": "gpt-codex",
+    "created_at": "2025-11-13 00:00:00 UTC",
+    "context_window": 400000,
+    "max_output_tokens": 128000,
+    "knowledge_cutoff": "2024-09-30",
+    "modalities": {
+      "input": [
+        "text",
+        "image"
+      ],
+      "output": [
+        "text"
+      ]
+    },
+    "capabilities": [
+      "streaming",
+      "reasoning",
+      "chat",
+      "vision",
+      "function_calling",
+      "tools",
+      "structured_output",
+      "json_mode"
+    ],
+    "pricing": {
+      "text_tokens": {
+        "standard": {
+          "input_per_million": 1.1,
+          "output_per_million": 9,
+          "cached_input_per_million": 0.11,
+          "reasoning_output_per_million": 9
+        }
+      }
+    },
+    "metadata": {
+      "source": "models.dev",
+      "input": 1.1,
+      "output": 128000,
+      "cache_read": 0.11,
       "context": 400000
     }
   },
@@ -11043,6 +11090,48 @@ export const modelsData = [
       "input": 0.6,
       "output": 131072,
       "cache_read": 0.11,
+      "context": 204800
+    }
+  },
+  {
+    "id": "zai-org/glm-4.7-maas",
+    "name": "GLM-4.7",
+    "provider": "gemini",
+    "family": "glm",
+    "created_at": "2025-12-22 00:00:00 UTC",
+    "context_window": 204800,
+    "max_output_tokens": 131072,
+    "knowledge_cutoff": "2025-04",
+    "modalities": {
+      "input": [
+        "text"
+      ],
+      "output": [
+        "text"
+      ]
+    },
+    "capabilities": [
+      "streaming",
+      "reasoning",
+      "chat",
+      "function_calling",
+      "tools",
+      "structured_output",
+      "json_mode"
+    ],
+    "pricing": {
+      "text_tokens": {
+        "standard": {
+          "input_per_million": 0.6,
+          "output_per_million": 2.2,
+          "reasoning_output_per_million": 2.2
+        }
+      }
+    },
+    "metadata": {
+      "source": "models.dev",
+      "input": 0.6,
+      "output": 131072,
       "context": 204800
     }
   }

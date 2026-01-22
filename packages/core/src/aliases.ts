@@ -279,6 +279,7 @@ export default {
     "openrouter": "z-ai/glm-4.6:exacto"
   },
   "glm-4.7": {
+    "gemini": "zai-org/glm-4.7-maas",
     "openrouter": "z-ai/glm-4.7"
   },
   "glm-z1-32b-free": {
@@ -361,7 +362,8 @@ export default {
     "openrouter": "openai/gpt-5.1-codex"
   },
   "gpt-5.1-codex-max": {
-    "openai": "gpt-5.1-codex-max"
+    "openai": "gpt-5.1-codex-max",
+    "openrouter": "openai/gpt-5.1-codex-max"
   },
   "gpt-5.1-codex-mini": {
     "openai": "gpt-5.1-codex-mini",
