@@ -45,28 +45,28 @@ async function main() {
 
   // Example 1: Single tool
   console.log("=== Example 1: Single Tool ===");
-  const chat1 = llm.chat("anthropic.claude-3-5-haiku-20241022-v1:0").withTool(WeatherTool);
+  const chat1 = llm.chat("amazon.nova-lite-v1:0").withTool(WeatherTool);
   const response1 = await chat1.ask("What's the weather in Paris?");
   console.log("\nFinal Answer:", response1.content);
   console.log("\n");
 
   // Example 2: Multiple tools
   console.log("=== Example 2: Multiple Tools ===");
-  const chat2 = llm.chat("anthropic.claude-3-5-haiku-20241022-v1:0").withTools([WeatherTool, TimeTool]);
+  const chat2 = llm.chat("amazon.nova-lite-v1:0").withTools([WeatherTool, TimeTool]);
   const response2 = await chat2.ask("What's the weather and current time in Tokyo?");
   console.log("\nFinal Answer:", response2.content);
   console.log("\n");
 
   // Example 3: Tool with different parameters
   console.log("=== Example 3: Tool with Unit Parameter ===");
-  const chat3 = llm.chat("anthropic.claude-3-5-haiku-20241022-v1:0").withTool(WeatherTool);
+  const chat3 = llm.chat("amazon.nova-lite-v1:0").withTool(WeatherTool);
   const response3 = await chat3.ask("What's the weather in New York in Fahrenheit?");
   console.log("\nFinal Answer:", response3.content);
   console.log("\n");
 
   // Example 4: Sequential Tool Calls
   console.log("=== Example 4: Sequential Tool Calls ===");
-  const chat4 = llm.chat("anthropic.claude-3-5-haiku-20241022-v1:0").withTools([WeatherTool, TimeTool]);
+  const chat4 = llm.chat("amazon.nova-lite-v1:0").withTools([WeatherTool, TimeTool]);
   const response4 = await chat4.ask(
     "Compare the weather in London and Berlin, and tell me the time in both cities."
   );
@@ -75,7 +75,7 @@ async function main() {
 
   // Example 5: Tool with conversation context
   console.log("=== Example 5: Tool with Conversation Context ===");
-  const chat5 = llm.chat("anthropic.claude-3-5-haiku-20241022-v1:0").withTool(WeatherTool);
+  const chat5 = llm.chat("amazon.nova-lite-v1:0").withTool(WeatherTool);
 
   await chat5.ask("I'm planning a trip to Rome.");
   const response5 = await chat5.ask("What's the weather like there?");

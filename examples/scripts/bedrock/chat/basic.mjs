@@ -6,7 +6,7 @@ async function main() {
   // Make sure these are set in your .env file
 
   const llm = NodeLLM.withProvider("bedrock");
-  const chat = llm.chat("anthropic.claude-3-5-haiku-20241022-v1:0");
+  const chat = llm.chat("amazon.nova-lite-v1:0"); // Or use the "nova-lite" alias
   console.log(`Using model: ${chat.modelId}`);
 
   // 1. Standard Request

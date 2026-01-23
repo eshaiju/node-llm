@@ -66,8 +66,23 @@ export function convertMessages(messages: Message[]): {
 } {
   const systemBlocks: BedrockContentBlock[] = [];
   const bedrockMessages: BedrockMessage[] = [];
+  let currentToolResults: BedrockContentBlock[] = [];
+
+  const flushToolResults = () => {
+    if (currentToolResults.length > 0) {
+      bedrockMessages.push({
+        role: "user",
+        content: currentToolResults
+      });
+      currentToolResults = [];
+    }
+  };
 
   for (const msg of messages) {
+    if (msg.role !== "tool") {
+      flushToolResults();
+    }
+
     // System messages go to the top-level system field
     if (msg.role === "system") {
       const content = typeof msg.content === "string" ? msg.content : "";
@@ -110,21 +125,17 @@ export function convertMessages(messages: Message[]): {
 
     // Tool result messages
     if (msg.role === "tool") {
-      // Tool results are sent as user messages with toolResult content
-      bedrockMessages.push({
-        role: "user",
-        content: [
-          {
-            toolResult: {
-              toolUseId: msg.tool_call_id || "",
-              content: [{ text: typeof msg.content === "string" ? msg.content : "" }],
-              status: msg.isError ? "error" : "success"
-            }
-          }
-        ]
+      currentToolResults.push({
+        toolResult: {
+          toolUseId: msg.tool_call_id || "",
+          content: [{ text: typeof msg.content === "string" ? msg.content : "" }],
+          status: msg.isError ? "error" : "success"
+        }
       });
     }
   }
+
+  flushToolResults();
 
   return {
     messages: bedrockMessages,

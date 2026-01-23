@@ -48,6 +48,14 @@ echo "Running tools example..."
 node chat/tools.mjs
 echo ""
 
+echo "Running streaming example..."
+node chat/streaming.mjs
+echo ""
+
+echo "Running Nova specific tests..."
+node chat/nova.mjs
+echo ""
+
 echo "================================"
 echo "All Bedrock examples completed!"
 echo "================================"

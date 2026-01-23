@@ -28,6 +28,9 @@ export function setupVCR(recordingName: string, subDir?: string) {
     if (!process.env.DEEPSEEK_API_KEY) process.env.DEEPSEEK_API_KEY = "dummy-key-for-vcr-replay";
     if (!process.env.OPENROUTER_API_KEY)
       process.env.OPENROUTER_API_KEY = "dummy-key-for-vcr-replay";
+    if (!process.env.AWS_ACCESS_KEY_ID) process.env.AWS_ACCESS_KEY_ID = "AKIA-DUMMY-KEY";
+    if (!process.env.AWS_SECRET_ACCESS_KEY) process.env.AWS_SECRET_ACCESS_KEY = "dummy-secret-key";
+    if (!process.env.AWS_REGION) process.env.AWS_REGION = "us-east-1";
   }
 
   const polly = new Polly(recordingName, {

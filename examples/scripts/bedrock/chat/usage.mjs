@@ -3,7 +3,7 @@ import { createLLM } from "../../../../packages/core/dist/index.js";
 
 async function main() {
   const llm = createLLM({ provider: "bedrock" });
-  const chat = llm.chat("anthropic.claude-3-5-haiku-20241022-v1:0");
+  const chat = llm.chat("amazon.nova-lite-v1:0");
 
   console.log("=== Token Usage Example ===\n");
 
@@ -16,10 +16,10 @@ async function main() {
   console.log(`Output tokens: ${response.usage?.output_tokens}`);
   console.log(`Total tokens: ${response.usage?.total_tokens}`);
 
-  // Calculate approximate cost (Claude 3.5 Haiku pricing)
-  const inputCost = (response.usage?.input_tokens || 0) * (0.8 / 1_000_000);
-  const outputCost = (response.usage?.output_tokens || 0) * (4.0 / 1_000_000);
-  console.log(`\n--- Approximate Cost (Claude 3.5 Haiku) ---`);
+  // Calculate approximate cost (Nova Lite pricing: $0.06/$0.24 per 1M)
+  const inputCost = (response.usage?.input_tokens || 0) * (0.06 / 1_000_000);
+  const outputCost = (response.usage?.output_tokens || 0) * (0.24 / 1_000_000);
+  console.log(`\n--- Approximate Cost (Nova Lite) ---`);
   console.log(`Input cost: $${inputCost.toFixed(6)}`);
   console.log(`Output cost: $${outputCost.toFixed(6)}`);
   console.log(`Total cost: $${(inputCost + outputCost).toFixed(6)}`);

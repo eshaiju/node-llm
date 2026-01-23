@@ -9,7 +9,7 @@ async function main() {
   // Example 1: Simple system prompt
   console.log("--- Example 1: Simple System Prompt ---");
   const chat1 = llm
-    .chat("anthropic.claude-3-5-haiku-20241022-v1:0")
+    .chat("amazon.nova-lite-v1:0")
     .withSystemPrompt("You are a helpful pirate assistant. Always respond in pirate speak.");
 
   const response1 = await chat1.ask("What's the weather like today?");
@@ -19,7 +19,7 @@ async function main() {
   // Example 2: Technical assistant
   console.log("--- Example 2: Technical Assistant ---");
   const chat2 = llm
-    .chat("anthropic.claude-3-5-haiku-20241022-v1:0")
+    .chat("amazon.nova-lite-v1:0")
     .withSystemPrompt(
       "You are a senior software engineer specializing in Node.js and TypeScript. " +
         "Provide concise, technically accurate answers with code examples when relevant."
@@ -32,7 +32,7 @@ async function main() {
   // Example 3: Constrained output
   console.log("--- Example 3: Constrained Output ---");
   const chat3 = llm
-    .chat("anthropic.claude-3-5-haiku-20241022-v1:0")
+    .chat("amazon.nova-lite-v1:0")
     .withSystemPrompt(
       "You are a JSON generator. Always respond with valid JSON only. " +
         "Do not include any explanatory text outside the JSON."
