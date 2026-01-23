@@ -38,12 +38,14 @@ import { BaseProvider } from "../BaseProvider.js";
 import { BedrockConfig, getBedrockEndpoint } from "./config.js";
 import { BedrockChat } from "./Chat.js";
 import { BedrockModels } from "./Models.js";
+import { BedrockStreaming } from "./Streaming.js";
 import { Capabilities } from "./Capabilities.js";
 
 export class BedrockProvider extends BaseProvider implements Provider {
   private readonly config: BedrockConfig;
   private readonly chatHandler: BedrockChat;
   private readonly modelsHandler: BedrockModels;
+  private readonly streamingHandler: BedrockStreaming;
 
   public capabilities: ProviderCapabilities = {
     supportsVision: (model: string) => Capabilities.supportsVision(model),
@@ -63,6 +65,7 @@ export class BedrockProvider extends BaseProvider implements Provider {
     this.config = config;
     this.chatHandler = new BedrockChat(config);
     this.modelsHandler = new BedrockModels(config);
+    this.streamingHandler = new BedrockStreaming(config);
   }
 
   public apiBase(): string {
@@ -81,18 +84,16 @@ export class BedrockProvider extends BaseProvider implements Provider {
   }
 
   public override defaultModel(_feature?: string): string {
-    // Claude 3.5 Haiku is a good default - fast and cost-effective
-    return "anthropic.claude-3-5-haiku-20241022-v1:0";
+    // Amazon Nova Lite is available by default and cost-effective
+    return "amazon.nova-lite-v1:0";
   }
 
   async chat(request: ChatRequest): Promise<ChatResponse> {
     return this.chatHandler.execute(request);
   }
 
-  async *stream(_request: ChatRequest): AsyncGenerator<ChatChunk> {
-    // Streaming will be implemented in Feature 3
-    this.throwUnsupportedError("stream (coming soon)");
-    yield* [];
+  async *stream(request: ChatRequest): AsyncGenerator<ChatChunk> {
+    yield* this.streamingHandler.execute(request);
   }
 
   async listModels(): Promise<ModelInfo[]> {
