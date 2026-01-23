@@ -128,3 +128,24 @@ export interface BedrockStreamEvent {
     };
   };
 }
+// ─────────────────────────────────────────────────────────────────────────────
+// Discovery / Management Types
+// ─────────────────────────────────────────────────────────────────────────────
+
+export interface BedrockModelSummary {
+  modelId: string;
+  modelArn: string;
+  modelName?: string;
+  providerName?: string;
+  inputModalities?: string[];
+  outputModalities?: string[];
+  responseStreamingSupported?: boolean;
+  inferenceTypesSupported?: Array<"ON_DEMAND" | "PROVISIONED" | "INFERENCE_PROFILE">;
+  modelLifecycle?: {
+    status: "ACTIVE" | "LEGACY";
+  };
+}
+
+export interface BedrockListModelsResponse {
+  modelSummaries: BedrockModelSummary[];
+}

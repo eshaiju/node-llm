@@ -31,16 +31,19 @@ import {
   ChatRequest,
   ChatResponse,
   ChatChunk,
-  ProviderCapabilities
+  ProviderCapabilities,
+  ModelInfo
 } from "../Provider.js";
 import { BaseProvider } from "../BaseProvider.js";
 import { BedrockConfig, getBedrockEndpoint } from "./config.js";
 import { BedrockChat } from "./Chat.js";
+import { BedrockModels } from "./Models.js";
 import { Capabilities } from "./Capabilities.js";
 
 export class BedrockProvider extends BaseProvider implements Provider {
   private readonly config: BedrockConfig;
   private readonly chatHandler: BedrockChat;
+  private readonly modelsHandler: BedrockModels;
 
   public capabilities: ProviderCapabilities = {
     supportsVision: (model: string) => Capabilities.supportsVision(model),
@@ -59,6 +62,7 @@ export class BedrockProvider extends BaseProvider implements Provider {
     super();
     this.config = config;
     this.chatHandler = new BedrockChat(config);
+    this.modelsHandler = new BedrockModels(config);
   }
 
   public apiBase(): string {
@@ -89,6 +93,10 @@ export class BedrockProvider extends BaseProvider implements Provider {
     // Streaming will be implemented in Feature 3
     this.throwUnsupportedError("stream (coming soon)");
     yield* [];
+  }
+
+  async listModels(): Promise<ModelInfo[]> {
+    return this.modelsHandler.execute();
   }
 }
 

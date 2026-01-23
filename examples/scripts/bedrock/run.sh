@@ -24,6 +24,10 @@ echo "Running basic chat example..."
 node chat/basic.mjs
 echo ""
 
+echo "Running discovery example..."
+node discovery/models.mjs
+echo ""
+
 echo "Running instructions example..."
 node chat/instructions.mjs
 echo ""

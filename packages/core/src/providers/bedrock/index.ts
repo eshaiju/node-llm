@@ -5,6 +5,7 @@
 import { config as globalConfig } from "../../config.js";
 import { providerRegistry } from "../registry.js";
 import { BedrockProvider } from "./BedrockProvider.js";
+import { BedrockConfig } from "./config.js";
 
 export function registerBedrockProvider() {
   providerRegistry.register("bedrock", (config) => {
@@ -15,28 +16,24 @@ export function registerBedrockProvider() {
       throw new Error("bedrockRegion is not set in config or AWS_REGION environment variable");
     }
 
-    // Check for API Key auth first
-    if (cfg.bedrockApiKey) {
-      return new BedrockProvider({
-        region,
-        apiKey: cfg.bedrockApiKey
-      });
+    // Build the config object with all available credentials
+    const bedrockConfig: BedrockConfig = {
+      region,
+      apiKey: cfg.bedrockApiKey,
+      accessKeyId: cfg.bedrockAccessKeyId,
+      secretAccessKey: cfg.bedrockSecretAccessKey,
+      sessionToken: cfg.bedrockSessionToken
+    };
+
+    // Ensure at least one auth method is provided
+    if (!bedrockConfig.apiKey && (!bedrockConfig.accessKeyId || !bedrockConfig.secretAccessKey)) {
+      throw new Error(
+        "Bedrock requires either bedrockApiKey (AWS_BEARER_TOKEN_BEDROCK) or " +
+          "bedrockAccessKeyId/bedrockSecretAccessKey (AWS_ACCESS_KEY_ID/AWS_SECRET_ACCESS_KEY)"
+      );
     }
 
-    // Fall back to SigV4 auth
-    if (cfg.bedrockAccessKeyId && cfg.bedrockSecretAccessKey) {
-      return new BedrockProvider({
-        region,
-        accessKeyId: cfg.bedrockAccessKeyId,
-        secretAccessKey: cfg.bedrockSecretAccessKey,
-        sessionToken: cfg.bedrockSessionToken
-      });
-    }
-
-    throw new Error(
-      "Bedrock requires either bedrockApiKey (AWS_BEARER_TOKEN_BEDROCK) or " +
-        "bedrockAccessKeyId/bedrockSecretAccessKey (AWS_ACCESS_KEY_ID/AWS_SECRET_ACCESS_KEY)"
-    );
+    return new BedrockProvider(bedrockConfig);
   });
 }
 

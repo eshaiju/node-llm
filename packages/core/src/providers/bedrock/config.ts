@@ -62,20 +62,15 @@ export function validateBedrockConfig(config: BedrockConfig): "apiKey" | "sigv4"
     throw new Error("BedrockConfig: region is required");
   }
 
-  const hasApiKey = !!config.apiKey;
-  const hasSigV4 = !!config.accessKeyId && !!config.secretAccessKey;
-
-  if (hasApiKey && hasSigV4) {
-    throw new Error(
-      "BedrockConfig: provide either apiKey OR accessKeyId/secretAccessKey, not both"
-    );
+  if (config.apiKey) {
+    return "apiKey";
   }
 
-  if (!hasApiKey && !hasSigV4) {
-    throw new Error("BedrockConfig: provide either apiKey OR accessKeyId/secretAccessKey");
+  if (config.accessKeyId && config.secretAccessKey) {
+    return "sigv4";
   }
 
-  return hasApiKey ? "apiKey" : "sigv4";
+  throw new Error("BedrockConfig: provide either apiKey OR accessKeyId/secretAccessKey");
 }
 
 /**

@@ -8,12 +8,21 @@ const MODELS_FILE = path.join(ROOT_DIR, "packages/core/src/models/models.ts");
 const ALIASES_FILE = path.join(ROOT_DIR, "packages/core/src/aliases.ts");
 const API_URL = "https://models.dev/api.json";
 
-const SUPPORTED_PROVIDERS = ["openai", "anthropic", "gemini", "deepseek", "openrouter", "ollama"];
+const SUPPORTED_PROVIDERS = [
+  "openai",
+  "anthropic",
+  "gemini",
+  "deepseek",
+  "openrouter",
+  "ollama",
+  "bedrock"
+];
 
 const PROVIDER_MAP = {
   google: "gemini",
   "google-vertex": "gemini",
-  vertexai: "gemini"
+  vertexai: "gemini",
+  "amazon-bedrock": "bedrock"
 };
 
 // High-quality manual overrides for the most common models
@@ -24,15 +33,18 @@ const GOLDEN_ALIASES = {
   "o3-mini": { openai: "o3-mini", openrouter: "openai/o3-mini" },
   "claude-3-5-sonnet": {
     anthropic: "claude-3-5-sonnet-20241022",
-    openrouter: "anthropic/claude-3.5-sonnet"
+    openrouter: "anthropic/claude-3.5-sonnet",
+    bedrock: "anthropic.claude-3-5-sonnet-20241022-v2:0"
   },
   "claude-3-7-sonnet": {
     anthropic: "claude-3-7-sonnet-20250219",
-    openrouter: "anthropic/claude-3.7-sonnet"
+    openrouter: "anthropic/claude-3.7-sonnet",
+    bedrock: "anthropic.claude-3-7-sonnet-20250219-v1:0"
   },
   "claude-3-5-haiku": {
     anthropic: "claude-3-5-haiku-20241022",
-    openrouter: "anthropic/claude-3.5-haiku"
+    openrouter: "anthropic/claude-3.5-haiku",
+    bedrock: "anthropic.claude-3-5-haiku-20241022-v1:0"
   },
   "deepseek-chat": { deepseek: "deepseek-chat", openrouter: "deepseek/deepseek-chat" },
   "deepseek-reasoner": { deepseek: "deepseek-reasoner", openrouter: "deepseek/deepseek-reasoner" },
