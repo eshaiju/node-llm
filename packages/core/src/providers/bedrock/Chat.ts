@@ -74,7 +74,22 @@ export class BedrockChat {
     if (!response.ok) {
       const errorText = await response.text();
       logger.logResponse("Bedrock", response.status, response.statusText, errorText);
-      throw new Error(`Bedrock API error (${response.status}): ${errorText}`);
+
+      let message = errorText;
+
+      // Improve clarity for known AWS errors
+      if (errorText.includes("INVALID_PAYMENT_INSTRUMENT")) {
+        message =
+          "Billing setup incomplete for AWS Marketplace models. Ensure a credit card is set as default payment method.";
+      } else if (
+        errorText.includes("AccessDeniedException") &&
+        errorText.includes("model access")
+      ) {
+        message =
+          "Access denied for this model. Ensure you have requested and been granted access in the AWS Bedrock console (Model Access section).";
+      }
+
+      throw new Error(`Bedrock API error (${response.status}): ${message}`);
     }
 
     const json = (await response.json()) as BedrockConverseResponse;
