@@ -73,10 +73,10 @@ export async function sendMessageStream(
           encoder.encode(JSON.stringify({ type: "chatId", chatId: chat.id }) + "\n")
         );
 
-        // Stream tokens
-        for await (const token of chat.withTool(searchDocumentsTool).askStream(message)) {
+        // Stream tokens and thinking
+        for await (const chunk of chat.withTool(searchDocumentsTool).askStream(message)) {
           controller.enqueue(
-            encoder.encode(JSON.stringify({ type: "token", content: token }) + "\n")
+            encoder.encode(JSON.stringify({ type: "chunk", chunk }) + "\n")
           );
         }
 

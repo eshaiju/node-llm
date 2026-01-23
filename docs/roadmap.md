@@ -10,30 +10,30 @@ NodeLLM is evolving to support more complex AI-native Node.js applications.
 
 ---
 
-## 🚀 Near-Term Priorities
+### ✅ RECENTLY RELEASED
+{: .no_toc }
 
-### 💾 Managed State & Persistence
+- **[Extended Thinking](/core-features/reasoning)**: Unified interface for Claude 3.7, DeepSeek R1, and OpenAI o1/o3.
+- **[Professional ORM Support](/orm/prisma)**: Database persistence for Prisma with automated history management and professional migration workflows.
+- **Context Isolation 2.0**: Strict separation of system instructions and conversation turns for enterprise-grade safety.
 
-**Seamless Long-Term Memory.**
+---
 
-We are exploring "Persistence Adapters" for standard Node.js ORMs (Prisma, Drizzle). Instead of complex class inheritance, we provide modular adapters that automatically sync conversion state to your database.
+## 🚀 Future Priorities
 
-```ts
-// Concept: Persistence Adapters
-import { PrismaAdapter } from "@node-llm/prisma";
+### 🧠 High-Level Orchestration
+**Managed Chain-of-Thought Patterns.**
 
-// Bind the LLM directly to a database record
-const chat = NodeLLM.chat("gpt-4o", {
-  persistence: new PrismaAdapter(prisma.chat, { id: "chat_123" })
-});
+Beyond simple chat loops, we are building structured orchestration patterns for complex multi-step reasoning:
+- **Planner/Executor Loops**: Automated sub-task decomposition.
+- **Self-Correction Patterns**: Native support for LLM-based output validation and retry loops.
 
-// Automatically fetches history -> Calls API -> Saves response
-await chat.ask("Continue where we left off");
-```
+### 🧪 Evaluation Framework
+**Integration Testing for AI.**
 
-- **Schema-Driven**: Define your chat schema in Prisma/Drizzle, we handle the sync.
-- **Zero-State**: Your Node.js process stays stateless; history lives in Postgres/MySQL.
-- **Goal**: Drop-in persistence for any Node.js backend.
+Measuring the quality of non-deterministic LLM outputs is hard. We are exploring a lightweight evaluation toolkit to help developers:
+- **Snapshot Testing**: Lock down expected behaviors.
+- **Prompt Regression Detection**: Ensure new model versions don't break your specialized instructions.
 
 ### 📂 Expanded Example Library
 

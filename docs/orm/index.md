@@ -33,9 +33,10 @@ npm install @node-llm/orm @node-llm/core @prisma/client
 
 The ORM is designed to be an **infrastructure-first** layer, much like the core package. It doesn't just store text; it captures the entire execution lifecycle, including:
 
-- **Token Consumption**: Track input/output tokens per message and per request.
+- **Token Consumption**: Track input/output/thinking tokens per message and per request.
+- **Reasoning & Thinking Process**: Capture internal chain-of-thought text and cryptographic signatures for modern reasoning models.
 - **Tool Audit Trail**: Record every tool call, its parameters, thought process, and result.
-- **Provider attribution**: Know exactly which model and provider served which message.
+- **Provider status**: Know exactly which model and provider served which message.
 - **Request Metadata**: Log latency, status codes, and cost for every API interaction.
 
 [Explore the Prisma Adapter](/orm/prisma.html){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }

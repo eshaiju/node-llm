@@ -25,17 +25,20 @@ model AssistantChat {
 }
 
 model AssistantMessage {
-  id           String              @id @default(uuid())
-  chatId       String
-  role         String             // user, assistant, system, tool
-  content      String?
-  contentRaw   String?            // JSON raw payload
-  reasoning    String?            // Chain of thought
-  inputTokens  Int?
-  outputTokens Int?
-  modelId      String?
-  provider     String?
-  createdAt    DateTime            @default(now())
+  id                String              @id @default(uuid())
+  chatId            String
+  role              String             // user, assistant, system, tool
+  content           String?
+  contentRaw        String?            // JSON raw payload
+  reasoning         String?            // Chain of thought (deprecated)
+  thinkingText      String?            // Extended thinking text
+  thinkingSignature String?            // Cryptographic signature
+  thinkingTokens    Int?               // Tokens spent on thinking
+  inputTokens       Int?
+  outputTokens      Int?
+  modelId           String?
+  provider          String?
+  createdAt         DateTime            @default(now())
 
   chat         AssistantChat       @relation(fields: [chatId], references: [id], onDelete: Cascade)
   toolCalls    AssistantToolCall[]
@@ -43,14 +46,15 @@ model AssistantMessage {
 }
 
 model AssistantToolCall {
-  id           String           @id @default(uuid())
-  messageId    String
-  toolCallId   String           // ID from the provider
-  name         String
-  arguments    String           // JSON string
-  thought      String?          // The LLM's reasoning for this tool call
-  result       String?          // Tool execution result
-  createdAt    DateTime         @default(now())
+  id               String           @id @default(uuid())
+  messageId        String
+  toolCallId       String           // ID from the provider
+  name             String
+  arguments        String           // JSON string
+  thought          String?          // The LLM's reasoning for this tool call
+  thoughtSignature String?          // Cryptographic signature
+  result           String?          // Tool execution result
+  createdAt        DateTime         @default(now())
 
   message      AssistantMessage @relation(fields: [messageId], references: [id], onDelete: Cascade)
 

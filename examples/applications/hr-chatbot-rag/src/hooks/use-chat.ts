@@ -5,6 +5,7 @@ export type Message = {
   id: string;
   role: "user" | "assistant" | "system";
   content: string | null;
+  thinking?: string;
 };
 
 export function useChat() {
@@ -32,9 +33,10 @@ export function useChat() {
         id: result.message.id,
         role: "assistant",
         content: result.message.content ?? null,
+        thinking: result.message.thinkingText ?? undefined
       };
 
-      setMessages((prev) => [...prev, assistantMessage]);
+      setMessages((prev: Message[]) => [...prev, assistantMessage]);
     } catch (err) {
       console.error("Failed to send message:", err);
     } finally {
@@ -51,7 +53,7 @@ export function useChat() {
       content,
     };
 
-    setMessages((prev) => [...prev, userMessage]);
+    setMessages((prev: Message[]) => [...prev, userMessage]);
     setIsLoading(true);
 
     // Create placeholder for assistant message
@@ -60,9 +62,10 @@ export function useChat() {
       id: assistantId,
       role: "assistant",
       content: "",
+      thinking: "",
     };
 
-    setMessages((prev) => [...prev, assistantMessage]);
+    setMessages((prev: Message[]) => [...prev, assistantMessage]);
 
     try {
       const stream = await sendMessageStream(chatId, content);
@@ -74,8 +77,8 @@ export function useChat() {
         const { done, value } = await reader.read();
         if (done) break;
 
-        const chunk = decoder.decode(value, { stream: true });
-        const lines = chunk.split("\n").filter((line) => line.trim());
+        const chunkText = decoder.decode(value, { stream: true });
+        const lines = chunkText.split("\n").filter((line) => line.trim());
 
         for (const line of lines) {
           try {
@@ -83,17 +86,23 @@ export function useChat() {
 
             if (data.type === "chatId") {
               setChatId(data.chatId);
-            } else if (data.type === "token") {
+            } else if (data.type === "chunk" || data.type === "token") {
               // Hide loader as soon as first token arrives
               if (!firstTokenReceived) {
                 setIsLoading(false);
                 firstTokenReceived = true;
               }
               
-              setMessages((prev) =>
-                prev.map((msg) =>
+              const chunk = data.chunk || { content: data.content };
+              
+              setMessages((prev: Message[]) =>
+                prev.map((msg: Message) =>
                   msg.id === assistantId
-                    ? { ...msg, content: (msg.content || "") + data.content }
+                    ? { 
+                        ...msg, 
+                        content: (msg.content || "") + (chunk.content || ""),
+                        thinking: (msg.thinking || "") + (chunk.thinking?.text || "")
+                      }
                     : msg
                 )
               );

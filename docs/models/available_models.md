@@ -26,7 +26,7 @@ _Model information enriched by [models.dev](https://models.dev)._
 ## Last Updated
 {: .d-inline-block }
 
-2026-01-16
+2026-01-22
 {: .label .label-green }
 
 ---
@@ -104,12 +104,12 @@ _Model information enriched by [models.dev](https://models.dev)._
 | `claude-sonnet-4-5` | 200k | 64k | In: $3.00, Out: $15.00, Cache: $0.30 |
 | `claude-sonnet-4-5-20250929` | 200k | 64k | In: $3.00, Out: $15.00, Cache: $0.30 |
 
-### Gemini (45)
+### Gemini (46)
 
 | Model | Context | Max Output | Pricing (per 1M tokens) |
 | :--- | ---: | ---: | :--- |
 | `gemini-2.0-flash` | 1.0M | 8.192k | In: $0.10, Out: $0.40, Cache: $0.03 |
-| `gemini-2.0-flash` | 1.0M | 8.192k | In: $0.10, Out: $0.40, Cache: $0.03 |
+| `gemini-2.0-flash` | 1.0M | 8.192k | In: $0.15, Out: $0.60, Cache: $0.03 |
 | `gemini-2.0-flash-lite` | 1.0M | 8.192k | In: $0.07, Out: $0.30 |
 | `gemini-2.0-flash-lite` | 1.0M | 8.192k | In: $0.07, Out: $0.30 |
 | `gemini-2.5-flash` | 1.0M | 65.536k | In: $0.30, Out: $2.50, Cache: $0.07 |
@@ -142,6 +142,7 @@ _Model information enriched by [models.dev](https://models.dev)._
 | `gemini-1.5-flash-8b` | 1.0M | 8.192k | In: $0.04, Out: $0.15, Cache: $0.01 |
 | `gemini-1.5-pro` | 1.0M | 8.192k | In: $1.25, Out: $5.00, Cache: $0.31 |
 | `gemini-3-pro-preview` | 1.0M | 64k | In: $2.00, Out: $12.00, Cache: $0.20 |
+| `zai-org/glm-4.7-maas` | 204.8k | 131.072k | In: $0.60, Out: $2.20 |
 | `gemini-live-2.5-flash-preview-native-audio` | 131.072k | 65.536k | In: $0.50, Out: $2.00 |
 | `openai/gpt-oss-120b-maas` | 131.072k | 32.768k | In: $0.09, Out: $0.36 |
 | `openai/gpt-oss-20b-maas` | 131.072k | 32.768k | In: $0.07, Out: $0.25 |
@@ -161,7 +162,7 @@ _Model information enriched by [models.dev](https://models.dev)._
 | `deepseek-chat` | 128k | 8.192k | In: $0.28, Out: $0.42, Cache: $0.03 |
 | `deepseek-reasoner` | 128k | 128k | In: $0.28, Out: $0.42, Cache: $0.03 |
 
-### OpenRouter (139)
+### OpenRouter (140)
 
 | Model | Context | Max Output | Pricing (per 1M tokens) |
 | :--- | ---: | ---: | :--- |
@@ -194,6 +195,7 @@ _Model information enriched by [models.dev](https://models.dev)._
 | `openai/gpt-5-pro` | 400k | 272k | In: $15.00, Out: $120.00 |
 | `openai/gpt-5.1` | 400k | 128k | In: $1.25, Out: $10.00, Cache: $0.13 |
 | `openai/gpt-5.1-codex` | 400k | 128k | In: $1.25, Out: $10.00, Cache: $0.13 |
+| `openai/gpt-5.1-codex-max` | 400k | 128k | In: $1.10, Out: $9.00, Cache: $0.11 |
 | `openai/gpt-5.1-codex-mini` | 400k | 100k | In: $0.25, Out: $2.00, Cache: $0.03 |
 | `openai/gpt-5.2` | 400k | 128k | In: $1.75, Out: $14.00, Cache: $0.17 |
 | `openai/gpt-5.2-codex` | 400k | 128k | In: $1.75, Out: $14.00, Cache: $0.17 |
@@ -309,7 +311,7 @@ _Model information enriched by [models.dev](https://models.dev)._
 
 ## Models by Capability
 
-### Function Calling (222)
+### Function Calling (224)
 
 | Model | Provider | Context | Pricing |
 | :--- | :--- | ---: | :--- |
@@ -334,7 +336,7 @@ _Model information enriched by [models.dev](https://models.dev)._
 | `claude-haiku-4-5-20251001` | anthropic | 200k | In: $1.00, Out: $5.00, Cache: $0.10 |
 | `claude-opus-4-0` | anthropic | 200k | In: $15.00, Out: $75.00, Cache: $1.50 |
 
-### Vision (152)
+### Vision (153)
 
 | Model | Provider | Context | Pricing |
 | :--- | :--- | ---: | :--- |
@@ -359,7 +361,7 @@ _Model information enriched by [models.dev](https://models.dev)._
 | `claude-haiku-4-5-20251001` | anthropic | 200k | In: $1.00, Out: $5.00, Cache: $0.10 |
 | `claude-opus-4-0` | anthropic | 200k | In: $15.00, Out: $75.00, Cache: $1.50 |
 
-### Reasoning (160)
+### Reasoning (162)
 
 | Model | Provider | Context | Pricing |
 | :--- | :--- | ---: | :--- |
@@ -384,7 +386,7 @@ _Model information enriched by [models.dev](https://models.dev)._
 | `claude-sonnet-4-20250514` | anthropic | 200k | In: $3.00, Out: $15.00, Cache: $0.30 |
 | `claude-sonnet-4-5` | anthropic | 200k | In: $3.00, Out: $15.00, Cache: $0.30 |
 
-### Streaming (247)
+### Streaming (249)
 
 | Model | Provider | Context | Pricing |
 | :--- | :--- | ---: | :--- |
@@ -409,7 +411,7 @@ _Model information enriched by [models.dev](https://models.dev)._
 | `claude-haiku-4-5-20251001` | anthropic | 200k | In: $1.00, Out: $5.00, Cache: $0.10 |
 | `claude-opus-4-0` | anthropic | 200k | In: $15.00, Out: $75.00, Cache: $1.50 |
 
-### Structured Output (222)
+### Structured Output (224)
 
 | Model | Provider | Context | Pricing |
 | :--- | :--- | ---: | :--- |
@@ -438,7 +440,7 @@ _Model information enriched by [models.dev](https://models.dev)._
 
 ## Models by Modality
 
-### Vision Models (148)
+### Vision Models (149)
 
 Models that can process images:
 
@@ -470,7 +472,7 @@ Models that can process audio:
 | `gemini-1.5-flash-8b` | gemini | 1.0M | In: $0.04, Out: $0.15, Cache: $0.01 |
 | `gemini-1.5-pro` | gemini | 1.0M | In: $1.25, Out: $5.00, Cache: $0.31 |
 | `gemini-2.0-flash` | gemini | 1.0M | In: $0.10, Out: $0.40, Cache: $0.03 |
-| `gemini-2.0-flash` | gemini | 1.0M | In: $0.10, Out: $0.40, Cache: $0.03 |
+| `gemini-2.0-flash` | gemini | 1.0M | In: $0.15, Out: $0.60, Cache: $0.03 |
 | `gemini-2.0-flash-lite` | gemini | 1.0M | In: $0.07, Out: $0.30 |
 | `gemini-2.0-flash-lite` | gemini | 1.0M | In: $0.07, Out: $0.30 |
 | `gemini-2.5-flash` | gemini | 1.0M | In: $0.30, Out: $2.50, Cache: $0.07 |
@@ -600,4 +602,4 @@ This is useful for:
 
 ---
 
-**Auto-generated by `npm run sync-models`** • Last updated: 2026-01-16
+**Auto-generated by `npm run sync-models`** • Last updated: 2026-01-22

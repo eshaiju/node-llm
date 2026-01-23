@@ -12,6 +12,9 @@ permalink: /orm/prisma
 NodeLLM + Prisma made simple. Persist chats, messages, and tool calls automatically.
 {: .fs-6 .fw-300 }
 
+**Added in v0.2.0**
+{: .label .label-green }
+
 1. TOC
 {:toc}
 
@@ -46,7 +49,15 @@ When calling `chat.ask("What is the capital of France?")`, the ORM adapter:
 
 ### 1. Schema Configuration
 
-Copy the reference models into your `prisma/schema.prisma` file. You can customize the model names (e.g., using `AssistantChat` instead of `LlmChat`) using the [Custom Table Names](#custom-table-names) option.
+The fastest way to get started is to use the **NodeLLM ORM CLI**. Run this command in your project root to generate the required Prisma schema:
+
+```bash
+npx @node-llm/orm init
+```
+
+This will create a `prisma/schema.prisma` file (or provide instructions if one already exists) populated with the standard models.
+
+Alternatively, you can manually copy the reference models below. You can customize the model names (e.g., using `AssistantChat` instead of `LlmChat`) using the [Custom Table Names](#custom-table-names) option.
 
 ```prisma
 model LlmChat {
@@ -54,7 +65,7 @@ model LlmChat {
   model        String?
   provider     String?
   instructions String?      
-  metadata     String?      
+  metadata     Json?         // Use Json for metadata
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt
   messages     LlmMessage[]
@@ -62,17 +73,20 @@ model LlmChat {
 }
 
 model LlmMessage {
-  id           String        @id @default(uuid())
-  chatId       String
-  role         String        // user, assistant, system, tool
-  content      String?
-  contentRaw   String?       // JSON raw payload
-  reasoning    String?       // Chain of thought
-  inputTokens  Int?
-  outputTokens Int?
-  modelId      String?
-  provider     String?
-  createdAt    DateTime      @default(now())
+  id                String        @id @default(uuid())
+  chatId            String
+  role              String        // user, assistant, system, tool
+  content           String?
+  contentRaw        String?       // JSON raw payload
+  reasoning         String?       // Chain of thought (deprecated)
+  thinkingText      String?       // Extended thinking text
+  thinkingSignature String?       // Cryptographic signature
+  thinkingTokens    Int?          // Tokens spent on thinking
+  inputTokens       Int?
+  outputTokens      Int?
+  modelId           String?
+  provider          String?
+  createdAt         DateTime      @default(now())
 
   chat         LlmChat       @relation(fields: [chatId], references: [id], onDelete: Cascade)
   toolCalls    LlmToolCall[]
@@ -80,14 +94,15 @@ model LlmMessage {
 }
 
 model LlmToolCall {
-  id           String     @id @default(uuid())
-  messageId    String
-  toolCallId   String     // ID from the provider
-  name         String
-  arguments    String     
-  thought      String?    
-  result       String?    
-  createdAt    DateTime   @default(now())
+  id               String     @id @default(uuid())
+  messageId        String
+  toolCallId       String     // ID from the provider
+  name             String
+  arguments        String     
+  thought          String?    
+  thoughtSignature String?    
+  result           String?    
+  createdAt        DateTime   @default(now())
 
   message      LlmMessage @relation(fields: [messageId], references: [id], onDelete: Cascade)
 
@@ -112,6 +127,12 @@ model LlmRequest {
 }
 ```
 
+### 2. Database Migrations
+
+For production-grade systems, always use **Prisma Migrate** instead of `db push`. This ensures you have a versioned history of changes and prevents accidental data loss.
+
+See the [Database Migration Guide](./migrations.md) for detailed instructions.
+
 ### 2. Manual Setup
 
 Initialize the adapter with your `PrismaClient` and `NodeLLMCore` instance.
@@ -134,10 +155,11 @@ The ORM Chat implementation provides a fluent API that mirrors the core NodeLLM 
 ### Creating and Loading Chats
 
 ```typescript
-// Start a new session
+// Start a new session with reasoning enabled by default
 const chat = await createChat(prisma, llm, {
-  model: "gpt-4o",
-  instructions: "You are a helpful assistant."
+  model: "claude-3-7-sonnet",
+  instructions: "You are a helpful assistant.",
+  thinking: { budget: 16000 }
 });
 
 // Load an existing session from DB (automatically rehydrates history)
@@ -151,6 +173,11 @@ When you use `.ask()`, the persistence flow runs automatically.
 ```typescript
 // This saves the user message, calls the API, and persists the response
 const messageRecord = await chat.ask("What is the capital of France?");
+
+// You can also pass thinking configuration directly per request
+const advancedResp = await chat.ask("Solve this logical puzzle", {
+  thinking: { budget: 32000 }
+});
 
 console.log(messageRecord.content); // "The capital of France is Paris."
 console.log(messageRecord.inputTokens); // 12

@@ -20,6 +20,16 @@ export interface ChatOptions {
     toolCalls?: boolean; // Default: true
     requests?: boolean; // Default: true
   };
+  thinking?: {
+    effort?: "low" | "medium" | "high" | "none";
+    budget?: number;
+  };
+  temperature?: number;
+  maxTokens?: number;
+  headers?: Record<string, string>;
+  maxToolCalls?: number;
+  requestTimeout?: number;
+  params?: Record<string, any>;
 }
 
 export interface UserHooks {
@@ -60,6 +70,13 @@ export abstract class BaseChat<
     this.localOptions.instructions = options.instructions || record.instructions;
     this.localOptions.model = options.model || record.model;
     this.localOptions.provider = options.provider || record.provider;
+    this.localOptions.thinking = options.thinking;
+    this.localOptions.temperature = options.temperature;
+    this.localOptions.maxTokens = options.maxTokens;
+    this.localOptions.headers = options.headers;
+    this.localOptions.maxToolCalls = options.maxToolCalls;
+    this.localOptions.requestTimeout = options.requestTimeout;
+    this.localOptions.params = options.params;
   }
 
   protected log(...args: any[]) {
@@ -120,6 +137,15 @@ export abstract class BaseChat<
   withParams(params: Record<string, any>): this {
     this.localOptions.params = { ...(this.localOptions.params || {}), ...params };
     return this;
+  }
+
+  withThinking(thinking: { effort?: "low" | "medium" | "high" | "none"; budget?: number }): this {
+    this.localOptions.thinking = { ...(this.localOptions.thinking || {}), ...thinking };
+    return this;
+  }
+
+  withEffort(effort: "low" | "medium" | "high" | "none"): this {
+    return this.withThinking({ effort });
   }
 
   // --- Hook Registration ---

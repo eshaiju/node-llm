@@ -196,21 +196,21 @@ await NodeLLM.paint("A cyberpunk city in rain");
 await NodeLLM.transcribe("meeting-recording.wav");
 ```
 
-### 💾 Persistence Layer
+### 💾 [Persistence Layer](/orm/prisma)
 
-Automatically track chat history, tool executions, and API metrics with **@node-llm/orm**.
+Automatically track chat history, tool executions, and API metrics with **@node-llm/orm**. Now with full support for **Extended Thinking** persistence.
 
 ```ts
 import { createChat } from "@node-llm/orm/prisma";
 
 // Chat state is automatically saved to your database (Postgres/MySQL/SQLite)
-const chat = await createChat(prisma, llm, { model: "gpt-4o" });
+const chat = await createChat(prisma, llm, { model: "claude-3-7-sonnet" });
 
-await chat.ask("Hello");
+await chat.withThinking({ budget: 16000 }).ask("Develop a strategy");
 // -> Saves User Message
-// -> Saves Assistant Response
-// -> Tracks Token Usage & Cost
-// -> Logs Tool Calls & Results
+// -> Saves Assistant Response + Internal Thought Process
+// -> Persists Cryptographic Signatures for Reasoning
+// -> Tracks Token Usage & Cost (including Reasoning Tokens)
 ```
 
 ### ⚡ Scoped Parallelism
@@ -227,13 +227,17 @@ const [gpt, claude] = await Promise.all([
 ]);
 ```
 
-### 🧠 Deep Reasoning
+### 🧠 [Extended Thinking](/core-features/reasoning)
 
-Direct access to the thought process of models like **DeepSeek R1** or **OpenAI o1/o3** using the `.reasoning` field.
+Direct access to the thought process of modern reasoning models like **Claude 3.7**, **DeepSeek R1**, or **OpenAI o1/o3** using a unified interface.
 
 ```ts
-const res = await NodeLLM.chat("deepseek-reasoner").ask("Solve this logical puzzle");
-console.log(res.reasoning); // Chain-of-thought
+const res = await chat
+  .withThinking({ budget: 16000 })
+  .ask("Solve this logical puzzle");
+
+console.log(res.thinking.text); // Full chain-of-thought
+console.log(res.thinking.signature); // Verification signature
 ```
 
 ---
@@ -256,8 +260,8 @@ console.log(res.reasoning); // Chain-of-thought
 | :----------------------------------------------------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------- |
 | <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/openai.svg" height="18"> **OpenAI**            | Chat, Streaming, Tools, Vision, Audio, Images, Transcription, **Reasoning**, **Smart Developer Role** |
 | <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/gemini-color.svg" height="18"> **Gemini**      | Chat, Streaming, Tools, Vision, Audio, Video, Embeddings                                              |
-| <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/anthropic-text.svg" height="12"> **Anthropic** | Chat, Streaming, Tools, Vision, PDF, Structured Output                                                |
-| <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/deepseek-color.svg" height="18"> **DeepSeek**  | Chat (V3), **Reasoning (R1)**, Tools, Streaming                                                       |
+| <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/anthropic-text.svg" height="12"> **Anthropic** | Chat, Streaming, Tools, Vision, PDF, Structured Output, **Extended Thinking (Claude 3.7)**            |
+| <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/deepseek-color.svg" height="18"> **DeepSeek**  | Chat (V3), **Extended Thinking (R1)**, Tools, Streaming                                              |
 | <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/openrouter.svg" height="18"> **OpenRouter**    | **Aggregator**, Chat, Streaming, Tools, Vision, Embeddings, **Reasoning**                             |
 | <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/ollama.svg" height="18"> **Ollama**            | **Local Inference**, Chat, Streaming, Tools, Vision, Embeddings                                       |
 
