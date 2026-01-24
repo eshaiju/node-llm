@@ -52,6 +52,16 @@ export interface BedrockConfig {
    * Default: 120000 (2 minutes)
    */
   requestTimeout?: number;
+
+  /**
+   * Default Bedrock Guardrail identifier (ID or ARN).
+   */
+  guardrailIdentifier?: string;
+
+  /**
+   * Default Bedrock Guardrail version (e.g., "1", "DRAFT").
+   */
+  guardrailVersion?: string;
 }
 
 /**

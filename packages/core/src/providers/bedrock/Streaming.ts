@@ -41,10 +41,20 @@ export class BedrockStreaming {
     }
 
     const url = `${this.baseUrl}/model/${modelId}/converse-stream`;
+
+    const guardrail =
+      this.config.guardrailIdentifier && this.config.guardrailVersion
+        ? {
+            guardrailIdentifier: this.config.guardrailIdentifier,
+            guardrailVersion: this.config.guardrailVersion
+          }
+        : undefined;
+
     const body = buildConverseRequest(request.messages, request.tools, {
       maxTokens: request.max_tokens,
       temperature: request.temperature,
-      thinking: request.thinking
+      thinking: request.thinking,
+      guardrail
     });
 
     const bodyJson = JSON.stringify(body);
@@ -202,7 +212,11 @@ export class BedrockStreaming {
 
     // 4. Message Stop
     if (event.messageStop) {
-      return { content: "", done: true };
+      return {
+        content: "",
+        done: true,
+        finish_reason: event.messageStop.stopReason
+      };
     }
 
     // 5. Metadata (Usage)

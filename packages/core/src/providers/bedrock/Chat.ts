@@ -48,10 +48,19 @@ export class BedrockChat {
     const url = `${this.baseUrl}/model/${modelId}/converse`;
 
     // Build the Bedrock request body
+    const guardrail =
+      this.config.guardrailIdentifier && this.config.guardrailVersion
+        ? {
+            guardrailIdentifier: this.config.guardrailIdentifier,
+            guardrailVersion: this.config.guardrailVersion
+          }
+        : undefined;
+
     const body = buildConverseRequest(request.messages, request.tools, {
       maxTokens: request.max_tokens,
       temperature: request.temperature,
-      thinking: request.thinking
+      thinking: request.thinking,
+      guardrail
     });
 
     const bodyJson = JSON.stringify(body);
@@ -191,7 +200,8 @@ export class BedrockChat {
       content,
       reasoning: reasoning || undefined,
       tool_calls: toolCalls.length > 0 ? toolCalls : undefined,
-      usage
+      usage,
+      finish_reason: response.stopReason
     };
   }
 }

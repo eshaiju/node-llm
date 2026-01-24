@@ -192,6 +192,11 @@ export function buildConverseRequest(
     maxTokens?: number;
     temperature?: number;
     thinking?: ThinkingConfig;
+    guardrail?: {
+      guardrailIdentifier: string;
+      guardrailVersion: string;
+      trace?: "enabled" | "disabled";
+    };
   }
 ): BedrockConverseRequest {
   const { messages: bedrockMessages, system } = convertMessages(messages);
@@ -207,6 +212,10 @@ export function buildConverseRequest(
   const toolConfig = convertTools(tools);
   if (toolConfig) {
     request.toolConfig = toolConfig;
+  }
+
+  if (options?.guardrail) {
+    request.guardrailConfig = options.guardrail;
   }
 
   // Inference config (only add if we have values)

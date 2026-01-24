@@ -23,7 +23,9 @@ export function registerBedrockProvider() {
       apiKey: cfg.bedrockApiKey,
       accessKeyId: cfg.bedrockAccessKeyId,
       secretAccessKey: cfg.bedrockSecretAccessKey,
-      sessionToken: cfg.bedrockSessionToken
+      sessionToken: cfg.bedrockSessionToken,
+      guardrailIdentifier: cfg.bedrockGuardrailIdentifier,
+      guardrailVersion: cfg.bedrockGuardrailVersion
     };
 
     return new BedrockProvider(bedrockConfig);

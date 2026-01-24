@@ -74,10 +74,17 @@ export interface BedrockInferenceConfig {
   stopSequences?: string[];
 }
 
+export interface BedrockGuardrailConfig {
+  guardrailIdentifier: string;
+  guardrailVersion: string;
+  trace?: "enabled" | "disabled";
+}
+
 export interface BedrockConverseRequest {
   messages: BedrockMessage[];
   system?: BedrockContentBlock[];
   toolConfig?: BedrockToolConfig;
+  guardrailConfig?: BedrockGuardrailConfig;
   inferenceConfig?: BedrockInferenceConfig;
   additionalModelRequestFields?: Record<string, any>;
 }
@@ -90,11 +97,25 @@ export interface BedrockConverseResponse {
   output: {
     message: BedrockMessage;
   };
-  stopReason: "end_turn" | "tool_use" | "max_tokens" | "stop_sequence" | "content_filtered";
+  stopReason:
+    | "end_turn"
+    | "tool_use"
+    | "max_tokens"
+    | "stop_sequence"
+    | "content_filtered"
+    | "guardrail_intervening"
+    | "guardrail_intervened";
   usage: {
     inputTokens: number;
     outputTokens: number;
     totalTokens: number;
+  };
+  trace?: {
+    guardrail?: {
+      modelOutput?: string[];
+      inputAssessment?: Record<string, any>;
+      outputAssessments?: Record<string, any>;
+    };
   };
   metrics?: {
     latencyMs: number;

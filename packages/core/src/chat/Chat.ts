@@ -454,7 +454,8 @@ export class Chat {
       this.provider.id,
       response.thinking,
       response.reasoning,
-      response.tool_calls
+      response.tool_calls,
+      response.finish_reason
     );
 
     // --- Content Policy Hooks (Output - Turn 1) ---
@@ -590,7 +591,9 @@ export class Chat {
         this.model,
         this.provider.id,
         response.thinking,
-        response.reasoning
+        response.reasoning,
+        response.tool_calls,
+        response.finish_reason
       );
 
       // --- Content Policy Hooks (Output - Tool Turns) ---
@@ -622,7 +625,8 @@ export class Chat {
       this.provider.id,
       assistantMessage.thinking,
       assistantMessage.reasoning,
-      response.tool_calls
+      response.tool_calls,
+      assistantMessage.finish_reason
     );
   }
 

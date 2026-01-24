@@ -20,6 +20,8 @@ export interface NodeLLMConfig {
   bedrockSecretAccessKey?: string; // SigV4: AWS Secret Access Key
   bedrockSessionToken?: string; // SigV4: Optional session token
   bedrockRegion?: string; // AWS Region (e.g., "us-east-1")
+  bedrockGuardrailIdentifier?: string; // AWS Guardrail ID
+  bedrockGuardrailVersion?: string; // AWS Guardrail Version
   // General options
   debug?: boolean;
   maxToolCalls?: number;
@@ -57,6 +59,8 @@ export class Configuration implements NodeLLMConfig {
   private _bedrockSecretAccessKey?: string;
   private _bedrockSessionToken?: string;
   private _bedrockRegion?: string;
+  private _bedrockGuardrailIdentifier?: string;
+  private _bedrockGuardrailVersion?: string;
   private _debug?: boolean;
   private _provider?: string;
 
@@ -171,6 +175,20 @@ export class Configuration implements NodeLLMConfig {
   }
   public set bedrockRegion(v: string | undefined) {
     this._bedrockRegion = v;
+  }
+
+  public get bedrockGuardrailIdentifier(): string | undefined {
+    return this._bedrockGuardrailIdentifier ?? process.env.AWS_GUARDRAIL_ID?.trim();
+  }
+  public set bedrockGuardrailIdentifier(v: string | undefined) {
+    this._bedrockGuardrailIdentifier = v;
+  }
+
+  public get bedrockGuardrailVersion(): string | undefined {
+    return this._bedrockGuardrailVersion ?? process.env.AWS_GUARDRAIL_VERSION?.trim();
+  }
+  public set bedrockGuardrailVersion(v: string | undefined) {
+    this._bedrockGuardrailVersion = v;
   }
 
   public get debug(): boolean | undefined {
