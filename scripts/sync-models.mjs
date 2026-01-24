@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT_DIR = path.resolve(__dirname, "..");
-const MODELS_FILE = path.join(ROOT_DIR, "packages/core/src/models/models.ts");
+const MODELS_FILE = path.join(ROOT_DIR, "packages/core/src/models/models.json");
 const ALIASES_FILE = path.join(ROOT_DIR, "packages/core/src/aliases.ts");
 const API_URL = "https://models.dev/api.json";
 
@@ -121,10 +121,7 @@ async function syncModels() {
     if (fs.existsSync(MODELS_FILE)) {
       try {
         const content = fs.readFileSync(MODELS_FILE, "utf-8");
-        const jsonMatch = content.match(/modelsData = (\[[\s\S]*\]);/);
-        if (jsonMatch) {
-          existingModels = JSON.parse(jsonMatch[1]);
-        }
+        existingModels = JSON.parse(content);
       } catch {
         console.warn("Could not parse existing models file, starting fresh.");
       }
@@ -237,10 +234,7 @@ async function syncModels() {
     }
 
     finalModels.sort((a, b) => a.id.localeCompare(b.id));
-    fs.writeFileSync(
-      MODELS_FILE,
-      `export const modelsData = ${JSON.stringify(finalModels, null, 2)};\n`
-    );
+    fs.writeFileSync(MODELS_FILE, JSON.stringify(finalModels, null, 2));
     console.log(`Synced ${finalModels.length} models.`);
 
     // Cleanup and save Aliases
