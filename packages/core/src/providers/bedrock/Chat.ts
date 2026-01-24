@@ -33,18 +33,7 @@ export class BedrockChat {
    * Execute a chat request against Bedrock Converse API.
    */
   async execute(request: ChatRequest): Promise<ChatResponse> {
-    let modelId = request.model;
-
-    // Normalize model ID for regional inference profiles if needed.
-    // Newer models (Claude 3.5 etc) often require regional prefixes (e.g. 'us.')
-    // to work with on-demand throughput via Cross-Region Inference.
-    if (modelId.startsWith("anthropic.") && !/^[a-z]{2}\./.test(modelId)) {
-      const region = this.config.region;
-      const prefix = region.split("-")[0]; // 'us', 'eu', 'ap' etc
-      if (prefix) {
-        modelId = `${prefix}.${modelId}`;
-      }
-    }
+    const modelId = request.model;
 
     const url = `${this.baseUrl}/model/${modelId}/converse`;
 
@@ -61,7 +50,8 @@ export class BedrockChat {
       maxTokens: request.max_tokens,
       temperature: request.temperature,
       thinking: request.thinking,
-      guardrail
+      guardrail,
+      additionalModelRequestFields: request.additionalModelRequestFields as Record<string, any>
     });
 
     const bodyJson = JSON.stringify(body);
@@ -98,6 +88,10 @@ export class BedrockChat {
       ) {
         message =
           "Access denied for this model. Ensure you have requested and been granted access in the AWS Bedrock console (Model Access section).";
+      } else if (errorText.includes("ThrottlingException")) {
+        message = "Bedrock API throttling. Too many requests. Please retry with backoff.";
+      } else if (errorText.includes("ValidationException")) {
+        message = `Bedrock validation error: ${errorText}`;
       }
 
       throw new Error(`Bedrock API error (${response.status}): ${message}`);
@@ -169,7 +163,7 @@ export class BedrockChat {
   private parseResponse(response: BedrockConverseResponse): ChatResponse {
     const message = response.output.message;
     let content: string | null = null;
-    let reasoning: string | null = null;
+    let thinkingText: string | null = null;
     const toolCalls: ToolCall[] = [];
 
     // Process content blocks
@@ -179,8 +173,8 @@ export class BedrockChat {
       }
 
       if (block.reasoningContent?.text) {
-        reasoning = reasoning
-          ? reasoning + block.reasoningContent.text
+        thinkingText = thinkingText
+          ? thinkingText + block.reasoningContent.text
           : block.reasoningContent.text;
       }
 
@@ -207,10 +201,12 @@ export class BedrockChat {
 
     return {
       content,
-      reasoning: reasoning || undefined,
+      thinking: thinkingText ? { text: thinkingText } : undefined,
+      reasoning: thinkingText || undefined, // Keep deprecated field for compat
       tool_calls: toolCalls.length > 0 ? toolCalls : undefined,
       usage,
-      finish_reason: response.stopReason
+      finish_reason: response.stopReason,
+      metadata: response.trace ? { trace: response.trace } : undefined
     };
   }
 }

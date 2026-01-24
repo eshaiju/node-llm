@@ -41,6 +41,12 @@ async function main() {
     
     if (response.finish_reason === "guardrail_intervening") {
       console.log("⚠️ Guardrail intervened to ensure safety.");
+      
+      // Access the raw trace assessment (if enabled in Guardrail config)
+      if (response.metadata?.trace) {
+        console.log("\nGuardrail Trace Assessments:");
+        console.log(JSON.stringify(response.metadata.trace, null, 2));
+      }
     }
   } catch (error) {
     console.error("Error:", error.message);

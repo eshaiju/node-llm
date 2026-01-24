@@ -202,6 +202,7 @@ export function buildConverseRequest(
       guardrailVersion: string;
       trace?: "enabled" | "disabled";
     };
+    additionalModelRequestFields?: Record<string, any>;
   }
 ): BedrockConverseRequest {
   const { messages: bedrockMessages, system } = convertMessages(messages);
@@ -237,10 +238,19 @@ export function buildConverseRequest(
   // Thinking config for Claude 3.7+
   if (options?.thinking?.budget) {
     request.additionalModelRequestFields = {
+      ...request.additionalModelRequestFields,
       thinking: {
         type: "enabled",
         budget_tokens: options.thinking.budget
       }
+    };
+  }
+
+  // Merge any other additional fields
+  if (options?.additionalModelRequestFields) {
+    request.additionalModelRequestFields = {
+      ...request.additionalModelRequestFields,
+      ...options.additionalModelRequestFields
     };
   }
 

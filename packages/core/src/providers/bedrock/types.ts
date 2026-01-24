@@ -175,6 +175,13 @@ export interface BedrockStreamEvent {
     metrics?: {
       latencyMs: number;
     };
+    trace?: {
+      guardrail?: {
+        modelOutput?: string[];
+        inputAssessment?: Record<string, any>;
+        outputAssessments?: Record<string, any>;
+      };
+    };
   };
 }
 // ─────────────────────────────────────────────────────────────────────────────

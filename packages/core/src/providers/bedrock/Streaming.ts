@@ -31,15 +31,7 @@ export class BedrockStreaming {
     const currentToolCalls: Map<number, { id: string; name: string; input: string }> = new Map();
     let currentReasoning = "";
 
-    let modelId = request.model;
-    // Regional inference profile normalization
-    if (modelId.startsWith("anthropic.") && !/^[a-z]{2}\./.test(modelId)) {
-      const region = this.config.region;
-      const prefix = region.split("-")[0];
-      if (prefix) {
-        modelId = `${prefix}.${modelId}`;
-      }
-    }
+    const modelId = request.model;
 
     const url = `${this.baseUrl}/model/${modelId}/converse-stream`;
 
@@ -55,7 +47,8 @@ export class BedrockStreaming {
       maxTokens: request.max_tokens,
       temperature: request.temperature,
       thinking: request.thinking,
-      guardrail
+      guardrail,
+      additionalModelRequestFields: request.additionalModelRequestFields as Record<string, any>
     });
 
     const bodyJson = JSON.stringify(body);
@@ -103,11 +96,27 @@ export class BedrockStreaming {
         while (buffer.length >= 12) {
           const totalLength = new DataView(buffer.buffer, buffer.byteOffset, 4).getUint32(0);
 
+          if (totalLength < 16 || totalLength > 1024 * 1024) {
+            // Safety check: skip if total length is unreasonable
+            logger.error(`Bedrock stream: invalid total length ${totalLength}`);
+            buffer = buffer.slice(4);
+            continue;
+          }
+
           if (buffer.length < totalLength) {
             break; // Wait for more data
           }
 
           const headersLength = new DataView(buffer.buffer, buffer.byteOffset + 4, 4).getUint32(0);
+
+          if (headersLength + 16 > totalLength) {
+            logger.error(
+              `Bedrock stream: invalid headers length ${headersLength} for total length ${totalLength}`
+            );
+            buffer = buffer.slice(totalLength);
+            continue;
+          }
+
           const payloadLength = totalLength - headersLength - 16;
           const payloadOffset = 12 + headersLength;
 
@@ -168,7 +177,7 @@ export class BedrockStreaming {
         });
       }
       if (start?.reasoningContent) {
-        return { content: "", reasoning: "" };
+        return { content: "", thinking: { text: "" }, reasoning: "" };
       }
     }
 
@@ -183,7 +192,11 @@ export class BedrockStreaming {
 
       if (delta.reasoningContent?.text) {
         onReasoning(delta.reasoningContent.text);
-        return { content: "", reasoning: delta.reasoningContent.text };
+        return {
+          content: "",
+          thinking: { text: delta.reasoningContent.text },
+          reasoning: delta.reasoningContent.text
+        };
       }
 
       if (delta.toolUse) {
@@ -237,8 +250,9 @@ export class BedrockStreaming {
       };
 
       const usage = ModelRegistry.calculateCost(rawUsage, modelId, "bedrock");
+      const metadata = event.metadata.trace ? { trace: event.metadata.trace } : undefined;
 
-      return { content: "", usage, done: true };
+      return { content: "", usage, done: true, metadata };
     }
 
     return null;

@@ -60,8 +60,10 @@ const llm = createLLM({
 - **Models**: Access to `amazon.titan`, `anthropic.claude`, `meta.llama3`, `mistral`, `cohere`, and `amazon.nova`.
 - **Cross-Region Inference**: Natively supports inference profiles (e.g., `us.anthropic.claude-3-5-sonnet...`) for higher throughput.
 - **Image Generation**: First-class support for **Titan Image Generator** and **Stable Diffusion**.
-- **Prompt Caching**: save up to 90% on costs with Claude and Nova models.
+- **Prompt Caching**: Save up to 90% on costs with Claude and Nova models.
 - **Multimodal**: Send images to Claude and Nova models easily.
+- **Extended Thinking (Reasoning)**: Native support for Claude 3.7 and DeepSeek R1 thinking budgets.
+- **Guardrail Visibility**: Access raw Guardrail trace assessments via response metadata.
 
 ---
 
@@ -119,6 +121,27 @@ To improve resilience and throughput, you can use Bedrock's **Inference Profiles
 const chat = llm.chat("us.anthropic.claude-3-5-sonnet-20241022-v2:0");
 
 const response = await chat.ask("Hello from global infrastructure!");
+```
+
+---
+
+## Advanced Hyperparameters
+
+Bedrock's Converse API has a standard `inferenceConfig`, but individual models often support additional parameters (like `topK` for Nova or specialized beta flags for Claude).
+
+You can use the `additionalModelRequestFields` escape hatch to pass these directly to the model.
+
+```ts
+const chat = llm.chat("amazon.nova-lite-v1:0")
+  .withParams({
+    additionalModelRequestFields: {
+      inferenceConfig: {
+        topK: 20
+      }
+    }
+  });
+
+const response = await chat.ask("Tell me a story.");
 ```
 
 ---

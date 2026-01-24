@@ -66,6 +66,7 @@ export interface ChatChunk {
   done?: boolean;
   usage?: Usage;
   finish_reason?: string | null;
+  metadata?: Record<string, unknown>;
 }
 
 export interface Usage {
@@ -88,6 +89,7 @@ export interface ChatResponse {
   tool_calls?: ToolCall[];
   usage?: Usage;
   finish_reason?: string | null;
+  metadata?: Record<string, unknown>;
 }
 
 export interface ProviderCapabilities {
