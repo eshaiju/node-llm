@@ -3283,8 +3283,6 @@ export const modelsData = [
       "reasoning",
       "chat",
       "vision",
-      "function_calling",
-      "tools",
       "structured_output",
       "json_mode"
     ],
