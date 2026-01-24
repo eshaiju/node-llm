@@ -21,17 +21,18 @@ export function setupVCR(recordingName: string, subDir?: string) {
   }
   const mode = (process.env.VCR_MODE as "replay" | "record" | undefined) || "replay";
 
-  if (mode === "replay") {
-    if (!process.env.OPENAI_API_KEY) process.env.OPENAI_API_KEY = "sk-dummy-key-for-vcr-replay";
-    if (!process.env.GEMINI_API_KEY) process.env.GEMINI_API_KEY = "dummy-key-for-vcr-replay";
-    if (!process.env.ANTHROPIC_API_KEY) process.env.ANTHROPIC_API_KEY = "dummy-key-for-vcr-replay";
-    if (!process.env.DEEPSEEK_API_KEY) process.env.DEEPSEEK_API_KEY = "dummy-key-for-vcr-replay";
-    if (!process.env.OPENROUTER_API_KEY)
-      process.env.OPENROUTER_API_KEY = "dummy-key-for-vcr-replay";
-    if (!process.env.AWS_ACCESS_KEY_ID) process.env.AWS_ACCESS_KEY_ID = "AKIA-DUMMY-KEY";
-    if (!process.env.AWS_SECRET_ACCESS_KEY) process.env.AWS_SECRET_ACCESS_KEY = "dummy-secret-key";
-    if (!process.env.AWS_REGION) process.env.AWS_REGION = "us-east-1";
+  // Provide dummy credentials for all providers if real ones are missing
+  if (!process.env.OPENAI_API_KEY) process.env.OPENAI_API_KEY = "sk-dummy-key-for-vcr-replay";
+  if (!process.env.GEMINI_API_KEY) process.env.GEMINI_API_KEY = "dummy-key-for-vcr-replay";
+  if (!process.env.ANTHROPIC_API_KEY) process.env.ANTHROPIC_API_KEY = "dummy-key-for-vcr-replay";
+  if (!process.env.DEEPSEEK_API_KEY) process.env.DEEPSEEK_API_KEY = "dummy-key-for-vcr-replay";
+  if (!process.env.OPENROUTER_API_KEY) process.env.OPENROUTER_API_KEY = "dummy-key-for-vcr-replay";
+
+  if (!process.env.AWS_ACCESS_KEY_ID && !process.env.AWS_BEARER_TOKEN_BEDROCK) {
+    process.env.AWS_ACCESS_KEY_ID = "AKIA-DUMMY-KEY";
+    process.env.AWS_SECRET_ACCESS_KEY = "dummy-secret-key";
   }
+  if (!process.env.AWS_REGION) process.env.AWS_REGION = "us-east-1";
 
   const polly = new Polly(recordingName, {
     adapters: ["node-http", "fetch"],
@@ -48,7 +49,10 @@ export function setupVCR(recordingName: string, subDir?: string) {
           "openai-organization",
           "openai-project",
           "user-agent",
-          "x-api-key"
+          "x-api-key",
+          ...(subDir === "bedrock"
+            ? ["x-amz-date", "x-amz-content-sha256", "x-amz-security-token", "x-amz-target"]
+            : [])
         ]
       },
       url: {

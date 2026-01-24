@@ -26,13 +26,13 @@ describe("BedrockProvider", () => {
   });
 
   describe("defaultModel", () => {
-    it("should return Claude 3.5 Haiku as default", () => {
+    it("should return Nova Lite as default", () => {
       const provider = new BedrockProvider({
         region: "us-east-1",
         apiKey: "test-api-key"
       });
 
-      expect(provider.defaultModel()).toBe("anthropic.claude-3-5-haiku-20241022-v1:0");
+      expect(provider.defaultModel()).toBe("amazon.nova-lite-v1:0");
     });
   });
 
@@ -76,7 +76,7 @@ describe("BedrockProvider", () => {
     });
 
     it("should return context window for DeepSeek models", () => {
-      expect(provider.capabilities?.getContextWindow("deepseek.v3-v1:0")).toBe(128000);
+      expect(provider.capabilities?.getContextWindow("deepseek.v3-v1:0")).toBe(163840);
     });
   });
 
