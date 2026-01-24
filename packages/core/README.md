@@ -35,6 +35,7 @@
 | **Anthropic**  | Chat, Streaming, Tools, Vision, PDF Support (Claude 3.5)         |
 | **Gemini**     | Chat, Streaming, Tools, Vision, Audio, Video, Embeddings         |
 | **DeepSeek**   | Chat (V3), Reasoning (R1), Streaming + Tools                     |
+| **Bedrock**    | Chat, Streaming, Tools, Image (Titan/SD), Prompt Caching         |
 | **OpenRouter** | 540+ models via a single API with automatic capability detection |
 | **Ollama**     | Local LLM inference with full Tool and Vision support            |
 
