@@ -57,6 +57,20 @@ export function setupVCR(recordingName: string, subDir?: string) {
         ]
       },
       url: {
+        pathname: (pathname: string) => {
+          // Normalize Bedrock Guardrail URLs so record and replay match
+          if (pathname.includes("/guardrail/")) {
+            return pathname.replace(
+              /\/guardrail\/[^/]+\/version\/[^/]+/,
+              "/guardrail/dummy-guardrail-id/version/1"
+            );
+          }
+          // Normalize Bedrock Model IDs in URLs (especially provisioned throughput ARNs)
+          if (pathname.includes("/model/")) {
+            return pathname.replace(/\/model\/[^/]+/, "/model/normalized-model-id");
+          }
+          return pathname;
+        },
         query: (query: Record<string, unknown>) => {
           const { key: _key, ...rest } = query;
           return rest;

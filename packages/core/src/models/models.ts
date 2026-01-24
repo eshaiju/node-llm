@@ -1,67 +1,5 @@
 export const modelsData = [
   {
-    "id": "amazon.titan-image-generator-v2:0",
-    "name": "Titan Image Generator V2",
-    "provider": "bedrock",
-    "family": "titan-image",
-    "created_at": "2023-11-28 00:00:00 UTC",
-    "context_window": 0,
-    "max_output_tokens": 0,
-    "modalities": {
-      "input": [
-        "text"
-      ],
-      "output": [
-        "image"
-      ]
-    },
-    "capabilities": [
-      "image_generation"
-    ],
-    "pricing": {
-      "image": {
-        "standard": {
-          "cost_per_image": 0.01
-        }
-      }
-    },
-    "metadata": {
-      "source": "aws",
-      "last_synced": "2026-01-24T18:13:00.000Z"
-    }
-  },
-  {
-    "id": "stability.stable-diffusion-xl-v1:0",
-    "name": "Stable Diffusion XL v1",
-    "provider": "bedrock",
-    "family": "stability",
-    "created_at": "2023-11-28 00:00:00 UTC",
-    "context_window": 0,
-    "max_output_tokens": 0,
-    "modalities": {
-      "input": [
-        "text"
-      ],
-      "output": [
-        "image"
-      ]
-    },
-    "capabilities": [
-      "image_generation"
-    ],
-    "pricing": {
-      "image": {
-        "standard": {
-          "cost_per_image": 0.04
-        }
-      }
-    },
-    "metadata": {
-      "source": "aws",
-      "last_synced": "2026-01-24T18:13:00.000Z"
-    }
-  },
-  {
     "id": "ai21.jamba-1-5-large-v1:0",
     "name": "Jamba 1.5 Large",
     "provider": "bedrock",
@@ -105,7 +43,7 @@ export const modelsData = [
         "context": 256000,
         "output": 4096
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -152,7 +90,7 @@ export const modelsData = [
         "context": 256000,
         "output": 4096
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -201,7 +139,7 @@ export const modelsData = [
         "context": 128000,
         "output": 4096
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -253,7 +191,7 @@ export const modelsData = [
         "context": 300000,
         "output": 8192
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -302,7 +240,7 @@ export const modelsData = [
         "context": 128000,
         "output": 8192
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -353,7 +291,7 @@ export const modelsData = [
         "context": 1000000,
         "output": 16384
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -405,7 +343,76 @@ export const modelsData = [
         "context": 300000,
         "output": 8192
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
+    }
+  },
+  {
+    "id": "amazon.titan-embed-text-v1",
+    "name": "Titan Text Embeddings v1",
+    "provider": "bedrock",
+    "family": "titan",
+    "context_window": 8000,
+    "max_output_tokens": 0,
+    "modalities": {
+      "input": [
+        "text"
+      ],
+      "output": [
+        "embedding"
+      ]
+    },
+    "capabilities": [
+      "embeddings"
+    ]
+  },
+  {
+    "id": "amazon.titan-embed-text-v2:0",
+    "name": "Titan Text Embeddings v2",
+    "provider": "bedrock",
+    "family": "titan",
+    "context_window": 8000,
+    "max_output_tokens": 0,
+    "modalities": {
+      "input": [
+        "text"
+      ],
+      "output": [
+        "embedding"
+      ]
+    },
+    "capabilities": [
+      "embeddings"
+    ]
+  },
+  {
+    "id": "amazon.titan-image-generator-v2:0",
+    "name": "Titan Image Generator V2",
+    "provider": "bedrock",
+    "family": "titan-image",
+    "created_at": "2023-11-28 00:00:00 UTC",
+    "context_window": 0,
+    "max_output_tokens": 0,
+    "modalities": {
+      "input": [
+        "text"
+      ],
+      "output": [
+        "image"
+      ]
+    },
+    "capabilities": [
+      "image_generation"
+    ],
+    "pricing": {
+      "image": {
+        "standard": {
+          "cost_per_image": 0.01
+        }
+      }
+    },
+    "metadata": {
+      "source": "aws",
+      "last_synced": "2026-01-24T18:13:00.000Z"
     }
   },
   {
@@ -451,7 +458,7 @@ export const modelsData = [
         "context": 128000,
         "output": 4096
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -497,7 +504,7 @@ export const modelsData = [
         "context": 128000,
         "output": 4096
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -550,7 +557,7 @@ export const modelsData = [
         "context": 200000,
         "output": 8192
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -603,7 +610,7 @@ export const modelsData = [
         "context": 200000,
         "output": 8192
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -656,7 +663,7 @@ export const modelsData = [
         "context": 200000,
         "output": 8192
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -709,7 +716,7 @@ export const modelsData = [
         "context": 200000,
         "output": 8192
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -759,7 +766,7 @@ export const modelsData = [
         "context": 200000,
         "output": 4096
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -809,7 +816,7 @@ export const modelsData = [
         "context": 200000,
         "output": 4096
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -859,7 +866,7 @@ export const modelsData = [
         "context": 200000,
         "output": 4096
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -913,7 +920,7 @@ export const modelsData = [
         "context": 200000,
         "output": 64000
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -956,7 +963,7 @@ export const modelsData = [
         "context": 100000,
         "output": 4096
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -1010,7 +1017,7 @@ export const modelsData = [
         "context": 200000,
         "output": 32000
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -1064,7 +1071,7 @@ export const modelsData = [
         "context": 200000,
         "output": 32000
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -1118,7 +1125,7 @@ export const modelsData = [
         "context": 200000,
         "output": 64000
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -1172,7 +1179,7 @@ export const modelsData = [
         "context": 200000,
         "output": 64000
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -1226,7 +1233,7 @@ export const modelsData = [
         "context": 200000,
         "output": 64000
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -1269,7 +1276,7 @@ export const modelsData = [
         "context": 100000,
         "output": 4096
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -1312,7 +1319,7 @@ export const modelsData = [
         "context": 200000,
         "output": 4096
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -1365,7 +1372,7 @@ export const modelsData = [
         "context": 200000,
         "output": 8192
       },
-      "last_synced": "2026-01-24T13:58:56.799Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -1419,7 +1426,7 @@ export const modelsData = [
         "context": 200000,
         "output": 128000
       },
-      "last_synced": "2026-01-24T13:58:56.799Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -1473,7 +1480,7 @@ export const modelsData = [
         "context": 200000,
         "output": 64000
       },
-      "last_synced": "2026-01-24T13:58:56.799Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -1527,7 +1534,7 @@ export const modelsData = [
         "context": 200000,
         "output": 32000
       },
-      "last_synced": "2026-01-24T13:58:56.799Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -1581,7 +1588,7 @@ export const modelsData = [
         "context": 200000,
         "output": 32000
       },
-      "last_synced": "2026-01-24T13:58:56.799Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -1635,7 +1642,7 @@ export const modelsData = [
         "context": 200000,
         "output": 32000
       },
-      "last_synced": "2026-01-24T13:58:56.799Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -1695,7 +1702,7 @@ export const modelsData = [
         "context": 200000,
         "output": 64000
       },
-      "last_synced": "2026-01-24T13:58:56.799Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -1755,7 +1762,7 @@ export const modelsData = [
         "context": 1000000,
         "output": 64000
       },
-      "last_synced": "2026-01-24T13:58:56.799Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -1808,7 +1815,7 @@ export const modelsData = [
         "context": 200000,
         "output": 8192
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -1861,7 +1868,7 @@ export const modelsData = [
         "context": 200000,
         "output": 8192
       },
-      "last_synced": "2026-01-24T13:58:56.799Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -1914,7 +1921,7 @@ export const modelsData = [
         "context": 200000,
         "output": 8192
       },
-      "last_synced": "2026-01-24T13:58:56.799Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -1967,7 +1974,7 @@ export const modelsData = [
         "context": 200000,
         "output": 8192
       },
-      "last_synced": "2026-01-24T13:58:56.799Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -2021,7 +2028,7 @@ export const modelsData = [
         "context": 200000,
         "output": 64000
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -2075,7 +2082,7 @@ export const modelsData = [
         "context": 200000,
         "output": 64000
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -2128,7 +2135,7 @@ export const modelsData = [
         "context": 200000,
         "output": 4096
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -2181,7 +2188,7 @@ export const modelsData = [
         "context": 200000,
         "output": 4096
       },
-      "last_synced": "2026-01-24T13:58:56.799Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -2234,7 +2241,7 @@ export const modelsData = [
         "context": 200000,
         "output": 4096
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -2288,7 +2295,7 @@ export const modelsData = [
         "context": 200000,
         "output": 64000
       },
-      "last_synced": "2026-01-24T13:58:56.799Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -2342,7 +2349,7 @@ export const modelsData = [
         "context": 200000,
         "output": 64000
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -2396,7 +2403,7 @@ export const modelsData = [
         "context": 200000,
         "output": 32000
       },
-      "last_synced": "2026-01-24T13:58:56.799Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -2450,7 +2457,7 @@ export const modelsData = [
         "context": 200000,
         "output": 32000
       },
-      "last_synced": "2026-01-24T13:58:56.799Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -2504,7 +2511,7 @@ export const modelsData = [
         "context": 200000,
         "output": 32000
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -2558,7 +2565,7 @@ export const modelsData = [
         "context": 200000,
         "output": 32000
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -2612,7 +2619,7 @@ export const modelsData = [
         "context": 200000,
         "output": 64000
       },
-      "last_synced": "2026-01-24T13:58:56.799Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -2666,7 +2673,7 @@ export const modelsData = [
         "context": 200000,
         "output": 64000
       },
-      "last_synced": "2026-01-24T13:58:56.799Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -2720,7 +2727,7 @@ export const modelsData = [
         "context": 200000,
         "output": 64000
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -2774,7 +2781,7 @@ export const modelsData = [
         "context": 200000,
         "output": 64000
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -2828,7 +2835,7 @@ export const modelsData = [
         "context": 200000,
         "output": 64000
       },
-      "last_synced": "2026-01-24T13:58:56.799Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -2882,7 +2889,7 @@ export const modelsData = [
         "context": 200000,
         "output": 64000
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -2933,7 +2940,7 @@ export const modelsData = [
         "context": 200000,
         "output": 100000
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.948Z"
     }
   },
   {
@@ -2980,7 +2987,7 @@ export const modelsData = [
         "context": 32768,
         "output": 8192
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -3028,7 +3035,7 @@ export const modelsData = [
         "context": 32768,
         "output": 8192
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -3071,7 +3078,7 @@ export const modelsData = [
         "context": 4096,
         "output": 4096
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -3118,7 +3125,7 @@ export const modelsData = [
         "context": 128000,
         "output": 4096
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -3165,7 +3172,7 @@ export const modelsData = [
         "context": 128000,
         "output": 4096
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -3208,7 +3215,7 @@ export const modelsData = [
         "context": 4096,
         "output": 4096
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -3258,7 +3265,7 @@ export const modelsData = [
         "context": 128000,
         "output": 8192
       },
-      "last_synced": "2026-01-24T13:58:56.796Z"
+      "last_synced": "2026-01-24T18:05:51.946Z"
     }
   },
   {
@@ -3282,7 +3289,6 @@ export const modelsData = [
       "streaming",
       "reasoning",
       "chat",
-      "vision",
       "structured_output",
       "json_mode"
     ],
@@ -3307,7 +3313,7 @@ export const modelsData = [
         "context": 128000,
         "output": 128000
       },
-      "last_synced": "2026-01-24T13:58:56.796Z"
+      "last_synced": "2026-01-24T18:05:51.947Z"
     }
   },
   {
@@ -3355,7 +3361,7 @@ export const modelsData = [
         "context": 128000,
         "output": 32768
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -3403,7 +3409,7 @@ export const modelsData = [
         "context": 163840,
         "output": 81920
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -3446,7 +3452,7 @@ export const modelsData = [
         "context": 16384,
         "output": 8192
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -3494,7 +3500,7 @@ export const modelsData = [
         "context": 163840,
         "output": 163840
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -3542,7 +3548,7 @@ export const modelsData = [
         "context": 131072,
         "output": 131072
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -3590,7 +3596,7 @@ export const modelsData = [
         "context": 163840,
         "output": 163840
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -3634,7 +3640,7 @@ export const modelsData = [
         "context": 8192,
         "output": 8192
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -3678,7 +3684,7 @@ export const modelsData = [
         "context": 64000,
         "output": 8192
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -3726,7 +3732,7 @@ export const modelsData = [
         "context": 163840,
         "output": 163840
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -3769,7 +3775,7 @@ export const modelsData = [
         "context": 163840,
         "output": 163840
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -3817,7 +3823,7 @@ export const modelsData = [
         "context": 131072,
         "output": 65536
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -3865,7 +3871,7 @@ export const modelsData = [
         "context": 131072,
         "output": 65536
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -3913,7 +3919,7 @@ export const modelsData = [
         "context": 163840,
         "output": 65536
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -3961,7 +3967,7 @@ export const modelsData = [
         "context": 163840,
         "output": 65536
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -4004,7 +4010,7 @@ export const modelsData = [
         "context": 32768,
         "output": 8192
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -4058,7 +4064,7 @@ export const modelsData = [
         "context": 1000000,
         "output": 8192
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.947Z"
     }
   },
   {
@@ -4112,7 +4118,7 @@ export const modelsData = [
         "context": 1000000,
         "output": 8192
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.947Z"
     }
   },
   {
@@ -4166,7 +4172,7 @@ export const modelsData = [
         "context": 1000000,
         "output": 8192
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.947Z"
     }
   },
   {
@@ -4221,7 +4227,7 @@ export const modelsData = [
         "context": 1048576,
         "output": 8192
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.947Z"
     }
   },
   {
@@ -4276,7 +4282,7 @@ export const modelsData = [
         "context": 1048576,
         "output": 8192
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.948Z"
     }
   },
   {
@@ -4329,7 +4335,7 @@ export const modelsData = [
         "context": 1048576,
         "output": 8192
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.947Z"
     }
   },
   {
@@ -4382,7 +4388,7 @@ export const modelsData = [
         "context": 1048576,
         "output": 8192
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.948Z"
     }
   },
   {
@@ -4439,7 +4445,7 @@ export const modelsData = [
         "context": 1048576,
         "output": 65536
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.947Z"
     }
   },
   {
@@ -4496,7 +4502,7 @@ export const modelsData = [
         "context": 1048576,
         "output": 65536
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.948Z"
     }
   },
   {
@@ -4546,7 +4552,7 @@ export const modelsData = [
         "context": 32768,
         "output": 32768
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.947Z"
     }
   },
   {
@@ -4596,7 +4602,7 @@ export const modelsData = [
         "context": 32768,
         "output": 32768
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.947Z"
     }
   },
   {
@@ -4652,7 +4658,7 @@ export const modelsData = [
         "context": 1048576,
         "output": 65536
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.947Z"
     }
   },
   {
@@ -4708,7 +4714,7 @@ export const modelsData = [
         "context": 1048576,
         "output": 65536
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.948Z"
     }
   },
   {
@@ -4765,7 +4771,7 @@ export const modelsData = [
         "context": 1048576,
         "output": 65536
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.947Z"
     }
   },
   {
@@ -4821,7 +4827,7 @@ export const modelsData = [
         "context": 65536,
         "output": 65536
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.948Z"
     }
   },
   {
@@ -4877,7 +4883,7 @@ export const modelsData = [
         "context": 1048576,
         "output": 65536
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.947Z"
     }
   },
   {
@@ -4933,7 +4939,7 @@ export const modelsData = [
         "context": 1048576,
         "output": 65536
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.948Z"
     }
   },
   {
@@ -4989,7 +4995,7 @@ export const modelsData = [
         "context": 1048576,
         "output": 65536
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.947Z"
     }
   },
   {
@@ -5045,7 +5051,7 @@ export const modelsData = [
         "context": 1048576,
         "output": 65536
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.948Z"
     }
   },
   {
@@ -5101,7 +5107,7 @@ export const modelsData = [
         "context": 1048576,
         "output": 65536
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.947Z"
     }
   },
   {
@@ -5157,7 +5163,7 @@ export const modelsData = [
         "context": 1048576,
         "output": 65536
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.948Z"
     }
   },
   {
@@ -5214,7 +5220,7 @@ export const modelsData = [
         "context": 1048576,
         "output": 65536
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.947Z"
     }
   },
   {
@@ -5271,7 +5277,7 @@ export const modelsData = [
         "context": 1048576,
         "output": 65536
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.948Z"
     }
   },
   {
@@ -5315,7 +5321,7 @@ export const modelsData = [
         "context": 8000,
         "output": 16000
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.947Z"
     }
   },
   {
@@ -5371,7 +5377,7 @@ export const modelsData = [
         "context": 1048576,
         "output": 65536
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.947Z"
     }
   },
   {
@@ -5427,7 +5433,7 @@ export const modelsData = [
         "context": 1048576,
         "output": 65536
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.948Z"
     }
   },
   {
@@ -5483,7 +5489,7 @@ export const modelsData = [
         "context": 1048576,
         "output": 65536
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.947Z"
     }
   },
   {
@@ -5539,7 +5545,7 @@ export const modelsData = [
         "context": 1048576,
         "output": 65536
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.948Z"
     }
   },
   {
@@ -5595,7 +5601,7 @@ export const modelsData = [
         "context": 1048576,
         "output": 65536
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.947Z"
     }
   },
   {
@@ -5651,7 +5657,7 @@ export const modelsData = [
         "context": 1048576,
         "output": 65536
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.948Z"
     }
   },
   {
@@ -5695,7 +5701,7 @@ export const modelsData = [
         "context": 8000,
         "output": 16000
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.947Z"
     }
   },
   {
@@ -5756,7 +5762,7 @@ export const modelsData = [
         "context": 1048576,
         "output": 65536
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.947Z"
     }
   },
   {
@@ -5817,7 +5823,7 @@ export const modelsData = [
         "context": 1048576,
         "output": 65536
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.947Z"
     }
   },
   {
@@ -5878,7 +5884,7 @@ export const modelsData = [
         "context": 1000000,
         "output": 64000
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.947Z"
     }
   },
   {
@@ -5939,7 +5945,7 @@ export const modelsData = [
         "context": 1048576,
         "output": 65536
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.948Z"
     }
   },
   {
@@ -5982,7 +5988,7 @@ export const modelsData = [
         "context": 2048,
         "output": 3072
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.947Z"
     }
   },
   {
@@ -6025,7 +6031,7 @@ export const modelsData = [
         "context": 2048,
         "output": 3072
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.947Z"
     }
   },
   {
@@ -6082,7 +6088,7 @@ export const modelsData = [
         "context": 1048576,
         "output": 65536
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.947Z"
     }
   },
   {
@@ -6139,7 +6145,7 @@ export const modelsData = [
         "context": 1048576,
         "output": 65536
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.948Z"
     }
   },
   {
@@ -6195,7 +6201,7 @@ export const modelsData = [
         "context": 1048576,
         "output": 65536
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.947Z"
     }
   },
   {
@@ -6251,7 +6257,7 @@ export const modelsData = [
         "context": 1048576,
         "output": 65536
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.948Z"
     }
   },
   {
@@ -6308,7 +6314,7 @@ export const modelsData = [
         "context": 128000,
         "output": 8000
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.947Z"
     }
   },
   {
@@ -6363,7 +6369,7 @@ export const modelsData = [
         "context": 131072,
         "output": 65536
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.947Z"
     }
   },
   {
@@ -6417,7 +6423,7 @@ export const modelsData = [
         "context": 200000,
         "output": 64000
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -6462,7 +6468,7 @@ export const modelsData = [
         "context": 131072,
         "output": 8192
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -6511,7 +6517,7 @@ export const modelsData = [
         "context": 202752,
         "output": 8192
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -6559,7 +6565,7 @@ export const modelsData = [
         "context": 128000,
         "output": 4096
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -6614,7 +6620,7 @@ export const modelsData = [
         "context": 1048576,
         "output": 8192
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -6663,7 +6669,7 @@ export const modelsData = [
         "context": 1048576,
         "output": 1048576
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -6719,7 +6725,7 @@ export const modelsData = [
         "context": 1048576,
         "output": 65536
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -6775,7 +6781,7 @@ export const modelsData = [
         "context": 1048576,
         "output": 65536
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -6831,7 +6837,7 @@ export const modelsData = [
         "context": 1048576,
         "output": 65536
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -6887,7 +6893,7 @@ export const modelsData = [
         "context": 1048576,
         "output": 65536
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -6943,7 +6949,7 @@ export const modelsData = [
         "context": 1048576,
         "output": 65536
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -6999,7 +7005,7 @@ export const modelsData = [
         "context": 1048576,
         "output": 65536
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -7055,7 +7061,7 @@ export const modelsData = [
         "context": 1048576,
         "output": 65536
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -7111,7 +7117,7 @@ export const modelsData = [
         "context": 1048576,
         "output": 65536
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -7165,7 +7171,7 @@ export const modelsData = [
         "context": 1050000,
         "output": 66000
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -7212,7 +7218,7 @@ export const modelsData = [
         "context": 8192,
         "output": 8192
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -7261,7 +7267,7 @@ export const modelsData = [
         "context": 96000,
         "output": 8192
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -7310,7 +7316,7 @@ export const modelsData = [
         "context": 96000,
         "output": 8192
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -7357,7 +7363,7 @@ export const modelsData = [
         "context": 8192,
         "output": 8192
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -7408,7 +7414,7 @@ export const modelsData = [
         "context": 8192,
         "output": 8192
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -7453,7 +7459,7 @@ export const modelsData = [
         "context": 16385,
         "output": 4096
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.948Z"
     }
   },
   {
@@ -7501,7 +7507,7 @@ export const modelsData = [
         "context": 8192,
         "output": 8192
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.948Z"
     }
   },
   {
@@ -7550,7 +7556,7 @@ export const modelsData = [
         "context": 128000,
         "output": 4096
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.948Z"
     }
   },
   {
@@ -7601,7 +7607,7 @@ export const modelsData = [
         "context": 1047576,
         "output": 32768
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.948Z"
     }
   },
   {
@@ -7652,7 +7658,7 @@ export const modelsData = [
         "context": 1047576,
         "output": 32768
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.948Z"
     }
   },
   {
@@ -7703,7 +7709,7 @@ export const modelsData = [
         "context": 1047576,
         "output": 32768
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.948Z"
     }
   },
   {
@@ -7754,7 +7760,7 @@ export const modelsData = [
         "context": 128000,
         "output": 16384
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.948Z"
     }
   },
   {
@@ -7803,7 +7809,7 @@ export const modelsData = [
         "context": 128000,
         "output": 4096
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.948Z"
     }
   },
   {
@@ -7854,7 +7860,7 @@ export const modelsData = [
         "context": 128000,
         "output": 16384
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.948Z"
     }
   },
   {
@@ -7905,7 +7911,7 @@ export const modelsData = [
         "context": 128000,
         "output": 16384
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -7956,7 +7962,7 @@ export const modelsData = [
         "context": 128000,
         "output": 16384
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -8009,7 +8015,7 @@ export const modelsData = [
         "input": 272000,
         "output": 128000
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -8034,7 +8040,9 @@ export const modelsData = [
       "streaming",
       "reasoning",
       "chat",
-      "vision"
+      "vision",
+      "structured_output",
+      "json_mode"
     ],
     "pricing": {
       "text_tokens": {
@@ -8056,7 +8064,7 @@ export const modelsData = [
         "input": 272000,
         "output": 128000
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -8109,7 +8117,7 @@ export const modelsData = [
         "input": 272000,
         "output": 128000
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.948Z"
     }
   },
   {
@@ -8162,7 +8170,7 @@ export const modelsData = [
         "input": 272000,
         "output": 128000
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.948Z"
     }
   },
   {
@@ -8215,7 +8223,7 @@ export const modelsData = [
         "input": 272000,
         "output": 128000
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.948Z"
     }
   },
   {
@@ -8266,7 +8274,7 @@ export const modelsData = [
         "input": 272000,
         "output": 272000
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -8319,7 +8327,7 @@ export const modelsData = [
         "input": 272000,
         "output": 128000
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.948Z"
     }
   },
   {
@@ -8371,7 +8379,7 @@ export const modelsData = [
         "context": 128000,
         "output": 16384
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -8424,7 +8432,7 @@ export const modelsData = [
         "input": 272000,
         "output": 128000
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.948Z"
     }
   },
   {
@@ -8477,7 +8485,7 @@ export const modelsData = [
         "input": 272000,
         "output": 128000
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -8530,7 +8538,7 @@ export const modelsData = [
         "input": 272000,
         "output": 128000
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.948Z"
     }
   },
   {
@@ -8583,7 +8591,7 @@ export const modelsData = [
         "input": 272000,
         "output": 128000
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -8635,7 +8643,7 @@ export const modelsData = [
         "context": 128000,
         "output": 16384
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.948Z"
     }
   },
   {
@@ -8689,7 +8697,7 @@ export const modelsData = [
         "input": 272000,
         "output": 128000
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.948Z"
     }
   },
   {
@@ -8740,7 +8748,7 @@ export const modelsData = [
         "input": 272000,
         "output": 128000
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.948Z"
     }
   },
   {
@@ -8787,7 +8795,7 @@ export const modelsData = [
         "context": 256000,
         "output": 65536
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -8832,7 +8840,7 @@ export const modelsData = [
         "context": 131072,
         "output": 8192
       },
-      "last_synced": "2026-01-24T13:58:56.799Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -8879,7 +8887,7 @@ export const modelsData = [
         "context": 65536,
         "output": 65536
       },
-      "last_synced": "2026-01-24T13:58:56.799Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -8928,7 +8936,7 @@ export const modelsData = [
         "context": 64000,
         "output": 64000
       },
-      "last_synced": "2026-01-24T13:58:56.799Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -8975,7 +8983,7 @@ export const modelsData = [
         "context": 128000,
         "output": 4096
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -9022,7 +9030,7 @@ export const modelsData = [
         "context": 128000,
         "output": 4096
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -9071,7 +9079,7 @@ export const modelsData = [
         "context": 128000,
         "output": 4096
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -9118,7 +9126,7 @@ export const modelsData = [
         "context": 131000,
         "output": 4096
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -9165,7 +9173,7 @@ export const modelsData = [
         "context": 131000,
         "output": 4096
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -9214,7 +9222,7 @@ export const modelsData = [
         "context": 128000,
         "output": 4096
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -9261,7 +9269,7 @@ export const modelsData = [
         "context": 128000,
         "output": 4096
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -9304,7 +9312,7 @@ export const modelsData = [
         "context": 8192,
         "output": 2048
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -9347,7 +9355,7 @@ export const modelsData = [
         "context": 8192,
         "output": 2048
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -9396,7 +9404,7 @@ export const modelsData = [
         "context": 1000000,
         "output": 16384
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -9445,7 +9453,7 @@ export const modelsData = [
         "context": 3500000,
         "output": 16384
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -9493,7 +9501,7 @@ export const modelsData = [
         "context": 163840,
         "output": 163840
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -9540,7 +9548,7 @@ export const modelsData = [
         "context": 204608,
         "output": 128000
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -9589,7 +9597,7 @@ export const modelsData = [
         "context": 1000000,
         "output": 1000000
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -9636,7 +9644,7 @@ export const modelsData = [
         "context": 1000000,
         "output": 40000
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -9686,7 +9694,7 @@ export const modelsData = [
         "context": 196600,
         "output": 118000
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -9733,7 +9741,7 @@ export const modelsData = [
         "context": 204800,
         "output": 131072
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -9779,7 +9787,7 @@ export const modelsData = [
         "context": 128000,
         "output": 4096
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -9825,7 +9833,7 @@ export const modelsData = [
         "context": 128000,
         "output": 4096
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -9871,7 +9879,7 @@ export const modelsData = [
         "context": 127000,
         "output": 127000
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -9917,7 +9925,7 @@ export const modelsData = [
         "context": 128000,
         "output": 4096
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -9938,7 +9946,9 @@ export const modelsData = [
     },
     "capabilities": [
       "streaming",
-      "chat"
+      "chat",
+      "structured_output",
+      "json_mode"
     ],
     "pricing": {
       "text_tokens": {
@@ -9959,7 +9969,7 @@ export const modelsData = [
         "context": 32000,
         "output": 32000
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -10007,7 +10017,7 @@ export const modelsData = [
         "context": 128000,
         "output": 4096
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -10056,7 +10066,7 @@ export const modelsData = [
         "context": 32000,
         "output": 8192
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -10103,7 +10113,7 @@ export const modelsData = [
         "context": 256000,
         "output": 256000
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -10150,7 +10160,7 @@ export const modelsData = [
         "context": 262144,
         "output": 262144
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -10197,7 +10207,7 @@ export const modelsData = [
         "context": 262144,
         "output": 262144
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -10244,7 +10254,7 @@ export const modelsData = [
         "context": 131072,
         "output": 131072
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -10291,7 +10301,7 @@ export const modelsData = [
         "context": 128000,
         "output": 128000
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -10338,7 +10348,7 @@ export const modelsData = [
         "context": 32768,
         "output": 32768
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -10385,7 +10395,7 @@ export const modelsData = [
         "context": 131072,
         "output": 131072
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -10432,7 +10442,7 @@ export const modelsData = [
         "context": 32768,
         "output": 32768
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -10481,7 +10491,7 @@ export const modelsData = [
         "context": 131072,
         "output": 131072
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -10530,7 +10540,7 @@ export const modelsData = [
         "context": 262144,
         "output": 262144
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -10577,7 +10587,7 @@ export const modelsData = [
         "context": 131072,
         "output": 131072
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -10626,7 +10636,7 @@ export const modelsData = [
         "context": 128000,
         "output": 8192
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -10675,7 +10685,7 @@ export const modelsData = [
         "context": 96000,
         "output": 8192
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -10724,7 +10734,7 @@ export const modelsData = [
         "context": 96000,
         "output": 96000
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -10770,7 +10780,7 @@ export const modelsData = [
         "context": 256000,
         "output": 256000
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -10817,7 +10827,7 @@ export const modelsData = [
         "context": 131072,
         "output": 131072
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -10864,7 +10874,7 @@ export const modelsData = [
         "context": 131072,
         "output": 32768
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -10911,7 +10921,7 @@ export const modelsData = [
         "context": 262144,
         "output": 16384
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -10958,7 +10968,7 @@ export const modelsData = [
         "context": 262144,
         "output": 16384
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -11008,7 +11018,7 @@ export const modelsData = [
         "context": 262144,
         "output": 262144
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -11055,7 +11065,7 @@ export const modelsData = [
         "context": 32800,
         "output": 32800
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -11103,7 +11113,7 @@ export const modelsData = [
         "context": 131072,
         "output": 8192
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -11151,7 +11161,7 @@ export const modelsData = [
         "context": 131072,
         "output": 131072
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -11199,7 +11209,7 @@ export const modelsData = [
         "context": 131072,
         "output": 131072
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -11247,7 +11257,7 @@ export const modelsData = [
         "context": 128000,
         "output": 4096
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -11293,7 +11303,7 @@ export const modelsData = [
         "context": 128000,
         "output": 4096
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -11341,7 +11351,7 @@ export const modelsData = [
         "context": 131072,
         "output": 131072
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -11393,7 +11403,7 @@ export const modelsData = [
         "context": 200000,
         "output": 100000
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.948Z"
     }
   },
   {
@@ -11416,7 +11426,9 @@ export const modelsData = [
     "capabilities": [
       "streaming",
       "reasoning",
-      "chat"
+      "chat",
+      "structured_output",
+      "json_mode"
     ],
     "pricing": {
       "text_tokens": {
@@ -11439,7 +11451,7 @@ export const modelsData = [
         "context": 128000,
         "output": 65536
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.948Z"
     }
   },
   {
@@ -11485,7 +11497,7 @@ export const modelsData = [
         "context": 128000,
         "output": 32768
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.948Z"
     }
   },
   {
@@ -11535,7 +11547,7 @@ export const modelsData = [
         "context": 200000,
         "output": 100000
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.948Z"
     }
   },
   {
@@ -11587,7 +11599,7 @@ export const modelsData = [
         "context": 200000,
         "output": 100000
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -11639,7 +11651,7 @@ export const modelsData = [
         "context": 200000,
         "output": 100000
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.948Z"
     }
   },
   {
@@ -11689,7 +11701,7 @@ export const modelsData = [
         "context": 200000,
         "output": 100000
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.948Z"
     }
   },
   {
@@ -11739,7 +11751,7 @@ export const modelsData = [
         "context": 200000,
         "output": 100000
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.948Z"
     }
   },
   {
@@ -11791,7 +11803,7 @@ export const modelsData = [
         "context": 200000,
         "output": 100000
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.948Z"
     }
   },
   {
@@ -11843,7 +11855,7 @@ export const modelsData = [
         "context": 200000,
         "output": 100000
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -11889,7 +11901,7 @@ export const modelsData = [
         "context": 128000,
         "output": 4096
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -11935,7 +11947,7 @@ export const modelsData = [
         "context": 128000,
         "output": 4096
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -11981,7 +11993,7 @@ export const modelsData = [
         "context": 128000,
         "output": 4096
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -12027,7 +12039,7 @@ export const modelsData = [
         "context": 128000,
         "output": 4096
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -12078,7 +12090,7 @@ export const modelsData = [
         "context": 1047576,
         "output": 32768
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -12129,7 +12141,7 @@ export const modelsData = [
         "context": 1047576,
         "output": 32768
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -12180,7 +12192,7 @@ export const modelsData = [
         "context": 128000,
         "output": 16384
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -12230,7 +12242,7 @@ export const modelsData = [
         "context": 400000,
         "output": 128000
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -12276,7 +12288,7 @@ export const modelsData = [
         "context": 400000,
         "output": 128000
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -12328,7 +12340,7 @@ export const modelsData = [
         "context": 400000,
         "output": 128000
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -12383,7 +12395,7 @@ export const modelsData = [
         "context": 400000,
         "output": 128000
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -12433,7 +12445,7 @@ export const modelsData = [
         "context": 400000,
         "output": 128000
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -12483,7 +12495,7 @@ export const modelsData = [
         "context": 400000,
         "output": 128000
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -12533,7 +12545,7 @@ export const modelsData = [
         "context": 400000,
         "output": 272000
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -12585,7 +12597,7 @@ export const modelsData = [
         "context": 400000,
         "output": 128000
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -12637,7 +12649,7 @@ export const modelsData = [
         "context": 128000,
         "output": 16384
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -12689,7 +12701,7 @@ export const modelsData = [
         "context": 400000,
         "output": 128000
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -12741,7 +12753,7 @@ export const modelsData = [
         "context": 400000,
         "output": 128000
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -12793,7 +12805,7 @@ export const modelsData = [
         "context": 400000,
         "output": 100000
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -12845,7 +12857,7 @@ export const modelsData = [
         "context": 400000,
         "output": 128000
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -12897,7 +12909,7 @@ export const modelsData = [
         "context": 128000,
         "output": 16384
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -12949,7 +12961,7 @@ export const modelsData = [
         "context": 400000,
         "output": 128000
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -12999,7 +13011,7 @@ export const modelsData = [
         "context": 400000,
         "output": 128000
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -13046,7 +13058,7 @@ export const modelsData = [
         "context": 131072,
         "output": 32768
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -13093,7 +13105,7 @@ export const modelsData = [
         "context": 131072,
         "output": 32768
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.948Z"
     }
   },
   {
@@ -13140,7 +13152,7 @@ export const modelsData = [
         "context": 131072,
         "output": 32768
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -13187,7 +13199,7 @@ export const modelsData = [
         "context": 131072,
         "output": 32768
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -13234,7 +13246,7 @@ export const modelsData = [
         "context": 131072,
         "output": 32768
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.948Z"
     }
   },
   {
@@ -13281,7 +13293,7 @@ export const modelsData = [
         "context": 131072,
         "output": 65536
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -13333,7 +13345,7 @@ export const modelsData = [
         "context": 200000,
         "output": 100000
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -13382,7 +13394,7 @@ export const modelsData = [
         "context": 1840000,
         "output": 0
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -13432,7 +13444,7 @@ export const modelsData = [
         "context": 1840000,
         "output": 0
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -13479,7 +13491,7 @@ export const modelsData = [
         "context": 262144,
         "output": 131072
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -13527,7 +13539,7 @@ export const modelsData = [
         "context": 16384,
         "output": 16384
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -13574,7 +13586,7 @@ export const modelsData = [
         "context": 262144,
         "output": 131072
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -13621,7 +13633,7 @@ export const modelsData = [
         "context": 131072,
         "output": 65536
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -13667,7 +13679,7 @@ export const modelsData = [
         "context": 262000,
         "output": 262000
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -13715,7 +13727,7 @@ export const modelsData = [
         "context": 262000,
         "output": 262000
       },
-      "last_synced": "2026-01-24T13:58:56.800Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -13758,7 +13770,7 @@ export const modelsData = [
         "context": 32768,
         "output": 8192
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -13808,7 +13820,7 @@ export const modelsData = [
         "context": 8192,
         "output": 8192
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -13853,7 +13865,7 @@ export const modelsData = [
         "context": 32768,
         "output": 8192
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -13902,7 +13914,7 @@ export const modelsData = [
         "context": 32768,
         "output": 32768
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -13950,7 +13962,7 @@ export const modelsData = [
         "context": 40960,
         "output": 40960
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -13997,7 +14009,7 @@ export const modelsData = [
         "context": 262144,
         "output": 131072
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -14044,7 +14056,7 @@ export const modelsData = [
         "context": 262144,
         "output": 131072
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -14092,7 +14104,7 @@ export const modelsData = [
         "context": 262144,
         "output": 81920
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -14140,7 +14152,7 @@ export const modelsData = [
         "context": 131072,
         "output": 131072
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -14187,7 +14199,7 @@ export const modelsData = [
         "context": 262000,
         "output": 262000
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -14235,7 +14247,7 @@ export const modelsData = [
         "context": 262000,
         "output": 262000
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -14283,7 +14295,7 @@ export const modelsData = [
         "context": 40960,
         "output": 40960
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -14331,7 +14343,7 @@ export const modelsData = [
         "context": 40960,
         "output": 40960
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -14379,7 +14391,7 @@ export const modelsData = [
         "context": 40960,
         "output": 40960
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -14426,7 +14438,7 @@ export const modelsData = [
         "context": 262144,
         "output": 66536
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -14473,7 +14485,7 @@ export const modelsData = [
         "context": 160000,
         "output": 65536
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -14520,7 +14532,7 @@ export const modelsData = [
         "context": 128000,
         "output": 66536
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -14567,7 +14579,7 @@ export const modelsData = [
         "context": 131072,
         "output": 32768
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -14614,7 +14626,7 @@ export const modelsData = [
         "context": 262144,
         "output": 66536
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -14661,7 +14673,7 @@ export const modelsData = [
         "context": 262144,
         "output": 32768
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -14708,7 +14720,7 @@ export const modelsData = [
         "context": 262144,
         "output": 262144
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -14756,7 +14768,7 @@ export const modelsData = [
         "context": 262144,
         "output": 262144
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -14804,7 +14816,7 @@ export const modelsData = [
         "context": 32768,
         "output": 32768
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -14852,7 +14864,7 @@ export const modelsData = [
         "context": 32768,
         "output": 8192
       },
-      "last_synced": "2026-01-24T13:58:56.799Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
     }
   },
   {
@@ -14900,7 +14912,38 @@ export const modelsData = [
         "context": 32768,
         "output": 32768
       },
-      "last_synced": "2026-01-24T13:58:56.799Z"
+      "last_synced": "2026-01-24T18:05:51.951Z"
+    }
+  },
+  {
+    "id": "stability.stable-diffusion-xl-v1:0",
+    "name": "Stable Diffusion XL v1",
+    "provider": "bedrock",
+    "family": "stability",
+    "created_at": "2023-11-28 00:00:00 UTC",
+    "context_window": 0,
+    "max_output_tokens": 0,
+    "modalities": {
+      "input": [
+        "text"
+      ],
+      "output": [
+        "image"
+      ]
+    },
+    "capabilities": [
+      "image_generation"
+    ],
+    "pricing": {
+      "image": {
+        "standard": {
+          "cost_per_image": 0.04
+        }
+      }
+    },
+    "metadata": {
+      "source": "aws",
+      "last_synced": "2026-01-24T18:13:00.000Z"
     }
   },
   {
@@ -14943,7 +14986,7 @@ export const modelsData = [
         "context": 8191,
         "output": 3072
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.948Z"
     }
   },
   {
@@ -14986,7 +15029,7 @@ export const modelsData = [
         "context": 8191,
         "output": 1536
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.948Z"
     }
   },
   {
@@ -15029,7 +15072,7 @@ export const modelsData = [
         "context": 8192,
         "output": 1536
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.948Z"
     }
   },
   {
@@ -15077,7 +15120,7 @@ export const modelsData = [
         "context": 32768,
         "output": 32768
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -15121,7 +15164,7 @@ export const modelsData = [
         "context": 163840,
         "output": 163840
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -15171,7 +15214,7 @@ export const modelsData = [
         "context": 131072,
         "output": 8192
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -15221,7 +15264,7 @@ export const modelsData = [
         "context": 131072,
         "output": 8192
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -15272,7 +15315,7 @@ export const modelsData = [
         "context": 131072,
         "output": 8192
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -15323,7 +15366,7 @@ export const modelsData = [
         "context": 131072,
         "output": 8192
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -15374,7 +15417,7 @@ export const modelsData = [
         "context": 256000,
         "output": 64000
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -15427,7 +15470,7 @@ export const modelsData = [
         "context": 2000000,
         "output": 30000
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -15480,7 +15523,7 @@ export const modelsData = [
         "context": 2000000,
         "output": 30000
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -15530,7 +15573,7 @@ export const modelsData = [
         "context": 256000,
         "output": 10000
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -15578,7 +15621,7 @@ export const modelsData = [
         "context": 128000,
         "output": 96000
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -15626,7 +15669,7 @@ export const modelsData = [
         "context": 128000,
         "output": 96000
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -15670,7 +15713,7 @@ export const modelsData = [
         "context": 128000,
         "output": 96000
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -15721,7 +15764,7 @@ export const modelsData = [
         "context": 64000,
         "output": 16384
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -15771,7 +15814,7 @@ export const modelsData = [
         "context": 200000,
         "output": 128000
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -15821,7 +15864,7 @@ export const modelsData = [
         "context": 200000,
         "output": 128000
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -15871,7 +15914,7 @@ export const modelsData = [
         "context": 204800,
         "output": 131072
       },
-      "last_synced": "2026-01-24T13:58:56.798Z"
+      "last_synced": "2026-01-24T18:05:51.950Z"
     }
   },
   {
@@ -15919,45 +15962,7 @@ export const modelsData = [
         "context": 204800,
         "output": 131072
       },
-      "last_synced": "2026-01-24T13:58:56.797Z"
+      "last_synced": "2026-01-24T18:05:51.948Z"
     }
-  },
-  {
-    "id": "amazon.titan-embed-text-v1",
-    "name": "Titan Text Embeddings v1",
-    "provider": "bedrock",
-    "family": "titan",
-    "context_window": 8000,
-    "max_output_tokens": 0,
-    "modalities": {
-      "input": [
-        "text"
-      ],
-      "output": [
-        "embedding"
-      ]
-    },
-    "capabilities": [
-      "embeddings"
-    ]
-  },
-  {
-    "id": "amazon.titan-embed-text-v2:0",
-    "name": "Titan Text Embeddings v2",
-    "provider": "bedrock",
-    "family": "titan",
-    "context_window": 8000,
-    "max_output_tokens": 0,
-    "modalities": {
-      "input": [
-        "text"
-      ],
-      "output": [
-        "embedding"
-      ]
-    },
-    "capabilities": [
-      "embeddings"
-    ]
   }
 ];

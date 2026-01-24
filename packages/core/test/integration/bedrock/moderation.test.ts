@@ -8,8 +8,8 @@ describe("Bedrock Moderation Integration (VCR)", () => {
   let polly: Polly;
   let llm: NodeLLMCore;
 
-  beforeEach(() => {
-    polly = setupVCR("bedrock-moderation", "bedrock");
+  beforeEach(({ task }) => {
+    polly = setupVCR(task.name, "bedrock");
     llm = createLLM({
       provider: "bedrock",
       bedrockRegion: "us-east-1",

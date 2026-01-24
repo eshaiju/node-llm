@@ -32,13 +32,13 @@ describe("Bedrock integration with Nova (VCR)", { timeout: 30000 }, () => {
     const chat = llm.chat(modelId);
 
     let fullText = "";
-    for await (const chunk of chat.stream("Say 'Stream Test'")) {
+    for await (const chunk of chat.stream("Translate 'ocean' to Spanish")) {
       if (chunk.content) {
         fullText += chunk.content;
       }
     }
 
-    expect(fullText.toLowerCase()).toContain("stream test");
+    expect(fullText.toLowerCase()).toContain("océano");
   });
 
   it("should support tool calling", async ({ task }) => {

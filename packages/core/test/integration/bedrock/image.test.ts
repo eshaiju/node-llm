@@ -8,8 +8,8 @@ describe("Bedrock Image Generation Integration (VCR)", { timeout: 60000 }, () =>
   let polly: Polly;
   let llm: NodeLLMCore;
 
-  beforeEach(() => {
-    polly = setupVCR("bedrock-image", "bedrock");
+  beforeEach(({ task }) => {
+    polly = setupVCR(task.name, "bedrock");
 
     llm = createLLM({
       provider: "bedrock",

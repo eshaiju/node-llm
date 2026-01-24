@@ -8,8 +8,8 @@ describe("Bedrock Guardrails Integration (VCR)", () => {
   let polly: Polly;
   let llm: NodeLLMCore;
 
-  beforeEach(() => {
-    polly = setupVCR("bedrock-guardrails", "bedrock");
+  beforeEach(({ task }) => {
+    polly = setupVCR(task.name, "bedrock");
 
     // Configure with dummy guardrail info
     llm = createLLM({

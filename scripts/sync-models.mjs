@@ -115,7 +115,29 @@ async function syncModels() {
     }
 
     const rawData = await response.json();
+
+    // Read existing models to preserve manual/other source entries
+    let existingModels = [];
+    if (fs.existsSync(MODELS_FILE)) {
+      try {
+        const content = fs.readFileSync(MODELS_FILE, "utf-8");
+        const jsonMatch = content.match(/modelsData = (\[[\s\S]*\]);/);
+        if (jsonMatch) {
+          existingModels = JSON.parse(jsonMatch[1]);
+        }
+      } catch {
+        console.warn("Could not parse existing models file, starting fresh.");
+      }
+    }
+
     const finalModels = [];
+    // Preserve any models that didn't come from models.dev
+    for (const model of existingModels) {
+      if (model.metadata?.source !== "models.dev") {
+        finalModels.push(model);
+      }
+    }
+
     const generatedAliases = { ...GOLDEN_ALIASES };
 
     for (const [providerId, providerData] of Object.entries(rawData)) {
@@ -148,9 +170,23 @@ async function syncModels() {
           caps.push("function_calling");
           caps.push("tools");
         }
-        if (details.json_mode || details.structured_output) {
+        if (details.json_mode || details.structured_output || details.tool_call) {
           caps.push("structured_output");
           caps.push("json_mode");
+        }
+
+        // Special overrides for DeepSeek Reasoner (R1)
+        if (modelId === "deepseek-reasoner") {
+          // R1 does not support tools/function calling on official API
+          const remove = ["function_calling", "tools", "vision"];
+          remove.forEach((cap) => {
+            const idx = caps.indexOf(cap);
+            if (idx > -1) caps.splice(idx, 1);
+          });
+
+          // Ensure reasoning and structured_output are present
+          if (!caps.includes("reasoning")) caps.push("reasoning");
+          if (!caps.includes("structured_output")) caps.push("structured_output");
         }
 
         const modelEntry = {
@@ -303,14 +339,23 @@ ${new Date().toISOString().split("T")[0]}
 `;
 
   // Generate tables for each provider
-  const providerOrder = ["openai", "anthropic", "gemini", "deepseek", "openrouter", "ollama"];
+  const providerOrder = [
+    "openai",
+    "anthropic",
+    "gemini",
+    "deepseek",
+    "openrouter",
+    "ollama",
+    "bedrock"
+  ];
   const providerNames = {
     openai: "OpenAI",
     anthropic: "Anthropic",
     gemini: "Gemini",
     deepseek: "DeepSeek",
     openrouter: "OpenRouter",
-    ollama: "Ollama (Local)"
+    ollama: "Ollama (Local)",
+    bedrock: "Amazon Bedrock"
   };
 
   providerOrder.forEach((provider) => {
