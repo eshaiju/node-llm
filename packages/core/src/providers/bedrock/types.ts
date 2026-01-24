@@ -17,6 +17,17 @@ export interface BedrockContentBlock {
       bytes: string; // base64
     };
   };
+  document?: {
+    format: "pdf" | "csv" | "doc" | "docx" | "xls" | "xlsx" | "html" | "txt" | "md";
+    name: string;
+    source: {
+      bytes: string; // base64
+    };
+  };
+  reasoningContent?: {
+    text?: string;
+    redactedContent?: string;
+  };
   toolUse?: {
     toolUseId: string;
     name: string;
@@ -26,6 +37,11 @@ export interface BedrockContentBlock {
     toolUseId: string;
     content: BedrockContentBlock[];
     status?: "success" | "error";
+  };
+  guardContent?: {
+    text: {
+      text: string;
+    };
   };
 }
 
@@ -63,6 +79,7 @@ export interface BedrockConverseRequest {
   system?: BedrockContentBlock[];
   toolConfig?: BedrockToolConfig;
   inferenceConfig?: BedrockInferenceConfig;
+  additionalModelRequestFields?: Record<string, any>;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -96,6 +113,9 @@ export interface BedrockStreamEvent {
     contentBlockIndex: number;
     start: {
       text?: string;
+      reasoningContent?: {
+        text?: string;
+      };
       toolUse?: {
         toolUseId: string;
         name: string;
@@ -106,6 +126,9 @@ export interface BedrockStreamEvent {
     contentBlockIndex: number;
     delta: {
       text?: string;
+      reasoningContent?: {
+        text?: string;
+      };
       toolUse?: {
         input: string; // JSON string fragment
       };

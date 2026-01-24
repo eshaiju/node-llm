@@ -50,7 +50,8 @@ export class BedrockChat {
     // Build the Bedrock request body
     const body = buildConverseRequest(request.messages, request.tools, {
       maxTokens: request.max_tokens,
-      temperature: request.temperature
+      temperature: request.temperature,
+      thinking: request.thinking
     });
 
     const bodyJson = JSON.stringify(body);
@@ -152,12 +153,19 @@ export class BedrockChat {
   private parseResponse(response: BedrockConverseResponse): ChatResponse {
     const message = response.output.message;
     let content: string | null = null;
+    let reasoning: string | null = null;
     const toolCalls: ToolCall[] = [];
 
     // Process content blocks
     for (const block of message.content) {
       if (block.text) {
         content = content ? content + block.text : block.text;
+      }
+
+      if (block.reasoningContent?.text) {
+        reasoning = reasoning
+          ? reasoning + block.reasoningContent.text
+          : block.reasoningContent.text;
       }
 
       if (block.toolUse) {
@@ -181,6 +189,7 @@ export class BedrockChat {
 
     return {
       content,
+      reasoning: reasoning || undefined,
       tool_calls: toolCalls.length > 0 ? toolCalls : undefined,
       usage
     };

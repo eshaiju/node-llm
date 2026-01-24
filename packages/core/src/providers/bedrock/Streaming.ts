@@ -27,6 +27,8 @@ export class BedrockStreaming {
     const internalController = new AbortController();
     const abortController = controller || internalController;
     const signal = request.signal ? (request.signal as AbortSignal) : abortController.signal;
+    const currentToolCalls: Map<number, { id: string; name: string; input: string }> = new Map();
+    let currentReasoning = "";
 
     let modelId = request.model;
     // Regional inference profile normalization
@@ -41,7 +43,8 @@ export class BedrockStreaming {
     const url = `${this.baseUrl}/model/${encodeURIComponent(modelId)}/converse-stream`;
     const body = buildConverseRequest(request.messages, request.tools, {
       maxTokens: request.max_tokens,
-      temperature: request.temperature
+      temperature: request.temperature,
+      thinking: request.thinking
     });
 
     const bodyJson = JSON.stringify(body);
@@ -102,7 +105,9 @@ export class BedrockStreaming {
 
           try {
             const event = JSON.parse(chunkJson);
-            const chatChunk = this.parseEvent(event);
+            const chatChunk = this.parseEvent(event, currentToolCalls, (text) => {
+              currentReasoning += text;
+            });
             if (chatChunk) {
               yield chatChunk;
             }
@@ -123,28 +128,89 @@ export class BedrockStreaming {
   /**
    * Parse a Bedrock ConverseStream event into a NodeLLM ChatChunk.
    */
-  private parseEvent(event: any): ChatChunk | null {
+  private parseEvent(
+    event: any,
+    toolCalls: Map<number, { id: string; name: string; input: string }>,
+    onReasoning: (text: string) => void
+  ): ChatChunk | null {
     // Bedrock ConverseStream events can be wrapped or unwrapped depending on model/service version
+    const contentBlockStart = event.contentBlockStart;
     const contentBlockDelta = event.contentBlockDelta || (event.delta ? event : null);
+    const contentBlockStop = event.contentBlockStop;
     const messageStop = event.messageStop || (event.stopReason ? event : null);
     const metadata = event.metadata || (event.usage ? event : null);
 
-    if (contentBlockDelta) {
-      const delta = contentBlockDelta.delta;
-      if (delta && delta.text) {
-        return { content: delta.text };
+    // 1. Content Block Start (Initialize tools or reasoning)
+    if (contentBlockStart) {
+      const { contentBlockIndex, start } = contentBlockStart;
+      if (start?.toolUse) {
+        toolCalls.set(contentBlockIndex, {
+          id: start.toolUse.toolUseId,
+          name: start.toolUse.name,
+          input: ""
+        });
+      }
+      if (start?.reasoningContent) {
+        return { content: "", reasoning: "" };
       }
     }
 
-    if (messageStop) {
+    // 2. Content Block Delta (Accumulate text, tools, or reasoning)
+    if (contentBlockDelta) {
+      const delta = contentBlockDelta.delta || contentBlockDelta;
+      const contentBlockIndex = contentBlockDelta.contentBlockIndex ?? 0;
+
+      if (delta.text) {
+        return { content: delta.text };
+      }
+
+      if (delta.reasoningContent?.text) {
+        onReasoning(delta.reasoningContent.text);
+        return { content: "", reasoning: delta.reasoningContent.text };
+      }
+
+      if (delta.toolUse) {
+        const toolCall = toolCalls.get(contentBlockIndex);
+        if (toolCall) {
+          toolCall.input += delta.toolUse.input;
+          return null;
+        }
+      }
+    }
+
+    // 3. Content Block Stop (Finalize tool calls)
+    if (contentBlockStop) {
+      const { contentBlockIndex } = contentBlockStop;
+      const toolCall = toolCalls.get(contentBlockIndex);
+      if (toolCall) {
+        toolCalls.delete(contentBlockIndex);
+        return {
+          content: "",
+          tool_calls: [
+            {
+              id: toolCall.id,
+              type: "function",
+              function: {
+                name: toolCall.name,
+                arguments: toolCall.input
+              }
+            }
+          ]
+        };
+      }
+    }
+
+    // 4. Message Stop
+    if (event.messageStop) {
       return { content: "", done: true };
     }
 
-    if (metadata && metadata.usage) {
+    // 5. Metadata (Usage)
+    if (event.metadata && event.metadata.usage) {
       const usage: Usage = {
-        input_tokens: metadata.usage.inputTokens,
-        output_tokens: metadata.usage.outputTokens,
-        total_tokens: metadata.usage.totalTokens
+        input_tokens: event.metadata.usage.inputTokens,
+        output_tokens: event.metadata.usage.outputTokens,
+        total_tokens: event.metadata.usage.totalTokens
       };
       return { content: "", usage, done: true };
     }

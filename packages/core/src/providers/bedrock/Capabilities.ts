@@ -116,14 +116,26 @@ export class Capabilities {
    * Check if a model supports chat.
    */
   static supportsChat(modelId: string): boolean {
-    return /anthropic\.claude/.test(modelId);
+    return (
+      /anthropic\.claude/.test(modelId) ||
+      /amazon\.nova/.test(modelId) ||
+      /mistral\.mistral/.test(modelId) ||
+      /meta\.llama/.test(modelId) ||
+      /deepseek/.test(modelId)
+    );
   }
 
   /**
    * Check if a model supports streaming.
    */
   static supportsStreaming(modelId: string): boolean {
-    return /anthropic\.claude/.test(modelId);
+    return (
+      /anthropic\.claude/.test(modelId) ||
+      /amazon\.nova/.test(modelId) ||
+      /mistral\.mistral/.test(modelId) ||
+      /meta\.llama/.test(modelId) ||
+      /deepseek/.test(modelId)
+    );
   }
 
   /**
@@ -133,8 +145,12 @@ export class Capabilities {
     const model = ModelRegistry.find(modelId, "bedrock");
     if (model?.modalities?.input?.includes("image")) return true;
 
-    // All Claude models support vision
-    return /anthropic\.claude/.test(modelId);
+    // All Claude 3+ models and Nova models support vision
+    return (
+      /anthropic\.claude-3/.test(modelId) ||
+      /anthropic\.claude-4/.test(modelId) ||
+      /amazon\.nova/.test(modelId)
+    );
   }
 
   /**
@@ -144,8 +160,8 @@ export class Capabilities {
     const model = ModelRegistry.find(modelId, "bedrock");
     if (model?.capabilities?.includes("function_calling")) return true;
 
-    // Claude models support tools
-    return /anthropic\.claude/.test(modelId);
+    // Claude and Nova models support tools via Converse API
+    return /anthropic\.claude/.test(modelId) || /amazon\.nova/.test(modelId);
   }
 
   /**
@@ -179,7 +195,10 @@ export class Capabilities {
   static getInputModalities(modelId: string): string[] {
     const modalities = ["text"];
 
-    if (/anthropic\.claude/.test(modelId) && this.supportsVision(modelId)) {
+    if (
+      (/anthropic\.claude/.test(modelId) || /amazon\.nova/.test(modelId)) &&
+      this.supportsVision(modelId)
+    ) {
       modalities.push("image");
       modalities.push("pdf");
     }
@@ -208,7 +227,7 @@ export class Capabilities {
       capabilities.push("function_calling");
     }
 
-    if (/claude-3-7/.test(modelId)) {
+    if (/claude-3-7|nova/.test(modelId)) {
       capabilities.push("reasoning");
     }
 

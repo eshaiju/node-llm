@@ -13,6 +13,7 @@ import {
   BedrockConverseRequest,
   BedrockToolConfig
 } from "./types.js";
+import { ThinkingConfig } from "../../providers/Provider.js";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Message Conversion
@@ -37,13 +38,13 @@ function messageContentToBlocks(content: Message["content"]): BedrockContentBloc
         if (match && match[1] && match[2]) {
           blocks.push({
             image: {
-              format: match[1] as "png" | "jpeg" | "gif" | "webp",
+              format: match[1].replace("jpg", "jpeg") as "png" | "jpeg" | "gif" | "webp",
               source: { bytes: match[2] }
             }
           });
         } else {
-          // Fallback for unsupported image format
-          blocks.push({ text: "[image]" });
+          // Fallback if not a data URL or missing base64
+          blocks.push({ text: `[Image: ${part.image_url.url}]` });
         }
       } else {
         // Default to empty text for unsupported types
@@ -99,9 +100,18 @@ export function convertMessages(messages: Message[]): {
       continue;
     }
 
-    // Assistant messages (may include tool calls)
+    // Assistant messages (may include tool calls and reasoning)
     if (msg.role === "assistant") {
       const contentBlocks = messageContentToBlocks(msg.content);
+
+      // Add reasoning content if present
+      if (msg.reasoning) {
+        contentBlocks.unshift({
+          reasoningContent: {
+            text: msg.reasoning
+          }
+        });
+      }
 
       // Add tool use blocks if present
       if (msg.tool_calls) {
@@ -181,6 +191,7 @@ export function buildConverseRequest(
   options?: {
     maxTokens?: number;
     temperature?: number;
+    thinking?: ThinkingConfig;
   }
 ): BedrockConverseRequest {
   const { messages: bedrockMessages, system } = convertMessages(messages);
@@ -207,6 +218,16 @@ export function buildConverseRequest(
     if (options.temperature !== undefined) {
       request.inferenceConfig.temperature = options.temperature;
     }
+  }
+
+  // Thinking config for Claude 3.7+
+  if (options?.thinking?.budget) {
+    request.additionalModelRequestFields = {
+      thinking: {
+        type: "enabled",
+        budget_tokens: options.thinking.budget
+      }
+    };
   }
 
   return request;
