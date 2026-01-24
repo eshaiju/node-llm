@@ -28,17 +28,20 @@
 
 import {
   Provider,
+  ProviderCapabilities,
+  ModelInfo,
   ChatRequest,
   ChatResponse,
   ChatChunk,
-  ProviderCapabilities,
-  ModelInfo
+  EmbeddingRequest,
+  EmbeddingResponse
 } from "../Provider.js";
 import { BaseProvider } from "../BaseProvider.js";
 import { BedrockConfig, getBedrockEndpoint } from "./config.js";
 import { BedrockChat } from "./Chat.js";
 import { BedrockModels } from "./Models.js";
 import { BedrockStreaming } from "./Streaming.js";
+import { BedrockEmbeddings } from "./Embeddings.js";
 import { Capabilities } from "./Capabilities.js";
 
 export class BedrockProvider extends BaseProvider implements Provider {
@@ -46,12 +49,13 @@ export class BedrockProvider extends BaseProvider implements Provider {
   private readonly chatHandler: BedrockChat;
   private readonly modelsHandler: BedrockModels;
   private readonly streamingHandler: BedrockStreaming;
+  private readonly embeddingsHandler: BedrockEmbeddings;
 
   public capabilities: ProviderCapabilities = {
     supportsVision: (model: string) => Capabilities.supportsVision(model),
     supportsTools: (model: string) => Capabilities.supportsTools(model),
     supportsStructuredOutput: (model: string) => Capabilities.supportsJsonMode(model),
-    supportsEmbeddings: (_model: string) => false,
+    supportsEmbeddings: (model: string) => Capabilities.supportsEmbeddings(model),
     supportsImageGeneration: (_model: string) => false,
     supportsTranscription: (_model: string) => false,
     supportsModeration: (_model: string) => false,
@@ -66,6 +70,7 @@ export class BedrockProvider extends BaseProvider implements Provider {
     this.chatHandler = new BedrockChat(config);
     this.modelsHandler = new BedrockModels(config);
     this.streamingHandler = new BedrockStreaming(config);
+    this.embeddingsHandler = new BedrockEmbeddings(config);
   }
 
   public apiBase(): string {
@@ -74,6 +79,9 @@ export class BedrockProvider extends BaseProvider implements Provider {
 
   public headers(): Record<string, string> {
     // Headers are built dynamically based on auth mode
+    // This method is primarily for SigV4 signing, which happens at the HTTP client level.
+    // For API Key auth, the key is passed in the Authorization header directly.
+    // For now, we return a default Content-Type.
     return {
       "Content-Type": "application/json"
     };
@@ -81,11 +89,6 @@ export class BedrockProvider extends BaseProvider implements Provider {
 
   protected providerName(): string {
     return "bedrock";
-  }
-
-  public override defaultModel(_feature?: string): string {
-    // Amazon Nova Lite is available by default and cost-effective
-    return "amazon.nova-lite-v1:0";
   }
 
   async chat(request: ChatRequest): Promise<ChatResponse> {
@@ -98,6 +101,18 @@ export class BedrockProvider extends BaseProvider implements Provider {
 
   async listModels(): Promise<ModelInfo[]> {
     return this.modelsHandler.execute();
+  }
+
+  async embed(request: EmbeddingRequest): Promise<EmbeddingResponse> {
+    return this.embeddingsHandler.execute(request);
+  }
+
+  public override defaultModel(feature?: string): string {
+    if (feature === "embeddings") {
+      return "amazon.titan-embed-text-v2:0";
+    }
+    // Amazon Nova Lite is available by default and cost-effective
+    return "amazon.nova-lite-v1:0";
   }
 }
 

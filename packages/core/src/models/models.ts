@@ -15861,5 +15861,43 @@ export const modelsData = [
       },
       "last_synced": "2026-01-23T19:21:54.185Z"
     }
+  },
+  {
+    "id": "amazon.titan-embed-text-v1",
+    "name": "Titan Text Embeddings v1",
+    "provider": "bedrock",
+    "family": "titan",
+    "context_window": 8000,
+    "max_output_tokens": 0,
+    "modalities": {
+      "input": [
+        "text"
+      ],
+      "output": [
+        "embedding"
+      ]
+    },
+    "capabilities": [
+      "embeddings"
+    ]
+  },
+  {
+    "id": "amazon.titan-embed-text-v2:0",
+    "name": "Titan Text Embeddings v2",
+    "provider": "bedrock",
+    "family": "titan",
+    "context_window": 8000,
+    "max_output_tokens": 0,
+    "modalities": {
+      "input": [
+        "text"
+      ],
+      "output": [
+        "embedding"
+      ]
+    },
+    "capabilities": [
+      "embeddings"
+    ]
   }
 ];

@@ -92,7 +92,8 @@ export class BedrockModels {
       modelId.includes("mistral") ||
       modelId.includes("meta.llama") ||
       modelId.includes("amazon.nova") ||
-      modelId.includes("amazon.titan-text");
+      modelId.includes("amazon.titan-text") ||
+      modelId.includes("amazon.titan-embed");
 
     return isSupportedFamily;
   }

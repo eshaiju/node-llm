@@ -1,8 +1,5 @@
 /**
- * Bedrock Model Capabilities
- *
  * Maps Bedrock model IDs to their capabilities.
- * Supports Claude, DeepSeek, Titan, Mistral, and Llama models.
  */
 
 import { ModelRegistry } from "../../models/ModelRegistry.js";
@@ -62,9 +59,6 @@ const PRICES: Record<ModelFamily, { input: number; output: number }> = {
 // ─────────────────────────────────────────────────────────────────────────────
 
 export class Capabilities {
-  /**
-   * Get the model family for pricing/capability lookup.
-   */
   static getModelFamily(modelId: string): ModelFamily {
     for (const [pattern, family] of MODEL_FAMILIES) {
       if (pattern.test(modelId)) return family;
@@ -72,9 +66,6 @@ export class Capabilities {
     return "other";
   }
 
-  /**
-   * Get the context window for a model.
-   */
   static getContextWindow(modelId: string): number | null {
     const val = ModelRegistry.getContextWindow(modelId, "bedrock");
     if (val) return val;
@@ -102,9 +93,6 @@ export class Capabilities {
     return null;
   }
 
-  /**
-   * Get max output tokens for a model.
-   */
   static getMaxOutputTokens(modelId: string): number | null {
     const val = ModelRegistry.getMaxOutputTokens(modelId, "bedrock");
     if (val) return val;
@@ -112,10 +100,9 @@ export class Capabilities {
     return 4_096;
   }
 
-  /**
-   * Check if a model supports chat.
-   */
   static supportsChat(modelId: string): boolean {
+    if (ModelRegistry.supports(modelId, "chat", "bedrock")) return true;
+
     return (
       /anthropic\.claude/.test(modelId) ||
       /amazon\.nova/.test(modelId) ||
@@ -125,10 +112,9 @@ export class Capabilities {
     );
   }
 
-  /**
-   * Check if a model supports streaming.
-   */
   static supportsStreaming(modelId: string): boolean {
+    if (ModelRegistry.supports(modelId, "streaming", "bedrock")) return true;
+
     return (
       /anthropic\.claude/.test(modelId) ||
       /amazon\.nova/.test(modelId) ||
@@ -138,48 +124,38 @@ export class Capabilities {
     );
   }
 
-  /**
-   * Check if a model supports vision (image input).
-   */
   static supportsVision(modelId: string): boolean {
     const model = ModelRegistry.find(modelId, "bedrock");
     if (model?.modalities?.input?.includes("image")) return true;
+    if (model?.capabilities?.includes("vision")) return true;
 
-    // All Claude 3+ models and Nova models support vision
-    return (
-      /anthropic\.claude-3/.test(modelId) ||
-      /anthropic\.claude-4/.test(modelId) ||
-      /amazon\.nova/.test(modelId)
-    );
+    return /anthropic\.claude-3|anthropic\.claude-4|amazon\.nova/.test(modelId);
   }
 
-  /**
-   * Check if a model supports tool/function calling.
-   */
   static supportsTools(modelId: string): boolean {
-    const model = ModelRegistry.find(modelId, "bedrock");
-    if (model?.capabilities?.includes("function_calling")) return true;
+    if (ModelRegistry.supports(modelId, "tools", "bedrock")) return true;
+    if (ModelRegistry.supports(modelId, "function_calling", "bedrock")) return true;
 
-    // Claude and Nova models support tools via Converse API
-    return /anthropic\.claude/.test(modelId) || /amazon\.nova/.test(modelId);
+    return /anthropic\.claude|amazon\.nova/.test(modelId);
   }
 
-  /**
-   * Check if a model supports JSON mode.
-   */
   static supportsJsonMode(modelId: string): boolean {
-    return /anthropic\.claude/.test(modelId) || /amazon\.nova/.test(modelId);
+    if (ModelRegistry.supports(modelId, "json_mode", "bedrock")) return true;
+    if (ModelRegistry.supports(modelId, "structured_output", "bedrock")) return true;
+
+    return /anthropic\.claude|amazon\.nova/.test(modelId);
   }
 
-  /**
-   * Check if a model supports extended thinking/reasoning.
-   */
   static supportsExtendedThinking(modelId: string): boolean {
-    const model = ModelRegistry.find(modelId, "bedrock");
-    if (model?.capabilities?.includes("reasoning")) return true;
+    if (ModelRegistry.supports(modelId, "reasoning", "bedrock")) return true;
 
-    // Claude 3.7 models support reasoning
     return /claude-3-7/.test(modelId);
+  }
+
+  static supportsEmbeddings(modelId: string): boolean {
+    if (ModelRegistry.supports(modelId, "embeddings", "bedrock")) return true;
+
+    return /amazon\.titan-embed/.test(modelId);
   }
 
   /**
@@ -239,9 +215,6 @@ export class Capabilities {
     return capabilities;
   }
 
-  /**
-   * Get pricing for a model.
-   */
   static getPricing(modelId: string): ModelPricing | undefined {
     // Try registry first
     const registryPricing = PricingRegistry.getPricing(modelId, "bedrock");
