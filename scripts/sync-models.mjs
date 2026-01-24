@@ -209,8 +209,6 @@ async function syncModels() {
           },
           metadata: {
             source: "models.dev",
-            cost: details.cost || {},
-            limit: details.limit || {},
             last_synced: new Date().toISOString()
           }
         };

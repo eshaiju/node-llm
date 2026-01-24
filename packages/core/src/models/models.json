@@ -31,15 +31,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 2,
-        "output": 8
-      },
-      "limit": {
-        "context": 256000,
-        "output": 4096
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -74,15 +66,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.2,
-        "output": 0.4
-      },
-      "limit": {
-        "context": 256000,
-        "output": 4096
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.743Z"
     }
   },
   {
@@ -117,15 +101,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.33,
-        "output": 2.75
-      },
-      "limit": {
-        "context": 128000,
-        "output": 4096
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.743Z"
     }
   },
   {
@@ -162,16 +138,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.06,
-        "output": 0.24,
-        "cache_read": 0.015
-      },
-      "limit": {
-        "context": 300000,
-        "output": 8192
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.743Z"
     }
   },
   {
@@ -207,16 +174,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.035,
-        "output": 0.14,
-        "cache_read": 0.00875
-      },
-      "limit": {
-        "context": 128000,
-        "output": 8192
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -253,15 +211,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 2.5,
-        "output": 12.5
-      },
-      "limit": {
-        "context": 1000000,
-        "output": 16384
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.743Z"
     }
   },
   {
@@ -298,16 +248,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.8,
-        "output": 3.2,
-        "cache_read": 0.2
-      },
-      "limit": {
-        "context": 300000,
-        "output": 8192
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -341,15 +282,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.2,
-        "output": 0.6
-      },
-      "limit": {
-        "context": 128000,
-        "output": 4096
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.743Z"
     }
   },
   {
@@ -383,15 +316,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.2,
-        "output": 0.6
-      },
-      "limit": {
-        "context": 128000,
-        "output": 4096
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.743Z"
     }
   },
   {
@@ -428,17 +353,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.8,
-        "output": 4,
-        "cache_read": 0.08,
-        "cache_write": 1
-      },
-      "limit": {
-        "context": 200000,
-        "output": 8192
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.743Z"
     }
   },
   {
@@ -475,17 +390,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 3,
-        "output": 15,
-        "cache_read": 0.3,
-        "cache_write": 3.75
-      },
-      "limit": {
-        "context": 200000,
-        "output": 8192
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -522,17 +427,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 3,
-        "output": 15,
-        "cache_read": 0.3,
-        "cache_write": 3.75
-      },
-      "limit": {
-        "context": 200000,
-        "output": 8192
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -569,17 +464,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 3,
-        "output": 15,
-        "cache_read": 0.3,
-        "cache_write": 3.75
-      },
-      "limit": {
-        "context": 200000,
-        "output": 8192
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -615,15 +500,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.25,
-        "output": 1.25
-      },
-      "limit": {
-        "context": 200000,
-        "output": 4096
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -659,15 +536,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 15,
-        "output": 75
-      },
-      "limit": {
-        "context": 200000,
-        "output": 4096
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -703,15 +572,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 3,
-        "output": 15
-      },
-      "limit": {
-        "context": 200000,
-        "output": 4096
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.743Z"
     }
   },
   {
@@ -749,17 +610,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 1,
-        "output": 5,
-        "cache_read": 0.1,
-        "cache_write": 1.25
-      },
-      "limit": {
-        "context": 200000,
-        "output": 64000
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -787,15 +638,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.8,
-        "output": 2.4
-      },
-      "limit": {
-        "context": 100000,
-        "output": 4096
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.743Z"
     }
   },
   {
@@ -833,17 +676,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 15,
-        "output": 75,
-        "cache_read": 1.5,
-        "cache_write": 18.75
-      },
-      "limit": {
-        "context": 200000,
-        "output": 32000
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.743Z"
     }
   },
   {
@@ -881,17 +714,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 15,
-        "output": 75,
-        "cache_read": 1.5,
-        "cache_write": 18.75
-      },
-      "limit": {
-        "context": 200000,
-        "output": 32000
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -929,17 +752,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 5,
-        "output": 25,
-        "cache_read": 0.5,
-        "cache_write": 6.25
-      },
-      "limit": {
-        "context": 200000,
-        "output": 64000
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -977,17 +790,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 3,
-        "output": 15,
-        "cache_read": 0.3,
-        "cache_write": 3.75
-      },
-      "limit": {
-        "context": 200000,
-        "output": 64000
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -1025,17 +828,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 3,
-        "output": 15,
-        "cache_read": 0.3,
-        "cache_write": 3.75
-      },
-      "limit": {
-        "context": 200000,
-        "output": 64000
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.743Z"
     }
   },
   {
@@ -1063,15 +856,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 8,
-        "output": 24
-      },
-      "limit": {
-        "context": 100000,
-        "output": 4096
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -1099,15 +884,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 8,
-        "output": 24
-      },
-      "limit": {
-        "context": 200000,
-        "output": 4096
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -1144,17 +921,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.8,
-        "output": 4,
-        "cache_read": 0.08,
-        "cache_write": 1
-      },
-      "limit": {
-        "context": 200000,
-        "output": 8192
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -1192,17 +959,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 15,
-        "output": 75,
-        "cache_read": 1.5,
-        "cache_write": 18.75
-      },
-      "limit": {
-        "context": 200000,
-        "output": 128000
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -1240,17 +997,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 1,
-        "output": 5,
-        "cache_read": 0.1,
-        "cache_write": 1.25
-      },
-      "limit": {
-        "context": 200000,
-        "output": 64000
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -1288,17 +1035,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 15,
-        "output": 75,
-        "cache_read": 1.5,
-        "cache_write": 18.75
-      },
-      "limit": {
-        "context": 200000,
-        "output": 32000
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -1336,17 +1073,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 15,
-        "output": 75,
-        "cache_read": 1.5,
-        "cache_write": 18.75
-      },
-      "limit": {
-        "context": 200000,
-        "output": 32000
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -1384,17 +1111,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 5,
-        "output": 25,
-        "cache_read": 0.5,
-        "cache_write": 6.25
-      },
-      "limit": {
-        "context": 200000,
-        "output": 32000
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -1432,23 +1149,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 3,
-        "output": 15,
-        "cache_read": 0.3,
-        "cache_write": 3.75,
-        "context_over_200k": {
-          "input": 6,
-          "output": 22.5,
-          "cache_read": 0.6,
-          "cache_write": 7.5
-        }
-      },
-      "limit": {
-        "context": 200000,
-        "output": 64000
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -1486,23 +1187,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 3,
-        "output": 15,
-        "cache_read": 0.3,
-        "cache_write": 3.75,
-        "context_over_200k": {
-          "input": 6,
-          "output": 22.5,
-          "cache_read": 0.6,
-          "cache_write": 7.5
-        }
-      },
-      "limit": {
-        "context": 1000000,
-        "output": 64000
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -1642,17 +1327,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.8,
-        "output": 4,
-        "cache_read": 0.08,
-        "cache_write": 1
-      },
-      "limit": {
-        "context": 200000,
-        "output": 8192
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -1689,17 +1364,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.8,
-        "output": 4,
-        "cache_read": 0.08,
-        "cache_write": 1
-      },
-      "limit": {
-        "context": 200000,
-        "output": 8192
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -1736,17 +1401,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 3,
-        "output": 15,
-        "cache_read": 0.3,
-        "cache_write": 3.75
-      },
-      "limit": {
-        "context": 200000,
-        "output": 8192
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -1783,17 +1438,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 3,
-        "output": 15,
-        "cache_read": 0.3,
-        "cache_write": 3.75
-      },
-      "limit": {
-        "context": 200000,
-        "output": 8192
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -1861,17 +1506,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 3,
-        "output": 15,
-        "cache_read": 0.3,
-        "cache_write": 3.75
-      },
-      "limit": {
-        "context": 200000,
-        "output": 64000
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -1909,17 +1544,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 3,
-        "output": 15,
-        "cache_read": 0.3,
-        "cache_write": 3.75
-      },
-      "limit": {
-        "context": 200000,
-        "output": 64000
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -1984,17 +1609,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.25,
-        "output": 1.25,
-        "cache_read": 0.03,
-        "cache_write": 0.3
-      },
-      "limit": {
-        "context": 200000,
-        "output": 4096
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -2059,17 +1674,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 15,
-        "output": 75,
-        "cache_read": 1.5,
-        "cache_write": 18.75
-      },
-      "limit": {
-        "context": 200000,
-        "output": 4096
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -2106,17 +1711,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 3,
-        "output": 15,
-        "cache_read": 0.3,
-        "cache_write": 0.3
-      },
-      "limit": {
-        "context": 200000,
-        "output": 4096
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -2178,17 +1773,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 1,
-        "output": 5,
-        "cache_read": 0.1,
-        "cache_write": 1.25
-      },
-      "limit": {
-        "context": 200000,
-        "output": 64000
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -2250,17 +1835,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 1,
-        "output": 5,
-        "cache_read": 0.1,
-        "cache_write": 1.25
-      },
-      "limit": {
-        "context": 200000,
-        "output": 64000
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -2298,17 +1873,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 15,
-        "output": 75,
-        "cache_read": 1.5,
-        "cache_write": 18.75
-      },
-      "limit": {
-        "context": 200000,
-        "output": 32000
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -2370,17 +1935,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 15,
-        "output": 75,
-        "cache_read": 1.5,
-        "cache_write": 18.75
-      },
-      "limit": {
-        "context": 200000,
-        "output": 32000
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -2442,17 +1997,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 15,
-        "output": 75,
-        "cache_read": 1.5,
-        "cache_write": 18.75
-      },
-      "limit": {
-        "context": 200000,
-        "output": 32000
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -2518,17 +2063,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 15,
-        "output": 75,
-        "cache_read": 1.5,
-        "cache_write": 18.75
-      },
-      "limit": {
-        "context": 200000,
-        "output": 32000
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -2566,17 +2101,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 5,
-        "output": 25,
-        "cache_read": 0.5,
-        "cache_write": 6.25
-      },
-      "limit": {
-        "context": 200000,
-        "output": 64000
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -2614,17 +2139,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 5,
-        "output": 25,
-        "cache_read": 0.5,
-        "cache_write": 6.25
-      },
-      "limit": {
-        "context": 200000,
-        "output": 64000
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -2662,17 +2177,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 3,
-        "output": 15,
-        "cache_read": 0.3,
-        "cache_write": 3.75
-      },
-      "limit": {
-        "context": 200000,
-        "output": 64000
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -2738,17 +2243,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 3,
-        "output": 15,
-        "cache_read": 0.3,
-        "cache_write": 3.75
-      },
-      "limit": {
-        "context": 200000,
-        "output": 64000
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -2810,17 +2305,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 3,
-        "output": 15,
-        "cache_read": 0.3,
-        "cache_write": 3.75
-      },
-      "limit": {
-        "context": 200000,
-        "output": 64000
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -2882,17 +2367,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 3,
-        "output": 15,
-        "cache_read": 0.3,
-        "cache_write": 3.75
-      },
-      "limit": {
-        "context": 200000,
-        "output": 64000
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -2958,16 +2433,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 1.5,
-        "output": 6,
-        "cache_read": 0.375
-      },
-      "limit": {
-        "context": 200000,
-        "output": 100000
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -3002,15 +2468,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "limit": {
-        "context": 32768,
-        "output": 8192
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -3046,15 +2504,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "limit": {
-        "context": 32768,
-        "output": 8192
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -3082,15 +2532,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.3,
-        "output": 0.6
-      },
-      "limit": {
-        "context": 4096,
-        "output": 4096
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -3125,15 +2567,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 3,
-        "output": 15
-      },
-      "limit": {
-        "context": 128000,
-        "output": 4096
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -3168,15 +2602,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.5,
-        "output": 1.5
-      },
-      "limit": {
-        "context": 128000,
-        "output": 4096
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -3204,15 +2630,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 1.5,
-        "output": 2
-      },
-      "limit": {
-        "context": 4096,
-        "output": 4096
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -3372,16 +2790,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.28,
-        "output": 0.42,
-        "cache_read": 0.028
-      },
-      "limit": {
-        "context": 128000,
-        "output": 8192
-      },
-      "last_synced": "2026-01-24T18:24:24.187Z"
+      "last_synced": "2026-01-24T18:45:51.738Z"
     }
   },
   {
@@ -3410,16 +2819,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.28,
-        "output": 0.42,
-        "cache_read": 0.028
-      },
-      "limit": {
-        "context": 128000,
-        "output": 128000
-      },
-      "last_synced": "2026-01-24T18:24:24.188Z"
+      "last_synced": "2026-01-24T18:45:51.739Z"
     }
   },
   {
@@ -3455,15 +2855,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 1.35,
-        "output": 5.4
-      },
-      "limit": {
-        "context": 128000,
-        "output": 32768
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -3499,15 +2891,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.58,
-        "output": 1.68
-      },
-      "limit": {
-        "context": 163840,
-        "output": 81920
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -3535,15 +2919,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "limit": {
-        "context": 16384,
-        "output": 8192
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -3579,15 +2955,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.2,
-        "output": 0.8
-      },
-      "limit": {
-        "context": 163840,
-        "output": 163840
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -3623,15 +2991,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "limit": {
-        "context": 131072,
-        "output": 131072
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -3667,15 +3027,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "limit": {
-        "context": 163840,
-        "output": 163840
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -3703,15 +3055,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "limit": {
-        "context": 8192,
-        "output": 8192
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -3739,15 +3083,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "limit": {
-        "context": 64000,
-        "output": 8192
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -3783,15 +3119,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "limit": {
-        "context": 163840,
-        "output": 163840
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -3819,15 +3147,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "limit": {
-        "context": 163840,
-        "output": 163840
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -3863,15 +3183,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.27,
-        "output": 1
-      },
-      "limit": {
-        "context": 131072,
-        "output": 65536
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -3907,15 +3219,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.27,
-        "output": 1
-      },
-      "limit": {
-        "context": 131072,
-        "output": 65536
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -3951,15 +3255,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.28,
-        "output": 0.4
-      },
-      "limit": {
-        "context": 163840,
-        "output": 65536
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -3995,15 +3291,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.27,
-        "output": 0.41
-      },
-      "limit": {
-        "context": 163840,
-        "output": 65536
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -4085,15 +3373,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "limit": {
-        "context": 32768,
-        "output": 8192
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -4131,16 +3411,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.075,
-        "output": 0.3,
-        "cache_read": 0.01875
-      },
-      "limit": {
-        "context": 1000000,
-        "output": 8192
-      },
-      "last_synced": "2026-01-24T18:24:24.188Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -4178,16 +3449,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.0375,
-        "output": 0.15,
-        "cache_read": 0.01
-      },
-      "limit": {
-        "context": 1000000,
-        "output": 8192
-      },
-      "last_synced": "2026-01-24T18:24:24.188Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -4225,16 +3487,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 1.25,
-        "output": 5,
-        "cache_read": 0.3125
-      },
-      "limit": {
-        "context": 1000000,
-        "output": 8192
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -4310,16 +3563,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.1,
-        "output": 0.4,
-        "cache_read": 0.025
-      },
-      "limit": {
-        "context": 1048576,
-        "output": 8192
-      },
-      "last_synced": "2026-01-24T18:24:24.188Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -4357,16 +3601,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.15,
-        "output": 0.6,
-        "cache_read": 0.025
-      },
-      "limit": {
-        "context": 1048576,
-        "output": 8192
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -4542,15 +3777,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.075,
-        "output": 0.3
-      },
-      "limit": {
-        "context": 1048576,
-        "output": 8192
-      },
-      "last_synced": "2026-01-24T18:24:24.188Z"
+      "last_synced": "2026-01-24T18:45:51.739Z"
     }
   },
   {
@@ -4587,15 +3814,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.075,
-        "output": 0.3
-      },
-      "limit": {
-        "context": 1048576,
-        "output": 8192
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -5000,17 +4219,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.3,
-        "output": 2.5,
-        "cache_read": 0.075,
-        "input_audio": 1
-      },
-      "limit": {
-        "context": 1048576,
-        "output": 65536
-      },
-      "last_synced": "2026-01-24T18:24:24.188Z"
+      "last_synced": "2026-01-24T18:45:51.739Z"
     }
   },
   {
@@ -5049,17 +4258,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.3,
-        "output": 2.5,
-        "cache_read": 0.075,
-        "cache_write": 0.383
-      },
-      "limit": {
-        "context": 1048576,
-        "output": 65536
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -5120,16 +4319,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.3,
-        "output": 30,
-        "cache_read": 0.075
-      },
-      "limit": {
-        "context": 32768,
-        "output": 32768
-      },
-      "last_synced": "2026-01-24T18:24:24.188Z"
+      "last_synced": "2026-01-24T18:45:51.739Z"
     }
   },
   {
@@ -5190,16 +4380,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.3,
-        "output": 30,
-        "cache_read": 0.075
-      },
-      "limit": {
-        "context": 32768,
-        "output": 32768
-      },
-      "last_synced": "2026-01-24T18:24:24.188Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -5276,16 +4457,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.1,
-        "output": 0.4,
-        "cache_read": 0.025
-      },
-      "limit": {
-        "context": 1048576,
-        "output": 65536
-      },
-      "last_synced": "2026-01-24T18:24:24.188Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -5324,16 +4496,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.1,
-        "output": 0.4,
-        "cache_read": 0.025
-      },
-      "limit": {
-        "context": 1048576,
-        "output": 65536
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -5372,17 +4535,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.1,
-        "output": 0.4,
-        "cache_read": 0.025,
-        "input_audio": 0.3
-      },
-      "limit": {
-        "context": 1048576,
-        "output": 65536
-      },
-      "last_synced": "2026-01-24T18:24:24.188Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -5421,16 +4574,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.1,
-        "output": 0.4,
-        "cache_read": 0.025
-      },
-      "limit": {
-        "context": 65536,
-        "output": 65536
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -5506,16 +4650,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.1,
-        "output": 0.4,
-        "cache_read": 0.025
-      },
-      "limit": {
-        "context": 1048576,
-        "output": 65536
-      },
-      "last_synced": "2026-01-24T18:24:24.188Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -5554,16 +4689,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.1,
-        "output": 0.4,
-        "cache_read": 0.025
-      },
-      "limit": {
-        "context": 1048576,
-        "output": 65536
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -5602,16 +4728,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.15,
-        "output": 0.6,
-        "cache_read": 0.0375
-      },
-      "limit": {
-        "context": 1048576,
-        "output": 65536
-      },
-      "last_synced": "2026-01-24T18:24:24.188Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -5650,16 +4767,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.15,
-        "output": 0.6,
-        "cache_read": 0.0375
-      },
-      "limit": {
-        "context": 1048576,
-        "output": 65536
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -5698,16 +4806,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.15,
-        "output": 0.6,
-        "cache_read": 0.0375
-      },
-      "limit": {
-        "context": 1048576,
-        "output": 65536
-      },
-      "last_synced": "2026-01-24T18:24:24.188Z"
+      "last_synced": "2026-01-24T18:45:51.739Z"
     }
   },
   {
@@ -5746,16 +4845,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.15,
-        "output": 0.6,
-        "cache_read": 0.0375
-      },
-      "limit": {
-        "context": 1048576,
-        "output": 65536
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -5831,17 +4921,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.3,
-        "output": 2.5,
-        "cache_read": 0.075,
-        "input_audio": 1
-      },
-      "limit": {
-        "context": 1048576,
-        "output": 65536
-      },
-      "last_synced": "2026-01-24T18:24:24.188Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -5880,17 +4960,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.3,
-        "output": 2.5,
-        "cache_read": 0.075,
-        "cache_write": 0.383
-      },
-      "limit": {
-        "context": 1048576,
-        "output": 65536
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -5950,15 +5020,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.5,
-        "output": 10
-      },
-      "limit": {
-        "context": 8000,
-        "output": 16000
-      },
-      "last_synced": "2026-01-24T18:24:24.188Z"
+      "last_synced": "2026-01-24T18:45:51.739Z"
     }
   },
   {
@@ -6035,16 +5097,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 1.25,
-        "output": 10,
-        "cache_read": 0.31
-      },
-      "limit": {
-        "context": 1048576,
-        "output": 65536
-      },
-      "last_synced": "2026-01-24T18:24:24.188Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -6083,16 +5136,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 1.25,
-        "output": 10,
-        "cache_read": 0.31
-      },
-      "limit": {
-        "context": 1048576,
-        "output": 65536
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -6205,16 +5249,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 1.25,
-        "output": 10,
-        "cache_read": 0.31
-      },
-      "limit": {
-        "context": 1048576,
-        "output": 65536
-      },
-      "last_synced": "2026-01-24T18:24:24.188Z"
+      "last_synced": "2026-01-24T18:45:51.739Z"
     }
   },
   {
@@ -6253,16 +5288,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 1.25,
-        "output": 10,
-        "cache_read": 0.31
-      },
-      "limit": {
-        "context": 1048576,
-        "output": 65536
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -6338,16 +5364,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 1.25,
-        "output": 10,
-        "cache_read": 0.31
-      },
-      "limit": {
-        "context": 1048576,
-        "output": 65536
-      },
-      "last_synced": "2026-01-24T18:24:24.188Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -6386,16 +5403,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 1.25,
-        "output": 10,
-        "cache_read": 0.31
-      },
-      "limit": {
-        "context": 1048576,
-        "output": 65536
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -6455,15 +5463,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 1,
-        "output": 20
-      },
-      "limit": {
-        "context": 8000,
-        "output": 16000
-      },
-      "last_synced": "2026-01-24T18:24:24.188Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -6502,21 +5502,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.5,
-        "output": 3,
-        "cache_read": 0.05,
-        "context_over_200k": {
-          "input": 0.5,
-          "output": 3,
-          "cache_read": 0.05
-        }
-      },
-      "limit": {
-        "context": 1048576,
-        "output": 65536
-      },
-      "last_synced": "2026-01-24T18:24:24.188Z"
+      "last_synced": "2026-01-24T18:45:51.739Z"
     }
   },
   {
@@ -6555,21 +5541,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.5,
-        "output": 3,
-        "cache_read": 0.05,
-        "context_over_200k": {
-          "input": 0.5,
-          "output": 3,
-          "cache_read": 0.05
-        }
-      },
-      "limit": {
-        "context": 1048576,
-        "output": 65536
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -6645,21 +5617,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 2,
-        "output": 12,
-        "cache_read": 0.2,
-        "context_over_200k": {
-          "input": 4,
-          "output": 18,
-          "cache_read": 0.4
-        }
-      },
-      "limit": {
-        "context": 1000000,
-        "output": 64000
-      },
-      "last_synced": "2026-01-24T18:24:24.188Z"
+      "last_synced": "2026-01-24T18:45:51.739Z"
     }
   },
   {
@@ -6698,21 +5656,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 2,
-        "output": 12,
-        "cache_read": 0.2,
-        "context_over_200k": {
-          "input": 4,
-          "output": 18,
-          "cache_read": 0.4
-        }
-      },
-      "limit": {
-        "context": 1048576,
-        "output": 65536
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -6772,15 +5716,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.15,
-        "output": 0
-      },
-      "limit": {
-        "context": 2048,
-        "output": 3072
-      },
-      "last_synced": "2026-01-24T18:24:24.188Z"
+      "last_synced": "2026-01-24T18:45:51.739Z"
     }
   },
   {
@@ -6808,15 +5744,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.15,
-        "output": 0
-      },
-      "limit": {
-        "context": 2048,
-        "output": 3072
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -7003,17 +5931,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.3,
-        "output": 2.5,
-        "cache_read": 0.075,
-        "input_audio": 1
-      },
-      "limit": {
-        "context": 1048576,
-        "output": 65536
-      },
-      "last_synced": "2026-01-24T18:24:24.188Z"
+      "last_synced": "2026-01-24T18:45:51.739Z"
     }
   },
   {
@@ -7052,17 +5970,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.3,
-        "output": 2.5,
-        "cache_read": 0.075,
-        "cache_write": 0.383
-      },
-      "limit": {
-        "context": 1048576,
-        "output": 65536
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -7138,16 +6046,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.1,
-        "output": 0.4,
-        "cache_read": 0.025
-      },
-      "limit": {
-        "context": 1048576,
-        "output": 65536
-      },
-      "last_synced": "2026-01-24T18:24:24.188Z"
+      "last_synced": "2026-01-24T18:45:51.739Z"
     }
   },
   {
@@ -7186,16 +6085,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.1,
-        "output": 0.4,
-        "cache_read": 0.025
-      },
-      "limit": {
-        "context": 1048576,
-        "output": 65536
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -7234,17 +6124,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.5,
-        "output": 2,
-        "input_audio": 3,
-        "output_audio": 12
-      },
-      "limit": {
-        "context": 128000,
-        "output": 8000
-      },
-      "last_synced": "2026-01-24T18:24:24.188Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -7282,17 +6162,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.5,
-        "output": 2,
-        "input_audio": 3,
-        "output_audio": 12
-      },
-      "limit": {
-        "context": 131072,
-        "output": 65536
-      },
-      "last_synced": "2026-01-24T18:24:24.188Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -7591,17 +6461,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 5,
-        "output": 25,
-        "cache_read": 0.5,
-        "cache_write": 6.25
-      },
-      "limit": {
-        "context": 200000,
-        "output": 64000
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.743Z"
     }
   },
   {
@@ -7629,15 +6489,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.049999999999999996,
-        "output": 0.09999999999999999
-      },
-      "limit": {
-        "context": 131072,
-        "output": 8192
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -7673,15 +6525,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.12,
-        "output": 0.2
-      },
-      "limit": {
-        "context": 202752,
-        "output": 8192
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -7716,15 +6560,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.04,
-        "output": 0.08
-      },
-      "limit": {
-        "context": 128000,
-        "output": 4096
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -7762,16 +6598,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.1,
-        "output": 0.4,
-        "cache_read": 0.025
-      },
-      "limit": {
-        "context": 1048576,
-        "output": 8192
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -7807,15 +6634,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "limit": {
-        "context": 1048576,
-        "output": 1048576
-      },
-      "last_synced": "2026-01-24T18:24:24.190Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -7854,16 +6673,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.3,
-        "output": 2.5,
-        "cache_read": 0.0375
-      },
-      "limit": {
-        "context": 1048576,
-        "output": 65536
-      },
-      "last_synced": "2026-01-24T18:24:24.190Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -7902,16 +6712,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.1,
-        "output": 0.4,
-        "cache_read": 0.025
-      },
-      "limit": {
-        "context": 1048576,
-        "output": 65536
-      },
-      "last_synced": "2026-01-24T18:24:24.190Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -7950,16 +6751,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.1,
-        "output": 0.4,
-        "cache_read": 0.025
-      },
-      "limit": {
-        "context": 1048576,
-        "output": 65536
-      },
-      "last_synced": "2026-01-24T18:24:24.190Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -7998,16 +6790,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.3,
-        "output": 2.5,
-        "cache_read": 0.031
-      },
-      "limit": {
-        "context": 1048576,
-        "output": 65536
-      },
-      "last_synced": "2026-01-24T18:24:24.190Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -8046,16 +6829,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 1.25,
-        "output": 10,
-        "cache_read": 0.31
-      },
-      "limit": {
-        "context": 1048576,
-        "output": 65536
-      },
-      "last_synced": "2026-01-24T18:24:24.190Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -8094,16 +6868,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 1.25,
-        "output": 10,
-        "cache_read": 0.31
-      },
-      "limit": {
-        "context": 1048576,
-        "output": 65536
-      },
-      "last_synced": "2026-01-24T18:24:24.190Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -8142,16 +6907,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 1.25,
-        "output": 10,
-        "cache_read": 0.31
-      },
-      "limit": {
-        "context": 1048576,
-        "output": 65536
-      },
-      "last_synced": "2026-01-24T18:24:24.190Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -8190,16 +6946,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.5,
-        "output": 3,
-        "cache_read": 0.05
-      },
-      "limit": {
-        "context": 1048576,
-        "output": 65536
-      },
-      "last_synced": "2026-01-24T18:24:24.190Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -8237,15 +6984,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 2,
-        "output": 12
-      },
-      "limit": {
-        "context": 1050000,
-        "output": 66000
-      },
-      "last_synced": "2026-01-24T18:24:24.190Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -8280,15 +7019,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "limit": {
-        "context": 8192,
-        "output": 8192
-      },
-      "last_synced": "2026-01-24T18:24:24.190Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -8324,15 +7055,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "limit": {
-        "context": 96000,
-        "output": 8192
-      },
-      "last_synced": "2026-01-24T18:24:24.190Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -8368,15 +7091,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "limit": {
-        "context": 96000,
-        "output": 8192
-      },
-      "last_synced": "2026-01-24T18:24:24.190Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -8404,15 +7119,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "limit": {
-        "context": 8192,
-        "output": 8192
-      },
-      "last_synced": "2026-01-24T18:24:24.190Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -8449,15 +7156,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "limit": {
-        "context": 8192,
-        "output": 8192
-      },
-      "last_synced": "2026-01-24T18:24:24.190Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -8517,16 +7216,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.5,
-        "output": 1.5,
-        "cache_read": 1.25
-      },
-      "limit": {
-        "context": 16385,
-        "output": 4096
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -8728,15 +7418,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 30,
-        "output": 60
-      },
-      "limit": {
-        "context": 8192,
-        "output": 8192
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -8888,15 +7570,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 10,
-        "output": 30
-      },
-      "limit": {
-        "context": 128000,
-        "output": 4096
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -9023,16 +7697,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 2,
-        "output": 8,
-        "cache_read": 0.5
-      },
-      "limit": {
-        "context": 1047576,
-        "output": 32768
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -9133,16 +7798,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.4,
-        "output": 1.6,
-        "cache_read": 0.1
-      },
-      "limit": {
-        "context": 1047576,
-        "output": 32768
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -9243,16 +7899,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.1,
-        "output": 0.4,
-        "cache_read": 0.03
-      },
-      "limit": {
-        "context": 1047576,
-        "output": 32768
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -9411,16 +8058,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 2.5,
-        "output": 10,
-        "cache_read": 1.25
-      },
-      "limit": {
-        "context": 128000,
-        "output": 16384
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -9512,15 +8150,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 5,
-        "output": 15
-      },
-      "limit": {
-        "context": 128000,
-        "output": 4096
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -9584,16 +8214,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 2.5,
-        "output": 10,
-        "cache_read": 1.25
-      },
-      "limit": {
-        "context": 128000,
-        "output": 16384
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -9657,16 +8278,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 2.5,
-        "output": 10,
-        "cache_read": 1.25
-      },
-      "limit": {
-        "context": 128000,
-        "output": 16384
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -9843,16 +8455,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.15,
-        "output": 0.6,
-        "cache_read": 0.08
-      },
-      "limit": {
-        "context": 128000,
-        "output": 16384
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -10388,17 +8991,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 1.25,
-        "output": 10,
-        "cache_read": 0.125
-      },
-      "limit": {
-        "context": 400000,
-        "input": 272000,
-        "output": 128000
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -10486,16 +9079,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 1.25,
-        "output": 10
-      },
-      "limit": {
-        "context": 400000,
-        "input": 272000,
-        "output": 128000
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -10561,17 +9145,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 1.25,
-        "output": 10,
-        "cache_read": 0.125
-      },
-      "limit": {
-        "context": 400000,
-        "input": 272000,
-        "output": 128000
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -10641,17 +9215,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.25,
-        "output": 2,
-        "cache_read": 0.025
-      },
-      "limit": {
-        "context": 400000,
-        "input": 272000,
-        "output": 128000
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -10753,17 +9317,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.05,
-        "output": 0.4,
-        "cache_read": 0.005
-      },
-      "limit": {
-        "context": 400000,
-        "input": 272000,
-        "output": 128000
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -10863,16 +9417,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 15,
-        "output": 120
-      },
-      "limit": {
-        "context": 400000,
-        "input": 272000,
-        "output": 272000
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -11025,17 +9570,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 1.25,
-        "output": 10,
-        "cache_read": 0.13
-      },
-      "limit": {
-        "context": 400000,
-        "input": 272000,
-        "output": 128000
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -11129,16 +9664,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 1.25,
-        "output": 10,
-        "cache_read": 0.125
-      },
-      "limit": {
-        "context": 128000,
-        "output": 16384
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -11204,17 +9730,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 1.25,
-        "output": 10,
-        "cache_read": 0.125
-      },
-      "limit": {
-        "context": 400000,
-        "input": 272000,
-        "output": 128000
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -11252,17 +9768,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 1.25,
-        "output": 10,
-        "cache_read": 0.125
-      },
-      "limit": {
-        "context": 400000,
-        "input": 272000,
-        "output": 128000
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -11328,17 +9834,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.25,
-        "output": 2,
-        "cache_read": 0.025
-      },
-      "limit": {
-        "context": 400000,
-        "input": 272000,
-        "output": 128000
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -11376,17 +9872,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 1.75,
-        "output": 14,
-        "cache_read": 0.175
-      },
-      "limit": {
-        "context": 400000,
-        "input": 272000,
-        "output": 128000
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -11424,16 +9910,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 1.75,
-        "output": 14,
-        "cache_read": 0.175
-      },
-      "limit": {
-        "context": 128000,
-        "output": 16384
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -11471,17 +9948,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 1.75,
-        "output": 14,
-        "cache_read": 0.175
-      },
-      "limit": {
-        "context": 400000,
-        "input": 272000,
-        "output": 128000
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -11518,16 +9985,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 21,
-        "output": 168
-      },
-      "limit": {
-        "context": 400000,
-        "input": 272000,
-        "output": 128000
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -11956,15 +10414,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "limit": {
-        "context": 256000,
-        "output": 65536
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -12024,15 +10474,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "limit": {
-        "context": 131072,
-        "output": 8192
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -12067,15 +10509,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "limit": {
-        "context": 65536,
-        "output": 65536
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -12111,15 +10545,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "limit": {
-        "context": 64000,
-        "output": 64000
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -12154,15 +10580,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.72,
-        "output": 0.72
-      },
-      "limit": {
-        "context": 128000,
-        "output": 4096
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -12197,15 +10615,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.22,
-        "output": 0.22
-      },
-      "limit": {
-        "context": 128000,
-        "output": 4096
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -12241,15 +10651,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.16,
-        "output": 0.16
-      },
-      "limit": {
-        "context": 128000,
-        "output": 4096
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -12284,15 +10686,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.1,
-        "output": 0.1
-      },
-      "limit": {
-        "context": 131000,
-        "output": 4096
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -12327,15 +10721,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.15,
-        "output": 0.15
-      },
-      "limit": {
-        "context": 131000,
-        "output": 4096
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.743Z"
     }
   },
   {
@@ -12371,15 +10757,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.72,
-        "output": 0.72
-      },
-      "limit": {
-        "context": 128000,
-        "output": 4096
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -12414,15 +10792,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.72,
-        "output": 0.72
-      },
-      "limit": {
-        "context": 128000,
-        "output": 4096
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -12450,15 +10820,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 2.65,
-        "output": 3.5
-      },
-      "limit": {
-        "context": 8192,
-        "output": 2048
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -12486,15 +10848,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.3,
-        "output": 0.6
-      },
-      "limit": {
-        "context": 8192,
-        "output": 2048
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.743Z"
     }
   },
   {
@@ -12530,15 +10884,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.24,
-        "output": 0.97
-      },
-      "limit": {
-        "context": 1000000,
-        "output": 16384
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.743Z"
     }
   },
   {
@@ -12574,15 +10920,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.17,
-        "output": 0.66
-      },
-      "limit": {
-        "context": 3500000,
-        "output": 16384
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.743Z"
     }
   },
   {
@@ -12618,15 +10956,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "limit": {
-        "context": 163840,
-        "output": 163840
-      },
-      "last_synced": "2026-01-24T18:24:24.190Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -12661,15 +10991,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.3,
-        "output": 1.2
-      },
-      "limit": {
-        "context": 204608,
-        "output": 128000
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -12705,15 +11027,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.2,
-        "output": 1.1
-      },
-      "limit": {
-        "context": 1000000,
-        "output": 1000000
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -12748,15 +11062,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.4,
-        "output": 2.2
-      },
-      "limit": {
-        "context": 1000000,
-        "output": 40000
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -12792,17 +11098,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.28,
-        "output": 1.15,
-        "cache_read": 0.28,
-        "cache_write": 1.15
-      },
-      "limit": {
-        "context": 196600,
-        "output": 118000
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -12837,15 +11133,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.3,
-        "output": 1.2
-      },
-      "limit": {
-        "context": 204800,
-        "output": 131072
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -12879,15 +11167,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.2,
-        "output": 0.2
-      },
-      "limit": {
-        "context": 128000,
-        "output": 4096
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.743Z"
     }
   },
   {
@@ -12921,15 +11201,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.15,
-        "output": 0.15
-      },
-      "limit": {
-        "context": 128000,
-        "output": 4096
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -12963,15 +11235,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.11,
-        "output": 0.11
-      },
-      "limit": {
-        "context": 127000,
-        "output": 127000
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.743Z"
     }
   },
   {
@@ -13005,15 +11269,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.5,
-        "output": 1.5
-      },
-      "limit": {
-        "context": 128000,
-        "output": 4096
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -13040,15 +11296,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.7,
-        "output": 0.7
-      },
-      "limit": {
-        "context": 32000,
-        "output": 32000
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.743Z"
     }
   },
   {
@@ -13083,15 +11331,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.04,
-        "output": 0.04
-      },
-      "limit": {
-        "context": 128000,
-        "output": 4096
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.743Z"
     }
   },
   {
@@ -13127,15 +11367,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.15,
-        "output": 0.35
-      },
-      "limit": {
-        "context": 32000,
-        "output": 8192
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -13170,15 +11402,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.3,
-        "output": 0.9
-      },
-      "limit": {
-        "context": 256000,
-        "output": 256000
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -13213,15 +11437,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.15,
-        "output": 0.6
-      },
-      "limit": {
-        "context": 262144,
-        "output": 262144
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -13256,15 +11472,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "limit": {
-        "context": 262144,
-        "output": 262144
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -13299,15 +11507,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.4,
-        "output": 2
-      },
-      "limit": {
-        "context": 131072,
-        "output": 131072
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -13342,15 +11542,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.06,
-        "output": 0.12
-      },
-      "limit": {
-        "context": 128000,
-        "output": 128000
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -13385,15 +11577,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "limit": {
-        "context": 32768,
-        "output": 32768
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -13428,15 +11612,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.1,
-        "output": 0.3
-      },
-      "limit": {
-        "context": 131072,
-        "output": 131072
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -13471,15 +11647,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "limit": {
-        "context": 32768,
-        "output": 32768
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -13515,15 +11683,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.4,
-        "output": 2
-      },
-      "limit": {
-        "context": 131072,
-        "output": 131072
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -13559,15 +11719,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.4,
-        "output": 2
-      },
-      "limit": {
-        "context": 262144,
-        "output": 262144
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -13602,15 +11754,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "limit": {
-        "context": 131072,
-        "output": 131072
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -13646,15 +11790,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "limit": {
-        "context": 128000,
-        "output": 8192
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -13690,15 +11826,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "limit": {
-        "context": 96000,
-        "output": 8192
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -13734,15 +11862,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "limit": {
-        "context": 96000,
-        "output": 96000
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -13776,15 +11896,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.6,
-        "output": 2.5
-      },
-      "limit": {
-        "context": 256000,
-        "output": 256000
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.743Z"
     }
   },
   {
@@ -13819,15 +11931,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "limit": {
-        "context": 131072,
-        "output": 131072
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -13862,15 +11966,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.55,
-        "output": 2.2
-      },
-      "limit": {
-        "context": 131072,
-        "output": 32768
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -13905,15 +12001,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.6,
-        "output": 2.5
-      },
-      "limit": {
-        "context": 262144,
-        "output": 16384
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -13948,15 +12036,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.6,
-        "output": 2.5
-      },
-      "limit": {
-        "context": 262144,
-        "output": 16384
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -13993,16 +12073,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.6,
-        "output": 2.5,
-        "cache_read": 0.15
-      },
-      "limit": {
-        "context": 262144,
-        "output": 262144
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -14037,15 +12108,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "limit": {
-        "context": 32800,
-        "output": 32800
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -14081,15 +12144,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "limit": {
-        "context": 131072,
-        "output": 8192
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -14125,15 +12180,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 1,
-        "output": 3
-      },
-      "limit": {
-        "context": 131072,
-        "output": 131072
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -14169,15 +12216,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.13,
-        "output": 0.4
-      },
-      "limit": {
-        "context": 131072,
-        "output": 131072
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -14212,15 +12251,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.2,
-        "output": 0.6
-      },
-      "limit": {
-        "context": 128000,
-        "output": 4096
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -14254,15 +12285,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.06,
-        "output": 0.23
-      },
-      "limit": {
-        "context": 128000,
-        "output": 4096
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.743Z"
     }
   },
   {
@@ -14298,15 +12321,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.04,
-        "output": 0.16
-      },
-      "limit": {
-        "context": 131072,
-        "output": 131072
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -14376,16 +12391,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 15,
-        "output": 60,
-        "cache_read": 7.5
-      },
-      "limit": {
-        "context": 200000,
-        "output": 100000
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -14471,16 +12477,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 1.1,
-        "output": 4.4,
-        "cache_read": 0.55
-      },
-      "limit": {
-        "context": 128000,
-        "output": 65536
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -14559,16 +12556,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 15,
-        "output": 60,
-        "cache_read": 7.5
-      },
-      "limit": {
-        "context": 128000,
-        "output": 32768
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -14661,15 +12649,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 150,
-        "output": 600
-      },
-      "limit": {
-        "context": 200000,
-        "output": 100000
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -14770,16 +12750,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 2,
-        "output": 8,
-        "cache_read": 0.5
-      },
-      "limit": {
-        "context": 200000,
-        "output": 100000
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -14881,16 +12852,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 10,
-        "output": 40,
-        "cache_read": 2.5
-      },
-      "limit": {
-        "context": 200000,
-        "output": 100000
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -14991,16 +12953,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 1.1,
-        "output": 4.4,
-        "cache_read": 0.55
-      },
-      "limit": {
-        "context": 200000,
-        "output": 100000
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -15100,15 +13053,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 20,
-        "output": 80
-      },
-      "limit": {
-        "context": 200000,
-        "output": 100000
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -15209,16 +13154,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 1.1,
-        "output": 4.4,
-        "cache_read": 0.28
-      },
-      "limit": {
-        "context": 200000,
-        "output": 100000
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -15320,16 +13256,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 2,
-        "output": 8,
-        "cache_read": 0.5
-      },
-      "limit": {
-        "context": 200000,
-        "output": 100000
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -15435,15 +13362,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.15,
-        "output": 0.6
-      },
-      "limit": {
-        "context": 128000,
-        "output": 4096
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -15477,15 +13396,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.07,
-        "output": 0.3
-      },
-      "limit": {
-        "context": 128000,
-        "output": 4096
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.743Z"
     }
   },
   {
@@ -15519,15 +13430,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.15,
-        "output": 0.6
-      },
-      "limit": {
-        "context": 128000,
-        "output": 4096
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.743Z"
     }
   },
   {
@@ -15561,15 +13464,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.07,
-        "output": 0.2
-      },
-      "limit": {
-        "context": 128000,
-        "output": 4096
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.743Z"
     }
   },
   {
@@ -15606,16 +13501,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 2,
-        "output": 8,
-        "cache_read": 0.5
-      },
-      "limit": {
-        "context": 1047576,
-        "output": 32768
-      },
-      "last_synced": "2026-01-24T18:24:24.190Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -15652,16 +13538,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.4,
-        "output": 1.6,
-        "cache_read": 0.1
-      },
-      "limit": {
-        "context": 1047576,
-        "output": 32768
-      },
-      "last_synced": "2026-01-24T18:24:24.190Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -15698,16 +13575,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.15,
-        "output": 0.6,
-        "cache_read": 0.08
-      },
-      "limit": {
-        "context": 128000,
-        "output": 16384
-      },
-      "last_synced": "2026-01-24T18:24:24.191Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -15744,15 +13612,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 1.25,
-        "output": 10
-      },
-      "limit": {
-        "context": 400000,
-        "output": 128000
-      },
-      "last_synced": "2026-01-24T18:24:24.191Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -15780,15 +13640,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 1.25,
-        "output": 10
-      },
-      "limit": {
-        "context": 400000,
-        "output": 128000
-      },
-      "last_synced": "2026-01-24T18:24:24.190Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -15826,16 +13678,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 1.25,
-        "output": 10,
-        "cache_read": 0.125
-      },
-      "limit": {
-        "context": 400000,
-        "output": 128000
-      },
-      "last_synced": "2026-01-24T18:24:24.190Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -15874,16 +13717,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 5,
-        "output": 10,
-        "cache_read": 1.25
-      },
-      "limit": {
-        "context": 400000,
-        "output": 128000
-      },
-      "last_synced": "2026-01-24T18:24:24.191Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -15920,15 +13754,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.25,
-        "output": 2
-      },
-      "limit": {
-        "context": 400000,
-        "output": 128000
-      },
-      "last_synced": "2026-01-24T18:24:24.191Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -15965,15 +13791,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.05,
-        "output": 0.4
-      },
-      "limit": {
-        "context": 400000,
-        "output": 128000
-      },
-      "last_synced": "2026-01-24T18:24:24.190Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -16010,15 +13828,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 15,
-        "output": 120
-      },
-      "limit": {
-        "context": 400000,
-        "output": 272000
-      },
-      "last_synced": "2026-01-24T18:24:24.191Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -16056,16 +13866,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 1.25,
-        "output": 10,
-        "cache_read": 0.125
-      },
-      "limit": {
-        "context": 400000,
-        "output": 128000
-      },
-      "last_synced": "2026-01-24T18:24:24.190Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -16103,16 +13904,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 1.25,
-        "output": 10,
-        "cache_read": 0.125
-      },
-      "limit": {
-        "context": 128000,
-        "output": 16384
-      },
-      "last_synced": "2026-01-24T18:24:24.191Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -16150,16 +13942,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 1.25,
-        "output": 10,
-        "cache_read": 0.125
-      },
-      "limit": {
-        "context": 400000,
-        "output": 128000
-      },
-      "last_synced": "2026-01-24T18:24:24.190Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -16197,16 +13980,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 1.1,
-        "output": 9,
-        "cache_read": 0.11
-      },
-      "limit": {
-        "context": 400000,
-        "output": 128000
-      },
-      "last_synced": "2026-01-24T18:24:24.191Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -16244,16 +14018,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.25,
-        "output": 2,
-        "cache_read": 0.025
-      },
-      "limit": {
-        "context": 400000,
-        "output": 100000
-      },
-      "last_synced": "2026-01-24T18:24:24.190Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -16291,16 +14056,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 1.75,
-        "output": 14,
-        "cache_read": 0.175
-      },
-      "limit": {
-        "context": 400000,
-        "output": 128000
-      },
-      "last_synced": "2026-01-24T18:24:24.191Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -16338,16 +14094,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 1.75,
-        "output": 14,
-        "cache_read": 0.175
-      },
-      "limit": {
-        "context": 128000,
-        "output": 16384
-      },
-      "last_synced": "2026-01-24T18:24:24.190Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -16385,16 +14132,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 1.75,
-        "output": 14,
-        "cache_read": 0.175
-      },
-      "limit": {
-        "context": 400000,
-        "output": 128000
-      },
-      "last_synced": "2026-01-24T18:24:24.190Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -16431,15 +14169,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 21,
-        "output": 168
-      },
-      "limit": {
-        "context": 400000,
-        "output": 128000
-      },
-      "last_synced": "2026-01-24T18:24:24.190Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -16474,15 +14204,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.072,
-        "output": 0.28
-      },
-      "limit": {
-        "context": 131072,
-        "output": 32768
-      },
-      "last_synced": "2026-01-24T18:24:24.191Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -16517,15 +14239,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.09,
-        "output": 0.36
-      },
-      "limit": {
-        "context": 131072,
-        "output": 32768
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -16560,15 +14274,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.05,
-        "output": 0.24
-      },
-      "limit": {
-        "context": 131072,
-        "output": 32768
-      },
-      "last_synced": "2026-01-24T18:24:24.190Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -16603,15 +14309,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.05,
-        "output": 0.2
-      },
-      "limit": {
-        "context": 131072,
-        "output": 32768
-      },
-      "last_synced": "2026-01-24T18:24:24.191Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -16646,15 +14344,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.07,
-        "output": 0.25
-      },
-      "limit": {
-        "context": 131072,
-        "output": 32768
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -16689,15 +14379,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.075,
-        "output": 0.3
-      },
-      "limit": {
-        "context": 131072,
-        "output": 65536
-      },
-      "last_synced": "2026-01-24T18:24:24.190Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -16735,16 +14417,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 1.1,
-        "output": 4.4,
-        "cache_read": 0.28
-      },
-      "limit": {
-        "context": 200000,
-        "output": 100000
-      },
-      "last_synced": "2026-01-24T18:24:24.190Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -16780,15 +14453,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "limit": {
-        "context": 1840000,
-        "output": 0
-      },
-      "last_synced": "2026-01-24T18:24:24.191Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -16825,15 +14490,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "limit": {
-        "context": 1840000,
-        "output": 0
-      },
-      "last_synced": "2026-01-24T18:24:24.191Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -16868,15 +14525,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.22,
-        "output": 0.88
-      },
-      "limit": {
-        "context": 262144,
-        "output": 131072
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.743Z"
     }
   },
   {
@@ -16912,15 +14561,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.15,
-        "output": 0.6
-      },
-      "limit": {
-        "context": 16384,
-        "output": 16384
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -16955,15 +14596,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.15,
-        "output": 0.6
-      },
-      "limit": {
-        "context": 262144,
-        "output": 131072
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -16998,15 +14631,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.22,
-        "output": 1.8
-      },
-      "limit": {
-        "context": 131072,
-        "output": 65536
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.743Z"
     }
   },
   {
@@ -17040,15 +14665,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.14,
-        "output": 1.4
-      },
-      "limit": {
-        "context": 262000,
-        "output": 262000
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -17083,15 +14700,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.3,
-        "output": 1.5
-      },
-      "limit": {
-        "context": 262000,
-        "output": 262000
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -17119,15 +14728,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "limit": {
-        "context": 32768,
-        "output": 8192
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -17163,15 +14764,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "limit": {
-        "context": 8192,
-        "output": 8192
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -17199,15 +14792,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "limit": {
-        "context": 32768,
-        "output": 8192
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -17243,15 +14828,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "limit": {
-        "context": 32768,
-        "output": 32768
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -17287,15 +14864,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "limit": {
-        "context": 40960,
-        "output": 40960
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -17330,15 +14899,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.15,
-        "output": 0.85
-      },
-      "limit": {
-        "context": 262144,
-        "output": 131072
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -17373,15 +14934,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "limit": {
-        "context": 262144,
-        "output": 131072
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -17417,15 +14970,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.078,
-        "output": 0.312
-      },
-      "limit": {
-        "context": 262144,
-        "output": 81920
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -17461,15 +15006,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "limit": {
-        "context": 131072,
-        "output": 131072
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -17504,15 +15041,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.2,
-        "output": 0.8
-      },
-      "limit": {
-        "context": 262000,
-        "output": 262000
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -17548,15 +15077,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.2,
-        "output": 0.8
-      },
-      "limit": {
-        "context": 262000,
-        "output": 262000
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -17592,15 +15113,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "limit": {
-        "context": 40960,
-        "output": 40960
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -17636,15 +15149,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "limit": {
-        "context": 40960,
-        "output": 40960
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -17680,15 +15185,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "limit": {
-        "context": 40960,
-        "output": 40960
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -17723,15 +15220,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.3,
-        "output": 1.2
-      },
-      "limit": {
-        "context": 262144,
-        "output": 66536
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -17766,15 +15255,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.07,
-        "output": 0.27
-      },
-      "limit": {
-        "context": 160000,
-        "output": 65536
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -17809,15 +15290,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.3,
-        "output": 1.5
-      },
-      "limit": {
-        "context": 128000,
-        "output": 66536
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -17852,15 +15325,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.38,
-        "output": 1.53
-      },
-      "limit": {
-        "context": 131072,
-        "output": 32768
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -17895,15 +15360,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "limit": {
-        "context": 262144,
-        "output": 66536
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -17938,15 +15395,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 1.2,
-        "output": 6
-      },
-      "limit": {
-        "context": 262144,
-        "output": 32768
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -17981,15 +15430,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.14,
-        "output": 1.4
-      },
-      "limit": {
-        "context": 262144,
-        "output": 262144
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -18025,15 +15466,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.14,
-        "output": 1.4
-      },
-      "limit": {
-        "context": 262144,
-        "output": 262144
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -18069,15 +15502,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "limit": {
-        "context": 32768,
-        "output": 32768
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -18113,15 +15538,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "limit": {
-        "context": 32768,
-        "output": 8192
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -18157,15 +15574,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "limit": {
-        "context": 32768,
-        "output": 32768
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -18303,15 +15712,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.13,
-        "output": 0
-      },
-      "limit": {
-        "context": 8191,
-        "output": 3072
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -18376,15 +15777,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.02,
-        "output": 0
-      },
-      "limit": {
-        "context": 8191,
-        "output": 1536
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -18449,15 +15842,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.1,
-        "output": 0
-      },
-      "limit": {
-        "context": 8192,
-        "output": 1536
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -18527,15 +15912,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "limit": {
-        "context": 32768,
-        "output": 32768
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -18563,15 +15940,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "limit": {
-        "context": 163840,
-        "output": 163840
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -18739,17 +16108,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 3,
-        "output": 15,
-        "cache_read": 0.75,
-        "cache_write": 15
-      },
-      "limit": {
-        "context": 131072,
-        "output": 8192
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -18785,17 +16144,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 3,
-        "output": 15,
-        "cache_read": 0.75,
-        "cache_write": 15
-      },
-      "limit": {
-        "context": 131072,
-        "output": 8192
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -18832,17 +16181,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.3,
-        "output": 0.5,
-        "cache_read": 0.075,
-        "cache_write": 0.5
-      },
-      "limit": {
-        "context": 131072,
-        "output": 8192
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -18879,17 +16218,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.3,
-        "output": 0.5,
-        "cache_read": 0.075,
-        "cache_write": 0.5
-      },
-      "limit": {
-        "context": 131072,
-        "output": 8192
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -18926,17 +16255,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 3,
-        "output": 15,
-        "cache_read": 0.75,
-        "cache_write": 15
-      },
-      "limit": {
-        "context": 256000,
-        "output": 64000
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -18974,17 +16293,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.2,
-        "output": 0.5,
-        "cache_read": 0.05,
-        "cache_write": 0.05
-      },
-      "limit": {
-        "context": 2000000,
-        "output": 30000
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -19022,17 +16331,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.2,
-        "output": 0.5,
-        "cache_read": 0.05,
-        "cache_write": 0.05
-      },
-      "limit": {
-        "context": 2000000,
-        "output": 30000
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -19069,16 +16368,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.2,
-        "output": 1.5,
-        "cache_read": 0.02
-      },
-      "limit": {
-        "context": 256000,
-        "output": 10000
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   },
   {
@@ -19114,15 +16404,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.6,
-        "output": 2.2
-      },
-      "limit": {
-        "context": 128000,
-        "output": 96000
-      },
-      "last_synced": "2026-01-24T18:24:24.191Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -19158,15 +16440,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.2,
-        "output": 1.1
-      },
-      "limit": {
-        "context": 128000,
-        "output": 96000
-      },
-      "last_synced": "2026-01-24T18:24:24.191Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -19194,15 +16468,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "limit": {
-        "context": 128000,
-        "output": 96000
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -19239,15 +16505,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.6,
-        "output": 1.8
-      },
-      "limit": {
-        "context": 64000,
-        "output": 16384
-      },
-      "last_synced": "2026-01-24T18:24:24.191Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -19284,16 +16542,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.6,
-        "output": 2.2,
-        "cache_read": 0.11
-      },
-      "limit": {
-        "context": 200000,
-        "output": 128000
-      },
-      "last_synced": "2026-01-24T18:24:24.191Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -19330,16 +16579,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.6,
-        "output": 1.9,
-        "cache_read": 0.11
-      },
-      "limit": {
-        "context": 200000,
-        "output": 128000
-      },
-      "last_synced": "2026-01-24T18:24:24.192Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -19376,16 +16616,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.6,
-        "output": 2.2,
-        "cache_read": 0.11
-      },
-      "limit": {
-        "context": 204800,
-        "output": 131072
-      },
-      "last_synced": "2026-01-24T18:24:24.191Z"
+      "last_synced": "2026-01-24T18:45:51.742Z"
     }
   },
   {
@@ -19421,15 +16652,7 @@
     },
     "metadata": {
       "source": "models.dev",
-      "cost": {
-        "input": 0.6,
-        "output": 2.2
-      },
-      "limit": {
-        "context": 204800,
-        "output": 131072
-      },
-      "last_synced": "2026-01-24T18:24:24.189Z"
+      "last_synced": "2026-01-24T18:45:51.741Z"
     }
   }
 ]
