@@ -266,10 +266,6 @@ Security is not an afterthought. NodeLLM includes a native **"Invisible Perimete
 - **Guardrails**: Integrated support for Bedrock/Azure safety filters.
 - **Auditing**: Full prompt/response tracing via `@node-llm/orm`.
 
-### 📼 Native VCR Testing
-
-Stop guessing if your agent works. NodeLLM is the only framework with built-in **VCR testing architecture** for deterministic CI/CD. Record real interactions once, and replay them forever in your test suite without hitting the API or spending money.
-
 ---
 
 ## 🚀 Why use this over official SDKs?

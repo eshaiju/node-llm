@@ -24,7 +24,6 @@ NodeLLM is an open-source infrastructure layer for building provider-agnostic, p
 - **Backend-First**: Optimized for long-running processes, CRON jobs, and persistent agents (not just frontend streaming).
 - **Static Model Registry**: Zero-latency, offline access to model metadata (context window, pricing, capabilities).
 - **Agentic Zero Trust**: Built-in PII redaction, guardrails, and audit logging.
-- **Native VCR Testing**: Deterministic recording/replay of LLM interactions for stable CI/CD.
 - **ORM Integration**: First-class support for persisting chat history and tools via `@node-llm/orm`.
 
 ## Architecture
