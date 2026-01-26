@@ -135,6 +135,9 @@ expect(lastEmbed.args[0].input).toBe("text to embed");
 
 // 4. Reset history (keep mocks)
 mocker.resetHistory();
+
+// 5. Snapshot valid request structures
+expect(mocker.getLastCall().prompt).toMatchSnapshot();
 ```
 
 ---
@@ -514,6 +517,9 @@ interface MockCall {
 
   // Timestamp of the call
   timestamp: number;
+
+  // Convenience prompt accessor (e.g. messages, input text)
+  prompt?: unknown;
 }
 ```
 

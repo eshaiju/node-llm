@@ -59,6 +59,14 @@ export interface MockCall {
   method: string;
   args: unknown[];
   timestamp: number;
+  /**
+   * Convenience accessor for the primary input "prompt" of the call.
+   * - chat/stream: `messages`
+   * - embed/moderate: `input`
+   * - paint: `prompt`
+   * - transcribe: `file`
+   */
+  prompt?: unknown;
 }
 
 export class Mocker {
@@ -236,7 +244,8 @@ export class Mocker {
                 this._history.push({
                   method: methodName,
                   args: [request],
-                  timestamp: Date.now()
+                  timestamp: Date.now(),
+                  prompt: request.messages
                 });
 
                 const matchingMocks = this.mocks.filter(
@@ -266,10 +275,18 @@ export class Mocker {
 
             // Promise-based methods
             return (async (request: unknown) => {
+              const req = request as any;
+              let promptAttr: unknown;
+              if (methodName === "chat") promptAttr = req.messages;
+              else if (methodName === "embed" || methodName === "moderate") promptAttr = req.input;
+              else if (methodName === "paint") promptAttr = req.prompt;
+              else if (methodName === "transcribe") promptAttr = req.file;
+
               this._history.push({
                 method: methodName,
                 args: [request],
-                timestamp: Date.now()
+                timestamp: Date.now(),
+                prompt: promptAttr
               });
 
               const matchingMocks = this.mocks.filter(
