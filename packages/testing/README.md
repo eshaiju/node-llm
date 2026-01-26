@@ -462,9 +462,6 @@ interface VCROptions {
 interface MockerOptions {
   // Enforce exact matching
   strict?: boolean;
-
-  // Enable verbose logging
-  debug?: boolean;
 }
 ```
 

@@ -55,6 +55,14 @@ export interface MockerDebugInfo {
 
 const EXECUTION_METHODS = ["chat", "stream", "paint", "transcribe", "moderate", "embed"];
 
+export interface MockerOptions {
+  /**
+   * Enforce that every LLM call must have a corresponding mock.
+   * If true, unmocked calls throw an error.
+   */
+  strict?: boolean;
+}
+
 export interface MockCall {
   method: string;
   args: unknown[];
@@ -74,7 +82,8 @@ export class Mocker {
   private _history: MockCall[] = [];
   public strict = false;
 
-  constructor() {
+  constructor(options: MockerOptions = {}) {
+    this.strict = !!options.strict;
     this.setupInterceptor();
   }
 
@@ -361,6 +370,6 @@ export class Mocker {
   }
 }
 
-export function mockLLM() {
-  return new Mocker();
+export function mockLLM(options: MockerOptions = {}) {
+  return new Mocker(options);
 }
