@@ -1,0 +1,28 @@
+{
+  "name": "defaults-plus-custom",
+  "interactions": [
+    {
+      "method": "chat",
+      "request": {
+        "model": "mock-model",
+        "messages": [
+          {
+            "role": "user",
+            "content": "key [REDACTED] plus custom_field"
+          }
+        ],
+        "max_tokens": 4096,
+        "headers": {},
+        "requestTimeout": 30000
+      },
+      "response": {
+        "content": "Response to key [REDACTED] plus custom_field",
+        "usage": {
+          "input_tokens": 10,
+          "output_tokens": 10,
+          "total_tokens": 20
+        }
+      }
+    }
+  ]
+}

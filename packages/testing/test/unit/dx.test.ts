@@ -47,4 +47,41 @@ describe("VCR Feature 5 & 6: DX Sugar & Auto-Naming", () => {
     const filePath = path.join(CASSETTE_DIR, "explicit-sugar-test.json");
     expect(fs.existsSync(filePath)).toBe(true);
   });
+
+  test("Respects global configuration", async () => {
+    // 1. Set global config
+    const { configureVCR } = await import("../../src/vcr.js");
+    configureVCR({ sensitiveKeys: ["global_secret"] });
+
+    // 2. Run a test that relies on this global config merging
+    await withVCR("global-config-test", { cassettesDir: CASSETTE_DIR }, async () => {
+      const llm = NodeLLM.withProvider("mock-provider");
+      await llm.chat().ask("global test");
+    })();
+
+    // Cleanup
+    configureVCR({});
+  });
+
+  test("Respects global cassettesDir configuration", async () => {
+    // 1. Set global cassettesDir
+    const { configureVCR } = await import("../../src/vcr.js");
+    const GLOBAL_DIR = path.join(CASSETTE_DIR, "global-custom-dir");
+    configureVCR({ cassettesDir: GLOBAL_DIR });
+
+    // 2. Run a test relying on global dir
+    await withVCR("global-dir-test", async () => {
+      const llm = NodeLLM.withProvider("mock-provider");
+      await llm.chat().ask("global dir test");
+    })();
+
+    // 3. Verify file exists in global dir
+    const filePath = path.join(GLOBAL_DIR, "global-dir-test.json");
+    expect(fs.existsSync(filePath)).toBe(true);
+
+    // Cleanup
+    if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+    if (fs.existsSync(GLOBAL_DIR)) fs.rmdirSync(GLOBAL_DIR);
+    configureVCR({});
+  });
 });

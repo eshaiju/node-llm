@@ -36,6 +36,8 @@ export interface VCROptions {
   scrub?: (data: any) => any;
   cassettesDir?: string;
   scope?: string | string[]; // Allow single or multiple scopes
+  sensitivePatterns?: RegExp[];
+  sensitiveKeys?: string[];
 }
 
 export class VCR {
@@ -46,16 +48,28 @@ export class VCR {
   private scrubber: Scrubber;
 
   constructor(name: string, options: VCROptions = {}) {
-    // 1. Resolve Base Directory (Env -> Option -> Default)
+    // 1. Merge Global Defaults
+    // Explicitly merge arrays to avoid overwriting global sensitive keys/patterns
+    const mergedOptions: VCROptions = {
+      ...globalVCROptions,
+      ...options,
+      sensitivePatterns: [
+        ...(globalVCROptions.sensitivePatterns || []),
+        ...(options.sensitivePatterns || [])
+      ],
+      sensitiveKeys: [...(globalVCROptions.sensitiveKeys || []), ...(options.sensitiveKeys || [])]
+    };
+
+    // 2. Resolve Base Directory (Env -> Option -> Default)
     // Rails-inspired organization: cassettes belong inside the test folder
-    const baseDir = options.cassettesDir || process.env.VCR_CASSETTE_DIR || "test/cassettes";
+    const baseDir = mergedOptions.cassettesDir || process.env.VCR_CASSETTE_DIR || "test/cassettes";
 
     // 2. Resolve Hierarchical Scopes
     const scopes: string[] = [];
-    if (Array.isArray(options.scope)) {
-      scopes.push(...options.scope);
-    } else if (options.scope) {
-      scopes.push(options.scope);
+    if (Array.isArray(mergedOptions.scope)) {
+      scopes.push(...mergedOptions.scope);
+    } else if (mergedOptions.scope) {
+      scopes.push(mergedOptions.scope);
     } else {
       scopes.push(...currentVCRScopes);
     }
@@ -70,7 +84,7 @@ export class VCR {
       this.filePath = path.join(process.cwd(), targetDir, `${this.slugify(name)}.json`);
     }
 
-    const initialMode = options.mode || (process.env.VCR_MODE as VCRMode) || "auto";
+    const initialMode = mergedOptions.mode || (process.env.VCR_MODE as VCRMode) || "auto";
     const isCI = !!process.env.CI;
     const exists = fs.existsSync(this.filePath);
 
@@ -92,7 +106,11 @@ export class VCR {
       this.mode = initialMode;
     }
 
-    this.scrubber = new Scrubber({ customScrubber: options.scrub });
+    this.scrubber = new Scrubber({
+      customScrubber: mergedOptions.scrub,
+      sensitivePatterns: mergedOptions.sensitivePatterns,
+      sensitiveKeys: mergedOptions.sensitiveKeys
+    });
 
     if (this.mode === "replay") {
       if (!exists) {
@@ -287,6 +305,13 @@ export function withVCR(...args: any[]): () => Promise<void> {
       await vcr.stop();
     }
   };
+}
+
+// Global configuration for VCR
+let globalVCROptions: VCROptions = {};
+
+export function configureVCR(options: VCROptions) {
+  globalVCROptions = { ...globalVCROptions, ...options };
 }
 
 /**

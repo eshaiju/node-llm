@@ -1,5 +1,5 @@
 {
-  "name": "scrub-test",
+  "name": "custom-scrub-config",
   "interactions": [
     {
       "method": "chat",
@@ -8,7 +8,7 @@
         "messages": [
           {
             "role": "user",
-            "content": "This contains XXXX"
+            "content": "status of [REDACTED]"
           }
         ],
         "max_tokens": 4096,
@@ -16,7 +16,7 @@
         "requestTimeout": 30000
       },
       "response": {
-        "content": "Response to This contains XXXX",
+        "content": "Response to status of [REDACTED]",
         "usage": {
           "input_tokens": 10,
           "output_tokens": 10,

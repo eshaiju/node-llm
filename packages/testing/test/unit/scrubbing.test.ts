@@ -57,4 +57,47 @@ describe("VCR Feature 4: Automatic Scrubbing", () => {
     expect(raw).toContain("XXXX");
     expect(raw).not.toContain("sensitive-info");
   });
+
+  test("Supports declarative custom keys and patterns via config", async () => {
+    const vcr = setupVCR("custom-scrub-config", {
+      mode: "record",
+      cassettesDir: CASSETTE_DIR,
+      sensitiveKeys: ["user_email", "internal_id"],
+      sensitivePatterns: [/secret-project-[a-z]+/g]
+    });
+
+    const llm = NodeLLM.withProvider("mock-provider");
+    await llm.chat().ask("status of secret-project-omega");
+
+    await vcr.stop();
+
+    const cassettePath = path.join(CASSETTE_DIR, "custom-scrub-config.json");
+    const raw = fs.readFileSync(cassettePath, "utf-8");
+
+    // Verify Pattern Scrubbing
+    expect(raw).not.toContain("secret-project-omega");
+    expect(raw).toContain("[REDACTED]");
+  });
+
+  test("Retains default scrubbing when custom config is provided", async () => {
+    const vcr = setupVCR("defaults-plus-custom", {
+      mode: "record",
+      cassettesDir: CASSETTE_DIR,
+      sensitiveKeys: ["custom_field"]
+    });
+
+    const llm = NodeLLM.withProvider("mock-provider");
+
+    // We send a standard fake key (matches default pattern) AND a custom field
+    await llm.chat().ask("key sk-123456789012345678901234567890 plus custom_field");
+
+    await vcr.stop();
+
+    const path = `${CASSETTE_DIR}/defaults-plus-custom.json`;
+    const raw = fs.readFileSync(path, "utf-8");
+
+    // Default pattern should still work
+    expect(raw).not.toContain("sk-1234567890");
+    expect(raw).toContain("[REDACTED]");
+  });
 });

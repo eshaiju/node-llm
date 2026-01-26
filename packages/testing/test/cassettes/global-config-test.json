@@ -1,0 +1,28 @@
+{
+  "name": "global-config-test",
+  "interactions": [
+    {
+      "method": "chat",
+      "request": {
+        "model": "mock-model",
+        "messages": [
+          {
+            "role": "user",
+            "content": "global test"
+          }
+        ],
+        "max_tokens": 4096,
+        "headers": {},
+        "requestTimeout": 30000
+      },
+      "response": {
+        "content": "Response to global test",
+        "usage": {
+          "input_tokens": 10,
+          "output_tokens": 10,
+          "total_tokens": 20
+        }
+      }
+    }
+  ]
+}

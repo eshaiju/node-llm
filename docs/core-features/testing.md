@@ -87,10 +87,40 @@ The VCR automatically redacts `api_key`, `authorization`, and other sensitive he
 
 ```typescript
 withVCR({
+  // Redact by key name
+  sensitiveKeys: ["user_ssn", "stripe_token"],
+  
+  // Redact by value pattern (Regex)
+  sensitivePatterns: [/sk-test-[0-9a-zA-Z]+/g],
+  
+  // Advanced: Custom function hook
   scrub: (data) => data.replace(/SSN: \d+/g, "[REDACTED_SSN]")
 }, async () => { ... });
 ```
+### Global Configuration 🌍
 
+Instead of repeating configuration in every test, set global defaults in your test setup file:
+
+```typescript
+import { configureVCR } from "@node-llm/testing";
+
+configureVCR({
+  cassettesDir: "test/__cassettes__", // Configurable global path
+  sensitiveKeys: ["user_ssn", "stripe_token"],
+  sensitivePatterns: [/sk-test-[0-9a-zA-Z]+/g]
+});
+```
+
+### Per-Test Overrides
+
+You can still override defaults on a per-test basis:
+
+```typescript
+withVCR({
+  // Merged with global config
+  sensitiveKeys: ["specific_secret"] 
+}, async () => { ... });
+```
 ---
 
 ## 🎭 Mocker Usage

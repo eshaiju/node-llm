@@ -6,13 +6,26 @@ export const DEFAULT_SECRET_PATTERNS = [
 
 export interface ScrubberOptions {
   customScrubber?: (data: unknown) => unknown;
+  sensitivePatterns?: RegExp[];
+  sensitiveKeys?: string[];
 }
 
 export class Scrubber {
   private customScrubber?: (data: unknown) => unknown;
+  private sensitivePatterns: RegExp[];
+  private sensitiveKeys: Set<string>;
 
   constructor(options: ScrubberOptions = {}) {
     this.customScrubber = options.customScrubber;
+    this.sensitivePatterns = [...DEFAULT_SECRET_PATTERNS, ...(options.sensitivePatterns || [])];
+    this.sensitiveKeys = new Set([
+      "key",
+      "api_key",
+      "token",
+      "auth",
+      "authorization",
+      ...(options.sensitiveKeys || []).map((k) => k.toLowerCase())
+    ]);
   }
 
   /**
@@ -33,7 +46,7 @@ export class Scrubber {
   private deepScrub(val: unknown): unknown {
     if (typeof val === "string") {
       let scrubbed = val;
-      for (const pattern of DEFAULT_SECRET_PATTERNS) {
+      for (const pattern of this.sensitivePatterns) {
         scrubbed = scrubbed.replace(pattern, "[REDACTED]");
       }
       return scrubbed;
@@ -56,12 +69,7 @@ export class Scrubber {
         // SENSITIVE KEY LOGIC:
         // Only redact if the key looks like a credential AND the value is a string.
         // We don't want to redact 'total_tokens' or 'input_tokens' which are numbers.
-        const isCredentialKey =
-          lowerKey === "key" ||
-          lowerKey === "api_key" ||
-          lowerKey === "token" ||
-          lowerKey === "auth" ||
-          lowerKey === "authorization";
+        const isCredentialKey = this.sensitiveKeys.has(lowerKey);
 
         if (isCredentialKey && typeof value === "string") {
           newObj[key] = "[REDACTED]";
