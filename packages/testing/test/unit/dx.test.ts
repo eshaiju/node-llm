@@ -69,8 +69,8 @@ describe("VCR Feature 5 & 6: DX Sugar & Auto-Naming", () => {
     const GLOBAL_DIR = path.join(CASSETTE_DIR, "global-custom-dir");
     configureVCR({ cassettesDir: GLOBAL_DIR });
 
-    // 2. Run a test relying on global dir
-    await withVCR("global-dir-test", async () => {
+    // 2. Run a test relying on global dir (explicit record mode to create cassette)
+    await withVCR("global-dir-test", { mode: "record", _allowRecordingInCI: true }, async () => {
       const llm = NodeLLM.withProvider("mock-provider");
       await llm.chat().ask("global dir test");
     })();
@@ -80,8 +80,7 @@ describe("VCR Feature 5 & 6: DX Sugar & Auto-Naming", () => {
     expect(fs.existsSync(filePath)).toBe(true);
 
     // Cleanup
-    if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
-    if (fs.existsSync(GLOBAL_DIR)) fs.rmdirSync(GLOBAL_DIR);
+    if (fs.existsSync(GLOBAL_DIR)) fs.rmSync(GLOBAL_DIR, { recursive: true, force: true });
     configureVCR({});
   });
 });

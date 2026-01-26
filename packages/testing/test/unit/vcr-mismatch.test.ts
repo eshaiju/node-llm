@@ -1,17 +1,28 @@
-import { test, expect, describe, beforeEach, afterEach } from "vitest";
+import { test, expect, describe, beforeEach, afterEach, beforeAll, afterAll } from "vitest";
 import { setupVCR } from "../../src/vcr.js";
 import { NodeLLM, providerRegistry } from "@node-llm/core";
 import fs from "node:fs";
 import path from "node:path";
+import os from "node:os";
 import { MockProvider } from "../helpers/MockProvider.js";
 
 describe("VCR: Interaction Mismatch Detection", () => {
-  const CASSETTE_DIR = path.join(__dirname, "../cassettes");
+  // Use temp directory to avoid modifying committed cassettes
+  let CASSETTE_DIR: string;
   const CASSETTE_NAME = "vcr-mismatch";
-  const CASSETTE_PATH = path.join(CASSETTE_DIR, `${CASSETTE_NAME}.json`);
+
+  beforeAll(() => {
+    CASSETTE_DIR = fs.mkdtempSync(path.join(os.tmpdir(), "vcr-mismatch-test-"));
+  });
+
+  afterAll(() => {
+    // Clean up temp directory
+    if (CASSETTE_DIR && fs.existsSync(CASSETTE_DIR)) {
+      fs.rmSync(CASSETTE_DIR, { recursive: true, force: true });
+    }
+  });
 
   beforeEach(() => {
-    if (fs.existsSync(CASSETTE_PATH)) fs.unlinkSync(CASSETTE_PATH);
     providerRegistry.register("mock-provider", () => new MockProvider());
   });
 
@@ -21,7 +32,11 @@ describe("VCR: Interaction Mismatch Detection", () => {
 
   test("Throws error when replay request doesn't match cassette content", async () => {
     // First: Record with specific request
-    const vcrRecord = setupVCR(CASSETTE_NAME, { mode: "record", cassettesDir: CASSETTE_DIR });
+    const vcrRecord = setupVCR(CASSETTE_NAME, {
+      mode: "record",
+      cassettesDir: CASSETTE_DIR,
+      _allowRecordingInCI: true
+    });
     const llmRecord = NodeLLM.withProvider("mock-provider");
     await llmRecord.chat().ask("Record this question");
     await vcrRecord.stop();
@@ -41,8 +56,8 @@ describe("VCR: Interaction Mismatch Detection", () => {
 
   test("Throws error when replay runs out of interactions", async () => {
     // Create a cassette with only one interaction
-    const dir = path.dirname(CASSETTE_PATH);
-    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    const CASSETTE_PATH = path.join(CASSETTE_DIR, `${CASSETTE_NAME}.json`);
+    if (!fs.existsSync(CASSETTE_DIR)) fs.mkdirSync(CASSETTE_DIR, { recursive: true });
 
     fs.writeFileSync(
       CASSETTE_PATH,
@@ -73,8 +88,8 @@ describe("VCR: Interaction Mismatch Detection", () => {
 
   test("Throws error when interaction method doesn't match", async () => {
     // Create a cassette with a chat interaction
-    const dir = path.dirname(CASSETTE_PATH);
-    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    const CASSETTE_PATH = path.join(CASSETTE_DIR, `${CASSETTE_NAME}.json`);
+    if (!fs.existsSync(CASSETTE_DIR)) fs.mkdirSync(CASSETTE_DIR, { recursive: true });
 
     fs.writeFileSync(
       CASSETTE_PATH,
@@ -107,8 +122,8 @@ describe("VCR: Interaction Mismatch Detection", () => {
 
   test("Replays multiple interactions in order", async () => {
     // Create a cassette with multiple interactions
-    const dir = path.dirname(CASSETTE_PATH);
-    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    const CASSETTE_PATH = path.join(CASSETTE_DIR, `${CASSETTE_NAME}.json`);
+    if (!fs.existsSync(CASSETTE_DIR)) fs.mkdirSync(CASSETTE_DIR, { recursive: true });
 
     fs.writeFileSync(
       CASSETTE_PATH,

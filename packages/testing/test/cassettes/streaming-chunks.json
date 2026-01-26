@@ -2,31 +2,16 @@
   "name": "streaming-chunks",
   "version": "1.0",
   "metadata": {
-    "recordedAt": "2026-01-26T09:37:53.134Z",
-    "duration": 10
+    "recordedAt": "2026-01-26T00:00:00.000Z"
   },
   "interactions": [
     {
       "method": "chat",
-      "request": {
-        "model": "mock-model",
-        "messages": [
-          {
-            "role": "user",
-            "content": "Test"
-          }
-        ],
-        "max_tokens": 4096,
-        "headers": {},
-        "requestTimeout": 30000
-      },
+      "request": { "messages": [{ "role": "user", "content": "Test" }] },
       "response": {
         "content": "Response to Test",
-        "usage": {
-          "input_tokens": 10,
-          "output_tokens": 10,
-          "total_tokens": 20
-        }
+        "tool_calls": [],
+        "usage": { "prompt_tokens": 5, "completion_tokens": 5, "total_tokens": 10 }
       }
     }
   ]

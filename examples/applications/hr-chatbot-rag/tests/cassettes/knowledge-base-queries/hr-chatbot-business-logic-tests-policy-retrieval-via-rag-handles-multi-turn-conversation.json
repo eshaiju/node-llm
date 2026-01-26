@@ -1,0 +1,86 @@
+{
+  "name": "HR Chatbot: Business Logic Tests > Policy Retrieval via RAG > handles multi-turn conversation",
+  "version": "1.0",
+  "metadata": {
+    "recordedAt": "2026-01-26T10:28:08.022Z",
+    "duration": 1844
+  },
+  "interactions": [
+    {
+      "method": "chat",
+      "request": {
+        "model": "gpt-4o-mini",
+        "messages": [
+          {
+            "role": "user",
+            "content": "What is vacation policy? One sentence."
+          }
+        ],
+        "max_tokens": 4096,
+        "headers": {},
+        "requestTimeout": 30000
+      },
+      "response": {
+        "content": "A vacation policy outlines the guidelines and procedures for employees regarding paid time off, including accrual rates, usage, and any restrictions.",
+        "usage": {
+          "input_tokens": 15,
+          "output_tokens": 26,
+          "total_tokens": 41,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "input_cost": 0.000002,
+          "output_cost": 0.000016,
+          "cost": 0.000018
+        },
+        "reasoning": null
+      }
+    },
+    {
+      "method": "chat",
+      "request": {
+        "model": "gpt-4o-mini",
+        "messages": [
+          {
+            "role": "user",
+            "content": "What is vacation policy? One sentence."
+          },
+          {
+            "role": "assistant",
+            "content": "A vacation policy outlines the guidelines and procedures for employees regarding paid time off, including accrual rates, usage, and any restrictions.",
+            "usage": {
+              "input_tokens": 15,
+              "output_tokens": 26,
+              "total_tokens": 41,
+              "cached_tokens": 0,
+              "reasoning_tokens": 0,
+              "input_cost": 0.000002,
+              "output_cost": 0.000016,
+              "cost": 0.000018
+            }
+          },
+          {
+            "role": "user",
+            "content": "How many days PTO? Just the number."
+          }
+        ],
+        "max_tokens": 4096,
+        "headers": {},
+        "requestTimeout": 30000
+      },
+      "response": {
+        "content": "The number of PTO days can vary widely by company, but a common range is 10 to 20 days per year.",
+        "usage": {
+          "input_tokens": 58,
+          "output_tokens": 25,
+          "total_tokens": 83,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "input_cost": 0.000009,
+          "output_cost": 0.000015,
+          "cost": 0.000024
+        },
+        "reasoning": null
+      }
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "name": "Brand Perception: Business Logic Tests > Multi-Model Sentiment Analysis > analyzes brand sentiment",
+  "version": "1.0",
+  "metadata": {
+    "recordedAt": "2026-01-26T10:30:13.704Z",
+    "duration": 1260
+  },
+  "interactions": [
+    {
+      "method": "chat",
+      "request": {
+        "model": "gpt-4o-mini",
+        "messages": [
+          {
+            "role": "user",
+            "content": "In one sentence, what makes Apple a strong brand?"
+          }
+        ],
+        "max_tokens": 4096,
+        "headers": {},
+        "requestTimeout": 30000
+      },
+      "response": {
+        "content": "Apple's strength as a brand stems from its unwavering commitment to innovation, exceptional design, user experience, and a loyal customer base that values quality and status.",
+        "usage": {
+          "input_tokens": 18,
+          "output_tokens": 31,
+          "total_tokens": 49,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "input_cost": 0.000003,
+          "output_cost": 0.000019,
+          "cost": 0.000021
+        },
+        "reasoning": null
+      }
+    }
+  ]
+}

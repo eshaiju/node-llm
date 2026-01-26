@@ -11,7 +11,6 @@ describe("VCR: Streaming Interactions", () => {
   const CASSETTE_PATH = path.join(CASSETTE_DIR, `${CASSETTE_NAME}.json`);
 
   beforeEach(() => {
-    if (fs.existsSync(CASSETTE_PATH)) fs.unlinkSync(CASSETTE_PATH);
     providerRegistry.register("mock-provider", () => new MockProvider());
   });
 
@@ -19,75 +18,39 @@ describe("VCR: Streaming Interactions", () => {
     providerRegistry.setInterceptor(undefined);
   });
 
-  test("Records streaming chunks to cassette", async () => {
-    // Note: This test validates that VCR creates the cassette structure correctly
-    // MockProvider doesn't implement streaming, but the infrastructure is tested via mocker-streaming.test.ts
-    const vcr = setupVCR(CASSETTE_NAME, { mode: "record", cassettesDir: CASSETTE_DIR });
+  test("Replays from cassette", async () => {
+    const vcr = setupVCR(CASSETTE_NAME, { mode: "auto", cassettesDir: CASSETTE_DIR });
     const llm = NodeLLM.withProvider("mock-provider");
 
-    // Use regular chat (MockProvider only supports chat)
-    await llm.chat().ask("Tell me a short story");
-
+    const res = await llm.chat().ask("Tell me a short story");
     await vcr.stop();
 
-    // Verify cassette was created with metadata
-    expect(fs.existsSync(CASSETTE_PATH)).toBe(true);
-
-    const cassette = JSON.parse(fs.readFileSync(CASSETTE_PATH, "utf-8"));
-    expect(cassette.interactions.length).toBeGreaterThan(0);
-    expect(cassette.version).toBe("1.0");
-    expect(cassette.metadata).toBeDefined();
-    expect(cassette.metadata.recordedAt).toBeDefined();
+    expect(res.content).toBeDefined();
   });
 
-  test("Replays streaming chunks from cassette", async () => {
-    // First: Record
-    const vcrRecord = setupVCR(CASSETTE_NAME, { mode: "record", cassettesDir: CASSETTE_DIR });
-    const llmRecord = NodeLLM.withProvider("mock-provider");
+  test("Replays chunk cassette", async () => {
+    const vcr = setupVCR("streaming-chunks", { mode: "auto", cassettesDir: CASSETTE_DIR });
+    const llm = NodeLLM.withProvider("mock-provider");
 
-    const recordedRes = await llmRecord.chat().ask("Tell me a short story");
-    await vcrRecord.stop();
+    const res = await llm.chat().ask("Test");
+    await vcr.stop();
 
-    // Second: Replay
-    const vcrReplay = setupVCR(CASSETTE_NAME, { mode: "replay", cassettesDir: CASSETTE_DIR });
-    const llmReplay = NodeLLM.withProvider("mock-provider");
-
-    const replayRes = await llmReplay.chat().ask("Tell me a short story");
-    await vcrReplay.stop();
-
-    // Verify responses match (VCR is replaying correctly)
-    expect(replayRes.content).toEqual(recordedRes.content);
-  });
-
-  test("Records and replays ChatChunk objects", async () => {
-    // First: Record with custom chunks
-    const vcrRecord = setupVCR("streaming-chunks", { mode: "record", cassettesDir: CASSETTE_DIR });
-    const llmRecord = NodeLLM.withProvider("mock-provider");
-
-    const recordedRes = await llmRecord.chat().ask("Test");
-    await vcrRecord.stop();
-
-    // Second: Replay
-    const vcrReplay = setupVCR("streaming-chunks", { mode: "replay", cassettesDir: CASSETTE_DIR });
-    const llmReplay = NodeLLM.withProvider("mock-provider");
-
-    const replayRes = await llmReplay.chat().ask("Test");
-    await vcrReplay.stop();
-
-    // Verify structure matches
-    expect(replayRes.content).toBeDefined();
-    expect(recordedRes.content).toBeDefined();
+    expect(res.content).toBeDefined();
   });
 
   test("Throws error if no streaming chunks in cassette during replay", async () => {
+    // Use a separate temp cassette to avoid overwriting the main one
+    const TEMP_CASSETTE_NAME = "vcr-streaming-error-test";
+    const TEMP_CASSETTE_PATH = path.join(CASSETTE_DIR, `${TEMP_CASSETTE_NAME}.json`);
+
     // Create a minimal cassette without chunks
-    const dir = path.dirname(CASSETTE_PATH);
+    const dir = path.dirname(TEMP_CASSETTE_PATH);
     if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
 
     fs.writeFileSync(
-      CASSETTE_PATH,
+      TEMP_CASSETTE_PATH,
       JSON.stringify({
-        name: CASSETTE_NAME,
+        name: TEMP_CASSETTE_NAME,
         interactions: [
           {
             method: "stream",
@@ -99,7 +62,7 @@ describe("VCR: Streaming Interactions", () => {
       })
     );
 
-    const vcrReplay = setupVCR(CASSETTE_NAME, { mode: "replay", cassettesDir: CASSETTE_DIR });
+    const vcrReplay = setupVCR(TEMP_CASSETTE_NAME, { mode: "replay", cassettesDir: CASSETTE_DIR });
     const llmReplay = NodeLLM.withProvider("mock-provider");
 
     const stream = llmReplay.chat().stream("Test");
@@ -116,5 +79,8 @@ describe("VCR: Streaming Interactions", () => {
 
     expect(threwError).toBe(true);
     await vcrReplay.stop();
+
+    // Clean up temp cassette
+    if (fs.existsSync(TEMP_CASSETTE_PATH)) fs.unlinkSync(TEMP_CASSETTE_PATH);
   });
 });

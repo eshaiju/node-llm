@@ -3,26 +3,37 @@ import { setupVCR } from "../../src/vcr.js";
 import { NodeLLM, providerRegistry } from "@node-llm/core";
 import fs from "node:fs";
 import path from "node:path";
+import os from "node:os";
 import { MockProvider } from "../helpers/MockProvider.js";
 
 describe("VCR Feature 4: Automatic Scrubbing", () => {
   const CASSETTE_NAME = "scrub-test";
-  const CASSETTE_DIR = path.join(__dirname, "../cassettes");
-  const CASSETTE_PATH = path.join(CASSETTE_DIR, `${CASSETTE_NAME}.json`);
+  // Use temp directory for scrubbing tests to avoid re-recording committed cassettes
+  let CASSETTE_DIR: string;
+  let CASSETTE_PATH: string;
   let mock: MockProvider;
 
   beforeEach(() => {
-    if (fs.existsSync(CASSETTE_PATH)) fs.unlinkSync(CASSETTE_PATH);
+    CASSETTE_DIR = fs.mkdtempSync(path.join(os.tmpdir(), "vcr-scrub-test-"));
+    CASSETTE_PATH = path.join(CASSETTE_DIR, `${CASSETTE_NAME}.json`);
     mock = new MockProvider();
     providerRegistry.register("mock-provider", () => mock);
   });
 
   afterEach(() => {
     providerRegistry.setInterceptor(undefined);
+    // Clean up temp directory
+    if (fs.existsSync(CASSETTE_DIR)) {
+      fs.rmSync(CASSETTE_DIR, { recursive: true, force: true });
+    }
   });
 
   test("Automatically scrubs API keys and sensitive JSON keys", async () => {
-    const vcr = setupVCR(CASSETTE_NAME, { mode: "record", cassettesDir: CASSETTE_DIR });
+    const vcr = setupVCR(CASSETTE_NAME, {
+      mode: "record",
+      cassettesDir: CASSETTE_DIR,
+      _allowRecordingInCI: true
+    });
     const llm = NodeLLM.withProvider("mock-provider");
 
     // 1. Trigger request with secrets
@@ -43,6 +54,7 @@ describe("VCR Feature 4: Automatic Scrubbing", () => {
     const vcr = setupVCR(CASSETTE_NAME, {
       mode: "record",
       cassettesDir: CASSETTE_DIR,
+      _allowRecordingInCI: true,
       scrub: (data: unknown) => {
         // Deep string replacement on the whole interaction object
         return JSON.parse(JSON.stringify(data).replace(/sensitive-info/g, "XXXX"));
@@ -62,6 +74,7 @@ describe("VCR Feature 4: Automatic Scrubbing", () => {
     const vcr = setupVCR("custom-scrub-config", {
       mode: "record",
       cassettesDir: CASSETTE_DIR,
+      _allowRecordingInCI: true,
       sensitiveKeys: ["user_email", "internal_id"],
       sensitivePatterns: [/secret-project-[a-z]+/g]
     });
@@ -83,6 +96,7 @@ describe("VCR Feature 4: Automatic Scrubbing", () => {
     const vcr = setupVCR("defaults-plus-custom", {
       mode: "record",
       cassettesDir: CASSETTE_DIR,
+      _allowRecordingInCI: true,
       sensitiveKeys: ["custom_field"]
     });
 

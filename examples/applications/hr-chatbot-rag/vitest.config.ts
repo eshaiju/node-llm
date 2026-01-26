@@ -6,11 +6,8 @@ export default defineConfig({
     environment: "node",
     globals: true,
     env: {
-      OPENAI_API_KEY: "sk-dummy-key-for-testing-only",
-      GEMINI_API_KEY: "dummy-gemini-key",
-      ANTHROPIC_API_KEY: "dummy-anthropic-key",
-      // Dummy DB URL to prevent Prisma Client crash during initialization
-      // even if we mock it later.
+      // Use real API keys from .env file for VCR recording
+      // Only set dummy database URL to prevent Prisma Client crash
       DATABASE_URL: "postgresql://postgres:password@localhost:5432/hr_chatbot_test"
     }
   },

@@ -3,12 +3,15 @@ import { configureVCR, resetVCRConfig, setupVCR } from "../../src/vcr.js";
 import { NodeLLM, providerRegistry } from "@node-llm/core";
 import fs from "node:fs";
 import path from "node:path";
+import os from "node:os";
 import { MockProvider } from "../helpers/MockProvider.js";
 
 describe("VCR: Global Configuration", () => {
-  const CASSETTE_DIR = path.join(__dirname, "../cassettes");
+  // Use temp directory to avoid modifying committed cassettes
+  let CASSETTE_DIR: string;
 
   beforeEach(() => {
+    CASSETTE_DIR = fs.mkdtempSync(path.join(os.tmpdir(), "vcr-global-config-"));
     resetVCRConfig();
     providerRegistry.register("mock-provider", () => new MockProvider());
   });
@@ -16,6 +19,10 @@ describe("VCR: Global Configuration", () => {
   afterEach(() => {
     resetVCRConfig();
     providerRegistry.setInterceptor(undefined);
+    // Clean up temp directory
+    if (fs.existsSync(CASSETTE_DIR)) {
+      fs.rmSync(CASSETTE_DIR, { recursive: true, force: true });
+    }
   });
 
   test("Configures global sensitive keys", async () => {
@@ -25,16 +32,18 @@ describe("VCR: Global Configuration", () => {
 
     const CASSETTE_NAME = "global-config-keys";
     const CASSETTE_PATH = path.join(CASSETTE_DIR, `${CASSETTE_NAME}.json`);
-    if (fs.existsSync(CASSETTE_PATH)) fs.unlinkSync(CASSETTE_PATH);
 
-    const vcr = setupVCR(CASSETTE_NAME, { mode: "record", cassettesDir: CASSETTE_DIR });
+    const vcr = setupVCR(CASSETTE_NAME, {
+      mode: "record",
+      cassettesDir: CASSETTE_DIR,
+      _allowRecordingInCI: true
+    });
     const llm = NodeLLM.withProvider("mock-provider");
 
     await llm.chat().ask("regular question");
     await vcr.stop();
 
     const raw = fs.readFileSync(CASSETTE_PATH, "utf-8");
-    // Verify cassette was created and has version/metadata (sign of proper implementation)
     const cassette = JSON.parse(raw);
     expect(cassette.version).toBe("1.0");
     expect(cassette.metadata).toBeDefined();
@@ -47,9 +56,12 @@ describe("VCR: Global Configuration", () => {
 
     const CASSETTE_NAME = "global-config-patterns";
     const CASSETTE_PATH = path.join(CASSETTE_DIR, `${CASSETTE_NAME}.json`);
-    if (fs.existsSync(CASSETTE_PATH)) fs.unlinkSync(CASSETTE_PATH);
 
-    const vcr = setupVCR(CASSETTE_NAME, { mode: "record", cassettesDir: CASSETTE_DIR });
+    const vcr = setupVCR(CASSETTE_NAME, {
+      mode: "record",
+      cassettesDir: CASSETTE_DIR,
+      _allowRecordingInCI: true
+    });
     const llm = NodeLLM.withProvider("mock-provider");
 
     await llm.chat().ask("Status of custom-secret-omega");
@@ -69,9 +81,12 @@ describe("VCR: Global Configuration", () => {
 
     const CASSETTE_NAME = "global-config-reset";
     const CASSETTE_PATH = path.join(CASSETTE_DIR, `${CASSETTE_NAME}.json`);
-    if (fs.existsSync(CASSETTE_PATH)) fs.unlinkSync(CASSETTE_PATH);
 
-    const vcr = setupVCR(CASSETTE_NAME, { mode: "record", cassettesDir: CASSETTE_DIR });
+    const vcr = setupVCR(CASSETTE_NAME, {
+      mode: "record",
+      cassettesDir: CASSETTE_DIR,
+      _allowRecordingInCI: true
+    });
     const llm = NodeLLM.withProvider("mock-provider");
 
     await llm.chat().ask("to_reset should not be redacted");

@@ -1,0 +1,39 @@
+{
+  "name": "HR Chatbot: Business Logic Tests > Policy Retrieval via RAG > retrieves leave policy for employee question",
+  "version": "1.0",
+  "metadata": {
+    "recordedAt": "2026-01-26T10:28:04.741Z",
+    "duration": 1964
+  },
+  "interactions": [
+    {
+      "method": "chat",
+      "request": {
+        "model": "gpt-4o-mini",
+        "messages": [
+          {
+            "role": "user",
+            "content": "What is our leave policy for paternity leave? Keep your answer brief."
+          }
+        ],
+        "max_tokens": 4096,
+        "headers": {},
+        "requestTimeout": 30000
+      },
+      "response": {
+        "content": "Our paternity leave policy provides eligible employees with [insert duration, e.g., 2 weeks] of paid leave following the birth or adoption of a child. Leave must be requested [insert notice period, e.g., 30 days] in advance and can be taken within [insert timeframe, e.g., the first year after birth]. For more details, please refer to the employee handbook or contact HR.",
+        "usage": {
+          "input_tokens": 22,
+          "output_tokens": 82,
+          "total_tokens": 104,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "input_cost": 0.000003,
+          "output_cost": 0.000049,
+          "cost": 0.000052
+        },
+        "reasoning": null
+      }
+    }
+  ]
+}

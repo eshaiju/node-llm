@@ -17,16 +17,26 @@ describe("VCR Feature 12: Hierarchical Scoping", () => {
     providerRegistry.register("mock-provider", () => new MockProvider());
   });
 
+  afterEach(() => {
+    // Clean up after test
+    if (fs.existsSync(CUSTOM_DIR)) fs.rmSync(CUSTOM_DIR, { recursive: true, force: true });
+  });
+
   test("Organizes cassettes into nested subfolders", async () => {
     // We use process.env to set the base dir for this test
     process.env.VCR_CASSETTE_DIR = CUSTOM_DIR;
 
     await describeVCR(LEVEL_1, () => {
       return describeVCR(LEVEL_2, async () => {
-        const testFn = withVCR(TEST_NAME, async () => {
-          const llm = NodeLLM.withProvider("mock-provider");
-          await llm.chat().ask("Trigger record");
-        });
+        // Use explicit mode: "record" to test cassette creation in temp dir
+        const testFn = withVCR(
+          TEST_NAME,
+          { mode: "record", _allowRecordingInCI: true },
+          async () => {
+            const llm = NodeLLM.withProvider("mock-provider");
+            await llm.chat().ask("Trigger record");
+          }
+        );
 
         await testFn();
       });

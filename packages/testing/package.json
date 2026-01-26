@@ -7,6 +7,7 @@
   "scripts": {
     "build": "tsc",
     "test": "vitest run",
+    "test:record": "VCR_MODE=record vitest run",
     "test:vitest": "vitest run"
   },
   "dependencies": {},

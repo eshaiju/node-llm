@@ -1,5 +1,10 @@
 {
   "name": "explicit-sugar-test",
+  "version": "1.0",
+  "metadata": {
+    "recordedAt": "2026-01-26T10:42:20.385Z",
+    "duration": 6
+  },
   "interactions": [
     {
       "method": "chat",

@@ -7,7 +7,9 @@
     "packages/*"
   ],
   "scripts": {
-    "test": "npm test --workspaces --if-present",
+    "test": "npm test --workspaces --if-present && npm run test:examples",
+    "test:packages": "npm test --workspaces --if-present",
+    "test:examples": "npm test --prefix examples/applications/hr-chatbot-rag && npm test --prefix examples/applications/brand-perception-checker/server",
     "build": "npm run build --workspaces --if-present",
     "docs": "cd docs && bundle install && bundle exec jekyll serve",
     "sync-models": "node scripts/sync-models.mjs",

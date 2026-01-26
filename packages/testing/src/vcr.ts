@@ -45,6 +45,8 @@ export interface VCROptions {
   scope?: string | string[]; // Allow single or multiple scopes
   sensitivePatterns?: RegExp[];
   sensitiveKeys?: string[];
+  /** @internal - For testing VCR library itself. Bypasses CI recording check. */
+  _allowRecordingInCI?: boolean;
 }
 
 export class VCR {
@@ -95,9 +97,10 @@ export class VCR {
     const initialMode = mergedOptions.mode || (process.env.VCR_MODE as VCRMode) || "auto";
     const isCI = !!process.env.CI;
     const exists = fs.existsSync(this.filePath);
+    const allowRecordingInCI = mergedOptions._allowRecordingInCI === true;
 
-    // CI Enforcement
-    if (isCI) {
+    // CI Enforcement (can be bypassed for VCR library's own unit tests)
+    if (isCI && !allowRecordingInCI) {
       if (initialMode === "record") {
         throw new Error(`VCR[${name}]: Recording cassettes is not allowed in CI.`);
       }
@@ -108,8 +111,20 @@ export class VCR {
       }
     }
 
+    // Mode Resolution:
+    // - "record": Always record (overwrites existing cassette)
+    // - "replay": Always replay (fails if cassette missing)
+    // - "auto": Replay if exists, otherwise FAIL (requires explicit record)
+    // - "passthrough": No VCR, make real calls
     if (initialMode === "auto") {
-      this.mode = exists ? "replay" : "record";
+      if (exists) {
+        this.mode = "replay";
+      } else {
+        throw new Error(
+          `VCR[${name}]: Cassette not found at ${this.filePath}. ` +
+            `Use mode: "record" to create it, then switch back to "auto" or "replay".`
+        );
+      }
     } else {
       this.mode = initialMode;
     }
