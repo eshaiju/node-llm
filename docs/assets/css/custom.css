@@ -1,120 +1,160 @@
 ---
 ---
 
-/* --- Total Background Parity Fix --- */
+/* --- Bun-like Clean Light Theme --- */
 
 :root {
-  --body-background-color: #0f110f !important;
-  --sidebar-color: #161a16 !important;
-  --search-background-color: #161a16 !important;
-  --bg-dark: #0f110f;
-  --bg-dark-accent: #161a16;
-  --accent-green: #00d46a;
-  --text-light: #f0fdf4;
-  --text-dim: #dce6dc;
+  /* Core Colors */
+  --body-background-color: #ffffff !important;
+  --sidebar-color: #fbfbfb !important;
+  --search-background-color: #f4f4f5 !important;
+  --border-color: #e4e4e7 !important;
+  
+  /* Text */
+  --text-primary: #18181b !important; /* Zinc-900 */
+  --text-secondary: #52525b !important; /* Zinc-600 */
+  
+  /* Brand */
+  --brand-color: #7ab74b;
+  --brand-light: rgba(0, 212, 106, 0.1);
 }
 
-/* 1. Force the page containers */
-html, body, 
-.site-nav, 
-.side-bar, 
-.main-header, 
-.main-content-wrap, 
-.main-content, 
-.site-footer,
-.site-header {
-  background-color: #0f110f !important;
-  background-image: none !important;
-  color: #f0fdf4 !important;
+/* 1. Global Reset & Typography */
+html, body {
+  background-color: var(--body-background-color) !important;
+  color: var(--text-primary) !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif !important;
 }
 
-/* 2. Sidebar & Sidebar Components */
+/* 2. Sidebar & Navigation */
 .side-bar {
-  background-color: #161a16 !important;
-  border-right: 1px solid rgba(0, 212, 106, 0.1) !important;
+  background-color: var(--sidebar-color) !important;
+  border-right: 1px solid var(--border-color) !important;
 }
 
-.site-button {
+.site-nav {
   background-color: transparent !important;
-  color: #00d46a !important;
 }
 
-/* 3. Main Header (Search Bar Area) */
-.main-header {
-  background-color: #0f110f !important;
-  border-bottom: 1px solid rgba(0, 212, 106, 0.1) !important;
-}
-
-.search-input {
-  background-color: #161a16 !important;
-  border: 1px solid rgba(0, 212, 106, 0.1) !important;
-  color: #f0fdf4 !important;
-}
-
-/* 4. Active Navigation State */
 .nav-list-item.active > .nav-list-link {
-  background-color: rgba(0, 212, 106, 0.12) !important;
-  color: #00d46a !important;
-  background-image: none !important;
+  background-color: var(--brand-light) !important;
+  color: var(--brand-color) !important;
+  border-left: 3px solid var(--brand-color) !important;
+  font-weight: 600 !important;
+}
+
+.nav-list-link {
+  color: var(--text-secondary) !important;
 }
 
 .nav-list-link:hover {
-  background-color: rgba(255, 255, 255, 0.05) !important;
-  color: #00d46a !important;
+  background-color: #f4f4f5 !important;
+  color: var(--text-primary) !important;
 }
 
-/* 5. Typography & Content */
+/* 3. Search Bar */
+.search {
+  background-color: transparent !important;
+}
+
+.search-input {
+  background-color: var(--search-background-color) !important;
+  border: 1px solid var(--border-color) !important;
+  color: var(--text-primary) !important;
+  border-radius: 6px !important;
+  transition: all 0.2s ease;
+}
+
+.search-input:focus {
+  border-color: var(--brand-color) !important;
+  box-shadow: 0 0 0 2px var(--brand-light) !important;
+}
+
+/* 4. Content Area */
+.main-content {
+  background-color: #ffffff !important;
+}
+
 h1, h2, h3, h4, h5, h6 {
-  color: #f0fdf4 !important;
+  color: var(--text-primary) !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.02em !important;
 }
 
-p, li {
-  color: #dce6dc !important;
+p, li, td, th {
+  color: var(--text-secondary) !important;
 }
 
 a {
-  color: #00d46a !important;
+  color: var(--brand-color) !important;
+  text-decoration: none !important;
 }
 
-/* 6. Code Blocks */
+a:hover {
+  text-decoration: underline !important;
+}
+
+hr {
+  border-bottom: 1px solid var(--border-color) !important;
+}
+
+/* 5. Tables */
+table {
+  border: 1px solid var(--border-color) !important;
+  border-radius: 6px !important;
+}
+
+th {
+  background-color: #f4f4f5 !important;
+  border-bottom: 1px solid var(--border-color) !important;
+  color: var(--text-primary) !important;
+}
+
+td {
+  border-bottom: 1px solid var(--border-color) !important;
+}
+
+/* 6. Code Blocks (Keeping dark for contrast, Bun-style) */
 .highlighter-rouge, pre, code {
-  background-color: #161a16 !important;
-  border: 1px solid rgba(0, 212, 106, 0.1) !important;
-  color: #f0fdf4 !important;
+  background-color: #1f2937 !important; /* Gray-800 */
+  color: #f9fafb !important; /* Gray-50 */
+  border-radius: 6px !important;
 }
 
-code.highlighter-rouge {
-  background-color: rgba(0, 212, 106, 0.08) !important;
-  color: #00d46a !important;
+/* Inline code needs to be lighter/distinct if not in a block */
+p > code, li > code, td > code {
+  background-color: #f4f4f5 !important;
+  color: #db2777 !important; /* Pinkish-red for inline code, popular in modern docs */
+  border: 1px solid #e4e4e7 !important;
+  padding: 0.2em 0.4em !important;
+  font-size: 0.85em !important;
 }
 
-/* 7. Provider Icons - FORCED VISIBILITY */
-.provider-icons {
-  margin: 3rem 0 !important;
-}
-
-/* Aggressive Inversion for Logos */
+/* 7. Provider Icons (Reset inversion) */
 .provider-icons img, 
-.provider-logo img, 
+.provider-logo img,
 .main-content img[src*="svg"], 
-.main-content img[src*="logo"],
-.main-content table img {
-  filter: invert(1) brightness(1.8) grayscale(1) !important;
-  opacity: 0.8 !important;
-  transition: all 0.3s ease !important;
-}
-
-.provider-icons img:hover, 
-.provider-logo img:hover,
-.main-content img[src*="svg"]:hover {
-  filter: invert(1) brightness(2.5) grayscale(0) !important;
+.main-content img[src*="logo"] {
+  filter: none !important; /* Reset any dark mode inversions */
   opacity: 1 !important;
+  transition: transform 0.2s ease;
 }
 
-/* Exclude the main product logo from inversion */
-.site-header .site-logo img,
-.logo img,
-img[alt="NodeLLM"],
-img[alt="Logo"] {
-  filter: brightness(1.2) !important;
+.provider-icons img:hover {
+  transform: translateY(-2px);
+}
+
+/* 8. Callouts / Notes */
+blockquote {
+  background-color: #f0fdf4 !important; /* Very light green */
+  border-left: 4px solid var(--brand-color) !important;
+  color: var(--text-secondary) !important;
+  padding: 1rem !important;
+  border-radius: 0 4px 4px 0 !important;
+}
+
+.site-footer {
+   background-color: #ffffff !important;
+   border-top: 1px solid var(--border-color) !important;
+   color: var(--text-secondary) !important;
 }

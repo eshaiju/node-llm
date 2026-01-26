@@ -163,6 +163,25 @@ const chat = await createChat(prisma, llm, { model: "claude-3-7-sonnet" });
 await chat.withThinking({ budget: 16000 }).ask("Develop a strategy");
 ```
 
+### 🧪 [Deterministic Testing](/core-features/testing)
+
+Validate your AI agents with **VCR cassettes** (record/replay) and a **Fluent Mocker** for unit tests. No more flaky or expensive test runs.
+
+```ts
+import { vcr, Mocker } from "@node-llm/testing";
+
+// 1. Integration Tests (VCR)
+await vcr.useCassette("pricing_flow", async () => {
+  const res = await chat.ask("How much?");
+  expect(res.content).toContain("$20/mo");
+});
+
+// 2. Unit Tests (Mocker)
+const mock = new Mocker()
+  .chat("Next step?", "Login User")
+  .tool("getCurrentUser", { id: 1 });
+```
+
 ### 🛡️ [Security & Compliance](/advanced/security)
 
 Implement custom security, PII detection, and compliance logic using pluggable asynchronous hooks (`beforeRequest` and `afterResponse`).

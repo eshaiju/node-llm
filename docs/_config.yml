@@ -3,7 +3,7 @@ description: One beautiful API for OpenAI, Anthropic, Gemini, and more.
 theme: just-the-docs
 logo: assets/images/logo.png
 favicon_ico: assets/images/favicon.jpg
-color_scheme: dark
+color_scheme: light
 
 url: "https://node-llm.eshaiju.com"
 baseurl: ""
