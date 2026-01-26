@@ -1,0 +1,17 @@
+{
+  "name": "vcr-streaming",
+  "version": "1.0",
+  "interactions": [
+    {
+      "method": "chat",
+      "request": {
+        "messages": [{ "role": "user", "content": "Tell me a short story" }]
+      },
+      "response": {
+        "content": "Once upon a time, there was a small robot who learned to dream.",
+        "tool_calls": [],
+        "usage": { "input_tokens": 10, "output_tokens": 15, "total_tokens": 25 }
+      }
+    }
+  ]
+}

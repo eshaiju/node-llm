@@ -21,16 +21,27 @@ export {
 } from "./llm.js";
 export { config } from "./config.js";
 export type { NodeLLMConfig } from "./config.js";
-export { providerRegistry } from "./providers/registry.js";
+export { providerRegistry, ProviderInterceptor } from "./providers/registry.js";
 export { Schema } from "./schema/Schema.js";
 export { BaseProvider } from "./providers/BaseProvider.js";
 export {
+  Provider,
+  ProviderCapabilities,
   ChatRequest,
   ChatResponse,
   ChatChunk,
   ThinkingConfig,
   ThinkingResult,
-  Usage
+  Usage,
+  ImageRequest,
+  ImageResponse,
+  TranscriptionRequest,
+  TranscriptionResponse,
+  ModerationRequest,
+  ModerationResponse,
+  ModerationResult,
+  EmbeddingRequest,
+  EmbeddingResponse
 } from "./providers/Provider.js";
 export { resolveModelAlias } from "./model_aliases.js";
 export { default as MODEL_ALIASES } from "./aliases.js";

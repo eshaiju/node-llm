@@ -1,0 +1,33 @@
+{
+  "name": "feature-1-vcr",
+  "version": "1.0",
+  "metadata": {
+    "recordedAt": "2026-01-26T10:42:20.369Z",
+    "duration": 6
+  },
+  "interactions": [
+    {
+      "method": "chat",
+      "request": {
+        "model": "mock-model",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Record me"
+          }
+        ],
+        "max_tokens": 4096,
+        "headers": {},
+        "requestTimeout": 30000
+      },
+      "response": {
+        "content": "Response to Record me",
+        "usage": {
+          "input_tokens": 10,
+          "output_tokens": 10,
+          "total_tokens": 20
+        }
+      }
+    }
+  ]
+}

@@ -6,16 +6,23 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@node-llm/core": "latest",
+    "@node-llm/core": "file:../../../../packages/core",
+    "@node-llm/testing": "file:../../../../packages/testing",
     "axios": "^1.13.2",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "first": "^0.0.3"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "vitest": "^4.0.0"
   }
 }

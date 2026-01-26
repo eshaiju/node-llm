@@ -1,0 +1,12 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Mocker Feature: Prompt Snapshots > Snapshots chat messages 1`] = `
+[
+  {
+    "content": "Hello",
+    "role": "user",
+  },
+]
+`;
+
+exports[`Mocker Feature: Prompt Snapshots > Snapshots embedding input 1`] = `"text"`;

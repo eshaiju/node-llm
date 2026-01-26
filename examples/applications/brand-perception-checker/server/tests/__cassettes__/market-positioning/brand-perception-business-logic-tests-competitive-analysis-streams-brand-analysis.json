@@ -1,0 +1,47 @@
+{
+  "name": "Brand Perception: Business Logic Tests > Competitive Analysis > streams brand analysis",
+  "version": "1.0",
+  "metadata": {
+    "recordedAt": "2026-01-26T10:30:16.708Z",
+    "duration": 641
+  },
+  "interactions": [
+    {
+      "method": "stream",
+      "request": {
+        "model": "gpt-4o-mini",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Name 3 brand values of Nike. Just the words."
+          }
+        ],
+        "max_tokens": 4096,
+        "headers": {},
+        "requestTimeout": 30000,
+        "signal": {}
+      },
+      "response": null,
+      "chunks": [
+        {
+          "content": "Innovation"
+        },
+        {
+          "content": ","
+        },
+        {
+          "content": " Performance"
+        },
+        {
+          "content": ","
+        },
+        {
+          "content": " Inspiration"
+        },
+        {
+          "content": "."
+        }
+      ]
+    }
+  ]
+}

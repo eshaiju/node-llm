@@ -1,0 +1,39 @@
+{
+  "name": "Brand Perception: Business Logic Tests > Competitive Analysis > compares brand positioning",
+  "version": "1.0",
+  "metadata": {
+    "recordedAt": "2026-01-26T10:30:16.040Z",
+    "duration": 667
+  },
+  "interactions": [
+    {
+      "method": "chat",
+      "request": {
+        "model": "gpt-4o-mini",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Compare Apple vs Samsung positioning in 2 words each."
+          }
+        ],
+        "max_tokens": 4096,
+        "headers": {},
+        "requestTimeout": 30000
+      },
+      "response": {
+        "content": "Apple: Premium Innovation  \nSamsung: Versatile Technology",
+        "usage": {
+          "input_tokens": 18,
+          "output_tokens": 10,
+          "total_tokens": 28,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "input_cost": 0.000003,
+          "output_cost": 0.000006,
+          "cost": 0.000009
+        },
+        "reasoning": null
+      }
+    }
+  ]
+}

@@ -1,0 +1,182 @@
+{
+  "name": "HR Chatbot: Business Logic Tests > Policy Retrieval via RAG > handles streaming responses",
+  "version": "1.0",
+  "metadata": {
+    "recordedAt": "2026-01-26T10:28:06.707Z",
+    "duration": 1314
+  },
+  "interactions": [
+    {
+      "method": "stream",
+      "request": {
+        "model": "gpt-4o-mini",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Summarize health insurance benefits in 2 sentences."
+          }
+        ],
+        "max_tokens": 4096,
+        "headers": {},
+        "requestTimeout": 30000,
+        "signal": {}
+      },
+      "response": null,
+      "chunks": [
+        {
+          "content": "Health"
+        },
+        {
+          "content": " insurance"
+        },
+        {
+          "content": " benefits"
+        },
+        {
+          "content": " typically"
+        },
+        {
+          "content": " cover"
+        },
+        {
+          "content": " a"
+        },
+        {
+          "content": " range"
+        },
+        {
+          "content": " of"
+        },
+        {
+          "content": " medical"
+        },
+        {
+          "content": " expenses"
+        },
+        {
+          "content": ","
+        },
+        {
+          "content": " including"
+        },
+        {
+          "content": " hospital"
+        },
+        {
+          "content": " stays"
+        },
+        {
+          "content": ","
+        },
+        {
+          "content": " doctor"
+        },
+        {
+          "content": " visits"
+        },
+        {
+          "content": ","
+        },
+        {
+          "content": " preventive"
+        },
+        {
+          "content": " care"
+        },
+        {
+          "content": ","
+        },
+        {
+          "content": " prescription"
+        },
+        {
+          "content": " medications"
+        },
+        {
+          "content": ","
+        },
+        {
+          "content": " and"
+        },
+        {
+          "content": " emergency"
+        },
+        {
+          "content": " services"
+        },
+        {
+          "content": "."
+        },
+        {
+          "content": " These"
+        },
+        {
+          "content": " benefits"
+        },
+        {
+          "content": " help"
+        },
+        {
+          "content": " individuals"
+        },
+        {
+          "content": " manage"
+        },
+        {
+          "content": " healthcare"
+        },
+        {
+          "content": " costs"
+        },
+        {
+          "content": ","
+        },
+        {
+          "content": " ensuring"
+        },
+        {
+          "content": " access"
+        },
+        {
+          "content": " to"
+        },
+        {
+          "content": " necessary"
+        },
+        {
+          "content": " medical"
+        },
+        {
+          "content": " care"
+        },
+        {
+          "content": " while"
+        },
+        {
+          "content": " protecting"
+        },
+        {
+          "content": " against"
+        },
+        {
+          "content": " high"
+        },
+        {
+          "content": " out"
+        },
+        {
+          "content": "-of"
+        },
+        {
+          "content": "-pocket"
+        },
+        {
+          "content": " expenses"
+        },
+        {
+          "content": "."
+        }
+      ]
+    }
+  ]
+}

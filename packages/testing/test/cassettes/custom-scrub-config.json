@@ -1,0 +1,33 @@
+{
+  "name": "custom-scrub-config",
+  "version": "1.0",
+  "metadata": {
+    "recordedAt": "2026-01-26T10:37:31.163Z",
+    "duration": 1
+  },
+  "interactions": [
+    {
+      "method": "chat",
+      "request": {
+        "model": "mock-model",
+        "messages": [
+          {
+            "role": "user",
+            "content": "status of [REDACTED]"
+          }
+        ],
+        "max_tokens": 4096,
+        "headers": {},
+        "requestTimeout": 30000
+      },
+      "response": {
+        "content": "Response to status of [REDACTED]",
+        "usage": {
+          "input_tokens": 10,
+          "output_tokens": 10,
+          "total_tokens": 20
+        }
+      }
+    }
+  ]
+}

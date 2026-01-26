@@ -1,0 +1,33 @@
+{
+  "name": "explicit-sugar-test",
+  "version": "1.0",
+  "metadata": {
+    "recordedAt": "2026-01-26T10:42:20.385Z",
+    "duration": 6
+  },
+  "interactions": [
+    {
+      "method": "chat",
+      "request": {
+        "model": "mock-model",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Explicit test"
+          }
+        ],
+        "max_tokens": 4096,
+        "headers": {},
+        "requestTimeout": 30000
+      },
+      "response": {
+        "content": "Response to Explicit test",
+        "usage": {
+          "input_tokens": 10,
+          "output_tokens": 10,
+          "total_tokens": 20
+        }
+      }
+    }
+  ]
+}
