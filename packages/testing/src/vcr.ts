@@ -3,6 +3,9 @@ import fs from "node:fs";
 import path from "node:path";
 import { Scrubber } from "./Scrubber.js";
 
+// Internal state for scoping
+let currentVCRScope: string | undefined;
+
 // Try to import Vitest's expect to get test state, but don't fail if not in a test env
 let vitestExpect: unknown;
 try {
@@ -32,6 +35,7 @@ export interface VCROptions {
   mode?: VCRMode;
   scrub?: (data: unknown) => unknown;
   cassettesDir?: string;
+  scope?: string; // Captured scope
 }
 
 export class VCR {
@@ -42,7 +46,14 @@ export class VCR {
   private scrubber: Scrubber;
 
   constructor(name: string, options: VCROptions = {}, cassettesDir = ".llm-cassettes") {
-    const targetDir = options.cassettesDir || cassettesDir;
+    let targetDir = options.cassettesDir || cassettesDir;
+
+    // Use provided scope or global scope
+    const scope = options.scope || currentVCRScope;
+    if (scope) {
+      targetDir = path.join(targetDir, this.slugify(scope));
+    }
+
     this.mode = options.mode || (process.env.VCR_MODE as VCRMode) || "auto";
     this.scrubber = new Scrubber({ customScrubber: options.scrub });
     this.filePath = path.join(process.cwd(), targetDir, `${this.slugify(name)}.json`);
@@ -223,6 +234,9 @@ export function withVCR(
   fn: () => Promise<void>
 ): () => Promise<void>;
 export function withVCR(...args: unknown[]): () => Promise<void> {
+  // CAPTURE the scope during the initialization (synchronous Vitest collection phase)
+  const capturedScope = currentVCRScope;
+
   return async function () {
     let name: string | undefined;
     let options: VCROptions = {};
@@ -244,6 +258,11 @@ export function withVCR(...args: unknown[]): () => Promise<void> {
       fn = args[1] as () => Promise<void>;
     }
 
+    // Pass the CAPTURED scope into the options if not already set
+    if (capturedScope && !options.scope) {
+      options.scope = capturedScope;
+    }
+
     // Auto-naming from Vitest
     if (!name && vitestExpect) {
       const state = (vitestExpect as VitestExpect).getState();
@@ -263,4 +282,17 @@ export function withVCR(...args: unknown[]): () => Promise<void> {
       await vcr.stop();
     }
   };
+}
+
+/**
+ * Organizes cassettes by test group subdirectory.
+ */
+export function describeVCR(name: string, fn: () => void): void {
+  const previousScope = currentVCRScope;
+  currentVCRScope = name;
+  try {
+    fn();
+  } finally {
+    currentVCRScope = previousScope;
+  }
 }
