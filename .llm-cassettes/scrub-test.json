@@ -1,0 +1,28 @@
+{
+  "name": "scrub-test",
+  "interactions": [
+    {
+      "method": "chat",
+      "request": {
+        "model": "",
+        "messages": [
+          {
+            "role": "user",
+            "content": "This contains XXXX"
+          }
+        ],
+        "max_tokens": 4096,
+        "headers": {},
+        "requestTimeout": 30000
+      },
+      "response": {
+        "content": "Response to This contains XXXX",
+        "usage": {
+          "input_tokens": 10,
+          "output_tokens": 10,
+          "total_tokens": 20
+        }
+      }
+    }
+  ]
+}

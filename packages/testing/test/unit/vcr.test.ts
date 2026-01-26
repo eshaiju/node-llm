@@ -1,50 +1,9 @@
-import { test, expect, describe, beforeEach, afterEach, vi } from "vitest";
+import { test, expect, describe, beforeEach, afterEach } from "vitest";
 import { setupVCR } from "../../src/vcr.js";
-import {
-  NodeLLM,
-  BaseProvider,
-  ChatRequest,
-  ChatResponse,
-  providerRegistry,
-  ProviderCapabilities
-} from "@node-llm/core";
+import { NodeLLM, providerRegistry } from "@node-llm/core";
 import fs from "node:fs";
 import path from "node:path";
-
-class MockProvider extends BaseProvider {
-  get id() {
-    return "mock-provider";
-  }
-  apiBase() {
-    return "http://mock";
-  }
-  headers() {
-    return {};
-  }
-  protected providerName() {
-    return "mock-provider";
-  }
-
-  capabilities: ProviderCapabilities = {
-    supportsVision: () => true,
-    supportsTools: () => true,
-    supportsStructuredOutput: () => true,
-    supportsEmbeddings: () => true,
-    supportsImageGeneration: () => true,
-    supportsTranscription: () => true,
-    supportsModeration: () => true,
-    supportsReasoning: () => true,
-    supportsDeveloperRole: () => true,
-    getContextWindow: () => 128000
-  };
-
-  chat = vi.fn(async (req: ChatRequest): Promise<ChatResponse> => {
-    return {
-      content: `Response to ${req.messages[0].content}`,
-      usage: { input_tokens: 10, output_tokens: 10, total_tokens: 20 }
-    };
-  });
-}
+import { MockProvider } from "../helpers/MockProvider.js";
 
 describe("VCR Feature 1: Native Record & Replay", () => {
   const CASSETTE_NAME = "feature-1-vcr";
@@ -66,7 +25,6 @@ describe("VCR Feature 1: Native Record & Replay", () => {
     const vcrRecord = setupVCR(CASSETTE_NAME, { mode: "record" });
 
     const llmRecord = NodeLLM.withProvider("mock-provider");
-    // Removed unused res1 assignment to fix lint
     await llmRecord.chat().ask("Record me");
 
     await vcrRecord.stop();

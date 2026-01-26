@@ -1,6 +1,7 @@
 import { Provider, providerRegistry } from "@node-llm/core";
 import fs from "node:fs";
 import path from "node:path";
+import { Scrubber } from "./Scrubber.js";
 
 export type VCRMode = "record" | "replay" | "auto" | "passthrough";
 
@@ -16,14 +17,21 @@ export interface VCRCassette {
   interactions: VCRInteraction[];
 }
 
+export interface VCROptions {
+  mode?: VCRMode;
+  scrub?: (data: unknown) => unknown;
+}
+
 export class VCR {
   private cassette: VCRCassette;
   private interactionIndex = 0;
   private mode: VCRMode;
   private filePath: string;
+  private scrubber: Scrubber;
 
-  constructor(name: string, mode: VCRMode = "auto", cassettesDir = ".llm-cassettes") {
-    this.mode = mode || (process.env.VCR_MODE as VCRMode) || "auto";
+  constructor(name: string, options: VCROptions = {}, cassettesDir = ".llm-cassettes") {
+    this.mode = options.mode || (process.env.VCR_MODE as VCRMode) || "auto";
+    this.scrubber = new Scrubber({ customScrubber: options.scrub });
     this.filePath = path.join(process.cwd(), cassettesDir, `${name}.json`);
 
     if (this.mode === "auto") {
@@ -77,11 +85,13 @@ export class VCR {
     const response = await originalMethod(request);
 
     if (this.mode === "record") {
-      this.cassette.interactions.push({
+      const interaction = this.scrubber.scrub({
         method,
         request: this.clone(request),
         response: this.clone(response)
-      });
+      }) as VCRInteraction;
+
+      this.cassette.interactions.push(interaction);
     }
 
     return response;
@@ -114,12 +124,14 @@ export class VCR {
     }
 
     if (this.mode === "record") {
-      this.cassette.interactions.push({
+      const interaction = this.scrubber.scrub({
         method,
         request: this.clone(request),
         response: null,
-        chunks
-      });
+        chunks: chunks.map((c) => this.clone(c))
+      }) as VCRInteraction;
+
+      this.cassette.interactions.push(interaction);
     }
   }
 
@@ -134,8 +146,8 @@ export class VCR {
 
 const EXECUTION_METHODS = ["chat", "stream", "paint", "transcribe", "moderate", "embed"];
 
-export function setupVCR(name: string, options: { mode?: VCRMode } = {}) {
-  const vcr = new VCR(name, options.mode);
+export function setupVCR(name: string, options: VCROptions = {}) {
+  const vcr = new VCR(name, options);
 
   providerRegistry.setInterceptor((provider: Provider) => {
     return new Proxy(provider, {
