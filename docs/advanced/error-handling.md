@@ -29,15 +29,18 @@ All errors raised by NodeLLM inherit from `LLMError`. Specific errors map to HTT
 LLMError                        # Base error class
 ├── APIError                    # Base for all provider API issues
 │   ├── BadRequestError         # 400: Invalid request parameters
+│   │   └── ContextWindowExceededError # 400: Prompt/output exceeds token limits
 │   ├── UnauthorizedError       # 401: Invalid or missing API key
 │   ├── PaymentRequiredError    # 402: Billing issues
 │   ├── ForbiddenError          # 403: Permission denied
 │   ├── RateLimitError          # 429: Rate limit exceeded
+│   │   └── InsufficientQuotaError     # 429: Out of credits or monthly quota
 │   ├── ServerError             # 500+: Provider server error
 │   │   └── ServiceUnavailableError  # 502/503/529: Overloaded
 │   └── AuthenticationError     # 401/403 (deprecated, use specific classes)
 ├── ConfigurationError          # Missing API key or invalid config
 ├── NotFoundError               # Model or provider not found
+│   └── InvalidModelError       # 404: Requested model ID is unknown
 ├── CapabilityError             # Model doesn't support feature (e.g. vision)
 ├── ToolError                   # Tool execution failed (has `fatal` property)
 ├── ProviderNotConfiguredError  # No provider set
@@ -194,8 +197,11 @@ See [Tool Error Handling](../core-features/tools.html#error-handling--flow-contr
 
 NodeLLM automatically retries transient errors:
 
-- **Retried**: RateLimitError (429), ServerError (500+), ServiceUnavailableError
-- **Not retried**: BadRequestError (400), UnauthorizedError (401), ForbiddenError (403)
+- **Retried**: `RateLimitError` (429), `ServerError` (500+), `ServiceUnavailableError`
+- **Not retried**: `BadRequestError` (400), `UnauthorizedError` (401), `ForbiddenError` (403), `ContextWindowExceededError`, `InsufficientQuotaError`
+
+> **Why not retry on Context Window Overflows?**
+> A `ContextWindowExceededError` (400) is considered a client-side logic error. Retrying with the same payload would consistently fail. By identifying this specific error, developers can implement smarter recovery logic, such as trimming chat history or summarizing previous turns before retrying manually.
 
 Configure retry behavior:
 

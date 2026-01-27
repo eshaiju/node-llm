@@ -1,6 +1,7 @@
 import { ChatRequest, ChatChunk } from "../Provider.js";
 import { APIError } from "../../errors/index.js";
 import { logger } from "../../utils/logger.js";
+import { handleDeepSeekError } from "./Errors.js";
 import { mapSystemMessages } from "../utils.js";
 import { fetchWithTimeout } from "../../utils/fetch.js";
 
@@ -64,8 +65,7 @@ export class DeepSeekStreaming {
       );
 
       if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`DeepSeek API error: ${response.status} - ${errorText}`);
+        await handleDeepSeekError(response, model);
       }
 
       logger.debug("DeepSeek streaming started", {

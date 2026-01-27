@@ -1,5 +1,9 @@
 import {
   BadRequestError,
+  ContextWindowExceededError,
+  InsufficientQuotaError,
+  InvalidModelError,
+  NotFoundError,
   AuthenticationError,
   RateLimitError,
   ServerError,
@@ -9,15 +13,17 @@ import {
 
 export async function handleAnthropicError(response: Response, modelId: string): Promise<never> {
   const status = response.status;
-  let body: unknown;
+  let body: any;
   let message = `Anthropic error (${status})`;
+  let errorType: string | undefined;
 
   try {
     body = await response.json();
     if (body && typeof body === "object" && "error" in body) {
-      const err = (body as { error: { message: string } }).error;
+      const err = body.error;
       if (err && err.message) {
         message = err.message;
+        errorType = err.type;
       }
     }
   } catch {
@@ -28,6 +34,9 @@ export async function handleAnthropicError(response: Response, modelId: string):
   const provider = "anthropic";
 
   if (status === 400) {
+    if (message.includes("prompt is too long") || message.includes("context_length")) {
+      throw new ContextWindowExceededError(message, body, provider, modelId);
+    }
     throw new BadRequestError(message, body, provider, modelId);
   }
 
@@ -35,7 +44,17 @@ export async function handleAnthropicError(response: Response, modelId: string):
     throw new AuthenticationError(message, status, body, provider);
   }
 
+  if (status === 404) {
+    if (message.includes("model") || errorType === "not_found_error") {
+      throw new InvalidModelError(message, body, provider, modelId);
+    }
+    throw new NotFoundError(message, status, body, provider, modelId);
+  }
+
   if (status === 429) {
+    if (message.includes("quota") || message.includes("credit")) {
+      throw new InsufficientQuotaError(message, body, provider, modelId);
+    }
     throw new RateLimitError(message, body, provider, modelId);
   }
 

@@ -9,6 +9,7 @@ import { ChatRequest, ChatChunk, Usage } from "../Provider.js";
 import { BedrockConfig, validateBedrockConfig, getBedrockEndpoint } from "./config.js";
 import { signRequest, AwsCredentials } from "../../utils/AwsSigV4.js";
 import { fetchWithTimeout } from "../../utils/fetch.js";
+import { handleBedrockError } from "./Errors.js";
 import { logger } from "../../utils/logger.js";
 import { buildConverseRequest } from "./mapper.js";
 import { ModelRegistry } from "../../models/ModelRegistry.js";
@@ -68,9 +69,7 @@ export class BedrockStreaming {
     );
 
     if (!response.ok) {
-      const errorText = await response.text();
-      logger.logResponse("Bedrock", response.status, response.statusText, errorText);
-      throw new Error(`Bedrock Streaming Error (${response.status}): ${errorText}`);
+      await handleBedrockError(response, modelId);
     }
 
     if (!response.body) {

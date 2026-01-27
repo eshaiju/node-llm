@@ -11,10 +11,10 @@ import {
   APIError
 } from "../../errors/index.js";
 
-export async function handleGeminiError(response: Response, model?: string): Promise<never> {
+export async function handleDeepSeekError(response: Response, model?: string): Promise<never> {
   const status = response.status;
   let body: any;
-  let message = `Gemini error (${status})`;
+  let message = `DeepSeek error (${status})`;
 
   try {
     body = await response.json();
@@ -25,15 +25,14 @@ export async function handleGeminiError(response: Response, model?: string): Pro
       }
     }
   } catch {
-    // If not JSON, use the status text
     body = await response.text().catch(() => "Unknown error");
-    message = `Gemini error (${status}): ${body}`;
+    message = `DeepSeek error (${status}): ${body}`;
   }
 
-  const provider = "gemini";
+  const provider = "deepseek";
 
   if (status === 400) {
-    if (message.includes("limit") || message.includes("context") || message.includes("token")) {
+    if (message.includes("context") || message.includes("length") || message.includes("tokens")) {
       throw new ContextWindowExceededError(message, body, provider, model);
     }
     throw new BadRequestError(message, body, provider, model);
@@ -50,15 +49,11 @@ export async function handleGeminiError(response: Response, model?: string): Pro
     throw new NotFoundError(message, status, body, provider, model);
   }
 
-  if (status === 429) {
-    if (message.includes("quota")) {
+  if (status === 402 || status === 429) {
+    if (message.includes("quota") || message.includes("balance") || message.includes("credit")) {
       throw new InsufficientQuotaError(message, body, provider, model);
     }
     throw new RateLimitError(message, body, provider, model);
-  }
-
-  if (status === 502 || status === 503 || status === 504) {
-    throw new ServiceUnavailableError(message, status, body, provider, model);
   }
 
   if (status >= 500) {

@@ -113,8 +113,9 @@ describe("DeepSeekStreaming", () => {
     }
 
     expect(finalChunk?.tool_calls).toHaveLength(1);
-    expect(finalChunk?.tool_calls?.[0].function.name).toBe("get_weather");
-    expect(finalChunk?.tool_calls?.[0].function.arguments).toBe('{"city":"NYC"}');
+    const toolCall = finalChunk!.tool_calls![0]!;
+    expect(toolCall.function.name).toBe("get_weather");
+    expect(toolCall.function.arguments).toBe('{"city":"NYC"}');
   });
 
   it("throws on API error response", async () => {
@@ -129,7 +130,7 @@ describe("DeepSeekStreaming", () => {
       })) {
         // consume
       }
-    }).rejects.toThrow("DeepSeek API error: 401");
+    }).rejects.toThrow("DeepSeek error (401): Error details");
   });
 
   it("throws on missing response body", async () => {

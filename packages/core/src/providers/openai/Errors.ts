@@ -1,5 +1,9 @@
 import {
   BadRequestError,
+  ContextWindowExceededError,
+  InsufficientQuotaError,
+  InvalidModelError,
+  NotFoundError,
   AuthenticationError,
   RateLimitError,
   ServerError,
@@ -9,15 +13,23 @@ import {
 
 export async function handleOpenAIError(response: Response, model?: string): Promise<never> {
   const status = response.status;
-  let body: unknown;
+  let body: any;
   let message = `OpenAI error (${status})`;
+  let code: string | undefined;
 
   try {
     body = await response.json();
-    if (body && typeof body === "object" && "error" in body) {
-      const err = (body as { error: { message: string } }).error;
-      if (err && err.message) {
-        message = err.message;
+    if (body && typeof body === "object") {
+      if ("error" in body) {
+        const err = body.error;
+        if (typeof err === "string") {
+          message = err;
+        } else if (err && typeof err === "object") {
+          if (err.message) message = err.message;
+          if (err.code) code = err.code;
+        }
+      } else if ("message" in body) {
+        message = (body as any).message;
       }
     }
   } catch {
@@ -29,6 +41,13 @@ export async function handleOpenAIError(response: Response, model?: string): Pro
   const provider = "openai";
 
   if (status === 400) {
+    if (
+      code === "context_length_exceeded" ||
+      message.includes("context length") ||
+      message.includes("too many tokens")
+    ) {
+      throw new ContextWindowExceededError(message, body, provider, model);
+    }
     throw new BadRequestError(message, body, provider, model);
   }
 
@@ -36,7 +55,17 @@ export async function handleOpenAIError(response: Response, model?: string): Pro
     throw new AuthenticationError(message, status, body, provider);
   }
 
+  if (status === 404) {
+    if (code === "model_not_found") {
+      throw new InvalidModelError(message, body, provider, model);
+    }
+    throw new NotFoundError(message, status, body, provider, model);
+  }
+
   if (status === 429) {
+    if (code === "insufficient_quota") {
+      throw new InsufficientQuotaError(message, body, provider, model);
+    }
     throw new RateLimitError(message, body, provider, model);
   }
 
