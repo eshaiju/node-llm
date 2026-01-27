@@ -171,7 +171,7 @@ NodeLLM passes `requestTimeout` (in milliseconds) through all request interfaces
 Use the built-in `fetchWithTimeout` utility:
 
 ```ts
-import { fetchWithTimeout } from "@node-llm/core/utils/fetch";
+import { fetchWithTimeout } from "@node-llm/core";
 
 async chat(request: ChatRequest): Promise<ChatResponse> {
   const response = await fetchWithTimeout(

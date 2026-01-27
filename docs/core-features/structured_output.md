@@ -55,7 +55,7 @@ const response = await chat
 // for await (const chunk of chat.withSchema(personSchema).stream("...")) { ... }
 
 // The response is strictly validated and parsed
-const person = response.parsed;
+const person = response.data;
 
 console.log(person.name); // "Alice"
 console.log(person.age); // e.g. 25
@@ -83,7 +83,7 @@ const schema = {
 
 const response = await chat.withSchema(schema).ask("Generate a person");
 
-console.log(response.parsed); // { name: "...", age: ... }
+console.log(response.data); // { name: "...", age: ... }
 ```
 
 ---
@@ -98,7 +98,7 @@ chat.withRequestOptions({
 });
 
 const response = await chat.ask("Generate a JSON object with a greeting");
-console.log(response.parsed); // { greeting: "..." } or whatever keys it chose
+console.log(response.data); // { greeting: "..." } or whatever keys it chose
 ```
 
 ---

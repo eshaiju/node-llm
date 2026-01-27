@@ -39,8 +39,27 @@ export abstract class BaseProvider implements Provider {
     throw new UnsupportedFeatureError(this.providerName(), feature);
   }
 
-  abstract chat(request: ChatRequest): Promise<ChatResponse>;
-  abstract capabilities?: ProviderCapabilities;
+  public abstract chat(request: ChatRequest): Promise<ChatResponse>;
+  public capabilities?: ProviderCapabilities;
+
+  /**
+   * Provides a set of default capabilities where everything is disabled.
+   * Useful for custom providers to start with a safe baseline.
+   */
+  protected defaultCapabilities(): ProviderCapabilities {
+    return {
+      supportsVision: () => false,
+      supportsTools: () => false,
+      supportsStructuredOutput: () => false,
+      supportsEmbeddings: () => false,
+      supportsImageGeneration: () => false,
+      supportsTranscription: () => false,
+      supportsModeration: () => false,
+      supportsReasoning: () => false,
+      supportsDeveloperRole: () => false,
+      getContextWindow: () => null
+    };
+  }
 
   async *stream?(_request: ChatRequest): AsyncIterable<ChatChunk> {
     this.throwUnsupportedError("stream");

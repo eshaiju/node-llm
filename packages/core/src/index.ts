@@ -6,6 +6,7 @@ export * from "./chat/ChatResponse.js";
 export * from "./chat/Chat.js";
 export * from "./chat/ChatStream.js";
 export * from "./streaming/Stream.js";
+export * from "./errors/index.js";
 
 export { z } from "zod";
 export {
