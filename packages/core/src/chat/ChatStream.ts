@@ -140,9 +140,9 @@ export class ChatStream {
           // Fallback cost calculation if provider didn't return it
           if (u.cost === undefined) {
             const withCost = ModelRegistry.calculateCost(u, model, provider.id);
-            u.cost = (withCost as any).cost;
-            u.input_cost = (withCost as any).input_cost;
-            u.output_cost = (withCost as any).output_cost;
+            u.cost = (withCost as Usage).cost;
+            u.input_cost = (withCost as Usage).input_cost;
+            u.output_cost = (withCost as Usage).output_cost;
           }
 
           totalUsage.input_tokens += u.input_tokens;
@@ -237,7 +237,10 @@ export class ChatStream {
             model,
             provider.id,
             thinking.text || thinking.signature ? thinking : undefined,
-            fullReasoning || undefined
+            fullReasoning || undefined,
+            toolCalls,
+            undefined, // finish_reason
+            options.schema
           );
 
           if (options.onAfterResponse) {

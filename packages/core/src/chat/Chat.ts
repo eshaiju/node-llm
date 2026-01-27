@@ -43,7 +43,7 @@ export interface AskOptions {
 
 import { ChatResponseString } from "./ChatResponse.js";
 
-export class Chat {
+export class Chat<S = unknown> {
   private messages: Message[] = [];
   private systemMessages: Message[] = [];
   private executor: Executor;
@@ -262,10 +262,10 @@ export class Chat {
    * Enforce a specific schema for the output.
    * Can accept a Schema object or a Zod schema/JSON Schema directly.
    */
-  withSchema(schema: Schema | z.ZodType<unknown> | Record<string, unknown> | null): this {
+  withSchema<T>(schema: Schema | z.ZodType<T> | Record<string, unknown> | null): Chat<T> {
     if (schema === null) {
       this.options.schema = undefined;
-      return this;
+      return this as unknown as Chat<unknown>;
     }
 
     if (schema instanceof Schema) {
@@ -275,7 +275,7 @@ export class Chat {
     } else {
       this.options.schema = Schema.fromJson("output", schema as Record<string, unknown>);
     }
-    return this;
+    return this as unknown as Chat<T>;
   }
 
   /**
@@ -452,9 +452,9 @@ export class Chat {
         // Fallback cost calculation if provider didn't return it
         if (u.cost === undefined) {
           const withCost = ModelRegistry.calculateCost(u, this.model, this.provider.id);
-          u.cost = (withCost as any).cost;
-          u.input_cost = (withCost as any).input_cost;
-          u.output_cost = (withCost as any).output_cost;
+          u.cost = (withCost as Usage).cost;
+          u.input_cost = (withCost as Usage).input_cost;
+          u.output_cost = (withCost as Usage).output_cost;
         }
 
         totalUsage.input_tokens += u.input_tokens;
@@ -488,7 +488,8 @@ export class Chat {
       response.thinking,
       response.reasoning,
       response.tool_calls,
-      response.finish_reason
+      response.finish_reason,
+      this.options.schema
     );
 
     // --- Content Policy Hooks (Output - Turn 1) ---
@@ -626,7 +627,8 @@ export class Chat {
         response.thinking,
         response.reasoning,
         response.tool_calls,
-        response.finish_reason
+        response.finish_reason,
+        this.options.schema
       );
 
       // --- Content Policy Hooks (Output - Tool Turns) ---
@@ -659,8 +661,9 @@ export class Chat {
       assistantMessage.thinking,
       assistantMessage.reasoning,
       response.tool_calls,
-      assistantMessage.finish_reason
-    );
+      assistantMessage.finish_reason,
+      this.options.schema
+    ) as unknown as ChatResponseString & { data: S };
   }
 
   /**

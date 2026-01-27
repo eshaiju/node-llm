@@ -1,11 +1,17 @@
 import { Usage, ThinkingResult } from "../providers/Provider.js";
 import { ToolCall } from "./Tool.js";
+import { Schema } from "../schema/Schema.js";
+import { extractJson } from "../utils/json.js";
+import { z } from "zod";
 
 /**
  * Enhanced string that includes token usage metadata.
  * Behaves like a regular string but has .usage and .input_tokens etc.
  */
 export class ChatResponseString extends String {
+  private _cachedData: unknown = undefined;
+  private _validationError: Error | null = null;
+
   constructor(
     content: string,
     public readonly usage: Usage,
@@ -14,7 +20,8 @@ export class ChatResponseString extends String {
     public readonly thinking?: ThinkingResult,
     public readonly reasoning?: string | null,
     public readonly tool_calls?: ToolCall[],
-    public readonly finish_reason?: string | null
+    public readonly finish_reason?: string | null,
+    public readonly schema?: Schema
   ) {
     super(content);
   }
@@ -106,19 +113,81 @@ export class ChatResponseString extends String {
       this.thinking,
       this.reasoning,
       this.tool_calls,
-      this.finish_reason
+      this.finish_reason,
+      this.schema
     );
   }
 
   /**
-   * Attempt to parse the content as JSON.
-   * Returns the parsed object or null if parsing fails.
+   * Attempt to extract and parse the content as JSON.
    */
   get parsed(): unknown {
     try {
-      return JSON.parse(this.valueOf());
+      const cleanJson = extractJson(this.valueOf());
+      return JSON.parse(cleanJson);
     } catch {
       return null;
+    }
+  }
+
+  /**
+   * Access the parsed data.
+   * If a Zod schema was provided via .withSchema(), this will validate the data.
+   * Throws ZodError if validation fails.
+   */
+  get data(): unknown {
+    if (this._cachedData !== undefined) return this._cachedData;
+    if (this._validationError) throw this._validationError;
+
+    const json = this.parsed;
+
+    if (this.schema && this.schema.definition.schema instanceof z.ZodType) {
+      try {
+        this._cachedData = this.schema.definition.schema.parse(json);
+        return this._cachedData;
+      } catch (e) {
+        this._validationError = e as Error;
+        throw e;
+      }
+    }
+
+    this._cachedData = json;
+    return json;
+  }
+
+  /**
+   * Safe version of .data that returns null instead of throwing on validation error.
+   */
+  get safeData(): unknown {
+    try {
+      return this.data;
+    } catch {
+      return null;
+    }
+  }
+
+  /**
+   * Returns true if the content contains valid JSON that matches the schema (if provided).
+   */
+  get isValid(): boolean {
+    if (!this.schema) return this.parsed !== null;
+    try {
+      void this.data;
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  /**
+   * Returns the validation error if the content doesn't match the schema.
+   */
+  get validationError(): Error | null {
+    try {
+      void this.data;
+      return null;
+    } catch (e) {
+      return e as Error;
     }
   }
 }
