@@ -1,7 +1,15 @@
 export const DEFAULT_SECRET_PATTERNS = [
-  /sk-[a-zA-Z0-9]{20,}/g, // OpenAI/Anthropic likely patterns
-  /x-[a-zA-Z0-9]{20,}/g, // Generic API keys
-  /[a-zA-Z0-9]{32,}/g // Long hashes/keys
+  // API Keys & Auth Tokens
+  /sk-[a-zA-Z0-9]{20,}/g, // OpenAI/Anthropic keys
+  /x-[a-zA-Z0-9]{20,}/g, // Generic key patterns
+  /ey[a-zA-Z0-9-_=]+\.ey[a-zA-Z0-9-_=]+\.?[a-zA-Z0-9-_.+/=]*/g, // JWT tokens
+  /\b(AIza[0-9A-Za-z-_]{35})\b/g, // Google API keys
+  /\b[0-9a-f]{32,}\b/gi, // Long hex hashes/IDs (often keys)
+
+  // PII (Personal Identifiable Information)
+  /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/g, // Emails
+  /\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b/g, // IPv4 Addresses
+  /\b(access_key|secret_key|aws_access_key_id|aws_secret_access_key):\s*[^\s,{}"]+/gi // AWS-like pairs
 ];
 
 export interface ScrubberOptions {
@@ -21,9 +29,20 @@ export class Scrubber {
     this.sensitiveKeys = new Set([
       "key",
       "api_key",
+      "apikey",
       "token",
       "auth",
       "authorization",
+      "password",
+      "secret",
+      "cookie",
+      "set-cookie",
+      "x-api-key",
+      "x-auth-token",
+      "access_key",
+      "secret_key",
+      "bearer",
+      "credential",
       ...(options.sensitiveKeys || []).map((k) => k.toLowerCase())
     ]);
   }

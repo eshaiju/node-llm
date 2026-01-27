@@ -1,6 +1,7 @@
 import { ChatRequest, ChatChunk } from "../Provider.js";
 import { APIError } from "../../errors/index.js";
 import { logger } from "../../utils/logger.js";
+import { handleDeepSeekError } from "./Errors.js";
 import { mapSystemMessages } from "../utils.js";
 import { fetchWithTimeout } from "../../utils/fetch.js";
 
@@ -37,6 +38,9 @@ export class DeepSeekStreaming {
     if (tools && tools.length > 0) body.tools = tools;
     if (response_format) body.response_format = response_format;
 
+    // DeepSeek (and most OpenAI compatible) supports include_usage
+    body.stream_options = { include_usage: true };
+
     let done = false;
     // Track tool calls being built across chunks
     const toolCallsMap = new Map<
@@ -64,8 +68,7 @@ export class DeepSeekStreaming {
       );
 
       if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`DeepSeek API error: ${response.status} - ${errorText}`);
+        await handleDeepSeekError(response, model);
       }
 
       logger.debug("DeepSeek streaming started", {
@@ -166,6 +169,16 @@ export class DeepSeekStreaming {
                   }
                 }
               }
+            }
+
+            // Handle usage
+            if (json.usage) {
+              const usage = {
+                input_tokens: json.usage.prompt_tokens,
+                output_tokens: json.usage.completion_tokens,
+                total_tokens: json.usage.total_tokens
+              };
+              yield { content: "", usage };
             }
           } catch (e) {
             // Re-throw APIError

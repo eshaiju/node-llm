@@ -107,7 +107,7 @@ describe("DeepSeekChat", () => {
 
     await expect(
       chat.execute({ model: "deepseek-chat", messages: [] } as ChatRequest)
-    ).rejects.toThrow("DeepSeek API error: 400 - Bad Request");
+    ).rejects.toThrow("DeepSeek error (400): Bad Request");
   });
 
   it("should handle structured output (json_schema conversion)", async () => {

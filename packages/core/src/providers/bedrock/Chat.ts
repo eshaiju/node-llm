@@ -10,6 +10,7 @@ import { BedrockConfig, validateBedrockConfig, getBedrockEndpoint } from "./conf
 import { BedrockConverseResponse, BedrockContentBlock } from "./types.js";
 import { buildConverseRequest } from "./mapper.js";
 import { signRequest, AwsCredentials } from "../../utils/AwsSigV4.js";
+import { handleBedrockError } from "./Errors.js";
 import { ModelRegistry } from "../../models/ModelRegistry.js";
 import { fetchWithTimeout } from "../../utils/fetch.js";
 import { logger } from "../../utils/logger.js";
@@ -73,28 +74,7 @@ export class BedrockChat {
     );
 
     if (!response.ok) {
-      const errorText = await response.text();
-      logger.logResponse("Bedrock", response.status, response.statusText, errorText);
-
-      let message = errorText;
-
-      // Improve clarity for known AWS errors
-      if (errorText.includes("INVALID_PAYMENT_INSTRUMENT")) {
-        message =
-          "Billing setup incomplete for AWS Marketplace models. Ensure a credit card is set as default payment method.";
-      } else if (
-        errorText.includes("AccessDeniedException") &&
-        errorText.includes("model access")
-      ) {
-        message =
-          "Access denied for this model. Ensure you have requested and been granted access in the AWS Bedrock console (Model Access section).";
-      } else if (errorText.includes("ThrottlingException")) {
-        message = "Bedrock API throttling. Too many requests. Please retry with backoff.";
-      } else if (errorText.includes("ValidationException")) {
-        message = `Bedrock validation error: ${errorText}`;
-      }
-
-      throw new Error(`Bedrock API error (${response.status}): ${message}`);
+      await handleBedrockError(response, modelId);
     }
 
     const json = (await response.json()) as BedrockConverseResponse;

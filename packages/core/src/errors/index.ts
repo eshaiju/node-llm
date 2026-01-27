@@ -53,6 +53,16 @@ export class BadRequestError extends APIError {
 }
 
 /**
+ * 400 - Specifically for context window/token limit issues
+ */
+export class ContextWindowExceededError extends BadRequestError {
+  constructor(message: string, body: unknown, provider?: string, model?: string) {
+    super(message, body, provider, model);
+    this.name = "ContextWindowExceededError";
+  }
+}
+
+/**
  * 401 - Invalid or missing API key
  */
 export class UnauthorizedError extends APIError {
@@ -104,6 +114,16 @@ export class RateLimitError extends APIError {
 }
 
 /**
+ * 429 - Out of credits or monthly quota exceeded
+ */
+export class InsufficientQuotaError extends RateLimitError {
+  constructor(message: string, body: unknown, provider?: string, model?: string) {
+    super(message, body, provider, model);
+    this.name = "InsufficientQuotaError";
+  }
+}
+
+/**
  * 500+ - Provider server error
  */
 export class ServerError extends APIError {
@@ -135,9 +155,26 @@ export class ConfigurationError extends LLMError {
 /**
  * Requested model or provider not found
  */
-export class NotFoundError extends LLMError {
-  constructor(message: string) {
-    super(message, "NOT_FOUND_ERROR");
+export class NotFoundError extends APIError {
+  constructor(
+    message: string,
+    status: number = 404,
+    body: unknown = null,
+    provider?: string,
+    model?: string
+  ) {
+    super(message, status, body, provider, model);
+    this.name = "NotFoundError";
+  }
+}
+
+/**
+ * Specifically when the requested model ID is invalid/unknown
+ */
+export class InvalidModelError extends NotFoundError {
+  constructor(message: string, body: unknown, provider?: string, model?: string) {
+    super(message, 404, body, provider, model);
+    this.name = "InvalidModelError";
   }
 }
 

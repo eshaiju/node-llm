@@ -199,6 +199,70 @@ async chat(request: ChatRequest): Promise<ChatResponse> {
 
 - `chat(request)`, `stream(request)`, `paint(request)`, `transcribe(request)`, `moderate(request)`, `embed(request)`
 
+## High-Fidelity Error Handling
+
+To make your custom provider feel like a "first-class citizen," you should map your API errors to NodeLLM's specialized error classes. This ensures that features like **automatic retries** and **smart recovery** work as expected.
+
+### Recommended Error Mapping
+
+| Status | Standard Class | Specialized Class (Preferred) | Behavior |
+| :--- | :--- | :--- | :--- |
+| **400** | `BadRequestError` | `ContextWindowExceededError` | Fatal (No Retry) |
+| **401** | `UnauthorizedError` | - | Fatal (No Retry) |
+| **404** | `NotFoundError` | `InvalidModelError` | Fatal (No Retry) |
+| **429** | `RateLimitError` | `InsufficientQuotaError` | **Retryable** (except Quota) |
+| **5xx** | `ServerError` | `ServiceUnavailableError` | **Retryable** |
+
+### Implementation Pattern
+
+The most robust way to handle errors is to create a dedicated error handler function:
+
+```ts
+import { 
+  BadRequestError, 
+  ContextWindowExceededError, 
+  RateLimitError, 
+  ServerError 
+} from "@node-llm/core";
+
+async function myErrorHandler(response: Response, modelId: string): Promise<never> {
+  const status = response.status;
+  const body = await response.json().catch(() => ({}));
+  const message = body.error?.message || "Unknown error";
+
+  if (status === 400) {
+    if (message.includes("tokens") || message.includes("context")) {
+      throw new ContextWindowExceededError(message, body, "my-service", modelId);
+    }
+    throw new BadRequestError(message, body, "my-service", modelId);
+  }
+
+  if (status === 429) {
+    throw new RateLimitError(message, body, "my-service", modelId);
+  }
+
+  if (status >= 500) {
+    throw new ServerError(message, status, body, "my-service", modelId);
+  }
+
+  throw new Error(`Technical failure (${status}): ${message}`);
+}
+```
+
+Then use it in your `chat` or `stream` methods:
+
+```ts
+async chat(request: ChatRequest) {
+  const response = await fetch(...);
+  
+  if (!response.ok) {
+    await myErrorHandler(response, request.model);
+  }
+  
+  return await response.json();
+}
+```
+
 ## Custom Pricing
 
 If your custom provider has associated costs, you can register them in the `PricingRegistry`. This allows `NodeLLM` to automatically calculate usage costs for your custom models.
