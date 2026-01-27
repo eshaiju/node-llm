@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.9.0] - 2026-01-27 (@node-llm/core)
+
+### Features
+
+- **Robust JSON Extraction**: New `extractJson` utility that handles conversational filler and markdown code blocks, ensuring reliable parsing even from "chatty" models.
+- **ActiveRecord-style Response Validation**:
+  - Added `.data` property to `ChatResponseString` with automatic Zod validation.
+  - Added `.safeData` (null on failure) and `.isValid` helpers for elegant error handling.
+- **Community Governance**:
+  - Added `SECURITY.md` with an "Agentic Zero Trust" philosophy and formal reporting process.
+  - Added `CODE_OF_CONDUCT.md` based on the Contributor Covenant.
+
 ## [1.8.0] - 2026-01-24 (@node-llm/core)
 
 ### Features

@@ -532,6 +532,9 @@ export default {
     "openrouter": "moonshotai/kimi-k2-thinking",
     "bedrock": "moonshot.kimi-k2-thinking"
   },
+  "kimi-k2.5": {
+    "openrouter": "moonshotai/kimi-k2.5"
+  },
   "llama-3-1-70b": {
     "bedrock": "meta.llama3-1-70b-instruct-v1:0",
     "openrouter": "meta-llama/llama-3.1-70b-instruct"
