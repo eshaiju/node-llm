@@ -130,17 +130,35 @@ p > code, li > code, td > code {
   font-size: 0.85em !important;
 }
 
-/* 7. Provider Icons (Reset inversion) */
-.provider-icons img, 
-.provider-logo img,
-.main-content img[src*="svg"], 
-.main-content img[src*="logo"] {
-  filter: none !important; /* Reset any dark mode inversions */
+/* 7. Provider Icons */
+.provider-icons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  align-items: center;
+  margin-top: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.provider-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.provider-logo img {
+  height: 24px !important;
+  width: auto !important;
+  filter: none !important;
   opacity: 1 !important;
   transition: transform 0.2s ease;
 }
 
-.provider-icons img:hover {
+.provider-logo img.logo-small {
+  height: 18px !important;
+}
+
+.provider-logo img:hover {
   transform: translateY(-2px);
 }
 

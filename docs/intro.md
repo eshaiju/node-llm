@@ -11,49 +11,55 @@ permalink: /docs/intro
 
 # Introduction
 
+[![npm version](https://badge.fury.io/js/@node-llm%2Fcore.svg)](https://www.npmjs.com/package/@node-llm/core)
+[![GitHub Repository](https://img.shields.io/badge/GitHub-node--llm-blue?logo=github)](https://github.com/node-llm/node-llm)
+[![CI](https://github.com/node-llm/node-llm/actions/workflows/cicd.yml/badge.svg)](https://github.com/node-llm/node-llm/actions/workflows/cicd.yml)
+[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 **A simple way to use Large Language Models in Node.js.**
 
 **NodeLLM is an open-source infrastructure layer for building provider-agnostic, production-grade LLM systems in Node.js.**
 
 Integrating multiple LLM providers often means juggling different SDKs, API styles, and update cycles. NodeLLM gives you a single, unified API that stays consistent even when providers change.
 
-<p class="fs-3 text-grey-dk-000 mb-3">Unified support for</p>
+<p class="fs-4 text-grey-dk-000 mb-3">Unified support for</p>
 <div class="provider-icons">
   <div class="provider-logo">
-    <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/openai.svg" alt="OpenAI" class="logo-medium">
-    <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/openai-text.svg" alt="OpenAI" class="logo-medium">
+    <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/openai.svg" alt="OpenAI">
+    <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/openai-text.svg" alt="">
   </div>
   <div class="provider-logo">
-    <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/anthropic-text.svg" alt="Anthropic" class="logo-medium">
+    <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/anthropic-text.svg" alt="Anthropic">
   </div>
   <div class="provider-logo">
-    <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/gemini-color.svg" alt="Gemini" class="logo-medium">
-    <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/gemini-text.svg" alt="Gemini" class="logo-small">
+    <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/gemini-color.svg" alt="Gemini">
+    <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/gemini-text.svg" alt="" class="logo-small">
   </div>
   <div class="provider-logo">
-    <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/deepseek-color.svg" alt="DeepSeek" class="logo-medium">
-    <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/deepseek-text.svg" alt="DeepSeek" class="logo-small">
+    <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/deepseek-color.svg" alt="DeepSeek">
+    <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/deepseek-text.svg" alt="" class="logo-small">
   </div>
   <div class="provider-logo">
-    <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/openrouter.svg" alt="OpenRouter" class="logo-medium">
-    <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/openrouter-text.svg" alt="OpenRouter" class="logo-medium">
+    <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/openrouter.svg" alt="OpenRouter">
+    <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/openrouter-text.svg" alt="">
   </div>
   <div class="provider-logo">
-    <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/ollama.svg" alt="Ollama" class="logo-medium">
-    <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/ollama-text.svg" alt="Ollama" class="logo-medium">
+    <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/ollama.svg" alt="Ollama">
+    <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/ollama-text.svg" alt="">
   </div>
   <div class="provider-logo">
-    <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/bedrock-color.svg" alt="Bedrock" class="logo-medium">
-    <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/bedrock-text.svg" alt="Bedrock" class="logo-small">
+    <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/bedrock-color.svg" alt="Bedrock">
+    <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/bedrock-text.svg" alt="" class="logo-small">
   </div>
 </div>
 
-```
-Your App
-   ↓
+```text
+                Your App
+                   ↓
 NodeLLM (Unified API + State + Security)
-   ↓
-OpenAI | Anthropic | Bedrock | Ollama
+                   ↓
+ OpenAI | Anthropic | Bedrock | Ollama
 ```
 
 ---
@@ -153,7 +159,7 @@ await chat.withTool(WeatherTool).ask("Weather in Tokyo?");
 
 ### 💾 [Persistence Layer](/orm/prisma)
 
-Automatically track chat history, tool executions, and API metrics with **@node-llm/orm**. Now with full support for **Extended Thinking** persistence.
+Automatically track chat history, tool executions, and API metrics with [**@node-llm/orm**](https://www.npmjs.com/package/@node-llm/orm). Now with full support for **Extended Thinking** persistence.
 
 ```ts
 import { createChat } from "@node-llm/orm/prisma";
@@ -166,7 +172,7 @@ await chat.withThinking({ budget: 16000 }).ask("Develop a strategy");
 
 ### 🧪 [Deterministic Testing](/core-features/testing)
 
-Validate your AI agents with **VCR cassettes** (record/replay) and a **Fluent Mocker** for unit tests. No more flaky or expensive test runs.
+Validate your AI agents with **VCR cassettes** (record/replay) and a **Fluent Mocker** for unit tests. No more flaky or expensive test runs. Powered by [**@node-llm/testing**](https://www.npmjs.com/package/@node-llm/testing).
 
 ```ts
 import { vcr, Mocker } from "@node-llm/testing";
