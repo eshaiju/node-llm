@@ -17,11 +17,11 @@ permalink: /docs/intro
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-**A simple way to use Large Language Models in Node.js.**
+**The Provider-Agnostic LLM Runtime for Node.js.**
 
-**NodeLLM is an open-source infrastructure layer for building provider-agnostic, production-grade LLM systems in Node.js.**
+**NodeLLM is a backend orchestration layer designed for building reliable, testable, and provider-agnostic AI systems.**
 
-Integrating multiple LLM providers often means juggling different SDKs, API styles, and update cycles. NodeLLM gives you a single, unified API that stays consistent even when providers change.
+It is not a "simple API wrapper" or a "prompt engineering tool." NodeLLM deals with the hard infrastructure problems: normalizing streaming across providers, managing tool execution loops, enforcing timeouts, and enabling first-class testing and telemetry.
 
 <p class="fs-4 text-grey-dk-000 mb-3">Unified support for</p>
 <div class="provider-icons">
@@ -64,17 +64,40 @@ NodeLLM (Unified API + State + Security)
 
 ---
 
-## 🏗️ The "Backend-First" AI SDK
+## 🛑 What NodeLLM is NOT
 
-While most AI SDKs (like Vercel AI SDK) are heavily optimized for **Frontend Streaming** (Next.js, React Server Components), NodeLLM is built for the **Backend**.
+To understand NodeLLM, you must understand what it is **NOT**.
 
-It is the "AI SDK for the rest of us"—backend engineers building workers, cron jobs, CLI tools, Slack bots, and REST/GraphQL APIs that *aren't* Next.js.
+NodeLLM is **NOT**:
 
-### Strategic Principles
+- ❌ **A thin wrapper** around vendor SDKs (like `openai` or `@anthropic-ai/sdk`)
+- ❌ **A UI streaming library** (like Vercel AI SDK)
+- ❌ **A prompt-only framework**
 
-- **Provider Isolation**: Decouple your services from vendor SDKs.
-- **Production-Ready**: Native support for streaming, retries, and unified error handling.
-- **Predictable API**: Consistent behavior for Tools, Vision, and Structured Outputs across all models.
+NodeLLM **IS**:
+
+- ✅ **A Backend Runtime**: Designed for workers, cron jobs, agents, and API servers.
+- ✅ **Provider Agnostic**: Switches providers via config, not code rewrites.
+- ✅ **Contract Driven**: Guarantees identical behavior for Tools and Streaming across all models.
+- ✅ **Infrastructure First**: Built for evals, telemetry, retries, and circuit breaking.
+
+---
+
+## 🏗️ The "Infrastructure-First" Approach
+
+Most AI SDKs optimize for "getting a response to the user fast" (Frontend/Edge). NodeLLM optimizes for **system reliability** (Backend).
+
+It is designed for architects and platform engineers who need:
+
+- **Strict Process Protection**: Preventing hung requests from stalling event loops.
+- **Normalized Persistence**: Treating chat interactions as database records via `@node-llm/orm`.
+- **Determinism**: Testing your AI logic with VCR recordings and time-travel debugging.
+
+### Strategic Goals
+
+- **Decoupling**: Isolate your business logic from the rapid churn of AI model versions.
+- **Production Safety**: Native support for circuit breaking, redaction, and audit logging.
+- **Predictability**: A unified Mental Model for streaming, structured outputs, and vision.
 
 ---
 
@@ -96,18 +119,6 @@ for await (const chunk of chat.stream("Explain event-driven architecture")) {
   process.stdout.write(chunk.content);
 }
 ```
-
----
-
-## 🛑 What NodeLLM is NOT
-
-NodeLLM represents a clear architectural boundary between your system and LLM vendors.
-
-NodeLLM is **NOT**:
-
-- A wrapper around a single provider SDK (like `openai` or `@google/generative-ai`)
-- A prompt-engineering framework
-- An agent playground or experimental toy
 
 ---
 
