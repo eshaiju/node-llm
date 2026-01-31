@@ -46,7 +46,7 @@ describe("Embedding Middleware", () => {
       });
 
       expect(onRequest).toHaveBeenCalledTimes(1);
-      const ctx = onRequest.mock.calls[0][0] as MiddlewareContext;
+      const ctx = onRequest.mock.calls[0]![0] as MiddlewareContext;
 
       expect(ctx.provider).toBe("fake");
       expect(ctx.model).toBe("test-model");
@@ -67,7 +67,7 @@ describe("Embedding Middleware", () => {
       });
 
       expect(onResponse).toHaveBeenCalledTimes(1);
-      const args = onResponse.mock.calls[0];
+      const args = onResponse.mock.calls[0]!;
       const ctx = args[0] as MiddlewareContext;
       const result = args[1] as Embedding;
 
@@ -134,7 +134,7 @@ describe("Embedding Middleware", () => {
       ).rejects.toThrow("Embedding failed");
 
       expect(onError).toHaveBeenCalledTimes(1);
-      const [ctx, error] = onError.mock.calls[0];
+      const [ctx, error] = onError.mock.calls[0]!;
       expect((error as Error).message).toBe("Embedding failed");
       expect(ctx.requestId).toBeDefined();
     });

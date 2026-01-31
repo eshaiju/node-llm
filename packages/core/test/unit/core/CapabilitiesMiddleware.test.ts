@@ -7,10 +7,10 @@ import { Moderation } from "../../../src/moderation/Moderation.js";
 import { GeneratedImage } from "../../../src/image/GeneratedImage.js";
 
 class TestProvider extends FakeProvider {
-  public calls: Record<string, any[]> = {
-    transcribe: [],
-    moderate: [],
-    paint: []
+  public calls = {
+    transcribe: [] as any[],
+    moderate: [] as any[],
+    paint: [] as any[]
   };
 
   constructor() {
@@ -18,7 +18,7 @@ class TestProvider extends FakeProvider {
   }
 
   async transcribe(request: any) {
-    this.calls.transcribe.push(request);
+    this.calls.transcribe!.push(request);
     return {
       text: "transcribed text",
       model: "test-model",
@@ -27,7 +27,7 @@ class TestProvider extends FakeProvider {
   }
 
   async moderate(request: any) {
-    this.calls.moderate.push(request);
+    this.calls.moderate!.push(request);
     return {
       id: "mod-123",
       model: "test-model",
@@ -42,7 +42,7 @@ class TestProvider extends FakeProvider {
   }
 
   async paint(request: any) {
-    this.calls.paint.push(request);
+    this.calls.paint!.push(request);
     return {
       url: "http://example.com/image.png"
     };
@@ -71,14 +71,14 @@ describe("Capabilities Middleware", () => {
       await llm.transcribe("audio.mp3", { middlewares: [middleware] });
 
       expect(onRequest).toHaveBeenCalledTimes(1);
-      const reqCtx = onRequest.mock.calls[0][0] as MiddlewareContext;
+      const reqCtx = onRequest.mock.calls[0]![0] as MiddlewareContext;
       expect(reqCtx.input).toBe("audio.mp3");
       // Use type assertion or check existence
       expect(reqCtx.transcriptionOptions).toBeDefined();
 
       expect(onResponse).toHaveBeenCalledTimes(1);
-      const resCtx = onResponse.mock.calls[0][0];
-      const result = onResponse.mock.calls[0][1];
+      const resCtx = onResponse.mock.calls[0]![0];
+      const result = onResponse.mock.calls[0]![1];
       expect(result).toBeInstanceOf(Transcription);
       expect(result.text).toBe("transcribed text");
     });
@@ -94,7 +94,7 @@ describe("Capabilities Middleware", () => {
       await llm.transcribe("original.mp3", { middlewares: [modifier] });
 
       expect(provider.calls.transcribe).toHaveLength(1);
-      expect(provider.calls.transcribe[0].file).toBe("modified.mp3");
+      expect(provider.calls.transcribe![0].file).toBe("modified.mp3");
     });
   });
 
@@ -108,10 +108,10 @@ describe("Capabilities Middleware", () => {
       });
 
       expect(onRequest).toHaveBeenCalledTimes(1);
-      expect((onRequest.mock.calls[0][0] as MiddlewareContext).input).toBe("nasty text");
+      expect((onRequest.mock.calls[0]![0] as MiddlewareContext).input).toBe("nasty text");
 
       expect(onResponse).toHaveBeenCalledTimes(1);
-      const result = onResponse.mock.calls[0][1];
+      const result = onResponse.mock.calls[0]![1];
       expect(result).toBeInstanceOf(Moderation);
       expect(result.flagged).toBe(false);
     });
@@ -127,7 +127,7 @@ describe("Capabilities Middleware", () => {
       await llm.moderate(["dirty text"], { middlewares: [modifier] });
 
       expect(provider.calls.moderate).toHaveLength(1);
-      expect(provider.calls.moderate[0].input).toEqual(["clean text"]);
+      expect(provider.calls.moderate![0].input).toEqual(["clean text"]);
     });
   });
 
@@ -141,11 +141,11 @@ describe("Capabilities Middleware", () => {
       });
 
       expect(onRequest).toHaveBeenCalledTimes(1);
-      expect((onRequest.mock.calls[0][0] as MiddlewareContext).input).toBe("a sunset");
-      expect((onRequest.mock.calls[0][0] as MiddlewareContext).imageOptions).toBeDefined();
+      expect((onRequest.mock.calls[0]![0] as MiddlewareContext).input).toBe("a sunset");
+      expect((onRequest.mock.calls[0]![0] as MiddlewareContext).imageOptions).toBeDefined();
 
       expect(onResponse).toHaveBeenCalledTimes(1);
-      const result = onResponse.mock.calls[0][1];
+      const result = onResponse.mock.calls[0]![1];
       expect(result).toBeInstanceOf(GeneratedImage);
       expect(result.url).toBe("http://example.com/image.png");
     });
@@ -161,7 +161,7 @@ describe("Capabilities Middleware", () => {
       await llm.paint("a sunset", { middlewares: [modifier] });
 
       expect(provider.calls.paint).toHaveLength(1);
-      expect(provider.calls.paint[0].prompt).toBe("a sunrise");
+      expect(provider.calls.paint![0].prompt).toBe("a sunrise");
     });
   });
 
@@ -177,7 +177,7 @@ describe("Capabilities Middleware", () => {
       ).rejects.toThrow("Fail");
 
       expect(onError).toHaveBeenCalledTimes(1);
-      const [ctx, error] = onError.mock.calls[0];
+      const [ctx, error] = onError.mock.calls[0]!;
       expect((error as Error).message).toBe("Fail");
       expect(ctx.requestId).toBeDefined();
     });
@@ -193,7 +193,7 @@ describe("Capabilities Middleware", () => {
       ).rejects.toThrow("Moderation failed");
 
       expect(onError).toHaveBeenCalledTimes(1);
-      const [ctx, error] = onError.mock.calls[0];
+      const [ctx, error] = onError.mock.calls[0]!;
       expect((error as Error).message).toBe("Moderation failed");
       expect(ctx.requestId).toBeDefined();
     });
@@ -209,7 +209,7 @@ describe("Capabilities Middleware", () => {
       ).rejects.toThrow("Paint failed");
 
       expect(onError).toHaveBeenCalledTimes(1);
-      const [ctx, error] = onError.mock.calls[0];
+      const [ctx, error] = onError.mock.calls[0]!;
       expect((error as Error).message).toBe("Paint failed");
       expect(ctx.requestId).toBeDefined();
     });

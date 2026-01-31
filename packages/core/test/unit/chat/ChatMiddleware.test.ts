@@ -51,12 +51,12 @@ describe("Chat Middleware", () => {
       await chat.ask("Hello");
 
       expect(onRequest).toHaveBeenCalledTimes(1);
-      const ctx = onRequest.mock.calls[0][0] as MiddlewareContext;
+      const ctx = onRequest.mock.calls[0]![0] as MiddlewareContext;
 
       expect(ctx.provider).toBe("fake");
       expect(ctx.model).toBe("test-model");
       expect(ctx.messages).toHaveLength(1);
-      expect(ctx.messages[0].content).toBe("Hello");
+      expect(ctx.messages![0].content).toBe("Hello");
       expect(ctx.requestId).toBeDefined();
     });
 
@@ -71,7 +71,7 @@ describe("Chat Middleware", () => {
       await chat.ask("Hello");
 
       expect(onResponse).toHaveBeenCalledTimes(1);
-      const args = onResponse.mock.calls[0];
+      const args = onResponse.mock.calls[0]!;
       const ctx = args[0] as MiddlewareContext;
       const result = args[1] as ChatResponseString;
 
@@ -112,7 +112,7 @@ describe("Chat Middleware", () => {
       const modifier: Middleware = {
         name: "Modifier",
         onRequest: async (ctx) => {
-          if (ctx.messages[0]) {
+          if (ctx.messages?.[0]) {
             ctx.messages[0].content = "Modified Hello";
           }
         }
@@ -161,7 +161,7 @@ describe("Chat Middleware", () => {
       await expect(chat.ask("Hello")).rejects.toThrow("Provider failed");
 
       expect(onError).toHaveBeenCalledTimes(1);
-      const [ctx, error] = onError.mock.calls[0];
+      const [ctx, error] = onError.mock.calls[0]!;
       expect((error as Error).message).toBe("Provider failed");
       expect(ctx.requestId).toBeDefined();
     });
@@ -181,7 +181,7 @@ describe("Chat Middleware", () => {
       // Setup tool
       const tool: ToolResolvable = {
         type: "function",
-        function: { name: "test_tool" },
+        function: { name: "test_tool", parameters: {} },
         handler: async () => "tool result"
       };
 
@@ -211,14 +211,14 @@ describe("Chat Middleware", () => {
       expect(onToolStart).toHaveBeenCalledTimes(1);
       expect(onToolEnd).toHaveBeenCalledTimes(1);
 
-      const startCtx = onToolStart.mock.calls[0][0];
-      const startTool = onToolStart.mock.calls[0][1];
+      const startCtx = onToolStart.mock.calls[0]![0];
+      const startTool = onToolStart.mock.calls[0]![1];
 
       expect(startCtx.requestId).toBeDefined();
       expect(startTool.function.name).toBe("test_tool");
 
-      const endCtx = onToolEnd.mock.calls[0][0];
-      const result = onToolEnd.mock.calls[0][2];
+      const endCtx = onToolEnd.mock.calls[0]![0];
+      const result = onToolEnd.mock.calls[0]![2];
 
       expect(endCtx.requestId).toBe(startCtx.requestId); // Same request ID
       expect(result).toBe("tool result");
@@ -235,7 +235,7 @@ describe("Chat Middleware", () => {
       const toolHandler = vi.fn();
       const tool: ToolResolvable = {
         type: "function",
-        function: { name: "risky_tool" },
+        function: { name: "risky_tool", parameters: {} },
         handler: toolHandler
       };
 
