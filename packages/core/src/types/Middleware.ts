@@ -46,6 +46,21 @@ export interface MiddlewareContext {
   embeddingOptions?: Record<string, any>;
 
   /**
+   * Options passed to the transcription request (Transcription only).
+   */
+  transcriptionOptions?: Record<string, any>;
+
+  /**
+   * Options passed to the moderation request (Moderation only).
+   */
+  moderationOptions?: Record<string, any>;
+
+  /**
+   * Options passed to the image generation request (Paint only).
+   */
+  imageOptions?: Record<string, any>;
+
+  /**
    * Shared state storage for passing data between middleware hooks.
    * Example: Storing start time in `onRequest` and reading it in `onResponse`.
    */

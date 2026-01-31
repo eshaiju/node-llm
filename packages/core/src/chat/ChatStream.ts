@@ -21,6 +21,7 @@ import { logger } from "../utils/logger.js";
 import { ResponseFormat } from "../providers/Provider.js";
 import { ModelRegistry } from "../models/ModelRegistry.js";
 import { Middleware, MiddlewareContext } from "../types/Middleware.js";
+import { runMiddleware } from "../utils/middleware-runner.js";
 import { randomUUID } from "node:crypto";
 
 /**
@@ -426,21 +427,5 @@ export class ChatStream {
         ),
       controller
     );
-  }
-}
-
-async function runMiddleware(
-  middlewares: Middleware[],
-  hookName: keyof Middleware,
-  context: MiddlewareContext,
-  ...args: any[]
-) {
-  if (!middlewares || middlewares.length === 0) return;
-
-  for (const middleware of middlewares) {
-    if (typeof middleware[hookName] === "function") {
-      // @ts-ignore
-      await middleware[hookName](context, ...args);
-    }
   }
 }

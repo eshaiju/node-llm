@@ -30,6 +30,7 @@ import { ChatValidator } from "./Validation.js";
 import { ToolHandler } from "./ToolHandler.js";
 import { logger } from "../utils/logger.js";
 import { Middleware, MiddlewareContext } from "../types/Middleware.js";
+import { runMiddleware } from "../utils/middleware-runner.js";
 
 export interface AskOptions {
   images?: string[];
@@ -440,7 +441,7 @@ export class Chat<S = unknown> {
 
     try {
       // 1. onRequest Hook
-      await this.runMiddleware("onRequest", context);
+      await runMiddleware(this.middlewares, "onRequest", context);
 
       // Re-read mutable context
       const messagesToUse = context.messages || [];
@@ -563,7 +564,7 @@ export class Chat<S = unknown> {
           }
 
           // 2. onToolCallStart Hook
-          await this.runMiddleware("onToolCallStart", context, toolCall);
+          await runMiddleware(this.middlewares, "onToolCallStart", context, toolCall);
 
           try {
             const toolResult = await ToolHandler.execute(
@@ -574,7 +575,13 @@ export class Chat<S = unknown> {
             );
 
             // 3. onToolCallEnd Hook
-            await this.runMiddleware("onToolCallEnd", context, toolCall, toolResult.content);
+            await runMiddleware(
+              this.middlewares,
+              "onToolCallEnd",
+              context,
+              toolCall,
+              toolResult.content
+            );
 
             this.messages.push(
               this.provider.formatToolResultMessage(toolResult.tool_call_id, toolResult.content)
@@ -583,7 +590,13 @@ export class Chat<S = unknown> {
             let currentError: unknown = error;
 
             // 4. onToolCallError Hook
-            await this.runMiddleware("onToolCallError", context, toolCall, currentError);
+            await runMiddleware(
+              this.middlewares,
+              "onToolCallError",
+              context,
+              toolCall,
+              currentError
+            );
 
             const directive = await this.options.onToolCallError?.(toolCall, currentError as Error);
 
@@ -604,14 +617,26 @@ export class Chat<S = unknown> {
                   this.options.onToolCallStart,
                   this.options.onToolCallEnd
                 );
-                await this.runMiddleware("onToolCallEnd", context, toolCall, toolResult.content);
+                await runMiddleware(
+                  this.middlewares,
+                  "onToolCallEnd",
+                  context,
+                  toolCall,
+                  toolResult.content
+                );
                 this.messages.push(
                   this.provider.formatToolResultMessage(toolResult.tool_call_id, toolResult.content)
                 );
                 continue;
               } catch (retryError) {
                 currentError = retryError;
-                await this.runMiddleware("onToolCallError", context, toolCall, currentError);
+                await runMiddleware(
+                  this.middlewares,
+                  "onToolCallError",
+                  context,
+                  toolCall,
+                  currentError
+                );
               }
             }
 
@@ -703,28 +728,13 @@ export class Chat<S = unknown> {
       ) as unknown as ChatResponseString & { data: S };
 
       // 5. onResponse Hook
-      await this.runMiddleware("onResponse", context, finalResponse);
+      await runMiddleware(this.middlewares, "onResponse", context, finalResponse);
 
       return finalResponse;
     } catch (err) {
       // 6. onError Hook
-      await this.runMiddleware("onError", context, err);
+      await runMiddleware(this.middlewares, "onError", context, err);
       throw err;
-    }
-  }
-
-  private async runMiddleware(
-    hookName: keyof Middleware,
-    context: MiddlewareContext,
-    ...args: any[]
-  ) {
-    if (!this.middlewares || this.middlewares.length === 0) return;
-
-    for (const middleware of this.middlewares) {
-      if (typeof middleware[hookName] === "function") {
-        // @ts-ignore
-        await middleware[hookName](context, ...args);
-      }
     }
   }
 
