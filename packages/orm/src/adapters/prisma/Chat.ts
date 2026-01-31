@@ -68,7 +68,8 @@ export class Chat extends BaseChat {
 
     const coreChat = llmInstance.chat(model || undefined, {
       messages: history,
-      ...this.localOptions
+      ...this.localOptions,
+      middlewares: this.customMiddlewares
     }) as any;
 
     // Register tools
