@@ -345,6 +345,7 @@ export async function createChat<T = Record<string, any>>(
   const chatTable = options.tableNames?.chat || "llmChat";
 
   // Extract known options so we don't double-pass them or pass them incorrectly
+  // middlewares are runtime functions and should NOT be persisted to DB
   const {
     model,
     provider,
@@ -353,6 +354,7 @@ export async function createChat<T = Record<string, any>>(
     tableNames: _tableNames,
     debug: _debug,
     persistence: _persistence,
+    middlewares: _middlewares, // Exclude middlewares from DB persistence
     ...extras
   } = options;
 
