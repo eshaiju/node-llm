@@ -29,6 +29,7 @@ export const AssistantChat = {
     model?: string;
     provider?: string;
     instructions?: string;
+    maxToolCalls?: number;
     metadata?: Record<string, any>;
     debug?: boolean;
   } = {}): Promise<Chat> {
@@ -47,7 +48,12 @@ export const AssistantChat = {
    * Load an existing chat session
    */
   async load(chatId: string): Promise<Chat | null> {
-    return loadChat(prisma, llm, chatId, { tableNames: TABLE_NAMES });
+    return loadChat(prisma, llm, chatId, { 
+      tableNames: TABLE_NAMES,
+      middlewares: hrChatbotMiddlewares,
+      maxToolCalls: 10, // Ensure budget is maintained on load
+      debug: true
+    });
   },
 };
 
