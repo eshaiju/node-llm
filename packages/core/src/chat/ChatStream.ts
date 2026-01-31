@@ -271,7 +271,7 @@ export class ChatStream {
 
           messages.push({
             role: "assistant",
-            content: assistantResponse?.toString() || null,
+            content: assistantResponse || null,
             tool_calls: toolCalls,
             reasoning: fullReasoning || undefined,
             usage: currentTurnUsage
