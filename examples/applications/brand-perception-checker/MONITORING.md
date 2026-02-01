@@ -36,10 +36,10 @@ This directory is gitignored and will be created automatically on first use.
 
 ### Monitoring Middleware (`server/llm/monitoring.js`)
 ```javascript
-export const monitorMiddleware = createFileMonitor({
-  directory: monitoringDir,
-  captureContent: true
-});
+export const monitorMiddleware = createFileMonitor(
+  join(monitoringDir, "monitoring.log"),
+  { captureContent: true }
+);
 ```
 
 ### Applied Globally (`server/llm/middlewares.js`)
@@ -71,7 +71,7 @@ const chat = systemAuditCore
 
 The FileAdapter stores events in JSONL format (one JSON object per line):
 ```bash
-cat monitoring-data/events.jsonl | jq
+cat monitoring-data/monitoring.log | jq
 ```
 
 Each event includes:

@@ -182,7 +182,7 @@ import { ToolError } from "@node-llm/core";
 class DatabaseTool extends Tool {
   async execute({ query }) {
     if (query.includes("DROP")) {
-      throw new ToolError("Dangerous query blocked", "database", { fatal: true });
+      throw new ToolError("Dangerous query blocked", "database", true);
     }
     // ...
   }

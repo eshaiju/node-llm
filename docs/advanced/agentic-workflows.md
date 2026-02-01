@@ -251,7 +251,7 @@ class RiskyTool extends Tool {
 
     // Fatal: stop the entire agent loop
     if (args.query.includes("DROP TABLE")) {
-      throw new ToolError("Blocked dangerous query", this.name, { fatal: true });
+      throw new ToolError("Blocked dangerous query", this.name, true);
     }
 
     return await this.doWork(args);

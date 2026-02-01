@@ -547,7 +547,7 @@ it(
     const messages = await prisma.assistantMessage.findMany({
       where: { chatId: chat.id }
     });
-
+ring a separate blog
     expect(messages).toHaveLength(2); // User + Assistant
     expect(messages[1].content).toBeDefined();
   })
@@ -578,3 +578,27 @@ it("handles tool errors in ORM sessions", async () => {
 - **No Side Effects**: Mocks and VCR interceptors are automatically cleared after each test turn.
 - **Deterministic**: The same input MUST always yield the same output in Replay mode.
 - **Explicit > Implicit**: We prefer explicit mock definitions over complex global state.
+
+---
+
+## 🔧 Troubleshooting
+
+### SyntaxError: Unexpected identifier 'assert'
+
+If you encounter this error in CI (especially with Node.js 22.x), add the following to your `vitest.config.ts`:
+
+```typescript
+import { defineConfig } from "vitest/config";
+
+export default defineConfig({
+  test: {
+    server: {
+      deps: {
+        inline: [/@node-llm/]
+      }
+    }
+  }
+});
+```
+
+This tells Vitest to bundle `@node-llm` packages instead of loading them as external modules, avoiding JSON import assertion compatibility issues across Node.js versions.

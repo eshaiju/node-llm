@@ -50,7 +50,7 @@ You can filter the registry to find models that match your requirements.
 ### Finding Vision Models
 
 ```ts
-const visionModels = NodeLLM.models.list().filter((m) => m.capabilities.includes("vision"));
+const visionModels = NodeLLM.models.all().filter((m) => m.capabilities.includes("vision"));
 
 console.log(`Found ${visionModels.length} vision-capable models.`);
 visionModels.forEach((m) => console.log(m.id));
@@ -59,13 +59,13 @@ visionModels.forEach((m) => console.log(m.id));
 ### Finding Tool-Use Models
 
 ```ts
-const toolModels = NodeLLM.models.list().filter((m) => m.capabilities.includes("tools"));
+const toolModels = NodeLLM.models.all().filter((m) => m.capabilities.includes("tools"));
 ```
 
 ### Finding Audio Models
 
 ```ts
-const audioModels = NodeLLM.models.list().filter((m) => m.capabilities.includes("audio_input"));
+const audioModels = NodeLLM.models.all().filter((m) => m.capabilities.includes("audio_input"));
 ```
 
 ---

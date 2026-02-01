@@ -110,8 +110,11 @@ Use standard telemetry patterns to track your infrastructure.
 ```typescript
 const perfMiddleware = {
   name: "PerformanceTracker",
+  onRequest: async (context) => {
+    context.state.startTime = Date.now();
+  },
   onResponse: async (context, result) => {
-    const latency = result.meta.latency;
+    const latency = Date.now() - (context.state.startTime as number);
     const cost = calculateCost(context.model, result.usage);
     await db.metrics.create({ model: context.model, latency, cost });
   }

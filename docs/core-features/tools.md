@@ -226,7 +226,7 @@ class DatabaseTool extends Tool {
   async execute({ query }) {
     if (isMalicious(query)) {
       // Force the agent to stop immediately
-      throw new ToolError("Security Violation", "db_tool", { fatal: true });
+      throw new ToolError("Security Violation", "db_tool", true);
     }
   }
 }

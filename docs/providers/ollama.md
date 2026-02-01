@@ -68,7 +68,7 @@ const chat = llm.chat("llama3").withParams({
 - **Vision**: Use vision-capable models like `llama3.2-vision` or `llava`.
 - **Tools**: Fully supported for models with tool-calling capabilities (e.g., `llama3.1`).
 - **Embeddings**: High-performance local vector generation.
-- **Model Discovery**: Inspect your local library and model metadata via `NodeLLM.listModels()`.
+- **Model Discovery**: Inspect your local library and model metadata via `llm.listModels()`.
 
 ### Multimodal (Vision)
 

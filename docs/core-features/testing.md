@@ -514,10 +514,11 @@ it("displays tokens as they arrive", async () => {
     "blue"
   ]);
 
-  const tokens = [];
-  await llm.stream("Write a poem", {
-    onToken: (token) => tokens.push(token)
-  });
+  const tokens: string[] = [];
+  const chat = NodeLLM.chat("gpt-4");
+  for await (const chunk of chat.stream("Write a poem")) {
+    tokens.push(chunk.content || "");
+  }
 
   expect(tokens).toEqual([
     "Roses ",

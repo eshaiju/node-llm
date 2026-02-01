@@ -31,10 +31,10 @@ import { createLLM } from "@node-llm/core";
 
 const embedding = await NodeLLM.embed("Ruby is a programmer's best friend");
 
-console.log(embedding.vector); // Float32Array[] (e.g., 1536 dimensions)
+console.log(embedding.vector); // number[] (e.g., 1536 dimensions)
 console.log(embedding.dimensions); // 1536
 console.log(embedding.model); // "text-embedding-3-small" (default)
-console.log(embedding.usage.total_tokens); // Token count
+console.log(embedding.input_tokens); // Token count
 ```
 
 ### Batch Embeddings

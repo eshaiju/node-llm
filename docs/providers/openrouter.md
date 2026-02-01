@@ -39,7 +39,7 @@ const llm = createLLM({
 
 ## Features
 
-- **Model Discovery**: Full support for `NodeLLM.listModels()` to explore available models.
+- **Model Discovery**: Full support for `llm.listModels()` to explore available models.
 - **Unified API**: Switch between models from OpenAI, Anthropic, Google, and Meta using a single configuration.
 - **Vision**: Supported for multimodal models.
 - **Tools**: Supported for models with function calling capabilities.

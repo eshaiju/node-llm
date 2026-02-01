@@ -182,5 +182,5 @@ const embedding = await llm.embed("The concept of general relativity", {
   dimensions: 1024
 });
 
-console.log(embedding.vector); // Float32Array
+console.log(embedding.vector); // number[]
 ```

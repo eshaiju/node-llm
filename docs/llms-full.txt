@@ -1461,10 +1461,10 @@ import { createLLM } from "@node-llm/core";
 
 const embedding = await NodeLLM.embed("Ruby is a programmer's best friend");
 
-console.log(embedding.vector); // Float32Array[] (e.g., 1536 dimensions)
+console.log(embedding.vector); // number[] (e.g., 1536 dimensions)
 console.log(embedding.dimensions); // 1536
 console.log(embedding.model); // "text-embedding-3-small" (default)
-console.log(embedding.usage.total_tokens); // Token count
+console.log(embedding.input_tokens); // Token count
 ```
 
 ### Batch Embeddings
@@ -1787,8 +1787,11 @@ Use standard telemetry patterns to track your infrastructure.
 ```typescript
 const perfMiddleware = {
   name: "PerformanceTracker",
+  onRequest: async (context) => {
+    context.state.startTime = Date.now();
+  },
   onResponse: async (context, result) => {
-    const latency = result.meta.latency;
+    const latency = Date.now() - (context.state.startTime as number);
     const cost = calculateCost(context.model, result.usage);
     await db.metrics.create({ model: context.model, latency, cost });
   }
@@ -1957,7 +1960,7 @@ You can filter the registry to find models that match your requirements.
 ### Finding Vision Models
 
 ```ts
-const visionModels = NodeLLM.models.list().filter((m) => m.capabilities.includes("vision"));
+const visionModels = NodeLLM.models.all().filter((m) => m.capabilities.includes("vision"));
 
 console.log(`Found ${visionModels.length} vision-capable models.`);
 visionModels.forEach((m) => console.log(m.id));
@@ -1966,13 +1969,13 @@ visionModels.forEach((m) => console.log(m.id));
 ### Finding Tool-Use Models
 
 ```ts
-const toolModels = NodeLLM.models.list().filter((m) => m.capabilities.includes("tools"));
+const toolModels = NodeLLM.models.all().filter((m) => m.capabilities.includes("tools"));
 ```
 
 ### Finding Audio Models
 
 ```ts
-const audioModels = NodeLLM.models.list().filter((m) => m.capabilities.includes("audio_input"));
+const audioModels = NodeLLM.models.all().filter((m) => m.capabilities.includes("audio_input"));
 ```
 
 ---
@@ -3289,10 +3292,11 @@ it("displays tokens as they arrive", async () => {
     "blue"
   ]);
 
-  const tokens = [];
-  await llm.stream("Write a poem", {
-    onToken: (token) => tokens.push(token)
-  });
+  const tokens: string[] = [];
+  const chat = NodeLLM.chat("gpt-4");
+  for await (const chunk of chat.stream("Write a poem")) {
+    tokens.push(chunk.content || "");
+  }
 
   expect(tokens).toEqual([
     "Roses ",
@@ -3557,7 +3561,7 @@ class DatabaseTool extends Tool {
   async execute({ query }) {
     if (isMalicious(query)) {
       // Force the agent to stop immediately
-      throw new ToolError("Security Violation", "db_tool", { fatal: true });
+      throw new ToolError("Security Violation", "db_tool", true);
     }
   }
 }
@@ -3959,7 +3963,7 @@ const embedding = await llm.embed("The concept of general relativity", {
   dimensions: 1024
 });
 
-console.log(embedding.vector); // Float32Array
+console.log(embedding.vector); // number[]
 ```
 
 
@@ -4230,7 +4234,7 @@ const chat = llm.chat("llama3").withParams({
 - **Vision**: Use vision-capable models like `llama3.2-vision` or `llava`.
 - **Tools**: Fully supported for models with tool-calling capabilities (e.g., `llama3.1`).
 - **Embeddings**: High-performance local vector generation.
-- **Model Discovery**: Inspect your local library and model metadata via `NodeLLM.listModels()`.
+- **Model Discovery**: Inspect your local library and model metadata via `llm.listModels()`.
 
 ### Multimodal (Vision)
 
@@ -4387,7 +4391,7 @@ const llm = createLLM({
 
 ## Features
 
-- **Model Discovery**: Full support for `NodeLLM.listModels()` to explore available models.
+- **Model Discovery**: Full support for `llm.listModels()` to explore available models.
 - **Unified API**: Switch between models from OpenAI, Anthropic, Google, and Meta using a single configuration.
 - **Vision**: Supported for multimodal models.
 - **Tools**: Supported for models with function calling capabilities.
@@ -5096,7 +5100,7 @@ class RiskyTool extends Tool {
 
     // Fatal: stop the entire agent loop
     if (args.query.includes("DROP TABLE")) {
-      throw new ToolError("Blocked dangerous query", this.name, { fatal: true });
+      throw new ToolError("Blocked dangerous query", this.name, true);
     }
 
     return await this.doWork(args);
@@ -5834,7 +5838,7 @@ import { ToolError } from "@node-llm/core";
 class DatabaseTool extends Tool {
   async execute({ query }) {
     if (query.includes("DROP")) {
-      throw new ToolError("Dangerous query blocked", "database", { fatal: true });
+      throw new ToolError("Dangerous query blocked", "database", true);
     }
     // ...
   }
@@ -7536,6 +7540,688 @@ This is useful for:
 
 
 <!-- END FILE: models/available_models.md -->
+----------------------------------------
+
+<!-- FILE: monitor/dashboard.md -->
+
+# 📄 monitor/dashboard.md
+
+---
+layout: default
+title: Dashboard
+parent: Monitor & Observability
+nav_order: 2
+permalink: /monitor/dashboard
+description: Built-in web dashboard for visualizing LLM usage, costs, and performance metrics.
+---
+
+# {{ page.title }}
+{: .no_toc }
+
+{{ page.description }}
+{: .fs-6 .fw-300 }
+
+![Dashboard Metrics View](/assets/images/monitor/dashboard-metrics.png)
+
+## Table of contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
+
+## Overview
+
+The NodeLLM Monitor Dashboard is a production-ready UI that visualizes your LLM telemetry. Unlike other tools that require external services, this dashboard is **embedded directly into your application** as a middleware or route handler.
+
+It provides:
+- **Real-time Metrics**: Costs, token usage, and latency.
+- **Trace Explorer**: Inspect full request/response payloads.
+- **Provider Breakdown**: Compare models and providers.
+- **Time-Series Analysis**: Visual trends over time.
+
+---
+
+## Integration
+
+### Express / Fastify / Node.js HTTP
+
+Use `createMonitorMiddleware` to mount the dashboard on any Express-compatible server:
+
+```typescript
+import express from "express";
+import { Monitor, MemoryAdapter } from "@node-llm/monitor";
+import { createMonitorMiddleware } from "@node-llm/monitor/ui";
+
+const app = express();
+
+// 1. Setup Monitor
+const store = new MemoryAdapter();
+const monitor = new Monitor({ store });
+
+// 2. Mount Dashboard (share the same store)
+app.use(createMonitorMiddleware(store, { basePath: "/monitor" }));
+
+app.listen(3001, () => {
+  console.log("Dashboard at http://localhost:3001/monitor");
+});
+```
+
+### Next.js App Router
+
+Use `createMonitoringRouter` to create a standard Web API route handler:
+
+```typescript
+// app/api/monitor/[...path]/route.ts
+import { PrismaClient } from "@prisma/client";
+import { PrismaAdapter } from "@node-llm/monitor";
+import { createMonitoringRouter } from "@node-llm/monitor/ui";
+
+const prisma = new PrismaClient();
+const adapter = new PrismaAdapter(prisma);
+
+const { GET, POST } = createMonitoringRouter(adapter, {
+  basePath: "/api/monitor",
+});
+
+export { GET, POST };
+```
+
+For the UI pages, you can either serve them via this API route (SPAs) or build a custom page that consumes these endpoints.
+
+---
+
+## Configuration
+
+The dashboard factories accept an options object:
+
+```typescript
+interface MonitorDashboardOptions {
+  /** Base path for mounting. Default: "/monitor" */
+  basePath?: string;
+  
+  /** CORS configuration for API endpoints */
+  cors?: boolean | string | string[];
+  
+  /** Polling interval (ms) for the UI. Default: 5000 */
+  pollInterval?: number;
+}
+```
+
+### Authentication
+
+Since the dashboard is just middleware, you can use standard authentication patterns:
+
+```typescript
+import { basicAuth } from "./auth-middleware";
+
+// Protect the dashboard route
+app.use("/monitor", basicAuth);
+app.use(createMonitorMiddleware(store, { basePath: "/monitor" }));
+```
+
+---
+
+## Standalone Server
+
+If you prefer to run the dashboard as a separate service (e.g., to view production logs locally), you can create a simple server script:
+
+```typescript
+// dashboard-server.ts
+import { createServer } from "node:http";
+import { FileAdapter } from "@node-llm/monitor";
+import { MonitorDashboard } from "@node-llm/monitor/ui";
+
+const adapter = new FileAdapter("./production-logs.json");
+const dashboard = new MonitorDashboard(adapter, { basePath: "/" });
+
+const server = createServer(async (req, res) => {
+  await dashboard.handleRequest(req, res);
+});
+
+server.listen(3001, () => {
+  console.log("Dashboard at http://localhost:3001");
+});
+```
+
+See `examples/dashboard.ts` in the repository for a complete implementation.
+
+---
+
+## API Endpoints
+
+The dashboard backend exposes these endpoints (relative to your `basePath`):
+
+| Endpoint | Method | Description | Params |
+|----------|--------|-------------|--------|
+| `/api/stats` | GET | Aggregate statistics | `from` (Date) |
+| `/api/metrics` | GET | Time-series data for charts | `from` (Date) |
+| `/api/traces` | GET | List of request traces | `limit`, `offset` |
+| `/api/events` | GET | Detailed events for a request | `requestId` (Required) |
+
+### Example Query
+
+```bash
+# Get traces
+curl "http://localhost:3001/monitor/api/traces?limit=10"
+
+# Get specific request details
+curl "http://localhost:3001/monitor/api/events?requestId=req_12345"
+```
+
+
+
+
+<!-- END FILE: monitor/dashboard.md -->
+----------------------------------------
+
+<!-- FILE: monitor/index.md -->
+
+# 📄 monitor/index.md
+
+---
+layout: default
+title: Monitor & Observability
+nav_order: 5
+has_children: true
+permalink: /monitor
+description: Production observability for NodeLLM. Track costs, latency, token usage, and debug LLM interactions in real-time.
+---
+
+# {{ page.title }}
+{: .no_toc }
+
+{{ page.description }}
+{: .fs-6 .fw-300 }
+
+![NodeLLM Monitor Dashboard](/assets/images/monitor/dashboard-metrics.png)
+
+---
+
+## Quick Setup
+
+NodeLLM Monitor provides production-grade observability for your AI applications. Track every LLM request, analyze costs, debug issues, and visualize usage patterns through a built-in dashboard.
+
+### Installation
+
+```bash
+npm install @node-llm/monitor
+```
+
+---
+
+## Why Monitor?
+
+Building AI applications without observability is like flying blind. NodeLLM Monitor captures:
+
+- **Cost Tracking**: Know exactly how much each conversation, user, or feature costs
+- **Latency Analysis**: Identify slow requests and optimize performance
+- **Token Usage**: Track input/output tokens across models and providers
+- **Error Debugging**: Capture full request/response payloads for troubleshooting
+- **Usage Patterns**: Understand which models and features are most used
+
+---
+
+## Basic Usage
+
+### 1. Monitor Setup
+
+Create a `Monitor` instance with a storage adapter (Memory, File, or Prisma):
+
+```typescript
+import { createLLM } from "@node-llm/core";
+import { Monitor } from "@node-llm/monitor";
+
+// Create a monitor with in-memory storage (great for dev/testing)
+const monitor = Monitor.memory({
+  captureContent: true, // Optional: capture full prompts/responses
+});
+
+const llm = createLLM({
+  provider: "openai",
+  model: "gpt-4o-mini",
+  openaiApiKey: process.env.OPENAI_API_KEY,
+  middlewares: [monitor], // Monitor IS the middleware
+});
+
+// All LLM calls are now automatically tracked
+const chat = llm.chat();
+const response = await chat.ask("Hello!");
+```
+
+### Built-in Dashboard
+
+Launch a visual dashboard to explore your data:
+
+```typescript
+import { createServer } from "node:http";
+import { MonitorDashboard } from "@node-llm/monitor/ui";
+import { MemoryAdapter } from "@node-llm/monitor";
+
+// Create a store (can also use PrismaAdapter or FileAdapter)
+const store = new MemoryAdapter();
+
+// Create dashboard instance
+const dashboard = new MonitorDashboard(store, { 
+  basePath: "/monitor",
+  cors: false, // Recommended: same-origin only for security
+});
+
+// Start server
+const server = createServer(async (req, res) => {
+  await dashboard.handleRequest(req, res);
+});
+
+server.listen(3001, () => {
+  console.log("Dashboard at http://localhost:3001/monitor");
+});
+```
+
+Or with Express:
+
+```typescript
+import express from "express";
+import { MonitorDashboard } from "@node-llm/monitor/ui";
+
+const app = express();
+const dashboard = new MonitorDashboard(store, { basePath: "/monitor" });
+
+app.use(dashboard.middleware());
+app.listen(3001);
+```
+
+---
+
+## Storage Adapters
+
+NodeLLM Monitor supports multiple storage backends:
+
+### Memory Adapter (Development)
+
+```typescript
+import { Monitor } from "@node-llm/monitor";
+
+const monitor = Monitor.memory();
+```
+
+Perfect for development and testing. Data is lost on restart.
+
+### File Adapter (Prototyping)
+
+```typescript
+import { createFileMonitor } from "@node-llm/monitor";
+
+const monitor = createFileMonitor("./llm-events.log");
+```
+
+Persist events to a JSON file. Good for prototyping.
+
+### Prisma Adapter (Production)
+
+```typescript
+import { PrismaClient } from "@prisma/client";
+import { createPrismaMonitor } from "@node-llm/monitor";
+
+const prisma = new PrismaClient();
+
+const monitor = createPrismaMonitor(prisma, {
+  captureContent: false, // PII protection (default)
+});
+```
+
+Production-ready with full query capabilities. See [Prisma Setup](/monitor/prisma.html).
+
+---
+
+## Content Scrubbing
+
+Protect sensitive data with automatic content scrubbing:
+
+```typescript
+import { Monitor, MemoryAdapter } from "@node-llm/monitor";
+
+const monitor = new Monitor({
+  store: new MemoryAdapter(),
+  captureContent: true, // Enable content capture
+  scrubbing: {
+    pii: true,     // Scrub emails, phone numbers, SSNs
+    secrets: true, // Scrub API keys, passwords
+  },
+});
+```
+
+By default, when `captureContent` is enabled, PII and secrets are automatically scrubbed.
+
+**Scrubbed patterns include:**
+- Email addresses → `[EMAIL]`
+- Phone numbers → `[PHONE]`
+- SSN/Tax IDs → `[SSN]`
+- API keys → `[API_KEY]`
+- Passwords → `[PASSWORD]`
+
+---
+
+## Event Types
+
+The monitor captures these event types:
+
+| Event | Description |
+|-------|-------------|
+| `request.start` | LLM request initiated |
+| `request.end` | LLM request completed |
+| `request.error` | LLM request failed |
+| `tool.start` | Tool call initiated |
+| `tool.end` | Tool call completed |
+| `tool.error` | Tool call failed |
+
+Each event includes:
+- Request ID, Session ID, and Transaction ID
+- Provider and Model
+- Token usage (input/output/total)
+- Cost calculation
+- Latency timing (duration, CPU time, allocations)
+- Full request/response payloads (if `captureContent` is enabled)
+
+---
+
+## Time Series Aggregation
+
+Analyze trends with built-in time series queries:
+
+```typescript
+import { TimeSeriesBuilder } from "@node-llm/monitor";
+
+// Create builder with bucket size (default: 5 minutes)
+const builder = new TimeSeriesBuilder(5 * 60 * 1000);
+
+// Build time series from events
+const timeSeries = builder.build(events);
+// Returns: { requests: [...], cost: [...], duration: [...], errors: [...] }
+
+// Get stats grouped by provider/model
+const providerStats = builder.buildProviderStats(events);
+// Returns: [{ provider, model, requests, cost, avgDuration, errorCount }, ...]
+```
+
+The adapters also provide a `getMetrics()` method that returns pre-aggregated data:
+
+```typescript
+const metrics = await store.getMetrics({ from: new Date(Date.now() - 24 * 60 * 60 * 1000) });
+console.log(metrics.totals);      // { totalRequests, totalCost, avgDuration, errorRate }
+console.log(metrics.byProvider);  // Provider breakdown
+console.log(metrics.timeSeries);  // Time series data
+```
+
+---
+
+## Next Steps
+
+- [Prisma Adapter Setup](/monitor/prisma.html) - Production database integration
+- [Dashboard Guide](/monitor/dashboard.html) - Explore the visual interface
+- [API Reference](/monitor/api.html) - Full API documentation
+- [Blog: NodeLLM Monitor](https://www.eshaiju.com/blog/nodellm-monitor-production-observability) - Deep dive into production observability
+
+
+
+<!-- END FILE: monitor/index.md -->
+----------------------------------------
+
+<!-- FILE: monitor/prisma.md -->
+
+# 📄 monitor/prisma.md
+
+---
+layout: default
+title: Prisma Adapter
+parent: Monitor & Observability
+nav_order: 1
+permalink: /monitor/prisma
+description: Production-ready Prisma adapter for NodeLLM Monitor. Store and query LLM metrics in your database.
+---
+
+# {{ page.title }}
+{: .no_toc }
+
+{{ page.description }}
+{: .fs-6 .fw-300 }
+
+## Table of contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
+
+## Installation
+
+```bash
+npm install @node-llm/monitor @prisma/client prisma
+```
+
+---
+
+## Schema Setup
+
+Add the monitoring events table to your Prisma schema:
+
+```prisma
+// prisma/schema.prisma
+
+model monitoring_events {
+  id            String   @id @default(uuid())
+  eventType     String   // request.start, request.end, tool.start, etc.
+  requestId     String   @map("requestId")
+  sessionId     String?  @map("sessionId")
+  transactionId String?  @map("transactionId")
+  time          DateTime @default(now())
+  duration      Int?     // duration in ms
+  cost          Float?
+  cpuTime       Float?
+  gcTime        Float?
+  allocations   Int?
+  payload       Json     // Stores metadata, tokens and optional content
+  createdAt     DateTime @default(now())
+  provider      String
+  model         String
+
+  @@index([requestId])
+  @@index([sessionId])
+  @@index([transactionId])
+  @@index([time])
+}
+```
+
+Run the migration:
+
+```bash
+npx prisma migrate dev --name add_monitoring_events
+```
+
+_Note: For non-Prisma users, a raw SQL migration is available at `migrations/001_create_monitoring_events.sql`._
+
+---
+
+## Basic Usage
+
+```typescript
+import { PrismaClient } from "@prisma/client";
+import { createLLM } from "@node-llm/core";
+import { createPrismaMonitor } from "@node-llm/monitor";
+
+const prisma = new PrismaClient();
+const monitor = createPrismaMonitor(prisma);
+
+const llm = createLLM({
+  provider: "openai",
+  model: "gpt-4o-mini",
+  openaiApiKey: process.env.OPENAI_API_KEY,
+  middlewares: [monitor],
+});
+
+// Now all LLM calls are persisted to your database
+const chat = llm.chat();
+await chat.ask("What is the weather today?");
+```
+
+---
+
+## Configuration Options
+
+```typescript
+const monitor = createPrismaMonitor(prisma, {
+  // Capture full request/response content (default: false)
+  captureContent: true,
+  
+  // Enable content scrubbing for PII protection
+  // (automatically enabled when captureContent is true)
+  scrubbing: {
+    pii: true,     // Scrub emails, phone numbers, SSNs
+    secrets: true, // Scrub API keys, passwords
+  },
+  
+  // Error handling callback
+  onError: (error, event) => {
+    console.error("Monitor error:", error, "Event:", event.eventType);
+  },
+});
+```
+
+---
+
+## Querying Events
+
+Since the Prisma Adapter stores data in your database, the best way to query events is using the Prisma Client directly.
+
+### Direct Prisma Queries
+
+```typescript
+// Get all events for a specific request
+const requestEvents = await prisma.monitoring_events.findMany({
+  where: { requestId: "req_123" },
+  orderBy: { time: "asc" },
+});
+
+// Calculate total cost for a time period
+const result = await prisma.monitoring_events.aggregate({
+  where: {
+    eventType: "request.end",
+    time: {
+      gte: new Date("2024-01-01"),
+      lte: new Date("2024-01-31"),
+    },
+  },
+  _sum: { cost: true },
+});
+console.log(`January cost: $${result._sum.cost}`);
+
+// Get usage by provider
+const byProvider = await prisma.monitoring_events.groupBy({
+  by: ["provider", "model"],
+  where: { eventType: "request.end" },
+  _count: true,
+  _sum: { cost: true, duration: true },
+});
+```
+
+---
+
+## Dashboard Integration
+
+To view your Prisma data in the visual dashboard, mount the dashboard middleware in your application:
+
+```typescript
+import express from "express";
+import { PrismaClient } from "@prisma/client";
+import { PrismaAdapter } from "@node-llm/monitor";
+import { createMonitorMiddleware } from "@node-llm/monitor/ui";
+
+const app = express();
+const prisma = new PrismaClient();
+const adapter = new PrismaAdapter(prisma);
+
+// Mount dashboard (handles its own routing under basePath)
+app.use(createMonitorMiddleware(adapter, { basePath: "/monitor" }));
+
+app.listen(3001, () => {
+  console.log("Dashboard at http://localhost:3001/monitor");
+});
+```
+
+The dashboard provides:
+- Real-time event stream
+- Cost analysis charts
+- Provider/model breakdown
+- Request detail viewer
+- Error tracking
+
+---
+
+## Best Practices
+
+### 1. Index Optimization
+
+Add indexes for your most common query patterns:
+
+```prisma
+@@index([time, provider])
+@@index([sessionId, time])
+@@index([eventType, time])
+```
+
+### 2. Data Retention
+
+Set up a cleanup job for old events:
+
+```typescript
+// Delete events older than 90 days
+await prisma.monitoring_events.deleteMany({
+  where: {
+    time: {
+      lt: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000),
+    },
+  },
+});
+```
+
+### 3. Separate Database
+
+For high-volume applications, consider a separate database for monitoring:
+
+```prisma
+datasource monitorDb {
+  provider = "postgresql"
+  url      = env("MONITOR_DATABASE_URL")
+}
+```
+
+
+
+---
+
+## Troubleshooting
+
+### Table Not Found
+
+If you get "monitoring_events table not found", ensure:
+
+1. You've added the schema to `prisma/schema.prisma`
+2. You've run `npx prisma migrate dev`
+3. Your Prisma client is regenerated: `npx prisma generate`
+
+### Type Errors
+
+If using custom table names, ensure your Prisma client types match:
+
+```typescript
+// Generate types after schema changes
+npx prisma generate
+```
+
+
+
+<!-- END FILE: monitor/prisma.md -->
 ----------------------------------------
 
 <!-- FILE: roadmap.md -->
