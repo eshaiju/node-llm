@@ -12,9 +12,15 @@ export async function runMiddleware<T = void>(
 ): Promise<T | undefined> {
   if (!middlewares || middlewares.length === 0) return undefined;
 
+  // Response and error hooks run in reverse order (stack model)
+  const isReverse = ["onResponse", "onError", "onToolCallEnd", "onToolCallError"].includes(
+    hookName
+  );
+  const chain = isReverse ? [...middlewares].reverse() : middlewares;
+
   let finalResult: T | undefined;
 
-  for (const middleware of middlewares) {
+  for (const middleware of chain) {
     if (typeof middleware[hookName] === "function") {
       // @ts-ignore
       const result = await middleware[hookName](context, ...args);

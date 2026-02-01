@@ -57,25 +57,34 @@ await chat.ask("Hello world");
 ---
 
 ## The Middleware Interface
-
-A middleware consists of a unique name and three optional hooks:
-
-```typescript
-interface Middleware {
-  name: string;
-  onRequest?: (context: MiddlewareContext) => Promise<void> | void;
-  onResponse?: (context: MiddlewareContext, result: MiddlewareResult) => Promise<void> | void;
-  onError?: (context: MiddlewareContext, error: Error) => Promise<void> | void;
-}
-```
-
-### MiddlewareContext
-The `context` object provides details about the request:
-- `model`: The model being used.
-- `provider`: The provider name (e.g., "openai", "anthropic").
-- `requestId`: A unique ID for the request.
-- `messages`: The conversation history (for chat operations).
-- `metadata`: Any custom metadata passed to the request.
+ 
+ A middleware consists of a unique name and several optional hooks that cover the entire lifecycle of an LLM request, including tool execution.
+ 
+ ```typescript
+ interface Middleware {
+   name: string;
+   onRequest?: (context: MiddlewareContext) => Promise<void> | void;
+   onResponse?: (context: MiddlewareContext, result: ChatResponseString) => Promise<void> | void;
+   onError?: (context: MiddlewareContext, error: Error) => Promise<void> | void;
+   
+   // Tool Execution Hooks
+   onToolCallStart?: (context: MiddlewareContext, tool: ToolCall) => Promise<void> | void;
+   onToolCallEnd?: (context: MiddlewareContext, tool: ToolCall, result: unknown) => Promise<void> | void;
+   onToolCallError?: (context: MiddlewareContext, tool: ToolCall, error: Error) => Promise<ToolErrorDirective> | ToolErrorDirective;
+ }
+ ```
+ 
+ ### MiddlewareContext
+ The `context` object is persistent across the lifecycle of a single request and provides deep access to the execution state:
+ 
+ - `requestId`: A unique UUID for tracing the request.
+ - `provider`: The provider name (e.g., "openai", "anthropic").
+ - `model`: The model identifier.
+ - `messages`: The conversation history (mutable in `onRequest`).
+ - `options`: The `ChatOptions` for the request (mutable in `onRequest`).
+ - `state`: A record for sharing data between hooks in the same middleware (e.g., storing a timer).
+ - `metadata`: Custom metadata passed to the request.
+ - **Operation Specifics**: `input` (Embeddings), `imageOptions` (Paint), etc.
 
 ---
 
@@ -113,12 +122,26 @@ const perfMiddleware = {
 
 ## Middleware Execution Order
 
-Middlewares are executed as a stack:
-- **onRequest**: Executed in the order they are defined (first to last).
-- **onResponse**: Executed in the REVERSE order (last to first).
-- **onError**: Executed in the REVERSE order (last to first).
+Middlewares are executed as a **stack** (Onion model). This ensures that outer middlewares (like loggers) can correctly wrap and observe the transformations made by inner middlewares (like security maskers).
 
-This ensures that logging middlewares can wrap security middlewares correctly.
+- **onRequest**: Executed in order (first to last).
+- **onToolCallStart**: Executed in order (first to last).
+- **onToolCallEnd**: Executed in **REVERSE** order (last to first).
+- **onToolCallError**: Executed in **REVERSE** order (last to first).
+- **onResponse**: Executed in **REVERSE** order (last to first).
+- **onError**: Executed in **REVERSE** order (last to first).
+
+### Example Lifecycle
+If you have two middlewares: `[Logger, Security]`, the execution order for a successful tool-calling request is:
+1. `Logger.onRequest`
+2. `Security.onRequest`
+3. `Logger.onToolCallStart`
+4. `Security.onToolCallStart`
+5. ... Tool Execution ...
+6. `Security.onToolCallEnd`
+7. `Logger.onToolCallEnd`
+8. `Security.onResponse`
+9. `Logger.onResponse`
 
 ---
 
