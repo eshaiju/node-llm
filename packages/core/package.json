@@ -11,6 +11,9 @@
     }
   },
   "description": "A provider-agnostic LLM core for Node.js, inspired by ruby-llm.",
+  "publishConfig": {
+    "access": "public"
+  },
   "keywords": [
     "llm",
     "large-language-models",

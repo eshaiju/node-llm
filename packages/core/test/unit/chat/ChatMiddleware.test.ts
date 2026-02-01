@@ -105,7 +105,7 @@ describe("Chat Middleware", () => {
       chat = new Chat(provider, "test-model", { middlewares: [m1, m2] });
       await chat.ask("Hello");
 
-      expect(callOrder).toEqual(["M1:request", "M2:request", "M1:response", "M2:response"]);
+      expect(callOrder).toEqual(["M1:request", "M2:request", "M2:response", "M1:response"]);
     });
 
     it("should allow modifying messages in onRequest", async () => {

@@ -56,7 +56,7 @@ await chat.ask("Hello world");
 
 ---
 
-## The Middleware Interface
+## The Middleware Interface (v1.10.0+)
  
  A middleware consists of a unique name and several optional hooks that cover the entire lifecycle of an LLM request, including tool execution.
  
@@ -120,7 +120,7 @@ const perfMiddleware = {
 
 ---
 
-## Middleware Execution Order
+## Middleware Execution Order (v1.10.0+)
 
 Middlewares are executed as a **stack** (Onion model). This ensures that outer middlewares (like loggers) can correctly wrap and observe the transformations made by inner middlewares (like security maskers).
 
