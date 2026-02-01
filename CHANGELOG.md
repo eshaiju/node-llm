@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.10.0] - 2026-02-01 (@node-llm/core)
+
+### Features
+
+- **Middleware Architecture**: Standardized interception layer for LLM requests and responses.
+- **Global & Local Interceptors**: Support for global middlewares via `createLLM` and local overrides in `chat()`.
+- **Standard Middleware Library**:
+  - `PIIMaskMiddleware`: Automated sensitive data masking.
+  - `CostGuardMiddleware`: Budget enforcement and cost monitoring.
+  - `UsageLoggerMiddleware`: Unified telemetry for token usage.
+- **Architectural Refinement**: Enhanced the `NodeLLM` instance with lazy-initialization and internal immutability for better configuration safety in concurrent environments.
+- **Enhanced Hooks**: New `onError` hook for robust error orchestration across the pipeline.
+
+### Improvements
+
+- **Streaming Stability**: Fixed critical state-sharing bug in multi-turn tool loops during streaming.
+- **Lazy Initialization**: Better support for `dotenv` and other environment loaders in ESM.
+
 ## [0.4.0] - 2026-02-01 (@node-llm/orm)
 
 ### Features
