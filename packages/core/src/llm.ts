@@ -177,8 +177,8 @@ export class NodeLLMCore {
   ): Promise<GeneratedImage> {
     const provider = this.ensureProviderSupport("paint");
 
-    const rawModel = options?.model;
-    const model = resolveModelAlias(rawModel || "", provider.id);
+    const rawModel = options?.model || provider.defaultModel("image");
+    const model = resolveModelAlias(rawModel, provider.id);
 
     const requestId = randomUUID();
     const state: Record<string, unknown> = {};
@@ -241,7 +241,8 @@ export class NodeLLMCore {
   ): Promise<Transcription> {
     const provider = this.ensureProviderSupport("transcribe");
 
-    const rawModel = options?.model || this.defaults.transcription || "";
+    const rawModel =
+      options?.model || this.defaults.transcription || provider.defaultModel("transcription");
     const model = resolveModelAlias(rawModel, provider.id);
 
     const requestId = randomUUID();
@@ -301,7 +302,8 @@ export class NodeLLMCore {
   ): Promise<Moderation> {
     const provider = this.ensureProviderSupport("moderate");
 
-    const rawModel = options?.model || this.defaults.moderation || "";
+    const rawModel =
+      options?.model || this.defaults.moderation || provider.defaultModel("moderation");
     const model = resolveModelAlias(rawModel, provider.id);
 
     const requestId = randomUUID();
@@ -362,7 +364,8 @@ export class NodeLLMCore {
   ): Promise<Embedding> {
     const provider = this.ensureProviderSupport("embed");
 
-    const rawModel = options?.model || this.defaults.embedding || "";
+    const rawModel =
+      options?.model || this.defaults.embedding || provider.defaultModel("embedding");
     const model = resolveModelAlias(rawModel, provider.id);
 
     const requestId = randomUUID();
