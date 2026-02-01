@@ -122,6 +122,68 @@ This ensures that logging middlewares can wrap security middlewares correctly.
 
 ---
 
+## Standard Middleware Library
+
+NodeLLM includes a set of pre-built, production-ready middlewares that you can use out of the box.
+
+### 1. PIIMaskMiddleware
+Automatically redacts sensitive information like emails, phone numbers, and credit cards from user messages before they are sent to the LLM.
+
+```typescript
+import { NodeLLM, PIIMaskMiddleware } from "@node-llm/core";
+
+const chat = NodeLLM.chat("gpt-4o", {
+  middlewares: [new PIIMaskMiddleware({ mask: "[SECRET]" })]
+});
+```
+
+### 2. CostGuardMiddleware
+Monitors accumulated cost during a session (especially useful for multi-turn tool calling loops) and throws an error if a defined budget is exceeded.
+
+```typescript
+import { NodeLLM, CostGuardMiddleware } from "@node-llm/core";
+
+const chat = NodeLLM.chat("gpt-4o", {
+  middlewares: [
+    new CostGuardMiddleware({ 
+      maxCost: 0.05, // $0.05 budget
+      onLimitExceeded: (ctx, cost) => console.log(`Budget blown for ${ctx.requestId}`)
+    })
+  ]
+});
+```
+
+### 3. UsageLoggerMiddleware
+Standardizes telemetry by logging token usage, request IDs, and calculated costs for every successful interaction.
+
+```typescript
+import { NodeLLM, UsageLoggerMiddleware } from "@node-llm/core";
+
+const chat = NodeLLM.chat("gpt-4o", {
+  middlewares: [new UsageLoggerMiddleware({ prefix: "MY-APP" })]
+});
+```
+
+---
+
+## Global Middlewares
+
+You can also register middlewares at the global level when creating the LLM instance. These will be applied to **every** chat, embedding, or image generation call made from that instance.
+
+```typescript
+import { createLLM, UsageLoggerMiddleware } from "@node-llm/core";
+
+const llm = createLLM({
+  provider: "openai",
+  middlewares: [new UsageLoggerMiddleware()]
+});
+
+// This chat will automatically use the global UsageLoggerMiddleware
+const chat = llm.chat("gpt-4o");
+```
+
+---
+
 ## Integration with @node-llm/orm
 
 When using the ORM, you can pass middlewares directly to the `createChat` call. They will be applied to the underlying chat instance but will NOT be persisted to the database.
@@ -131,6 +193,6 @@ import { createChat } from "@node-llm/orm/prisma";
 
 const chat = await createChat(prisma, llm, {
   model: "gpt-4o",
-  middlewares: [auditMiddleware, costMiddleware]
+  middlewares: [new UsageLoggerMiddleware()]
 });
 ```

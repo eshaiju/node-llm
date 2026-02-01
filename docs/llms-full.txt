@@ -34,24 +34,26 @@ NodeLLM is an open-source infrastructure layer for building provider-agnostic, p
 - **Provider Agnostic**: Unified API for 540+ models (OpenAI, Anthropic, Gemini, Bedrock, DeepSeek, Ollama).
 - **Backend-First**: Optimized for long-running processes, CRON jobs, and persistent agents (not just frontend streaming).
 - **Static Model Registry**: Zero-latency, offline access to model metadata (context window, pricing, capabilities).
-- **Agentic Zero Trust**: Built-in PII redaction, guardrails, and audit logging.
+- **Middleware Architecture**: Intercept and modify LLM requests/responses globally or locally (PII masking, cost tracking, telemetry).
 - **ORM Integration**: First-class support for persisting chat history and tools via `@node-llm/orm`.
 - **Deterministic Testing**: Native support for recording/replaying LLM interactions (VCR) and fluent mocking via `@node-llm/testing`.
 
 ## Architecture
 
-1.  **Core**: Light-weight, zero-dependency abstraction layer.
+1.  **Core**: Light-weight, zero-dependency abstraction layer with middleware support.
 2.  **Providers**: Pluggable adapters that normalize inputs/outputs.
 3.  **Registry**: Static JSON database of model capabilities.
-4.  **Middleware**: Concept for attaching Evals, Logging, and Redaction.
+4.  **MiddlewareStack**: Multi-layer orchestration for Evals, Logging, and Redaction.
 
 ## Usage Example
 
 ```ts
 import { NodeLLM } from "@node-llm/core";
 
-// 1. Unified Interface
-const chat = NodeLLM.chat("gpt-4o");
+// 1. Unified Interface with Middleware
+const chat = NodeLLM.chat("gpt-4o", {
+  middlewares: [piiMasker, costLogger]
+});
 
 // 2. Standardized Response
 const response = await chat.ask("Explain infrastructure-as-code");
@@ -91,74 +93,104 @@ permalink: /docs/intro
 
 # Introduction
 
-**A simple way to use Large Language Models in Node.js.**
+[![npm version](https://badge.fury.io/js/@node-llm%2Fcore.svg)](https://www.npmjs.com/package/@node-llm/core)
+[![GitHub Repository](https://img.shields.io/badge/GitHub-node--llm-blue?logo=github)](https://github.com/node-llm/node-llm)
+[![CI](https://github.com/node-llm/node-llm/actions/workflows/cicd.yml/badge.svg)](https://github.com/node-llm/node-llm/actions/workflows/cicd.yml)
+[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-**NodeLLM is an open-source infrastructure layer for building provider-agnostic, production-grade LLM systems in Node.js.**
+**The Provider-Agnostic LLM Runtime for Node.js.**
 
-Integrating multiple LLM providers often means juggling different SDKs, API styles, and update cycles. NodeLLM gives you a single, unified API that stays consistent even when providers change.
+**NodeLLM is a backend orchestration layer designed for building reliable, testable, and provider-agnostic AI systems.**
 
-<p class="fs-3 text-grey-dk-000 mb-3">Unified support for</p>
+It is not a "simple API wrapper" or a "prompt engineering tool." NodeLLM deals with the hard infrastructure problems: normalizing streaming across providers, managing tool execution loops, enforcing timeouts, and enabling first-class testing and telemetry.
+
+<p class="fs-4 text-grey-dk-000 mb-3">Unified support for</p>
 <div class="provider-icons">
   <div class="provider-logo">
-    <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/openai.svg" alt="OpenAI" class="logo-medium">
-    <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/openai-text.svg" alt="OpenAI" class="logo-medium">
+    <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/openai.svg" alt="OpenAI">
+    <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/openai-text.svg" alt="">
   </div>
   <div class="provider-logo">
-    <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/anthropic-text.svg" alt="Anthropic" class="logo-medium">
+    <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/anthropic-text.svg" alt="Anthropic">
   </div>
   <div class="provider-logo">
-    <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/gemini-color.svg" alt="Gemini" class="logo-medium">
-    <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/gemini-text.svg" alt="Gemini" class="logo-small">
+    <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/gemini-color.svg" alt="Gemini">
+    <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/gemini-text.svg" alt="" class="logo-small">
   </div>
   <div class="provider-logo">
-    <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/deepseek-color.svg" alt="DeepSeek" class="logo-medium">
-    <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/deepseek-text.svg" alt="DeepSeek" class="logo-small">
+    <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/deepseek-color.svg" alt="DeepSeek">
+    <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/deepseek-text.svg" alt="" class="logo-small">
   </div>
   <div class="provider-logo">
-    <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/openrouter.svg" alt="OpenRouter" class="logo-medium">
-    <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/openrouter-text.svg" alt="OpenRouter" class="logo-medium">
+    <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/openrouter.svg" alt="OpenRouter">
+    <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/openrouter-text.svg" alt="">
   </div>
   <div class="provider-logo">
-    <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/ollama.svg" alt="Ollama" class="logo-medium">
-    <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/ollama-text.svg" alt="Ollama" class="logo-medium">
+    <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/ollama.svg" alt="Ollama">
+    <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/ollama-text.svg" alt="">
   </div>
   <div class="provider-logo">
-    <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/bedrock-color.svg" alt="Bedrock" class="logo-medium">
-    <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/bedrock-text.svg" alt="Bedrock" class="logo-small">
+    <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/bedrock-color.svg" alt="Bedrock">
+    <img src="https://registry.npmmirror.com/@lobehub/icons-static-svg/latest/files/icons/bedrock-text.svg" alt="" class="logo-small">
   </div>
 </div>
 
-```
-Your App
-   ↓
+```text
+                Your App
+                   ↓
 NodeLLM (Unified API + State + Security)
-   ↓
-OpenAI | Anthropic | Bedrock | Ollama
+                   ↓
+ OpenAI | Anthropic | Bedrock | Ollama
 ```
 
 ---
 
-## 🏗️ The "Backend-First" AI SDK
+## 🛑 What NodeLLM is NOT
 
-While most AI SDKs (like Vercel AI SDK) are heavily optimized for **Frontend Streaming** (Next.js, React Server Components), NodeLLM is built for the **Backend**.
+To understand NodeLLM, you must understand what it is **NOT**.
 
-It is the "AI SDK for the rest of us"—backend engineers building workers, cron jobs, CLI tools, Slack bots, and REST/GraphQL APIs that *aren't* Next.js.
+NodeLLM is **NOT**:
 
-### Strategic Principles
+- ❌ **A thin wrapper** around vendor SDKs (like `openai` or `@anthropic-ai/sdk`)
+- ❌ **A UI streaming library** (like Vercel AI SDK)
+- ❌ **A prompt-only framework**
 
-- **Provider Isolation**: Decouple your services from vendor SDKs.
-- **Production-Ready**: Native support for streaming, retries, and unified error handling.
-- **Predictable API**: Consistent behavior for Tools, Vision, and Structured Outputs across all models.
+NodeLLM **IS**:
+
+- ✅ **A Backend Runtime**: Designed for workers, cron jobs, agents, and API servers.
+- ✅ **Provider Agnostic**: Switches providers via config, not code rewrites.
+- ✅ **Contract Driven**: Guarantees identical behavior for Tools and Streaming across all models.
+- ✅ **Infrastructure First**: Built for evals, telemetry, retries, and circuit breaking.
+
+---
+
+## 🏗️ The "Infrastructure-First" Approach
+
+Most AI SDKs optimize for "getting a response to the user fast" (Frontend/Edge). NodeLLM optimizes for **system reliability** (Backend).
+
+It is designed for architects and platform engineers who need:
+
+- **Strict Process Protection**: Preventing hung requests from stalling event loops.
+- **Normalized Persistence**: Treating chat interactions as database records via `@node-llm/orm`.
+- **Determinism**: Testing your AI logic with VCR recordings and time-travel debugging.
+
+### Strategic Goals
+
+- **Decoupling**: Isolate your business logic from the rapid churn of AI model versions.
+- **Production Safety**: Native support for circuit breaking, redaction, and audit logging.
+- **Predictability**: A unified Mental Model for streaming, structured outputs, and vision.
 
 ---
 
 ## ⚡ The 5-Minute Path
 
 ```ts
-import { NodeLLM } from "@node-llm/core";
+import { createLLM } from "@node-llm/core";
 
-// 1. Install & Configure (Uses env vars)
-const chat = NodeLLM.chat("gpt-4o");
+// 1. Explicit Initialization (Preferred)
+const llm = createLLM({ provider: "openai" });
+const chat = llm.chat("gpt-4o");
 
 // 2. Chat (High-level request/response)
 const response = await chat.ask("Explain event-driven architecture");
@@ -169,18 +201,6 @@ for await (const chunk of chat.stream("Explain event-driven architecture")) {
   process.stdout.write(chunk.content);
 }
 ```
-
----
-
-## 🛑 What NodeLLM is NOT
-
-NodeLLM represents a clear architectural boundary between your system and LLM vendors.
-
-NodeLLM is **NOT**:
-
-- A wrapper around a single provider SDK (like `openai` or `@google/generative-ai`)
-- A prompt-engineering framework
-- An agent playground or experimental toy
 
 ---
 
@@ -203,10 +223,10 @@ NodeLLM is **NOT**:
 Stop rewriting code for every provider. `NodeLLM` normalizes inputs and outputs into a single, predictable mental model.
 
 ```ts
-import { NodeLLM } from "@node-llm/core";
+import { createLLM } from "@node-llm/core";
 
-// Uses NODELLM_PROVIDER from environment (defaults to GPT-4o)
-const chat = NodeLLM.chat();
+const llm = createLLM({ provider: "openai" });
+const chat = llm.chat("gpt-4o");
 await chat.ask("Hello world");
 ```
 
@@ -232,7 +252,7 @@ await chat.withTool(WeatherTool).ask("Weather in Tokyo?");
 
 ### 💾 [Persistence Layer](/orm/prisma)
 
-Automatically track chat history, tool executions, and API metrics with **@node-llm/orm**. Now with full support for **Extended Thinking** persistence.
+Automatically track chat history, tool executions, and API metrics with [**@node-llm/orm**](https://www.npmjs.com/package/@node-llm/orm). Now with full support for **Extended Thinking** persistence.
 
 ```ts
 import { createChat } from "@node-llm/orm/prisma";
@@ -245,7 +265,7 @@ await chat.withThinking({ budget: 16000 }).ask("Develop a strategy");
 
 ### 🧪 [Deterministic Testing](/core-features/testing)
 
-Validate your AI agents with **VCR cassettes** (record/replay) and a **Fluent Mocker** for unit tests. No more flaky or expensive test runs.
+Validate your AI agents with **VCR cassettes** (record/replay) and a **Fluent Mocker** for unit tests. No more flaky or expensive test runs. Powered by [**@node-llm/testing**](https://www.npmjs.com/package/@node-llm/testing).
 
 ```ts
 import { vcr, Mocker } from "@node-llm/testing";
@@ -626,21 +646,17 @@ The fastest way to start is using **Zero-Config**. NodeLLM automatically reads y
 
 ```ts
 import "dotenv/config";
-import { NodeLLM } from "@node-llm/core";
-
-// 1. Ensure NODELLM_PROVIDER=openai and OPENAI_API_KEY=... are in .env
-const llm = NodeLLM; // Exported singleton, ready to go!
-```
-
-Alternatively, use **Explicit Configuration** for multi-tenant or multi-provider apps:
-
-```ts
 import { createLLM } from "@node-llm/core";
 
-const llm = createLLM({
-  provider: "openai",
-  openaiApiKey: process.env.OPENAI_API_KEY
-});
+// Explicit initialization is recommended for production apps
+const llm = createLLM({ provider: "openai" });
+```
+
+Alternatively, use the **Zero-Config** singleton for rapid prototyping. NodeLLM automatically reads your API keys and the active provider from environment variables:
+
+```ts
+import { NodeLLM } from "@node-llm/core";
+const llm = NodeLLM; // Exported singleton
 ```
 
 ---
@@ -1653,6 +1669,213 @@ back_to_top: false
 
 
 <!-- END FILE: core-features/index.md -->
+----------------------------------------
+
+<!-- FILE: core-features/middlewares.md -->
+
+# 📄 core-features/middlewares.md
+
+---
+layout: default
+title: Middlewares
+parent: Core Features
+nav_order: 13
+permalink: /core-features/middlewares
+description: Intercept and modify LLM requests and responses with production-grade middlewares.
+---
+
+# Middlewares
+{: .no_toc }
+
+NodeLLM's middleware system allows you to intercept, monitor, and modify LLM interactions at the infrastructure level. This is essential for building production-grade systems that require observability, auditing, cost tracking, and safety.
+
+1. TOC
+{:toc}
+
+---
+
+## Why Middlewares?
+
+In a production environment, you rarely want to call an LLM directly without additional logic. Middlewares allow you to separate these cross-cutting concerns from your business logic:
+
+- **Observability**: Log requests, responses, and errors to external systems.
+- **Cost Tracking**: Calculate and record the token usage and cost of every request.
+- **Security & Compliance**: Redact PII (Personally Identifiable Information) before it segments to the LLM.
+- **Auditing**: Maintain a permanent audit trail of all AI interactions.
+- **Performance**: Track latency and success rates across different models.
+- **Quality**: Automatically verify the integrity of the response.
+
+---
+
+## Basic Usage
+
+Middlewares are passed when creating a chat instance. You can pass a single middleware or an array of middlewares.
+
+```typescript
+import { NodeLLM, Middleware } from "@node-llm/core";
+
+const myMiddleware: Middleware = {
+  name: "MyMiddleware",
+  onRequest: async (context) => {
+    console.log(`[Request] Sending to ${context.model}`);
+  },
+  onResponse: async (context, result) => {
+    console.log(`[Response] Received ${result.usage.total_tokens} tokens`);
+  }
+};
+
+const chat = NodeLLM.chat("gpt-4o", {
+  middlewares: [myMiddleware]
+});
+
+await chat.ask("Hello world");
+```
+
+---
+
+## The Middleware Interface
+
+A middleware consists of a unique name and three optional hooks:
+
+```typescript
+interface Middleware {
+  name: string;
+  onRequest?: (context: MiddlewareContext) => Promise<void> | void;
+  onResponse?: (context: MiddlewareContext, result: MiddlewareResult) => Promise<void> | void;
+  onError?: (context: MiddlewareContext, error: Error) => Promise<void> | void;
+}
+```
+
+### MiddlewareContext
+The `context` object provides details about the request:
+- `model`: The model being used.
+- `provider`: The provider name (e.g., "openai", "anthropic").
+- `requestId`: A unique ID for the request.
+- `messages`: The conversation history (for chat operations).
+- `metadata`: Any custom metadata passed to the request.
+
+---
+
+## Common Use Cases
+
+### 1. PII Redaction (Security)
+Redact sensitive information before it reaches the provider.
+
+```typescript
+const piiMiddleware = {
+  name: "PIIRedactor",
+  onRequest: async (context) => {
+    context.messages.forEach(msg => {
+      msg.content = msg.content.replace(/\b\d{4}-\d{4}-\d{4}-\d{4}\b/g, "[REDACTED_CC]");
+    });
+  }
+}
+```
+
+### 2. Cost & Performance Tracking
+Use standard telemetry patterns to track your infrastructure.
+
+```typescript
+const perfMiddleware = {
+  name: "PerformanceTracker",
+  onResponse: async (context, result) => {
+    const latency = result.meta.latency;
+    const cost = calculateCost(context.model, result.usage);
+    await db.metrics.create({ model: context.model, latency, cost });
+  }
+}
+```
+
+---
+
+## Middleware Execution Order
+
+Middlewares are executed as a stack:
+- **onRequest**: Executed in the order they are defined (first to last).
+- **onResponse**: Executed in the REVERSE order (last to first).
+- **onError**: Executed in the REVERSE order (last to first).
+
+This ensures that logging middlewares can wrap security middlewares correctly.
+
+---
+
+## Standard Middleware Library
+
+NodeLLM includes a set of pre-built, production-ready middlewares that you can use out of the box.
+
+### 1. PIIMaskMiddleware
+Automatically redacts sensitive information like emails, phone numbers, and credit cards from user messages before they are sent to the LLM.
+
+```typescript
+import { NodeLLM, PIIMaskMiddleware } from "@node-llm/core";
+
+const chat = NodeLLM.chat("gpt-4o", {
+  middlewares: [new PIIMaskMiddleware({ mask: "[SECRET]" })]
+});
+```
+
+### 2. CostGuardMiddleware
+Monitors accumulated cost during a session (especially useful for multi-turn tool calling loops) and throws an error if a defined budget is exceeded.
+
+```typescript
+import { NodeLLM, CostGuardMiddleware } from "@node-llm/core";
+
+const chat = NodeLLM.chat("gpt-4o", {
+  middlewares: [
+    new CostGuardMiddleware({ 
+      maxCost: 0.05, // $0.05 budget
+      onLimitExceeded: (ctx, cost) => console.log(`Budget blown for ${ctx.requestId}`)
+    })
+  ]
+});
+```
+
+### 3. UsageLoggerMiddleware
+Standardizes telemetry by logging token usage, request IDs, and calculated costs for every successful interaction.
+
+```typescript
+import { NodeLLM, UsageLoggerMiddleware } from "@node-llm/core";
+
+const chat = NodeLLM.chat("gpt-4o", {
+  middlewares: [new UsageLoggerMiddleware({ prefix: "MY-APP" })]
+});
+```
+
+---
+
+## Global Middlewares
+
+You can also register middlewares at the global level when creating the LLM instance. These will be applied to **every** chat, embedding, or image generation call made from that instance.
+
+```typescript
+import { createLLM, UsageLoggerMiddleware } from "@node-llm/core";
+
+const llm = createLLM({
+  provider: "openai",
+  middlewares: [new UsageLoggerMiddleware()]
+});
+
+// This chat will automatically use the global UsageLoggerMiddleware
+const chat = llm.chat("gpt-4o");
+```
+
+---
+
+## Integration with @node-llm/orm
+
+When using the ORM, you can pass middlewares directly to the `createChat` call. They will be applied to the underlying chat instance but will NOT be persisted to the database.
+
+```typescript
+import { createChat } from "@node-llm/orm/prisma";
+
+const chat = await createChat(prisma, llm, {
+  model: "gpt-4o",
+  middlewares: [new UsageLoggerMiddleware()]
+});
+```
+
+
+<!-- END FILE: core-features/middlewares.md -->
 ----------------------------------------
 
 <!-- FILE: core-features/models.md -->
@@ -4514,13 +4737,34 @@ console.log(messageRecord.inputTokens); // 12
 For real-time user experiences, use `askStream()`. The assistant message record is "finalized" once the stream completes.
 
 ```typescript
-for await (const token of chat.askStream("Tell me a long story")) {
-  process.stdout.write(token);
+for await (const chunk of chat.askStream("Tell me a long story")) {
+  if (chunk.content) {
+    process.stdout.write(chunk.content);
+  }
 }
 
 // History is now updated in the DB
 const history = await chat.messages();
 ```
+
+---
+
+## Analytical Views (Insights)
+
+The ORM is great at storing data, but querying it for usage insights (e.g., "How many tokens did this user spend?") can be complex. NodeLLM provides a built-in `stats()` method that aggregates conversation-level metrics efficiently using Prisma's `aggregate` features.
+
+### Conversation Summary
+
+```typescript
+const chat = await loadChat(prisma, llm, "chat-uuid-123");
+const stats = await chat.stats();
+
+console.log(`Input Tokens: ${stats.input_tokens}`);
+console.log(`Output Tokens: ${stats.output_tokens}`);
+console.log(`Total Cost: $${stats.cost}`);
+```
+
+This method is significantly more efficient than fetching and summing all message records manually, as it performs the calculation directly inside the database.
 
 ---
 
@@ -4563,7 +4807,7 @@ await chat.withTool(WeatherTool).ask("How is the weather in London?");
 
 If an API call fails, NodeLLM follows a "clean rollback" strategy:
 1. The pending Assistant message is **deleted**.
-2. The initial User message is **deleted** (to prevent orphaned conversation turns).
+2. The initial User message is **preserved** so you have a record of the request for debugging.
 3. The error is thrown for your application to handle.
 
 This ensures your database doesn't fill up with "broken" chat turns.
@@ -5026,7 +5270,7 @@ NodeLLM passes `requestTimeout` (in milliseconds) through all request interfaces
 Use the built-in `fetchWithTimeout` utility:
 
 ```ts
-import { fetchWithTimeout } from "@node-llm/core/utils/fetch";
+import { fetchWithTimeout } from "@node-llm/core";
 
 async chat(request: ChatRequest): Promise<ChatResponse> {
   const response = await fetchWithTimeout(
@@ -5053,6 +5297,70 @@ async chat(request: ChatRequest): Promise<ChatResponse> {
 **Note**: The `requestTimeout` parameter is available in all provider methods:
 
 - `chat(request)`, `stream(request)`, `paint(request)`, `transcribe(request)`, `moderate(request)`, `embed(request)`
+
+## High-Fidelity Error Handling
+
+To make your custom provider feel like a "first-class citizen," you should map your API errors to NodeLLM's specialized error classes. This ensures that features like **automatic retries** and **smart recovery** work as expected.
+
+### Recommended Error Mapping
+
+| Status | Standard Class | Specialized Class (Preferred) | Behavior |
+| :--- | :--- | :--- | :--- |
+| **400** | `BadRequestError` | `ContextWindowExceededError` | Fatal (No Retry) |
+| **401** | `UnauthorizedError` | - | Fatal (No Retry) |
+| **404** | `NotFoundError` | `InvalidModelError` | Fatal (No Retry) |
+| **429** | `RateLimitError` | `InsufficientQuotaError` | **Retryable** (except Quota) |
+| **5xx** | `ServerError` | `ServiceUnavailableError` | **Retryable** |
+
+### Implementation Pattern
+
+The most robust way to handle errors is to create a dedicated error handler function:
+
+```ts
+import { 
+  BadRequestError, 
+  ContextWindowExceededError, 
+  RateLimitError, 
+  ServerError 
+} from "@node-llm/core";
+
+async function myErrorHandler(response: Response, modelId: string): Promise<never> {
+  const status = response.status;
+  const body = await response.json().catch(() => ({}));
+  const message = body.error?.message || "Unknown error";
+
+  if (status === 400) {
+    if (message.includes("tokens") || message.includes("context")) {
+      throw new ContextWindowExceededError(message, body, "my-service", modelId);
+    }
+    throw new BadRequestError(message, body, "my-service", modelId);
+  }
+
+  if (status === 429) {
+    throw new RateLimitError(message, body, "my-service", modelId);
+  }
+
+  if (status >= 500) {
+    throw new ServerError(message, status, body, "my-service", modelId);
+  }
+
+  throw new Error(`Technical failure (${status}): ${message}`);
+}
+```
+
+Then use it in your `chat` or `stream` methods:
+
+```ts
+async chat(request: ChatRequest) {
+  const response = await fetch(...);
+  
+  if (!response.ok) {
+    await myErrorHandler(response, request.model);
+  }
+  
+  return await response.json();
+}
+```
 
 ## Custom Pricing
 
@@ -5350,15 +5658,18 @@ All errors raised by NodeLLM inherit from `LLMError`. Specific errors map to HTT
 LLMError                        # Base error class
 ├── APIError                    # Base for all provider API issues
 │   ├── BadRequestError         # 400: Invalid request parameters
+│   │   └── ContextWindowExceededError # 400: Prompt/output exceeds token limits
 │   ├── UnauthorizedError       # 401: Invalid or missing API key
 │   ├── PaymentRequiredError    # 402: Billing issues
 │   ├── ForbiddenError          # 403: Permission denied
 │   ├── RateLimitError          # 429: Rate limit exceeded
+│   │   └── InsufficientQuotaError     # 429: Out of credits or monthly quota
 │   ├── ServerError             # 500+: Provider server error
 │   │   └── ServiceUnavailableError  # 502/503/529: Overloaded
 │   └── AuthenticationError     # 401/403 (deprecated, use specific classes)
 ├── ConfigurationError          # Missing API key or invalid config
 ├── NotFoundError               # Model or provider not found
+│   └── InvalidModelError       # 404: Requested model ID is unknown
 ├── CapabilityError             # Model doesn't support feature (e.g. vision)
 ├── ToolError                   # Tool execution failed (has `fatal` property)
 ├── ProviderNotConfiguredError  # No provider set
@@ -5515,8 +5826,11 @@ See [Tool Error Handling](../core-features/tools.html#error-handling--flow-contr
 
 NodeLLM automatically retries transient errors:
 
-- **Retried**: RateLimitError (429), ServerError (500+), ServiceUnavailableError
-- **Not retried**: BadRequestError (400), UnauthorizedError (401), ForbiddenError (403)
+- **Retried**: `RateLimitError` (429), `ServerError` (500+), `ServiceUnavailableError`
+- **Not retried**: `BadRequestError` (400), `UnauthorizedError` (401), `ForbiddenError` (403), `ContextWindowExceededError`, `InsufficientQuotaError`
+
+> **Why not retry on Context Window Overflows?**
+> A `ContextWindowExceededError` (400) is considered a client-side logic error. Retrying with the same payload would consistently fail. By identifying this specific error, developers can implement smarter recovery logic, such as trimming chat history or summarizing previous turns before retrying manually.
 
 Configure retry behavior:
 
@@ -6311,7 +6625,7 @@ _Model information enriched by [models.dev](https://models.dev)._
 ## Last Updated
 {: .d-inline-block }
 
-2026-01-24
+2026-01-27
 {: .label .label-green }
 
 ---
@@ -6628,7 +6942,7 @@ _Model information enriched by [models.dev](https://models.dev)._
 | `deepseek-chat` | 128k | 8.192k | In: $0.28, Out: $0.42, Cache: $0.03 |
 | `deepseek-reasoner` | 128k | 128k | In: $0.28, Out: $0.42, Cache: $0.03 |
 
-### OpenRouter (140)
+### OpenRouter (141)
 
 | Model | Context | Max Output | Pricing (per 1M tokens) |
 | :--- | ---: | ---: | :--- |
@@ -6672,6 +6986,7 @@ _Model information enriched by [models.dev](https://models.dev)._
 | `moonshotai/kimi-k2-0905` | 262.144k | 16.384k | In: $0.60, Out: $2.50 |
 | `moonshotai/kimi-k2-0905:exacto` | 262.144k | 16.384k | In: $0.60, Out: $2.50 |
 | `moonshotai/kimi-k2-thinking` | 262.144k | 262.144k | In: $0.60, Out: $2.50, Cache: $0.15 |
+| `moonshotai/kimi-k2.5` | 262.144k | 262.144k | In: $0.60, Out: $3.00, Cache: $0.10 |
 | `qwen/qwen3-235b-a22b-07-25` | 262.144k | 131.072k | In: $0.15, Out: $0.85 |
 | `qwen/qwen3-235b-a22b-07-25:free` | 262.144k | 131.072k | - |
 | `qwen/qwen3-235b-a22b-thinking-2507` | 262.144k | 81.92k | In: $0.08, Out: $0.31 |
@@ -6849,7 +7164,7 @@ _Model information enriched by [models.dev](https://models.dev)._
 
 ## Models by Capability
 
-### Function Calling (386)
+### Function Calling (387)
 
 | Model | Provider | Context | Pricing |
 | :--- | :--- | ---: | :--- |
@@ -6874,7 +7189,7 @@ _Model information enriched by [models.dev](https://models.dev)._
 | `anthropic.claude-opus-4-20250514-v1:0` | bedrock | 200k | In: $15.00, Out: $75.00, Cache: $1.50 |
 | `anthropic.claude-opus-4-5-20251101-v1:0` | bedrock | 200k | In: $5.00, Out: $25.00, Cache: $0.50 |
 
-### Vision (180)
+### Vision (181)
 
 | Model | Provider | Context | Pricing |
 | :--- | :--- | ---: | :--- |
@@ -6899,7 +7214,7 @@ _Model information enriched by [models.dev](https://models.dev)._
 | `anthropic/claude-3.7-sonnet` | openrouter | 200k | In: $15.00, Out: $75.00, Cache: $1.50 |
 | `anthropic/claude-haiku-4.5` | openrouter | 200k | In: $1.00, Out: $5.00, Cache: $0.10 |
 
-### Reasoning (180)
+### Reasoning (181)
 
 | Model | Provider | Context | Pricing |
 | :--- | :--- | ---: | :--- |
@@ -6924,7 +7239,7 @@ _Model information enriched by [models.dev](https://models.dev)._
 | `claude-haiku-4-5-20251001` | anthropic | 200k | In: $1.00, Out: $5.00, Cache: $0.10 |
 | `claude-opus-4-0` | anthropic | 200k | In: $15.00, Out: $75.00, Cache: $1.50 |
 
-### Streaming (389)
+### Streaming (390)
 
 | Model | Provider | Context | Pricing |
 | :--- | :--- | ---: | :--- |
@@ -6949,7 +7264,7 @@ _Model information enriched by [models.dev](https://models.dev)._
 | `anthropic.claude-opus-4-1-20250805-v1:0` | bedrock | 200k | In: $15.00, Out: $75.00, Cache: $1.50 |
 | `anthropic.claude-opus-4-20250514-v1:0` | bedrock | 200k | In: $15.00, Out: $75.00, Cache: $1.50 |
 
-### Structured Output (380)
+### Structured Output (381)
 
 | Model | Provider | Context | Pricing |
 | :--- | :--- | ---: | :--- |
@@ -6978,7 +7293,7 @@ _Model information enriched by [models.dev](https://models.dev)._
 
 ## Models by Modality
 
-### Vision Models (287)
+### Vision Models (288)
 
 Models that can process images:
 
@@ -7162,7 +7477,7 @@ This is useful for:
 
 ---
 
-**Auto-generated by `npm run sync-models`** • Last updated: 2026-01-24
+**Auto-generated by `npm run sync-models`** • Last updated: 2026-01-27
 
 
 <!-- END FILE: models/available_models.md -->
