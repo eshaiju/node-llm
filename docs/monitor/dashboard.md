@@ -15,6 +15,8 @@ description: Built-in web dashboard for visualizing LLM usage, costs, and perfor
 
 ![Dashboard Metrics View](/assets/images/monitor/dashboard-metrics.png)
 
+![Token Analytics](/assets/images/monitor/dashboard-tokens.png)
+
 ## Table of contents
 {: .no_toc .text-delta }
 

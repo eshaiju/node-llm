@@ -15,6 +15,8 @@ description: Production observability for NodeLLM. Track costs, latency, token u
 
 ![NodeLLM Monitor Dashboard](/assets/images/monitor/dashboard-metrics.png)
 
+![Token Analytics](/assets/images/monitor/dashboard-tokens.png)
+
 ---
 
 ## Quick Setup
