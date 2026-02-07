@@ -46,12 +46,13 @@
 
 // Chat API
 export { Chat, createChat, loadChat } from "./Chat.js";
-export type { ChatRecord, MessageRecord, ChatOptions, TableNames } from "./Chat.js";
+export type { ChatRecord, MessageRecord, ChatOptions } from "./Chat.js";
 
 // AgentSession API
 export { AgentSession, createAgentSession, loadAgentSession } from "./AgentSession.js";
 export type {
   AgentSessionRecord,
   CreateAgentSessionOptions,
-  LoadAgentSessionOptions
+  LoadAgentSessionOptions,
+  TableNames // Export from AgentSession which includes agentSession key
 } from "./AgentSession.js";
