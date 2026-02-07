@@ -3,7 +3,7 @@ import { Chat, AskOptions } from "../chat/Chat.js";
 import { ChatOptions } from "../chat/ChatOptions.js";
 import { ChatResponseString } from "../chat/ChatResponse.js";
 import { ToolResolvable } from "../chat/Tool.js";
-import { ThinkingConfig } from "../providers/Provider.js";
+import { ThinkingConfig, ThinkingResult } from "../providers/Provider.js";
 import { Schema } from "../schema/Schema.js";
 import { NodeLLM, NodeLLMCore } from "../llm.js";
 
@@ -90,6 +90,91 @@ export abstract class Agent<S extends Record<string, unknown> = Record<string, u
   static maxToolCalls?: number;
   static assumeModelExists?: boolean;
 
+  /**
+   * Hook called when the agent starts a new session (ask/stream).
+   * @param context - Initial context including messages/options
+   */
+  static onStart(context: { messages: unknown[] }): void | Promise<void> {
+    // Override in subclass
+  }
+
+  /**
+   * Hook called when the agent generates a reasoning trace (thinking).
+   * @param thinking - The content of the thinking trace
+   * @param result - The full response object containing the thinking
+   */
+  static onThinking(thinking: ThinkingResult, result: ChatResponseString): void | Promise<void> {
+    // Override in subclass
+  }
+
+  /**
+   * Hook called when a tool execution starts.
+   * @param toolCall - The tool call object (id, function name, arguments)
+   */
+  static onToolStart(toolCall: unknown): void | Promise<void> {
+    // Override in subclass
+  }
+
+  /**
+   * Hook called when a tool execution ends.
+   * @param toolCall - The tool call object
+   * @param result - The result of the tool execution
+   */
+  static onToolEnd(toolCall: unknown, result: unknown): void | Promise<void> {
+    // Override in subclass
+  }
+
+  /**
+   * Hook called when a tool execution encounters an error.
+   * @param toolCall - The tool call object
+   * @param error - The error that occurred
+   */
+  static onToolError(toolCall: unknown, error: Error): void | Promise<void> {
+    // Override in subclass
+  }
+
+  /**
+   * Hook called when the agent completes a response turn.
+   * @param result - The final response object
+   */
+  static onComplete(result: ChatResponseString): void | Promise<void> {
+    // Override in subclass
+  }
+
+  // --- Static Execution API ---
+
+  /**
+   * Run the agent immediately with a prompt.
+   * Creates a new instance of the agent, runs the prompt, and disposes it.
+   *
+   * @example
+   * ```typescript
+   * const result = await TravelAgent.ask("Find flights to Paris");
+   * ```
+   */
+  static async ask(message: string, options?: AskOptions): Promise<ChatResponseString> {
+    const Ctor = this as unknown as new (overrides?: Partial<AgentConfig & ChatOptions>) => Agent;
+    const agent = new Ctor({});
+    return agent.ask(message, options);
+  }
+
+  /**
+   * Stream the agent response immediately.
+   * Creates a new instance of the agent and streams the response.
+   *
+   * @example
+   * ```typescript
+   * for await (const chunk of TravelAgent.stream("Write a poem")) {
+   *   process.stdout.write(chunk.content);
+   * }
+   * ```
+   */
+  static stream(message: string, options?: AskOptions) {
+    const Ctor = this as unknown as new (overrides?: Partial<AgentConfig & ChatOptions>) => Agent;
+    const agent = new Ctor({});
+    return agent.stream(message, options);
+  }
+
   /** The underlying Chat instance */
   protected readonly chat: Chat<S>;
 
@@ -141,6 +226,46 @@ export abstract class Agent<S extends Record<string, unknown> = Record<string, u
     const schema = overrides.schema ?? ctor.schema;
     if (schema) {
       this.chat.withSchema(schema as z.ZodType<S>);
+    }
+
+    // Wire up global/static telemetry hooks
+
+    // Trigger onStart immediately
+    if (ctor.onStart) {
+      this.chat.beforeRequest(async (messages) => {
+        if (ctor.onStart) {
+          await ctor.onStart({ messages });
+        }
+      });
+    }
+
+    if (ctor.onToolStart) {
+      this.chat.onToolCallStart(async (toolCall) => {
+        await ctor.onToolStart(toolCall);
+      });
+    }
+
+    if (ctor.onToolEnd) {
+      this.chat.onToolCallEnd(async (toolCall, result) => {
+        await ctor.onToolEnd(toolCall, result);
+      });
+    }
+
+    if (ctor.onToolError) {
+      this.chat.onToolCallError(async (toolCall, error) => {
+        await ctor.onToolError(toolCall, error);
+      });
+    }
+
+    if (ctor.onComplete || ctor.onThinking) {
+      this.chat.onEndMessage(async (msg) => {
+        if (msg.thinking && ctor.onThinking) {
+          await ctor.onThinking(msg.thinking, msg);
+        }
+        if (ctor.onComplete) {
+          await ctor.onComplete(msg);
+        }
+      });
     }
   }
 

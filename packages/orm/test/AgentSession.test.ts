@@ -23,11 +23,11 @@ const mockPrisma = {
 };
 
 // Mock LLM
-const mockLlm = {
-  chat: vi.fn().mockReturnValue({
-    withInstructions: vi.fn(),
-    withTools: vi.fn(),
-    withSchema: vi.fn(),
+const createMockChat = () => {
+  const mockChat = {
+    withInstructions: vi.fn().mockReturnThis(),
+    withTools: vi.fn().mockReturnThis(),
+    withSchema: vi.fn().mockReturnThis(),
     ask: vi.fn().mockResolvedValue({
       content: "Response",
       meta: {},
@@ -36,8 +36,19 @@ const mockLlm = {
     stream: vi.fn(),
     history: [],
     totalUsage: { input_tokens: 0, output_tokens: 0 },
-    modelId: "mock-model"
-  })
+    modelId: "mock-model",
+    // Hook methods required by Agent constructor
+    beforeRequest: vi.fn().mockReturnThis(),
+    onToolCallStart: vi.fn().mockReturnThis(),
+    onToolCallEnd: vi.fn().mockReturnThis(),
+    onToolCallError: vi.fn().mockReturnThis(),
+    onEndMessage: vi.fn().mockReturnThis()
+  };
+  return mockChat;
+};
+
+const mockLlm = {
+  chat: vi.fn().mockImplementation(() => createMockChat())
 } as unknown as typeof NodeLLM;
 
 // --- Test Classes ---

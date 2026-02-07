@@ -273,7 +273,11 @@ For stateful agents that need to persist across requests (e.g., support tickets,
 
 ### The "Code Wins" Principle
 
-AgentSession follows a hybrid sovereignty model:
+**The Problem with Traditional Systems:**  
+In traditional AI applications, if you want to resume a conversation, you have to load the implementation details (model, instructions, tools) from the database. If you updated your prompt in the code, the stale database version continues to be used instead of your improved version.
+
+**NodeLLM's Solution:**  
+AgentSession follows a hybrid sovereignty model where **code always wins** for configuration, but **database always wins** for history:
 
 | Aspect | Source | Why |
 |:-------|:-------|:----|

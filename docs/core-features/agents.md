@@ -49,13 +49,32 @@ const agent = new AssistantAgent({ llm });
 const response = await agent.ask("What is the capital of France?");
 ```
 
+
 ### Agent Methods
+
+**Instance Methods:**
 
 | Method | Description |
 |:-------|:------------|
 | `ask(prompt)` | Send a message and get a response |
 | `say(prompt)` | Alias for `ask()` |
 | `stream(prompt)` | Stream the response |
+
+**Static Methods** <span style="background-color: #0d9488; color: white; padding: 1px 6px; border-radius: 3px; font-size: 0.65em; font-weight: 600; vertical-align: middle;">v1.11.0+</span>
+
+| Method | Description |
+|:-------|:------------|
+| `Agent.ask(prompt)` | One-liner execution (creates instance automatically) |
+| `Agent.stream(prompt)` | One-liner streaming |
+
+```typescript
+// Static API (one-liner)
+const result = await AssistantAgent.ask("What is TypeScript?");
+
+// Instance API (traditional)
+const agent = new AssistantAgent({ llm });
+const result = await agent.ask("What is TypeScript?");
+```
 
 ### Available Static Properties
 
@@ -182,52 +201,45 @@ See the [HR Chatbot Example](https://github.com/node-llm/node-llm/tree/main/exam
 
 ## Multi-Agent Collaboration
 
-The "research then write" pattern with specialized agents:
+Compose specialized agents for complex workflows:
 
 ```typescript
-import { Agent, Tool, z, createLLM } from "@node-llm/core";
+import { Agent, createLLM } from "@node-llm/core";
 
 class ResearchAgent extends Agent {
   static model = "gemini-2.0-flash";
-  static instructions = "List 5 key facts about the topic.";
+  static instructions = "List 5 key facts about the topic. Be concise.";
 }
 
 class WriterAgent extends Agent {
   static model = "claude-sonnet-4-20250514";
-  static instructions = "Write a concise article from these notes.";
+  static instructions = "Write a compelling article from the provided research notes.";
 }
 
-class ResearcherTool extends Tool {
-  name = "research";
-  description = "Gathers facts about a topic";
-  schema = z.object({ topic: z.string() });
-
-  async execute({ topic }) {
-    const researcher = new ResearchAgent({ llm: createLLM({ provider: "gemini" }) });
-    return await researcher.ask(topic);
-  }
+// Orchestrator: directly coordinates sub-agents
+async function researchAndWrite(topic: string) {
+  // Step 1: Research
+  const researcher = new ResearchAgent({ 
+    llm: createLLM({ provider: "gemini" }) 
+  });
+  const facts = await researcher.ask(`Research: ${topic}`);
+  
+  // Step 2: Write
+  const writer = new WriterAgent({ 
+    llm: createLLM({ provider: "anthropic" }) 
+  });
+  const article = await writer.ask(`Write an article from these facts:\n\n${facts}`);
+  
+  return article;
 }
 
-class WriterTool extends Tool {
-  name = "write";
-  description = "Writes content from research notes";
-  schema = z.object({ notes: z.string() });
+// Usage
+const result = await researchAndWrite("TypeScript 5.4 features");
+console.log(result);
+```
 
-  async execute({ notes }) {
-    const writer = new WriterAgent({ llm: createLLM({ provider: "anthropic" }) });
-    return await writer.ask(notes);
-  }
-}
+**Why not wrap in tools?** Direct orchestration is clearer when you control the workflow. Use tools only when the LLM needs to decide *when* to call sub-agents dynamically.
 
-class CoordinatorAgent extends Agent {
-  static model = "gpt-4o";
-  static instructions = "First research the topic, then write an article.";
-  static tools = [ResearcherTool, WriterTool];
-}
-
-const llm = createLLM({ provider: "openai" });
-const coordinator = new CoordinatorAgent({ llm });
-await coordinator.ask("Write about TypeScript 5.4 features");
 ```
 
 ---
@@ -310,6 +322,122 @@ const agent = new AssistantAgent({
   temperature: 0.9,    // Override static temperature
   maxTokens: 500       // Add runtime options
 });
+```
+
+---
+
+## Telemetry Hooks <span style="background-color: #0d9488; color: white; padding: 1px 6px; border-radius: 3px; font-size: 0.65em; font-weight: 600; vertical-align: middle;">v1.11.0+</span>
+
+Agent telemetry hooks provide declarative observability for production agents. They enable debugging, cost auditing, latency tracking, and integration with monitoring systems—without cluttering your agent logic.
+
+### Available Hooks
+
+| Hook | When Fired | Use Cases |
+|:-----|:-----------|:----------|
+| `onStart(context)` | Agent session begins | Request logging, session initialization |
+| `onThinking(thinking, result)` | Model generates reasoning trace | Debug extended thinking (o1, Claude) |
+| `onToolStart(toolCall)` | Tool execution starts | Latency tracking, audit trails |
+| `onToolEnd(toolCall, result)` | Tool execution completes | Performance metrics, result logging |
+| `onToolError(toolCall, error)` | Tool execution fails | Error tracking, alerting |
+| `onComplete(result)` | Agent turn finishes | Cost logging, response analytics |
+
+### Basic Example
+
+```typescript
+import { Agent, Tool, z } from "@node-llm/core";
+
+class WeatherTool extends Tool {
+  name = "get_weather";
+  description = "Get current weather for a city";
+  schema = z.object({ city: z.string() });
+
+  async execute({ city }) {
+    return `Sunny, 25°C in ${city}`;
+  }
+}
+
+class ObservableAgent extends Agent {
+  static model = "gpt-4o";
+  static tools = [WeatherTool];
+  
+  static onStart(context) {
+    console.log(`[Agent] Started with ${context.messages.length} messages`);
+  }
+
+  static onToolStart(toolCall) {
+    console.log(`[Tool] ${toolCall.function.name} started`);
+    console.time(`tool-${toolCall.id}`);
+  }
+
+  static onToolEnd(toolCall, result) {
+    console.timeEnd(`tool-${toolCall.id}`);
+  }
+
+  static onComplete(result) {
+    console.log(`[Agent] Complete. Tokens: ${result.total_tokens}`);
+  }
+}
+```
+
+### Production Monitoring
+
+Track costs and latency in production:
+
+```typescript
+import { Agent } from "@node-llm/core";
+import { metrics } from "./monitoring";
+
+class ProductionAgent extends Agent {
+  static model = "gpt-4o";
+  
+  static onStart(context) {
+    metrics.increment("agent.requests");
+  }
+
+  static onToolError(toolCall, error) {
+    metrics.increment(`tool.${toolCall.function.name}.errors`);
+    console.error(`Tool ${toolCall.function.name} failed:`, error);
+  }
+
+  static onComplete(result) {
+    metrics.gauge("agent.cost", result.usage.cost);
+    metrics.gauge("agent.tokens", result.total_tokens);
+  }
+}
+```
+
+### Debug Extended Thinking
+
+For models with extended thinking (o1, Claude):
+
+```typescript
+class ThinkingAgent extends Agent {
+  static model = "o1-preview";
+  static thinking = { effort: "high" };
+  
+  static onThinking(thinking, result) {
+    console.log("🧠 Reasoning:", thinking.text);
+    console.log(`Thinking tokens: ${thinking.tokens}`);
+  }
+}
+```
+
+### Async Hooks
+
+All hooks support async operations:
+
+```typescript
+class AuditedAgent extends Agent {
+  static model = "gpt-4o";
+  
+  static async onComplete(result) {
+    await db.metrics.create({
+      model: result.model,
+      tokens: result.total_tokens,
+      cost: result.usage.cost
+    });
+  }
+}
 ```
 
 ---
