@@ -146,13 +146,12 @@ Define reusable, class-configured agents with a declarative DSL:
 ```ts
 import { Agent, Tool, z } from "@node-llm/core";
 
-class LookupOrderTool extends Tool {
-  static definition = {
-    name: "lookup_order",
-    description: "Look up an order by ID",
-    parameters: z.object({ orderId: z.string() })
-  };
-  async execute({ orderId }) {
+class LookupOrderTool extends Tool<{ orderId: string }> {
+  name = "lookup_order";
+  description = "Look up an order by ID";
+  schema = z.object({ orderId: z.string() });
+
+  async execute({ orderId }: { orderId: string }) {
     return { status: "shipped", eta: "Tomorrow" };
   }
 }
@@ -175,13 +174,12 @@ console.log(response.content);
 Stop the agentic loop early when a definitive answer is found:
 
 ```ts
-class FinalAnswerTool extends Tool {
-  static definition = {
-    name: "final_answer",
-    description: "Return the final answer to the user",
-    parameters: z.object({ answer: z.string() })
-  };
-  async execute({ answer }) {
+class FinalAnswerTool extends Tool<{ answer: string }> {
+  name = "final_answer";
+  description = "Return the final answer to the user";
+  schema = z.object({ answer: z.string() });
+
+  async execute({ answer }: { answer: string }) {
     return this.halt(answer); // Stops the loop, returns this result
   }
 }
