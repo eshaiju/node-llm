@@ -75,7 +75,7 @@ export interface AgentConfig {
  * const agent = new SupportAgent({ model: "gpt-4o-mini" });
  * ```
  */
-export abstract class Agent<S = unknown> {
+export abstract class Agent<S extends Record<string, unknown> = Record<string, unknown>> {
   // Static configuration properties - override these in subclasses
   static model?: string;
   static provider?: string;
@@ -109,7 +109,8 @@ export abstract class Agent<S = unknown> {
       maxToolCalls: overrides.maxToolCalls ?? ctor.maxToolCalls,
       headers: { ...ctor.headers, ...overrides.headers },
       params: { ...ctor.params, ...overrides.params },
-      thinking: overrides.thinking ?? ctor.thinking
+      thinking: overrides.thinking ?? ctor.thinking,
+      messages: overrides.messages // Allow history injection
     };
 
     // Determine model
@@ -213,7 +214,7 @@ export abstract class Agent<S = unknown> {
  * const response = await agent.ask("Help me!");
  * ```
  */
-export function defineAgent<S = unknown>(
+export function defineAgent<S extends Record<string, unknown> = Record<string, unknown>>(
   config: AgentConfig
 ): new (overrides?: Partial<AgentConfig & ChatOptions>) => Agent<S> {
   return class extends Agent<S> {

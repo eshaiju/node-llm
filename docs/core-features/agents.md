@@ -314,6 +314,86 @@ const agent = new AssistantAgent({
 
 ---
 
+## Agent Persistence with @node-llm/orm <span style="background-color: #0d9488; color: white; padding: 1px 6px; border-radius: 3px; font-size: 0.65em; font-weight: 600; vertical-align: middle;">v0.5.0+</span>
+
+For long-running agents that need to persist conversations across requests (e.g., support tickets, chat sessions), use `AgentSession` from `@node-llm/orm`.
+
+```bash
+npm install @node-llm/orm @prisma/client
+```
+
+### Create & Resume Sessions
+
+```typescript
+import { Agent, Tool, z, createLLM } from "@node-llm/core";
+import { createAgentSession, loadAgentSession } from "@node-llm/orm/prisma";
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
+const llm = createLLM({ provider: "openai" });
+
+// Define agent (configuration lives in code)
+class SupportAgent extends Agent {
+  static model = "gpt-4.1";
+  static instructions = "You are a helpful support agent.";
+  static tools = [LookupOrderTool, CancelOrderTool];
+}
+
+// Create a persistent session
+const session = await createAgentSession(prisma, llm, SupportAgent, {
+  metadata: { userId: "user_123", ticketId: "TKT-456" }
+});
+
+await session.ask("Where is my order #789?");
+console.log(session.id); // "abc-123" - save this to resume later
+
+// Resume in a later request
+const session = await loadAgentSession(prisma, llm, SupportAgent, "abc-123");
+await session.ask("Can you cancel it?");
+```
+
+### The "Code Wins" Principle
+
+When you resume a session, the agent uses **current code configuration** but **database history**:
+
+| Aspect | Source | Rationale |
+|:-------|:-------|:----------|
+| Model | Agent class | Immediate upgrades when you deploy |
+| Tools | Agent class | Only code can execute functions |
+| Instructions | Agent class | Deploy prompt fixes immediately |
+| History | Database | Sacred, never modified |
+
+This means if you deploy an upgrade (new model, better prompt), all resumed sessions get the improvement automatically.
+
+### Prisma Schema
+
+Add `LlmAgentSession` to your schema:
+
+```prisma
+model LlmAgentSession {
+  id         String   @id @default(uuid())
+  agentClass String   // Validated on load (e.g., 'SupportAgent')
+  chatId     String   @unique
+  metadata   Json?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  chat       LlmChat  @relation(fields: [chatId], references: [id], onDelete: Cascade)
+
+  @@index([agentClass])
+  @@index([createdAt])
+}
+
+model LlmChat {
+  // ... existing fields
+  agentSession LlmAgentSession?
+}
+```
+
+See the [@node-llm/orm documentation](https://node-llm.eshaiju.com/orm/prisma) for full details.
+
+---
+
 ## Next Steps
 
 - [Tool Calling Guide](tools.html) — Deep dive on tool patterns and safety
