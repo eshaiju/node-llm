@@ -1,8 +1,8 @@
 # @node-llm/core
 
 <p align="left">
-  <a href="https://node-llm.eshaiju.com/">
-    <img src="https://node-llm.eshaiju.com/assets/images/logo.jpg" alt="NodeLLM logo" width="300" />
+  <a href="https://nodellm.dev/">
+    <img src="https://nodellm.dev/assets/images/logo.jpg" alt="NodeLLM logo" width="300" />
   </a>
 </p>
 
@@ -150,11 +150,11 @@ Looking for persistence? use **[@node-llm/orm](https://www.npmjs.com/package/@no
 
 ## 📚 Full Documentation
 
-Visit **[node-llm.eshaiju.com](https://node-llm.eshaiju.com/)** for:
+Visit **[nodellm.dev](https://nodellm.dev/)** for:
 
-- [Deep Dive into Tool Calling](https://node-llm.eshaiju.com/core-features/tools)
-- [Multi-modal Vision & Audio Guide](https://node-llm.eshaiju.com/core-features/multimodal)
-- [Custom Provider Plugin System](https://node-llm.eshaiju.com/advanced/custom-providers)
+- [Deep Dive into Tool Calling](https://nodellm.dev/core-features/tools)
+- [Multi-modal Vision & Audio Guide](https://nodellm.dev/core-features/multimodal)
+- [Custom Provider Plugin System](https://nodellm.dev/advanced/custom-providers)
 
 ---
 

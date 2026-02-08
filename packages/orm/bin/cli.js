@@ -103,7 +103,7 @@ function main() {
       console.log("  npx @node-llm/orm sync     # Check for missing ORM fields");
       console.log("  npx @node-llm/orm migrate  # Rails-style migration helper");
       console.log("\nFor enterprise patterns, see:");
-      console.log("  https://node-llm.eshaiju.com/orm/migrations");
+      console.log("  https://nodellm.dev/orm/migrations");
   }
 }
 

@@ -17,7 +17,7 @@ NodeLLM is an open-source infrastructure layer for building provider-agnostic, p
 - **Package**: `@node-llm/core`
 - **Testing Package**: `@node-llm/testing`
 - **Repository**: `https://github.com/node-llm/node-llm`
-- **Documentation**: `https://node-llm.eshaiju.com`
+- **Documentation**: `https://nodellm.dev`
 
 ## Core Features
 
@@ -57,7 +57,7 @@ const response = await chat.ask("Explain infrastructure-as-code");
 
 ## Quick Links
 
-- **Get Started**: https://node-llm.eshaiju.com/getting-started/overview
-- **Architecture**: https://node-llm.eshaiju.com/architecture
-- **Testing**: https://node-llm.eshaiju.com/core-features/testing
+- **Get Started**: https://nodellm.dev/getting-started/overview
+- **Architecture**: https://nodellm.dev/architecture
+- **Testing**: https://nodellm.dev/core-features/testing
 - **Contributing**: https://github.com/node-llm/node-llm/blob/main/CONTRIBUTING.md

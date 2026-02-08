@@ -4,5 +4,5 @@ contact_links:
     url: https://github.com/node-llm/node-llm/discussions
     about: Questions about using NodeLLM, implementation approaches, or general discussion
   - name: 📖 Documentation
-    url: https://node-llm.eshaiju.com/
+    url: https://nodellm.dev/
     about: Check the docs first - guides and examples

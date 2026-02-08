@@ -43,7 +43,7 @@
     "url": "https://github.com/node-llm/node-llm",
     "directory": "packages/core"
   },
-  "homepage": "https://node-llm.eshaiju.com",
+  "homepage": "https://nodellm.dev",
   "bugs": {
     "url": "https://github.com/node-llm/node-llm/issues"
   },

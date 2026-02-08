@@ -35,4 +35,4 @@ Our security features are designed to enforce safety at the infrastructure level
 - **Tool Execution Policies**: Intercepts high-risk actions before they execute.
 - **Response Validation**: Ensures structured outputs meet your schemas before they reach your business logic.
 
-For more details on building secure agents, see our [Security Features Guide](https://node-llm.eshaiju.com/advanced/security).
+For more details on building secure agents, see our [Security Features Guide](https://nodellm.dev/advanced/security).

@@ -109,7 +109,7 @@ All notable changes to this project will be documented in this file.
   - Shifted from `db push` to professional **Prisma Migrate** workflow for safe, versioned schema updates.
   - Added repository-wide `prisma/migrations` folder for reproducible deployments.
   - New built-in scripts: `npm run db:migrate`, `npm run db:deploy`, and `npm run db:status`.
-  - Comprehensive [Database Migration Guide](https://node-llm.eshaiju.com/orm/migrations) for application scaling.
+  - Comprehensive [Database Migration Guide](https://nodellm.dev/orm/migrations) for application scaling.
 
 ## [1.6.2] - 2026-01-21 (@node-llm/core)
 
@@ -211,7 +211,7 @@ All notable changes to this project will be documented in this file.
   - `onToolCallStart`: Triggered when a tool call begins
   - `onToolCallEnd`: Triggered when a tool call completes successfully
   - `onToolCallError`: Triggered when a tool call fails
-- **Security Documentation**: New comprehensive [Security & Compliance](https://node-llm.eshaiju.com/advanced/security.html) guide covering:
+- **Security Documentation**: New comprehensive [Security & Compliance](https://nodellm.dev/advanced/security.html) guide covering:
   - Smart Context Isolation
   - Content Policy Hooks
   - Tool Execution Policies

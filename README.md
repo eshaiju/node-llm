@@ -1,6 +1,6 @@
 <p align="left">
-  <a href="https://node-llm.eshaiju.com/">
-    <img src="https://node-llm.eshaiju.com/assets/images/logo.png" alt="NodeLLM logo" width="300" />
+  <a href="https://nodellm.dev/">
+    <img src="https://nodellm.dev/assets/images/logo.png" alt="NodeLLM logo" width="300" />
   </a>
 </p>
 
@@ -190,7 +190,7 @@ await chat.withTool(WeatherTool).ask("What's the weather in Tokyo?");
 chat.onToolCallError((call, err) => "STOP");
 ```
 
-**[Full Tool Calling Guide →](https://node-llm.eshaiju.com/core-features/tool-calling)**
+**[Full Tool Calling Guide →](https://nodellm.dev/core-features/tool-calling)**
 
 ### 🔍 Comprehensive Debug Logging
 
@@ -314,7 +314,7 @@ Security is not an afterthought. NodeLLM includes a native **"Invisible Perimete
 npm install @node-llm/core
 ```
 
-**[View Full Documentation ↗](https://node-llm.eshaiju.com/)**
+**[View Full Documentation ↗](https://nodellm.dev/)**
 
 ### 🍿 Try the Live Demo
 

@@ -65,7 +65,7 @@
   "bugs": {
     "url": "https://github.com/node-llm/node-llm/issues"
   },
-  "homepage": "https://node-llm.eshaiju.com",
+  "homepage": "https://nodellm.dev",
   "devDependencies": {
     "@eslint/js": "^9.39.2",
     "@semantic-release/changelog": "^6.0.3",
