@@ -167,6 +167,87 @@ export class Mocker {
     return this;
   }
 
+  /**
+   * Chain multiple tool calls in a single response.
+   * Useful for testing agents that invoke multiple tools at once.
+   *
+   * @example
+   * mocker.chat(/book flight/).callsTools([
+   *   { name: "search_flights", args: { from: "NYC", to: "LAX" } },
+   *   { name: "check_weather", args: { city: "LAX" } }
+   * ]);
+   */
+  public callsTools(tools: Array<{ name: string; args?: Record<string, unknown> }>): this {
+    const lastMock = this.mocks[this.mocks.length - 1];
+    if (!lastMock || lastMock.method !== "chat") {
+      throw new Error("Mocker: .callsTools() must follow a .chat() definition.");
+    }
+    lastMock.response = {
+      content: null,
+      tool_calls: tools.map((t) => ({
+        id: `call_${Math.random().toString(36).slice(2, 9)}`,
+        type: "function" as const,
+        function: { name: t.name, arguments: JSON.stringify(t.args || {}) }
+      })),
+      finish_reason: "tool_calls"
+    };
+    return this;
+  }
+
+  /**
+   * Define a sequence of responses for multi-turn conversations.
+   * Each call consumes the next response in the sequence.
+   *
+   * @example
+   * mocker.chat(/help/).sequence([
+   *   "What do you need help with?",
+   *   "I can help with that. Here's the answer...",
+   *   "Is there anything else?"
+   * ]);
+   */
+  public sequence(responses: Array<string | MockResponse>): this {
+    const lastMock = this.mocks[this.mocks.length - 1];
+    if (!lastMock) throw new Error("Mocker: No mock definition started.");
+    if (responses.length === 0)
+      throw new Error("Mocker: sequence() requires at least one response.");
+
+    let callIndex = 0;
+    lastMock.response = (_request: unknown): MockResponse => {
+      const response = responses[Math.min(callIndex, responses.length - 1)]!;
+      callIndex++;
+      if (typeof response === "string") {
+        return { content: response, text: response };
+      }
+      return response;
+    };
+    return this;
+  }
+
+  /**
+   * Limit how many times this mock can match.
+   * After exhausted, falls through to next matching mock or strict mode error.
+   *
+   * @example
+   * mocker.chat(/retry/).times(2).respond("Try again");
+   * mocker.chat(/retry/).respond("Giving up");
+   */
+  public times(n: number): this {
+    const lastMock = this.mocks[this.mocks.length - 1];
+    if (!lastMock) throw new Error("Mocker: No mock definition started.");
+
+    let remaining = n;
+    const originalMatcher = lastMock.match;
+    lastMock.match = (request: unknown) => {
+      if (remaining <= 0) return false;
+      if (originalMatcher(request)) {
+        remaining--;
+        return true;
+      }
+      return false;
+    };
+    return this;
+  }
+
   public embed(input?: string | string[]): this {
     return this.addMock("embed", (req: unknown) => {
       const embReq = req as EmbeddingRequest;
@@ -257,7 +338,7 @@ export class Mocker {
 
           if (EXECUTION_METHODS.includes(methodName)) {
             if (methodName === "stream") {
-              return async function* (this: Mocker, request: ChatRequest) {
+              return async function* (this: any, request: ChatRequest) {
                 this._history.push({
                   method: methodName,
                   args: [request],
@@ -266,9 +347,9 @@ export class Mocker {
                 });
 
                 const matchingMocks = this.mocks.filter(
-                  (m) => m.method === methodName && m.match(request)
+                  (m: MockDefinition) => m.method === methodName && m.match(request)
                 );
-                const mock = matchingMocks[matchingMocks.length - 1];
+                const mock = matchingMocks[0]; // First match wins (for times() support)
                 if (mock) {
                   const res =
                     typeof mock.response === "function" ? mock.response(request) : mock.response;
@@ -283,16 +364,17 @@ export class Mocker {
                   return;
                 }
                 if (this.strict) throw new Error("Mocker: Unexpected LLM call to 'stream'");
-                const original = originalValue
-                  ? (originalValue as any).apply(target, [request])
-                  : undefined;
+                const original =
+                  typeof originalValue === "function"
+                    ? (originalValue.apply(target, [request]) as AsyncIterable<unknown>)
+                    : undefined;
                 if (original) yield* original;
               }.bind(this);
             }
 
             // Promise-based methods
             return (async (request: unknown) => {
-              const req = request as any;
+              const req = request as Record<string, unknown>;
               let promptAttr: unknown;
               if (methodName === "chat") promptAttr = req.messages;
               else if (methodName === "embed" || methodName === "moderate") promptAttr = req.input;
@@ -309,7 +391,7 @@ export class Mocker {
               const matchingMocks = this.mocks.filter(
                 (m) => m.method === methodName && m.match(request)
               );
-              const mock = matchingMocks[matchingMocks.length - 1];
+              const mock = matchingMocks[0]; // First match wins (for times() support)
 
               if (mock) {
                 const res =
@@ -363,7 +445,7 @@ export class Mocker {
                     } as ModerationResponse;
                   }
                   case "listModels": {
-                    return res || [];
+                    return (res as unknown) || [];
                   }
                   default:
                     return res;
@@ -371,7 +453,9 @@ export class Mocker {
               }
 
               if (this.strict) throw new Error(`Mocker: Unexpected LLM call to '${methodName}'`);
-              return originalValue ? (originalValue as any).apply(target, [request]) : undefined;
+              return typeof originalValue === "function"
+                ? originalValue.apply(target, [request])
+                : undefined;
             }).bind(this);
           }
           return originalValue;
